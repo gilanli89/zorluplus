@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, Phone, Menu, X, FileText, Wrench } from "lucide-react";
+import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,8 +28,8 @@ export default function Header() {
       <div className="bg-foreground text-background">
         <div className="container flex items-center justify-between py-1.5 text-[11px]">
           <div className="flex items-center gap-4 font-medium">
-            <span className="hidden sm:inline">🏆 Samsung & LG Yetkili Bayi</span>
-            <span>✅ 2 Yıl Garanti</span>
+            <span className="hidden sm:inline flex items-center gap-1"><Shield className="h-3 w-3" /> Samsung & LG Yetkili Bayi</span>
+            <span className="flex items-center gap-1"><Award className="h-3 w-3" /> 2 Yıl Garanti</span>
           </div>
           <a href={`tel:${BRAND.phone}`} className="flex items-center gap-1.5 font-semibold hover:opacity-80 transition-opacity">
             <Phone className="h-3 w-3" />
