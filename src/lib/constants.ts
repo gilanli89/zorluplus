@@ -53,6 +53,7 @@ export const CATEGORIES = [
       { slug: "bulasik-makinesi", name: "Bulaşık Makinesi" },
       { slug: "kurutma-makinesi", name: "Kurutma Makinesi" },
       { slug: "derin-dondurucu", name: "Derin Dondurucu" },
+      { slug: "mini-buzdolabi", name: "Mini Buzdolabı" },
     ],
   },
   {
@@ -67,10 +68,12 @@ export const CATEGORIES = [
   },
   {
     slug: "klima-isitma",
-    name: "Klima & Isıtma/Soğutma",
+    name: "İklimlendirme",
     icon: "Snowflake",
     children: [
       { slug: "klima", name: "Klima" },
+      { slug: "split-klima", name: "Split Klima" },
+      { slug: "portatif-klima", name: "Portatif Klima" },
       { slug: "isiticilar", name: "Isıtıcılar" },
     ],
   },
@@ -84,14 +87,58 @@ export const CATEGORIES = [
     ],
   },
   {
+    slug: "mutfak-aletleri",
+    name: "Mutfak Aletleri",
+    icon: "ChefHat",
+    children: [
+      { slug: "air-fryer", name: "Air Fryer" },
+      { slug: "mikrodalga", name: "Mikrodalga" },
+      { slug: "kahve-makinesi", name: "Kahve Makinesi" },
+      { slug: "pisirici", name: "Pişiriciler" },
+      { slug: "su-sebili", name: "Su Sebili" },
+    ],
+  },
+  {
     slug: "kucuk-ev-aletleri",
     name: "Küçük Ev Aletleri",
     icon: "Zap",
-    children: [],
+    children: [
+      { slug: "supurge", name: "Süpürge" },
+      { slug: "utu", name: "Ütü" },
+      { slug: "ventilator", name: "Vantilatör" },
+    ],
+  },
+  {
+    slug: "ses-sistemleri",
+    name: "Ses Sistemleri",
+    icon: "Speaker",
+    children: [
+      { slug: "bluetooth-hoparlor", name: "Bluetooth Hoparlör" },
+      { slug: "kulaklik", name: "Kulaklık" },
+      { slug: "soundbar-ses", name: "Soundbar" },
+    ],
+  },
+  {
+    slug: "aksesuar",
+    name: "Aksesuarlar",
+    icon: "Cable",
+    children: [
+      { slug: "temizlik-urunleri", name: "Temizlik Ürünleri" },
+      { slug: "tv-aski", name: "TV Askı Aparatları" },
+      { slug: "uydu-ekipman", name: "Uydu Ekipmanları" },
+    ],
+  },
+  {
+    slug: "oyun",
+    name: "Oyun",
+    icon: "Gamepad2",
+    children: [
+      { slug: "oyun-aksesuar", name: "Aksesuar" },
+    ],
   },
   {
     slug: "elektronik-aksesuar",
-    name: "Elektronik & Aksesuar",
+    name: "Diğer Ürünler",
     icon: "Smartphone",
     children: [],
   },
