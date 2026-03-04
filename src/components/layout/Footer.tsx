@@ -78,7 +78,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-border text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} {BRAND.name}. Tüm hakları saklıdır.
+          ©ZorluPlus bir Zorlu Digital Trade & Services Ltd. kuruluşudur. Tüm hakları saklıdır. 2026
         </div>
       </div>
     </footer>
