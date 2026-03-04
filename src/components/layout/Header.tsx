@@ -28,8 +28,8 @@ export default function Header() {
       <div className="bg-foreground text-background">
         <div className="container flex items-center justify-between py-1.5 text-[11px]">
           <div className="flex items-center gap-4 font-medium">
-            <span className="hidden sm:inline flex items-center gap-1"><Shield className="h-3 w-3" /> Samsung & LG Yetkili Bayi</span>
-            <span className="flex items-center gap-1"><Award className="h-3 w-3" /> 2 Yıl Garanti</span>
+            <span className="hidden sm:inline-flex items-center gap-1"><Shield className="h-3 w-3" /> Samsung & LG Yetkili Bayi</span>
+            <span className="inline-flex items-center gap-1"><Award className="h-3 w-3" /> 2 Yıl Garanti</span>
           </div>
           <a href={`tel:${BRAND.phone}`} className="flex items-center gap-1.5 font-semibold hover:opacity-80 transition-opacity">
             <Phone className="h-3 w-3" />
@@ -113,9 +113,12 @@ export default function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          <a href="https://servis.zorluplus.com" target="_blank" rel="noopener noreferrer" title="Servis Talebi">
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <Wrench className="h-5 w-5" />
+          <a href="https://servis.zorluplus.com" target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" size="sm" className="rounded-full gap-1.5 border-primary/30 text-primary hover:bg-primary/5 font-semibold hidden sm:inline-flex">
+              <Wrench className="h-3.5 w-3.5" /> Servis Talebi
+            </Button>
+            <Button variant="ghost" size="icon" className="rounded-full sm:hidden">
+              <Wrench className="h-5 w-5 text-primary" />
             </Button>
           </a>
           {searchOpen ? (
