@@ -1,14 +1,120 @@
 import ContentPage from "@/components/ContentPage";
+import { motion } from "framer-motion";
+import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin } from "lucide-react";
+
+const testimonials = [
+  { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
+  { name: "Mert Yalçın", text: "Zorlu Digital Plaza'dan aldığım hizmetten gerçekten çok memnunum. Ekip her aşamada yardımcı oldu ve ürün seçiminde doğru yönlendirmeler yaptılar. Kesinlikle tavsiye ederim." },
+  { name: "Ayşe Karademir", text: "Satın alma süreci çok kolaydı ve ürün beklediğimden daha hızlı elime ulaştı. Teknik destek ekibi de oldukça ilgiliydi." },
+  { name: "Burak Erdemli", text: "Hem ürün kalitesi hem de satış sonrası destek mükemmel. Bir sorun yaşadığımda anında yardımcı oldular." },
+  { name: "Selin Aras", text: "Mağazaya girdiğim anda güler yüzlü bir karşılama ve samimi bir ortam vardı. Aldığım tavsiyeler sayesinde tam ihtiyacıma uygun ürünü seçtim." },
+];
+
+const stats = [
+  { value: "60,000+", label: "Mutlu Müşteri", icon: Users },
+  { value: "26", label: "Gurur Dolu Yıl", icon: Clock },
+  { value: "3", label: "Mağaza", icon: MapPin },
+];
 
 export function HakkimizdaPage() {
   return (
-    <ContentPage title="Hakkımızda">
-      <p>Zorlu Digital Plaza, Kuzey Kıbrıs'ın önde gelen elektronik ve beyaz eşya mağazasıdır. Samsung ve LG yetkili servisi olarak, müşterilerimize en kaliteli ürünleri en uygun fiyatlarla sunuyoruz.</p>
-      <h2>Misyonumuz</h2>
-      <p>Müşterilerimize güvenilir, garantili ve uygun fiyatlı teknoloji ürünleri sunarak yaşam kalitelerini artırmak.</p>
-      <h2>Vizyonumuz</h2>
-      <p>Kuzey Kıbrıs'ın en güvenilir ve tercih edilen teknoloji mağazası olmak.</p>
-    </ContentPage>
+    <>
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground">
+        <div className="container py-16 md:py-24">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <span className="text-primary-foreground/60 font-semibold text-sm tracking-wider uppercase">1999'dan beri</span>
+            <h1 className="font-display text-3xl md:text-5xl font-extrabold leading-tight mt-3 mb-6">
+              Kaliteyi ve Güvenilir<br />Ürünleri Benimsiyoruz
+            </h1>
+            <div className="flex flex-wrap gap-6 md:gap-10">
+              {stats.map(s => (
+                <div key={s.label} className="flex items-center gap-3">
+                  <div className="h-12 w-12 rounded-xl bg-primary-foreground/15 flex items-center justify-center">
+                    <s.icon className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <p className="font-display text-2xl font-extrabold">{s.value}</p>
+                    <p className="text-primary-foreground/70 text-sm">{s.label}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <div className="container py-12 md:py-16 space-y-16">
+        {/* Hakkımızda */}
+        <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4">Hakkımızda</h2>
+          <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
+            <p><strong className="text-foreground">Zorlu Digital Plaza</strong>, Kuzey Kıbrıs'ta 26 yıllık faaliyet süresi boyunca olağanüstü bir performans sergilemiştir. Yirmi yılı aşkın sürede şirket, teknoloji, elektronik ve müşteri hizmetleri alanlarında güvenilir bir lider olarak kendini başarıyla konumlandırmıştır.</p>
+            <p>Sürekli inovasyon, yüksek kaliteli ürün yelpazesi ve güçlü müşteri memnuniyeti odaklı yaklaşımı sayesinde Zorlu Digital Plaza, sektörde sağlam bir itibar kazanmıştır.</p>
+          </div>
+        </motion.section>
+
+        {/* Biz Kimiz */}
+        <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4">Biz Kimiz</h2>
+          <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
+            <p>1999 yılından bu yana Zorlu Digital Plaza, Kuzey Kıbrıs'ta markalı elektronik, beyaz eşya ve klima çözümleri alanında güvenilir bir lider olmuştur.</p>
+            <p>Yirmi yılı aşkın deneyimiyle şirket, yalnızca yüksek kaliteli ürünler sunmasıyla değil, aynı zamanda ilk temas anından satış sonrası süreçlere kadar uzanan <strong className="text-foreground">kusursuz müşteri deneyimi</strong> ile de güçlü bir itibar kazanmıştır.</p>
+            <p>Zorlu Digital Plaza'nın gücü; uzman satış ekibi, derin sektör bilgisi ve yüksek nitelikli satış sonrası hizmet departmanından gelmektedir.</p>
+            <p>Dünya çapında önde gelen markalarla iş ortaklıkları yaparak ve hizmet altyapısına sürekli yatırım yaparak Zorlu Digital Plaza, bölgede <strong className="text-foreground">kalite, güven ve teknoloji mükemmeliyeti</strong> için bir referans noktası hâline gelmiştir.</p>
+          </div>
+        </motion.section>
+
+        {/* Tarihçe */}
+        <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4">Tarihçemiz</h2>
+          <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
+            <p>Tek bir mağazadan merkezi bir dağıtım deposuna uzanan yolculuğu boyunca Zorlu Digital Plaza, Kuzey Kıbrıs'ın en güçlü perakende ve lojistik ağlarından birine dönüşmüştür.</p>
+            <p>Girne, Lefkoşa ve Mağusa'da bulunan stratejik mağaza lokasyonları sayesinde şirket, her büyük bölgedeki müşterilere ulaşarak markalı elektronik ürünler, beyaz eşya ve iklimlendirme çözümlerini uzun yıllara dayanan uzmanlıkla sunmaktadır.</p>
+            <p>Bugün Zorlu Digital Plaza, çok nesilli deneyimi ve güçlü dağıtım ağıyla sektörde yeni standartlar belirleyen; <strong className="text-foreground">güven, kalite ve mükemmeliyetin simgesi</strong> olarak öne çıkmaktadır.</p>
+          </div>
+        </motion.section>
+
+        {/* Değerler */}
+        <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-6">Kaliteli Ürünlere Olan İnancımız</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { icon: Truck, title: "Ücretsiz Teslimat", desc: "5000 TL ve üzeri alışverişlerde" },
+              { icon: Star, title: "100% Memnuniyet", desc: "Para iade garantisi" },
+              { icon: HeartHandshake, title: "7/24 Destek", desc: "Kesintisiz hizmet" },
+              { icon: ShieldCheck, title: "Güvenli Ödeme", desc: "100% güvenli ödeme seçenekleri" },
+            ].map(item => (
+              <div key={item.title} className="card-lift rounded-2xl border border-border bg-card p-6 text-center">
+                <div className="h-12 w-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-3">
+                  <item.icon className="h-6 w-6" />
+                </div>
+                <h3 className="font-display font-bold text-foreground mb-1">{item.title}</h3>
+                <p className="text-sm text-muted-foreground">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Testimonials */}
+        <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-6">Müşterilerimiz Ne Diyor?</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {testimonials.map((t, i) => (
+              <div key={i} className="rounded-2xl border border-border bg-card p-5">
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">"{t.text}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+                    {t.name.charAt(0)}
+                  </div>
+                  <p className="font-semibold text-sm text-foreground">{t.name}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.section>
+      </div>
+    </>
   );
 }
 
