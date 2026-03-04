@@ -52,16 +52,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           <h3 className="text-sm font-semibold text-foreground line-clamp-2 leading-tight group-hover:text-primary transition-colors">
             {product.name}
           </h3>
-          <div className="mt-auto pt-2 flex items-baseline gap-2">
-            <span className="font-display font-bold text-lg text-foreground">
-              {formatPrice(product.salePrice || product.price)}
-            </span>
-            {hasDiscount && (
-              <span className="text-xs text-muted-foreground line-through">
-                {formatPrice(product.price)}
-              </span>
-            )}
-          </div>
         </div>
       </Link>
 
