@@ -1,23 +1,26 @@
-import { Shield, Award, Wrench } from "lucide-react";
+import { Shield, Award, Wrench, Truck } from "lucide-react";
 
 const items = [
-  { icon: Shield, label: "Yetkili Servis", desc: "Samsung & LG yetkili servis noktası" },
-  { icon: Award, label: "2 Yıl Garanti", desc: "Tüm ürünlerde resmi garanti" },
-  { icon: Wrench, label: "Ücretsiz Montaj", desc: "Uygun ürünlerde ücretsiz kurulum" },
+  { icon: Shield, label: "Yetkili Servis", desc: "Samsung & LG" },
+  { icon: Award, label: "2 Yıl Garanti", desc: "Resmi garanti" },
+  { icon: Wrench, label: "Ücretsiz Montaj", desc: "Uygun ürünlerde" },
+  { icon: Truck, label: "Hızlı Teslimat", desc: "Tüm KKTC'ye" },
 ];
 
 export default function TrustSection() {
   return (
-    <section className="py-12 bg-muted/50">
-      <div className="container">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+    <section className="border-b border-border bg-card">
+      <div className="container py-5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {items.map(item => (
-            <div key={item.label} className="flex flex-col items-center text-center gap-3 p-6 rounded-xl bg-card border border-border">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <item.icon className="h-6 w-6" />
+            <div key={item.label} className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <item.icon className="h-5 w-5" />
               </div>
-              <h3 className="font-display font-bold text-foreground">{item.label}</h3>
-              <p className="text-sm text-muted-foreground">{item.desc}</p>
+              <div>
+                <p className="font-display font-bold text-sm text-foreground leading-tight">{item.label}</p>
+                <p className="text-xs text-muted-foreground">{item.desc}</p>
+              </div>
             </div>
           ))}
         </div>
