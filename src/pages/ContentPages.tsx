@@ -305,36 +305,85 @@ export function IadeKosullariPage() {
 export function GizlilikPolitikasiPage() {
   return (
     <ContentPage title="Gizlilik Politikası">
-      <h2>Biz Kimiz</h2>
-      <p>Web sitemizin adresi: <strong>https://zorluplus.com</strong></p>
+      <p>Bu Gizlilik Politikası, Zorlu Digital Plaza ("Şirket", "biz", "bize", "bizim") tarafından işletilen <strong>www.zorluplus.com</strong> ("Site") üzerinden elde edilen kişisel verilerin hangi amaçlarla, nasıl işlendiğini ve korunduğunu açıklamaktadır.</p>
+      <p>Siteyi kullanarak bu politikada belirtilen şartları kabul etmiş sayılırsınız.</p>
 
-      <h2>Hangi Kişisel Verileri Topluyoruz ve Neden</h2>
+      <h2>1. Kapsam ve Amaç</h2>
+      <p>Bu politika; web sitemizi ziyaret eden tüm kullanıcıları, online ve offline kanallar üzerinden bizimle iletişime geçen potansiyel ve mevcut müşterileri, kampanyalarımıza, bültenlerimize veya formlarımıza kayıt olan kişileri kapsar.</p>
+      <p>Amaç; kişisel verilerinizi nasıl topladığımız, hangi amaçlarla kullandığımız, kimlerle paylaşabileceğimiz ve haklarınız hakkında sizi açık ve anlaşılır şekilde bilgilendirmektir.</p>
 
-      <h3>Yorumlar</h3>
-      <p>Ziyaretçiler sitede yorum bıraktığında, yorum formundaki verilerin yanı sıra spam tespitine yardımcı olmak amacıyla ziyaretçinin IP adresi ve tarayıcı kullanıcı aracı dizesi de toplanır.</p>
-      <p>E-posta adresinizden oluşturulan anonimleştirilmiş bir dize (hash olarak da bilinir), Gravatar hizmetine sağlanabilir. Yorumunuz onaylandıktan sonra profil resminiz yorum bağlamında herkese görünür hale gelir.</p>
+      <h2>2. Topladığımız Veriler</h2>
+      <p>Sitemizi ziyaret ettiğinizde veya bizimle iletişime geçtiğinizde aşağıdaki türde kişisel verileri toplayabiliriz:</p>
+      <ul>
+        <li><strong>Kimlik Bilgileri:</strong> Ad, soyad, kullanıcı adı vb.</li>
+        <li><strong>İletişim Bilgileri:</strong> E-posta adresi, telefon numarası, adres bilgisi vb.</li>
+        <li><strong>İşlem ve Sipariş Bilgileri:</strong> Satın aldığınız ürünler, fatura, teslimat ve ödeme bilgileri (kart numarası gibi hassas bilgiler doğrudan ödeme sağlayıcısı üzerinden işlenir, tarafımızca saklanmaz).</li>
+        <li><strong>Teknik Veriler:</strong> IP adresi, tarayıcı türü, işletim sistemi, ziyaret süresi, görüntülenen sayfalar, yönlendiren URL vb.</li>
+        <li><strong>Çerez ve Benzeri Teknolojiler:</strong> Site deneyiminizi iyileştirmek ve istatistiksel analiz yapmak için kullanılan çerezler aracılığıyla elde edilen kullanım verileri.</li>
+        <li><strong>İletişim İçerikleri:</strong> Bize e-posta, iletişim formu, sosyal medya veya çağrı merkezi üzerinden ilettiğiniz talep, şikâyet ve geri bildirimler.</li>
+      </ul>
 
-      <h3>Medya</h3>
-      <p>Web sitesine görsel yüklüyorsanız, konum verileri (EXIF GPS) gömülmüş görseller yüklemekten kaçınmalısınız. Web sitesi ziyaretçileri görsellerdeki konum verilerini indirebilir ve çıkarabilir.</p>
+      <h2>3. Verilerinizi Hangi Amaçlarla Kullanıyoruz?</h2>
+      <p>Toplanan kişisel verileriniz aşağıdaki amaçlarla işlenebilir:</p>
+      <ul>
+        <li>Siparişlerinizi oluşturmak, takip etmek ve teslimat süreçlerini yönetmek</li>
+        <li>Müşteri hesabınızı oluşturmak ve erişiminizi sağlamak</li>
+        <li>Satış sonrası destek, garanti ve teknik servis hizmetlerini yürütmek</li>
+        <li>Talep ve şikâyetlerinizi değerlendirmek ve sonuçlandırmak</li>
+        <li>Ürün ve hizmetlerimizi geliştirmek, iyileştirmek ve kişiselleştirmek</li>
+        <li>Kampanyalar, indirimler, yeni ürünler ve duyurular hakkında bilgilendirme yapmak (ticari elektronik ileti izni vermeniz hâlinde)</li>
+        <li>Güvenlik, dolandırıcılığın önlenmesi ve yasal yükümlülüklerin yerine getirilmesi</li>
+        <li>Ziyaretçi trafiğini analiz etmek, site performansını ölçmek ve iyileştirmek</li>
+      </ul>
 
-      <h3>Çerezler</h3>
-      <p>Sitemizde yorum bırakırsanız adınızı, e-posta adresinizi ve web sitenizi çerezlere kaydetmeyi tercih edebilirsiniz. Bunlar bir yıl sürer. Giriş yaptığınızda, giriş bilgilerinizi kaydetmek için çerezler ayarlanır. Giriş çerezleri iki gün, ekran seçenekleri çerezleri bir yıl sürer.</p>
+      <h2>4. Çerezler (Cookies) Kullanımı</h2>
+      <p>Sitemizde kullanıcı deneyimini geliştirmek, tercihlerinizi hatırlamak ve istatistiksel veri toplamak için çerezler kullanmaktayız.</p>
+      <p>Tarayıcınızın ayarlarından çerezleri kabul etmeme veya silme hakkına sahipsiniz. Çerezleri devre dışı bırakmanız hâlinde, sitemizin bazı işlevleri tam olarak çalışmayabilir.</p>
 
-      <h3>Diğer Sitelerden Gömülü İçerik</h3>
-      <p>Bu sitedeki makaleler gömülü içerik (videolar, görseller, makaleler vb.) içerebilir. Diğer web sitelerinden gömülü içerik, ziyaretçinin o web sitesini ziyaret etmiş olmasıyla aynı şekilde davranır.</p>
+      <h2>5. Verilerin Paylaşılması</h2>
+      <p>Kişisel verileriniz, aşağıdaki durumlarda ve ölçülü olmak kaydıyla üçüncü kişilerle paylaşılabilir:</p>
+      <ul>
+        <li><strong>Hizmet Sağlayıcılar:</strong> Kargo şirketleri, ödeme kuruluşları, teknik altyapı sağlayıcıları, çağrı merkezi, SMS/E-posta servisleri vb.</li>
+        <li><strong>İş Ortakları ve Tedarikçiler:</strong> Kampanyalar, ürün tedariki, garanti ve teknik servis süreçlerinin yürütülmesi kapsamında gerekli olduğunda.</li>
+        <li><strong>Resmi Kurumlar:</strong> Yasal yükümlülüklerimizi yerine getirmek veya hukuki taleplere cevap vermek amacıyla, yetkili kurum ve kuruluşlarla mevzuat çerçevesinde.</li>
+      </ul>
+      <p>Kişisel verileriniz, yasal zorunluluklar veya açık rızanız dışında hiçbir şekilde üçüncü taraflara satılmaz.</p>
 
-      <h2>Verilerinizi Kimlerle Paylaşıyoruz</h2>
-      <p>Parola sıfırlama talebinde bulunursanız IP adresiniz sıfırlama e-postasına dahil edilecektir.</p>
+      <h2>6. Verilerin Saklanma Süresi</h2>
+      <p>Kişisel verileriniz; ilgili mevzuatta öngörülen süreler, sözleşme ilişkimiz devam ettiği süre ve hukuki yükümlülüklerimizi yerine getirmek için gerekli saklama süreleri boyunca saklanır. Bu süreler dolduğunda verileriniz mevzuata uygun şekilde silinir, anonim hale getirilir veya imha edilir.</p>
 
-      <h2>Verilerinizi Ne Kadar Süre Saklıyoruz</h2>
-      <p>Yorum bırakırsanız, yorum ve meta verileri süresiz olarak saklanır. Bu, takip yorumlarını moderasyon kuyruğunda tutmak yerine otomatik olarak tanıyıp onaylamamız içindir.</p>
-      <p>Web sitemize kayıt olan kullanıcılar için, kullanıcı profillerinde sağladıkları kişisel bilgileri de saklarız. Tüm kullanıcılar kişisel bilgilerini istedikleri zaman görebilir, düzenleyebilir veya silebilir.</p>
+      <h2>7. Kişisel Verilerinizin Güvenliği</h2>
+      <p>Kişisel verilerinizi yetkisiz erişim, kayıp, kötüye kullanım, değişiklik veya ifşaya karşı korumak için uygun teknik ve idari güvenlik önlemleri uygulamaktayız.</p>
+      <p>Buna rağmen, internet üzerinden yapılan hiçbir veri aktarımının %100 güvenli olduğunu garanti etmek mümkün değildir. Bu nedenle, bize sağladığınız bilgilerin güvenliğini en üst düzeyde sağlamak için tüm makul önlemleri almaktayız.</p>
 
-      <h2>Verileriniz Üzerindeki Haklarınız</h2>
-      <p>Bu sitede bir hesabınız varsa veya yorum bıraktıysanız, sizin hakkınızda tuttuğumuz kişisel verilerin dışa aktarılmış bir dosyasını talep edebilirsiniz. Ayrıca hakkınızda tuttuğumuz tüm kişisel verileri silmemizi talep edebilirsiniz. Bu, idari, yasal veya güvenlik amaçlarıyla saklamak zorunda olduğumuz verileri kapsamaz.</p>
+      <h2>8. Haklarınız</h2>
+      <p>İlgili mevzuat uyarınca kişisel verilerinizle ilgili olarak:</p>
+      <ul>
+        <li>Hakkınızda kişisel veri işlenip işlenmediğini öğrenme,</li>
+        <li>İşlenmişse buna ilişkin bilgi talep etme,</li>
+        <li>İşleme amacını ve bu amaçlara uygun kullanılıp kullanılmadığını öğrenme,</li>
+        <li>Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme,</li>
+        <li>Eksik veya yanlış işlenmişse düzeltilmesini isteme,</li>
+        <li>İşlenmesini gerektiren sebeplerin ortadan kalkması hâlinde silinmesini veya yok edilmesini talep etme,</li>
+        <li>Bu işlemlerin, verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme,</li>
+        <li>İşlenen verilerin münhasıran otomatik sistemler vasıtasıyla analiz edilmesi suretiyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme,</li>
+        <li>Mevzuata aykırı olarak işlenmesi sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme</li>
+      </ul>
+      <p>haklarına sahipsiniz.</p>
 
-      <h2>Verilerinizi Nereye Gönderiyoruz</h2>
-      <p>Ziyaretçi yorumları otomatik bir spam tespit hizmeti aracılığıyla kontrol edilebilir.</p>
+      <h2>9. Bize Nasıl Ulaşabilirsiniz?</h2>
+      <p>Kişisel verilerinizle ilgili her türlü soru, talep ve başvuru için aşağıdaki iletişim kanallarından bize ulaşabilirsiniz:</p>
+      <ul>
+        <li><strong>Şirket:</strong> Zorlu Digital Plaza</li>
+        <li><strong>Adres:</strong> Belediye Bulvarı, Kent Plaza, A Blok No:1, Yenikent, Lefkoşa</li>
+        <li><strong>Telefon:</strong> +90 (548) 878 31 31</li>
+        <li><strong>E-posta:</strong> info@zorluplus.com</li>
+      </ul>
+      <p>Başvurularınız, yasal süreler içinde değerlendirilerek sizlere geri dönüş sağlanacaktır.</p>
+
+      <h2>10. Gizlilik Politikasında Değişiklikler</h2>
+      <p>Bu Gizlilik Politikası'nı gerekli gördüğümüz zamanlarda güncelleyebiliriz. Güncellenmiş versiyon, yürürlük tarihiyle birlikte sitemizde yayınlandığı andan itibaren geçerli olacaktır.</p>
+      <p>Siteyi kullanmaya devam ederek, güncellenmiş politikayı kabul etmiş sayılırsınız.</p>
     </ContentPage>
   );
 }
