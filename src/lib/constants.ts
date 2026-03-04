@@ -98,7 +98,7 @@ export const CATEGORIES = [
 export const CATALOGUE_URL = "https://online.fliphtml5.com/wcszl/ZDP-March-E-Catalogue/#p=1";
 
 // Placeholder CSV URL — user must publish their Google Sheet as CSV
-export const PRODUCT_FEED_URL = "https://docs.google.com/spreadsheets/d/1UOtoqZ5QFK_1H4HdgRpNUFhHp4lv3w7YNTOjWuqyyRk/export?format=csv";
+export const PRODUCT_FEED_URL = "https://docs.google.com/spreadsheets/d/1bPLd5ILPMggj7PbvqRj_dnbt-AUfLJUvtyZ5A_Q8I20/export?format=csv";
 
 export const FOOTER_LINKS = {
   kurumsal: [
