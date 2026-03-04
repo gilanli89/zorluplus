@@ -2,6 +2,13 @@ import Papa from "papaparse";
 import { Product } from "./types";
 import { PRODUCT_FEED_URL } from "./constants";
 
+const CLOUDINARY_CLOUD = "dj2oamfxf";
+
+function cloudinaryFetch(url: string, width = 600): string {
+  if (!url || url.startsWith("/") || url.includes("res.cloudinary.com")) return url;
+  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/fetch/f_auto,q_auto,w_${width}/${encodeURIComponent(url)}`;
+}
+
 const CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
   "tv-goruntu": "/products/samsung-oled-tv.png",
   "klima-isitma": "/products/klima.png",
@@ -86,7 +93,7 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
   const fallback = getFallbackImage(category, subcategory);
   const rawImage = row["Görseller"] || row["Image"] || row["Görsel"] || row["image"] || "";
-  const images = rawImage ? rawImage.split(",").map(s => s.trim()).filter(Boolean) : [];
+  const images = rawImage ? rawImage.split(",").map(s => s.trim()).filter(Boolean).map(u => cloudinaryFetch(u)) : [];
   const image = images[0] || fallback;
   const desc = row["Kısa açıklama"] || row["Kısa Açıklama"] || row["Açıklama"] || row["Description"] || "";
   const fullDesc = row["Açıklama"] || row["Description"] || "";
