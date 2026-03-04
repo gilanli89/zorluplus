@@ -28,6 +28,9 @@ export default function HomePage() {
   const { data: products = [] } = useProducts();
   const featured = products.filter(p => p.isFeatured).slice(0, 8);
   const newArrivals = products.filter(p => p.isNew).slice(0, 4);
+  // If no featured/new tags exist in the feed, show latest products
+  const displayFeatured = featured.length > 0 ? featured : products.slice(0, 8);
+  const displayNew = newArrivals.length > 0 ? newArrivals : products.slice(8, 12);
 
   return (
     <>
@@ -106,7 +109,7 @@ export default function HomePage() {
       </section>
 
       {/* Featured */}
-      {featured.length > 0 && (
+      {displayFeatured.length > 0 && (
         <section className="py-12 md:py-16 bg-muted/40">
           <div className="container">
             <div className="flex items-end justify-between mb-8">
@@ -119,7 +122,7 @@ export default function HomePage() {
               </Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-              {featured.map((p, i) => (
+              {displayFeatured.map((p, i) => (
                 <motion.div
                   key={p.id}
                   custom={i}
@@ -142,7 +145,7 @@ export default function HomePage() {
       )}
 
       {/* New Arrivals */}
-      {newArrivals.length > 0 && (
+      {displayNew.length > 0 && (
         <section className="py-12 md:py-16">
           <div className="container">
             <div className="flex items-end justify-between mb-8">
@@ -152,7 +155,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-              {newArrivals.map((p, i) => (
+              {displayNew.map((p, i) => (
                 <motion.div
                   key={p.id}
                   custom={i}

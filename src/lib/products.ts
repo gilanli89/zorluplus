@@ -108,7 +108,7 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const rawCat = row["Kategoriler"] || row["Kategori"] || row["Category"] || row["category"] || "";
   const { category, subcategory } = normalizeCategorySlug(rawCat);
   const name = row["İsim"] || row["Ürün Adı"] || row["Name"] || row["name"] || `Ürün ${index + 1}`;
-  const sku = (row["SKU"] || row["sku"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
+  const sku = (row["Stok kodu (SKU)"] || row["SKU"] || row["sku"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
   const price = parseFloat(row["Normal fiyat"] || row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
   const salePrice = parseFloat(row["İndirimli satış fiyatı"] || row["İndirimli Fiyat"] || row["Sale Price"] || "0") || undefined;
   const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
