@@ -1,7 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect } from "react";
-import { Shield, Award, Wrench, MessageCircle } from "lucide-react";
+import { Shield, Award, Wrench, MessageCircle, ShoppingCart } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
+import { useCart } from "@/contexts/CartContext";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { getProductBySlug, formatPrice, getWhatsAppLink } from "@/lib/products";
 import { CATEGORIES } from "@/lib/constants";
@@ -10,11 +11,13 @@ import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/ProductCard";
 import QuoteForm from "@/components/QuoteForm";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 export default function ProductPage() {
   const { slug } = useParams();
   const { data: products = [], isLoading } = useProducts();
   const { recentIds, addViewed } = useRecentlyViewed();
+  const { addItem } = useCart();
   const product = getProductBySlug(products, slug || "");
 
   useEffect(() => {
@@ -84,8 +87,17 @@ export default function ProductPage() {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3">
+            {product.inStock && (
+              <Button
+                size="lg"
+                className="flex-1 gap-2 font-semibold"
+                onClick={() => { addItem(product); toast.success("Sepete eklendi!"); }}
+              >
+                <ShoppingCart className="h-5 w-5" /> Sepete Ekle
+              </Button>
+            )}
             <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer" className="flex-1">
-              <Button size="lg" className="w-full gap-2 bg-success hover:bg-success/90 text-success-foreground font-semibold">
+              <Button size="lg" variant="outline" className="w-full gap-2 border-success/50 text-success hover:bg-success/5 font-semibold">
                 <MessageCircle className="h-5 w-5" /> WhatsApp ile Sipariş
               </Button>
             </a>

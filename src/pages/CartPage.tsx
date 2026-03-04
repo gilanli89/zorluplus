@@ -1,0 +1,275 @@
+import { Link } from "react-router-dom";
+import { ShoppingCart, Trash2, Plus, Minus, ShieldPlus, Zap, ArrowLeft, CreditCard, Banknote } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
+import { useCart } from "@/contexts/CartContext";
+import { formatPrice } from "@/lib/products";
+import { useState } from "react";
+import { toast } from "sonner";
+import { BRAND } from "@/lib/constants";
+
+const EXPRESS_FEE = 2000;
+
+export default function CartPage() {
+  const {
+    items, removeItem, updateQuantity, clearCart,
+    toggleWarranty, toggleExpressDelivery,
+    subtotal, warrantyTotal, expressTotal, grandTotal, itemCount,
+  } = useCart();
+
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "cash">("card");
+  const [customerInfo, setCustomerInfo] = useState({ name: "", phone: "", email: "", address: "" });
+
+  if (items.length === 0) {
+    return (
+      <div className="container max-w-3xl py-16 text-center">
+        <ShoppingCart className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
+        <h1 className="font-display text-2xl font-bold text-foreground mb-2">Sepetiniz Boş</h1>
+        <p className="text-muted-foreground mb-6">Alışverişe başlamak için ürünleri keşfedin.</p>
+        <Link to="/">
+          <Button className="rounded-full gap-2"><ArrowLeft className="h-4 w-4" /> Alışverişe Başla</Button>
+        </Link>
+      </div>
+    );
+  }
+
+  const handleCheckout = () => {
+    if (!customerInfo.name || !customerInfo.phone) {
+      toast.error("Lütfen ad ve telefon bilgilerinizi giriniz.");
+      return;
+    }
+
+    if (paymentMethod === "card") {
+      // Redirect to CardPlus checkout
+      const orderId = `ORD-${Date.now()}`;
+      const params = new URLSearchParams({
+        amount: grandTotal.toString(),
+        orderId,
+        product: items.map(i => i.product.name).join(", "),
+      });
+      window.location.href = `/odeme?${params.toString()}`;
+    } else {
+      // Cash on delivery — send WhatsApp order
+      const orderLines = items.map(i => {
+        const price = i.product.salePrice || i.product.price;
+        let line = `• ${i.product.name} x${i.quantity} — ${formatPrice(price * i.quantity)}`;
+        if (i.extendedWarranty) line += ` (+2 Yıl Garanti: ${formatPrice(price * 0.5 * i.quantity)})`;
+        if (i.expressDelivery) line += ` (Express Kurulum: ${formatPrice(EXPRESS_FEE * i.quantity)})`;
+        return line;
+      }).join("\n");
+
+      const message = `🛒 Yeni Sipariş (Kapıda Ödeme)\n\n${orderLines}\n\n💰 Toplam: ${formatPrice(grandTotal)}\n\n👤 ${customerInfo.name}\n📱 ${customerInfo.phone}\n📧 ${customerInfo.email}\n📍 ${customerInfo.address}`;
+
+      window.open(`https://wa.me/${BRAND.phone.replace(/\s/g, "")}?text=${encodeURIComponent(message)}`, "_blank");
+      toast.success("Siparişiniz WhatsApp üzerinden iletildi!");
+      clearCart();
+    }
+  };
+
+  return (
+    <div className="container max-w-4xl py-6 md:py-10">
+      <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6">
+        <ArrowLeft className="h-4 w-4" /> Alışverişe Devam Et
+      </Link>
+
+      <h1 className="font-display text-2xl font-bold text-foreground mb-6">
+        Sepetim <span className="text-muted-foreground font-normal text-lg">({itemCount} ürün)</span>
+      </h1>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Cart Items */}
+        <div className="lg:col-span-2 space-y-4">
+          {items.map(item => {
+            const price = item.product.salePrice || item.product.price;
+            const warrantyPrice = price * 0.5;
+
+            return (
+              <Card key={item.product.id} className="border-border">
+                <CardContent className="p-4">
+                  <div className="flex gap-4">
+                    <Link to={`/urun/${item.product.slug}`}>
+                      <img
+                        src={item.product.image}
+                        alt={item.product.name}
+                        className="h-24 w-24 rounded-xl object-contain bg-muted/50 border border-border p-2"
+                      />
+                    </Link>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-primary/70 uppercase">{item.product.brand}</p>
+                      <Link to={`/urun/${item.product.slug}`}>
+                        <p className="text-sm font-semibold text-foreground line-clamp-2 hover:text-primary transition-colors">{item.product.name}</p>
+                      </Link>
+                      <p className="text-lg font-bold text-foreground mt-1">{formatPrice(price)}</p>
+
+                      {/* Quantity */}
+                      <div className="flex items-center gap-2 mt-2">
+                        <Button variant="outline" size="icon" className="h-8 w-8 rounded-full" onClick={() => updateQuantity(item.product.id, item.quantity - 1)}>
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <span className="font-semibold w-8 text-center">{item.quantity}</span>
+                        <Button variant="outline" size="icon" className="h-8 w-8 rounded-full" onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                        <Button variant="ghost" size="sm" className="ml-auto text-muted-foreground hover:text-destructive gap-1" onClick={() => removeItem(item.product.id)}>
+                          <Trash2 className="h-4 w-4" /> Sil
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Upsells */}
+                  <div className="mt-4 space-y-3 border-t border-border pt-4">
+                    {/* Extended Warranty */}
+                    <div className="flex items-start gap-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 p-3">
+                      <ShieldPlus className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-semibold text-foreground">+2 Yıl Ekstra Garanti</p>
+                            <p className="text-xs text-muted-foreground">Toplam 4 yıl garanti kapsamı</p>
+                          </div>
+                          <Switch
+                            checked={item.extendedWarranty}
+                            onCheckedChange={() => toggleWarranty(item.product.id)}
+                          />
+                        </div>
+                        <p className="text-sm font-bold text-amber-700 dark:text-amber-400 mt-1">
+                          +{formatPrice(warrantyPrice)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Express Delivery */}
+                    <div className="flex items-start gap-3 rounded-xl bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 p-3">
+                      <Zap className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-semibold text-foreground">Express Kurulum (Bugün)</p>
+                            <p className="text-xs text-muted-foreground">Aynı gün teslimat ve kurulum</p>
+                          </div>
+                          <Switch
+                            checked={item.expressDelivery}
+                            onCheckedChange={() => toggleExpressDelivery(item.product.id)}
+                          />
+                        </div>
+                        <p className="text-sm font-bold text-blue-700 dark:text-blue-400 mt-1">
+                          +{formatPrice(EXPRESS_FEE)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        {/* Sidebar: Summary + Payment */}
+        <div className="space-y-4">
+          {/* Customer Info */}
+          <Card className="border-border">
+            <CardContent className="p-4 space-y-3">
+              <h3 className="font-display font-bold text-foreground">Müşteri Bilgileri</h3>
+              <Input
+                placeholder="Ad Soyad *"
+                value={customerInfo.name}
+                onChange={e => setCustomerInfo(p => ({ ...p, name: e.target.value }))}
+              />
+              <Input
+                placeholder="Telefon *"
+                value={customerInfo.phone}
+                onChange={e => setCustomerInfo(p => ({ ...p, phone: e.target.value }))}
+                inputMode="tel"
+              />
+              <Input
+                placeholder="E-posta"
+                value={customerInfo.email}
+                onChange={e => setCustomerInfo(p => ({ ...p, email: e.target.value }))}
+                type="email"
+              />
+              <Input
+                placeholder="Teslimat Adresi"
+                value={customerInfo.address}
+                onChange={e => setCustomerInfo(p => ({ ...p, address: e.target.value }))}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Payment Method */}
+          <Card className="border-border">
+            <CardContent className="p-4 space-y-3">
+              <h3 className="font-display font-bold text-foreground">Ödeme Yöntemi</h3>
+              <RadioGroup value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as "card" | "cash")}>
+                <div className="flex items-center gap-3 rounded-xl border border-border p-3 cursor-pointer hover:bg-muted/50 transition-colors">
+                  <RadioGroupItem value="card" id="card" />
+                  <Label htmlFor="card" className="flex items-center gap-2 cursor-pointer flex-1">
+                    <CreditCard className="h-4 w-4 text-primary" />
+                    <div>
+                      <p className="font-semibold text-sm">Kredi Kartı</p>
+                      <p className="text-xs text-muted-foreground">3D Secure güvenli ödeme</p>
+                    </div>
+                  </Label>
+                </div>
+                <div className="flex items-center gap-3 rounded-xl border border-border p-3 cursor-pointer hover:bg-muted/50 transition-colors">
+                  <RadioGroupItem value="cash" id="cash" />
+                  <Label htmlFor="cash" className="flex items-center gap-2 cursor-pointer flex-1">
+                    <Banknote className="h-4 w-4 text-success" />
+                    <div>
+                      <p className="font-semibold text-sm">Kapıda Ödeme</p>
+                      <p className="text-xs text-muted-foreground">Nakit veya POS ile</p>
+                    </div>
+                  </Label>
+                </div>
+              </RadioGroup>
+            </CardContent>
+          </Card>
+
+          {/* Summary */}
+          <Card className="border-border bg-muted/30">
+            <CardContent className="p-4 space-y-2">
+              <h3 className="font-display font-bold text-foreground mb-3">Sipariş Özeti</h3>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Ürünler ({itemCount})</span>
+                <span className="font-medium">{formatPrice(subtotal)}</span>
+              </div>
+              {warrantyTotal > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-amber-600">+2 Yıl Garanti</span>
+                  <span className="font-medium text-amber-600">{formatPrice(warrantyTotal)}</span>
+                </div>
+              )}
+              {expressTotal > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-blue-600">Express Kurulum</span>
+                  <span className="font-medium text-blue-600">{formatPrice(expressTotal)}</span>
+                </div>
+              )}
+              <hr className="border-border" />
+              <div className="flex justify-between text-lg font-bold">
+                <span className="text-foreground">Toplam</span>
+                <span className="text-primary">{formatPrice(grandTotal)}</span>
+              </div>
+
+              <Button
+                className="w-full rounded-full font-semibold gap-2 mt-2"
+                size="lg"
+                onClick={handleCheckout}
+              >
+                {paymentMethod === "card" ? (
+                  <><CreditCard className="h-4 w-4" /> Kredi Kartı ile Öde</>
+                ) : (
+                  <><Banknote className="h-4 w-4" /> Kapıda Ödeme ile Sipariş Ver</>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}

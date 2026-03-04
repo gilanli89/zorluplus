@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award, Mic, MicOff } from "lucide-react";
+import CartSheet from "@/components/CartSheet";
 import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -227,6 +228,7 @@ export default function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          <CartSheet />
           <a href="https://servis.zorluplus.com" target="_blank" rel="noopener noreferrer">
             <Button variant="outline" size="sm" className="rounded-full gap-1.5 border-primary/30 text-primary hover:bg-primary/5 font-semibold hidden sm:inline-flex">
               <Wrench className="h-3.5 w-3.5" /> Servis Talebi
