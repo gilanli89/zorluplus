@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, Phone, Menu, X, FileText } from "lucide-react";
+import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -87,13 +88,8 @@ export default function Header() {
         </Sheet>
 
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 shrink-0">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground font-display font-extrabold text-sm">
-            Z+
-          </div>
-          <span className="font-display font-bold text-lg hidden sm:inline text-foreground">
-            Zorlu Digital Plaza
-          </span>
+        <Link to="/" className="shrink-0">
+          <Logo size="sm" />
         </Link>
 
         {/* Desktop nav */}
