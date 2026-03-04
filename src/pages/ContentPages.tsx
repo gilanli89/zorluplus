@@ -180,9 +180,36 @@ export function IadeKosullariPage() {
 export function GizlilikPolitikasiPage() {
   return (
     <ContentPage title="Gizlilik Politikası">
-      <p>Zorlu Digital Plaza olarak kişisel verilerinizin güvenliği bizim için önemlidir.</p>
-      <h2>Toplanan Bilgiler</h2>
-      <p>İletişim formları aracılığıyla ad, telefon ve e-posta bilgileriniz toplanmaktadır. Bu bilgiler yalnızca sizinle iletişim kurmak amacıyla kullanılır.</p>
+      <h2>Biz Kimiz</h2>
+      <p>Web sitemizin adresi: <strong>https://zorluplus.com</strong></p>
+
+      <h2>Hangi Kişisel Verileri Topluyoruz ve Neden</h2>
+
+      <h3>Yorumlar</h3>
+      <p>Ziyaretçiler sitede yorum bıraktığında, yorum formundaki verilerin yanı sıra spam tespitine yardımcı olmak amacıyla ziyaretçinin IP adresi ve tarayıcı kullanıcı aracı dizesi de toplanır.</p>
+      <p>E-posta adresinizden oluşturulan anonimleştirilmiş bir dize (hash olarak da bilinir), Gravatar hizmetine sağlanabilir. Yorumunuz onaylandıktan sonra profil resminiz yorum bağlamında herkese görünür hale gelir.</p>
+
+      <h3>Medya</h3>
+      <p>Web sitesine görsel yüklüyorsanız, konum verileri (EXIF GPS) gömülmüş görseller yüklemekten kaçınmalısınız. Web sitesi ziyaretçileri görsellerdeki konum verilerini indirebilir ve çıkarabilir.</p>
+
+      <h3>Çerezler</h3>
+      <p>Sitemizde yorum bırakırsanız adınızı, e-posta adresinizi ve web sitenizi çerezlere kaydetmeyi tercih edebilirsiniz. Bunlar bir yıl sürer. Giriş yaptığınızda, giriş bilgilerinizi kaydetmek için çerezler ayarlanır. Giriş çerezleri iki gün, ekran seçenekleri çerezleri bir yıl sürer.</p>
+
+      <h3>Diğer Sitelerden Gömülü İçerik</h3>
+      <p>Bu sitedeki makaleler gömülü içerik (videolar, görseller, makaleler vb.) içerebilir. Diğer web sitelerinden gömülü içerik, ziyaretçinin o web sitesini ziyaret etmiş olmasıyla aynı şekilde davranır.</p>
+
+      <h2>Verilerinizi Kimlerle Paylaşıyoruz</h2>
+      <p>Parola sıfırlama talebinde bulunursanız IP adresiniz sıfırlama e-postasına dahil edilecektir.</p>
+
+      <h2>Verilerinizi Ne Kadar Süre Saklıyoruz</h2>
+      <p>Yorum bırakırsanız, yorum ve meta verileri süresiz olarak saklanır. Bu, takip yorumlarını moderasyon kuyruğunda tutmak yerine otomatik olarak tanıyıp onaylamamız içindir.</p>
+      <p>Web sitemize kayıt olan kullanıcılar için, kullanıcı profillerinde sağladıkları kişisel bilgileri de saklarız. Tüm kullanıcılar kişisel bilgilerini istedikleri zaman görebilir, düzenleyebilir veya silebilir.</p>
+
+      <h2>Verileriniz Üzerindeki Haklarınız</h2>
+      <p>Bu sitede bir hesabınız varsa veya yorum bıraktıysanız, sizin hakkınızda tuttuğumuz kişisel verilerin dışa aktarılmış bir dosyasını talep edebilirsiniz. Ayrıca hakkınızda tuttuğumuz tüm kişisel verileri silmemizi talep edebilirsiniz. Bu, idari, yasal veya güvenlik amaçlarıyla saklamak zorunda olduğumuz verileri kapsamaz.</p>
+
+      <h2>Verilerinizi Nereye Gönderiyoruz</h2>
+      <p>Ziyaretçi yorumları otomatik bir spam tespit hizmeti aracılığıyla kontrol edilebilir.</p>
     </ContentPage>
   );
 }

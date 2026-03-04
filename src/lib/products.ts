@@ -49,6 +49,8 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
   const map: Array<{ match: string; category: string; subcategory: string }> = [
     // Beyaz Eşya
     { match: "buzdolap", category: "beyaz-esya", subcategory: "buzdolabi" },
+    { match: "buz dolap", category: "beyaz-esya", subcategory: "buzdolabi" },
+    { match: "mini buzd", category: "beyaz-esya", subcategory: "mini-buzdolabi" },
     { match: "çamaşır", category: "beyaz-esya", subcategory: "camasir-makinesi" },
     { match: "camasir", category: "beyaz-esya", subcategory: "camasir-makinesi" },
     { match: "bulaşık", category: "beyaz-esya", subcategory: "bulasik-makinesi" },
@@ -61,6 +63,8 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
     { match: "ocak", category: "ankastre", subcategory: "ocak" },
     { match: "davlumbaz", category: "ankastre", subcategory: "davlumbaz" },
     // İklimlendirme
+    { match: "split klima", category: "klima-isitma", subcategory: "split-klima" },
+    { match: "portatif klima", category: "klima-isitma", subcategory: "portatif-klima" },
     { match: "klima", category: "klima-isitma", subcategory: "klima" },
     { match: "ısıtıcı", category: "klima-isitma", subcategory: "isiticilar" },
     { match: "isitici", category: "klima-isitma", subcategory: "isiticilar" },
@@ -70,11 +74,28 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
     { match: "soundbar", category: "tv-goruntu", subcategory: "soundbar" },
     { match: "ses sistem", category: "tv-goruntu", subcategory: "soundbar" },
     { match: "video", category: "tv-goruntu", subcategory: "tv" },
-    // Ev Aletleri
-    { match: "su sebil", category: "kucuk-ev-aletleri", subcategory: "su-sebili" },
+    // Mutfak Aletleri
+    { match: "air fryer", category: "mutfak-aletleri", subcategory: "air-fryer" },
+    { match: "mikrodalga", category: "mutfak-aletleri", subcategory: "mikrodalga" },
+    { match: "kahve", category: "mutfak-aletleri", subcategory: "kahve-makinesi" },
+    { match: "pişirici", category: "mutfak-aletleri", subcategory: "pisirici" },
+    { match: "su sebil", category: "mutfak-aletleri", subcategory: "su-sebili" },
+    // Küçük Ev Aletleri
     { match: "süpürge", category: "kucuk-ev-aletleri", subcategory: "supurge" },
     { match: "ütü", category: "kucuk-ev-aletleri", subcategory: "utu" },
+    { match: "vantilatör", category: "kucuk-ev-aletleri", subcategory: "ventilator" },
     { match: "ev alet", category: "kucuk-ev-aletleri", subcategory: "" },
+    // Ses Sistemleri
+    { match: "hoparlör", category: "ses-sistemleri", subcategory: "bluetooth-hoparlor" },
+    { match: "kulaklık", category: "ses-sistemleri", subcategory: "kulaklik" },
+    // Aksesuarlar
+    { match: "temizlik", category: "aksesuar", subcategory: "temizlik-urunleri" },
+    { match: "tv askı", category: "aksesuar", subcategory: "tv-aski" },
+    { match: "uydu", category: "aksesuar", subcategory: "uydu-ekipman" },
+    { match: "kumanda", category: "aksesuar", subcategory: "" },
+    { match: "kablo", category: "aksesuar", subcategory: "" },
+    // Oyun
+    { match: "oyun", category: "oyun", subcategory: "oyun-aksesuar" },
   ];
 
   for (const entry of map) {
