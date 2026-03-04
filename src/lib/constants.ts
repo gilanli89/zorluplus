@@ -24,13 +24,13 @@ export const BRANCHES = [
     mapsLink: "https://maps.google.com/?q=Zorlu+Digital+Plaza+Lefkosa",
   },
   {
-    id: "girne",
-    name: "Zorlu Digital Plaza Girne",
-    address: "Girne Merkez, KKTC",
+    id: "magusa",
+    name: "Zorlu Digital Plaza Mağusa",
+    address: "Mağusa Merkez, KKTC",
     phone: "+90 548 878 31 31",
     hours: "Pazartesi - Cumartesi: 09:00 - 19:00",
-    mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3261.8!2d33.32!3d35.33!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDE5JzQ4LjAiTiAzM8KwMTknMTIuMCJF!5e0!3m2!1str!2s!4v1",
-    mapsLink: "https://maps.google.com/?q=Zorlu+Digital+Plaza+Girne",
+    mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3261.8!2d33.94!3d35.12!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDA3JzEyLjAiTiAzM8KwNTYnMjQuMCJF!5e0!3m2!1str!2s!4v1",
+    mapsLink: "https://maps.google.com/?q=Zorlu+Digital+Plaza+Magusa",
   },
 ];
 
