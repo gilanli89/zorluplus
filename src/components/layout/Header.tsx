@@ -1,17 +1,44 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award } from "lucide-react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award, Mic, MicOff } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { BRAND, CATEGORIES } from "@/lib/constants";
-import { useNavigate } from "react-router-dom";
+import { cn } from "@/lib/utils";
+
+// Speech Recognition types
+interface SpeechRecognitionEvent {
+  results: { [index: number]: { [index: number]: { transcript: string } } };
+  resultIndex: number;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: new () => SpeechRecognition;
+    webkitSpeechRecognition: new () => SpeechRecognition;
+  }
+  interface SpeechRecognition extends EventTarget {
+    lang: string;
+    continuous: boolean;
+    interimResults: boolean;
+    start(): void;
+    stop(): void;
+    onresult: ((event: SpeechRecognitionEvent) => void) | null;
+    onend: (() => void) | null;
+    onerror: ((event: { error: string }) => void) | null;
+  }
+}
 
 export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const navigate = useNavigate();
+
+  const hasSpeechSupport = typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,8 +46,48 @@ export default function Header() {
       navigate(`/arama?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
       setSearchQuery("");
+      stopListening();
     }
   };
+
+  const stopListening = useCallback(() => {
+    recognitionRef.current?.stop();
+    setIsListening(false);
+  }, []);
+
+  const startListening = useCallback(() => {
+    if (!hasSpeechSupport) return;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = "tr-TR";
+    recognition.continuous = false;
+    recognition.interimResults = true;
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const transcript = event.results[0][0].transcript;
+      setSearchQuery(transcript);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsListening(true);
+    setSearchOpen(true);
+  }, [hasSpeechSupport]);
+
+  useEffect(() => {
+    return () => {
+      recognitionRef.current?.stop();
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-lg supports-[backdrop-filter]:bg-card/80 shadow-sm">
@@ -92,6 +159,53 @@ export default function Header() {
           <Logo size="sm" />
         </Link>
 
+        {/* Search + Voice (between logo and nav) */}
+        <div className="flex items-center gap-1">
+          {searchOpen ? (
+            <form onSubmit={handleSearch} className="flex items-center gap-1.5">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Ürün ara..."
+                  className="w-40 sm:w-64 h-9 rounded-full pl-9 pr-3"
+                  autoFocus
+                />
+              </div>
+              {hasSpeechSupport && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    "rounded-full shrink-0 transition-colors",
+                    isListening && "text-destructive bg-destructive/10 animate-pulse"
+                  )}
+                  onClick={isListening ? stopListening : startListening}
+                  title={isListening ? "Dinlemeyi durdur" : "Sesle ara"}
+                >
+                  {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                </Button>
+              )}
+              <Button type="button" variant="ghost" size="icon" className="rounded-full shrink-0" onClick={() => { setSearchOpen(false); stopListening(); }}>
+                <X className="h-4 w-4" />
+              </Button>
+            </form>
+          ) : (
+            <>
+              <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setSearchOpen(true)}>
+                <Search className="h-5 w-5" />
+              </Button>
+              {hasSpeechSupport && (
+                <Button variant="ghost" size="icon" className="rounded-full" onClick={startListening} title="Sesle ara">
+                  <Mic className="h-5 w-5" />
+                </Button>
+              )}
+            </>
+          )}
+        </div>
+
         {/* Desktop nav */}
         <nav className="hidden lg:flex items-center gap-0.5">
           {CATEGORIES.slice(0, 4).map(cat => (
@@ -121,24 +235,6 @@ export default function Header() {
               <Wrench className="h-5 w-5 text-primary" />
             </Button>
           </a>
-          {searchOpen ? (
-            <form onSubmit={handleSearch} className="flex items-center gap-2">
-              <Input
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Ürün ara..."
-                className="w-40 sm:w-60 h-9 rounded-full"
-                autoFocus
-              />
-              <Button type="button" variant="ghost" size="icon" onClick={() => setSearchOpen(false)}>
-                <X className="h-4 w-4" />
-              </Button>
-            </form>
-          ) : (
-            <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setSearchOpen(true)}>
-              <Search className="h-5 w-5" />
-            </Button>
-          )}
           <Link to="/teklif-al">
             <Button size="sm" className="hidden sm:inline-flex font-semibold rounded-full px-5">
               Teklif Al
