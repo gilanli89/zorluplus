@@ -53,17 +53,18 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
 }
 
 function parseRow(row: Record<string, string>, index: number): Product {
-  const rawCat = row["Kategori"] || row["Category"] || row["category"] || "";
+  const rawCat = row["Kategoriler"] || row["Kategori"] || row["Category"] || row["category"] || "";
   const { category, subcategory } = normalizeCategorySlug(rawCat);
   const name = row["İsim"] || row["Ürün Adı"] || row["Name"] || row["name"] || `Ürün ${index + 1}`;
   const sku = (row["SKU"] || row["sku"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
-  const price = parseFloat(row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
-  const salePrice = parseFloat(row["İndirimli Fiyat"] || row["Sale Price"] || row["sale_price"] || "0") || undefined;
-  const brand = row["Marka"] || row["Brand"] || row["brand"] || "";
-  const image = row["Image"] || row["Görsel"] || row["image"] || "/placeholder.svg";
+  const price = parseFloat(row["Normal fiyat"] || row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
+  const salePrice = parseFloat(row["İndirimli satış fiyatı"] || row["İndirimli Fiyat"] || row["Sale Price"] || "0") || undefined;
+  const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
+  const image = row["Görseller"] || row["Image"] || row["Görsel"] || row["image"] || "/placeholder.svg";
   const images = image ? image.split(",").map(s => s.trim()).filter(Boolean) : ["/placeholder.svg"];
-  const desc = row["Kısa Açıklama"] || row["Açıklama"] || row["Description"] || row["description"] || "";
-  const stock = (row["Stok"] || row["Stock"] || row["stock"] || "evet").toLowerCase();
+  const desc = row["Kısa açıklama"] || row["Kısa Açıklama"] || row["Açıklama"] || row["Description"] || "";
+  const fullDesc = row["Açıklama"] || row["Description"] || "";
+  const stock = (row["Stokta?"] || row["Stok"] || row["Stock"] || row["stock"] || "1").toLowerCase();
   const tags = (row["Etiketler"] || row["Tags"] || "").split(",").map(s => s.trim()).filter(Boolean);
 
   // Parse specs from attribute columns and known spec fields
@@ -103,7 +104,7 @@ function parseRow(row: Record<string, string>, index: number): Product {
     currency: "TL",
     image: images[0] || "/placeholder.svg",
     images: images.length > 0 ? images : ["/placeholder.svg"],
-    description: desc,
+    description: desc || fullDesc,
     specs,
     inStock: stock !== "hayır" && stock !== "no" && stock !== "0",
     isNew,
