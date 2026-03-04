@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, Phone, Menu, X, FileText } from "lucide-react";
+import { Search, Phone, Menu, X, FileText, Wrench } from "lucide-react";
 import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -113,6 +113,11 @@ export default function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          <a href="https://servis.zorluplus.com" target="_blank" rel="noopener noreferrer" title="Servis Talebi">
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <Wrench className="h-5 w-5" />
+            </Button>
+          </a>
           {searchOpen ? (
             <form onSubmit={handleSearch} className="flex items-center gap-2">
               <Input
