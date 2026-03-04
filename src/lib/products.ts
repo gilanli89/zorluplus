@@ -12,31 +12,42 @@ function slugify(text: string): string {
 }
 
 function normalizeCategorySlug(raw: string): { category: string; subcategory: string } {
-  const lower = raw.toLowerCase();
-  const map: Record<string, { category: string; subcategory: string }> = {
-    buzdolabı: { category: "beyaz-esya", subcategory: "buzdolabi" },
-    buzdolabi: { category: "beyaz-esya", subcategory: "buzdolabi" },
-    "çamaşır makinesi": { category: "beyaz-esya", subcategory: "camasir-makinesi" },
-    "camasir makinesi": { category: "beyaz-esya", subcategory: "camasir-makinesi" },
-    "bulaşık makinesi": { category: "beyaz-esya", subcategory: "bulasik-makinesi" },
-    "bulasik makinesi": { category: "beyaz-esya", subcategory: "bulasik-makinesi" },
-    "kurutma makinesi": { category: "beyaz-esya", subcategory: "kurutma-makinesi" },
-    "derin dondurucu": { category: "beyaz-esya", subcategory: "derin-dondurucu" },
-    fırın: { category: "ankastre", subcategory: "firin" },
-    firin: { category: "ankastre", subcategory: "firin" },
-    ocak: { category: "ankastre", subcategory: "ocak" },
-    davlumbaz: { category: "ankastre", subcategory: "davlumbaz" },
-    klima: { category: "klima-isitma", subcategory: "klima" },
-    ısıtıcı: { category: "klima-isitma", subcategory: "isiticilar" },
-    isitici: { category: "klima-isitma", subcategory: "isiticilar" },
-    tv: { category: "tv-goruntu", subcategory: "tv" },
-    televizyon: { category: "tv-goruntu", subcategory: "tv" },
-    soundbar: { category: "tv-goruntu", subcategory: "soundbar" },
-    "ses sistemi": { category: "tv-goruntu", subcategory: "soundbar" },
-  };
+  const lower = raw.toLowerCase().trim();
+  
+  // Handle hierarchical categories like "Video / Audio > Televizyonlar"
+  const map: Array<{ match: string; category: string; subcategory: string }> = [
+    // Beyaz Eşya
+    { match: "buzdolap", category: "beyaz-esya", subcategory: "buzdolabi" },
+    { match: "çamaşır", category: "beyaz-esya", subcategory: "camasir-makinesi" },
+    { match: "camasir", category: "beyaz-esya", subcategory: "camasir-makinesi" },
+    { match: "bulaşık", category: "beyaz-esya", subcategory: "bulasik-makinesi" },
+    { match: "bulasik", category: "beyaz-esya", subcategory: "bulasik-makinesi" },
+    { match: "kurutma", category: "beyaz-esya", subcategory: "kurutma-makinesi" },
+    { match: "derin dondurucu", category: "beyaz-esya", subcategory: "derin-dondurucu" },
+    // Ankastre
+    { match: "fırın", category: "ankastre", subcategory: "firin" },
+    { match: "firin", category: "ankastre", subcategory: "firin" },
+    { match: "ocak", category: "ankastre", subcategory: "ocak" },
+    { match: "davlumbaz", category: "ankastre", subcategory: "davlumbaz" },
+    // İklimlendirme
+    { match: "klima", category: "klima-isitma", subcategory: "klima" },
+    { match: "ısıtıcı", category: "klima-isitma", subcategory: "isiticilar" },
+    { match: "isitici", category: "klima-isitma", subcategory: "isiticilar" },
+    // TV
+    { match: "televizyon", category: "tv-goruntu", subcategory: "tv" },
+    { match: "tv", category: "tv-goruntu", subcategory: "tv" },
+    { match: "soundbar", category: "tv-goruntu", subcategory: "soundbar" },
+    { match: "ses sistem", category: "tv-goruntu", subcategory: "soundbar" },
+    { match: "video", category: "tv-goruntu", subcategory: "tv" },
+    // Ev Aletleri
+    { match: "su sebil", category: "kucuk-ev-aletleri", subcategory: "su-sebili" },
+    { match: "süpürge", category: "kucuk-ev-aletleri", subcategory: "supurge" },
+    { match: "ütü", category: "kucuk-ev-aletleri", subcategory: "utu" },
+    { match: "ev alet", category: "kucuk-ev-aletleri", subcategory: "" },
+  ];
 
-  for (const [key, val] of Object.entries(map)) {
-    if (lower.includes(key)) return val;
+  for (const entry of map) {
+    if (lower.includes(entry.match)) return { category: entry.category, subcategory: entry.subcategory };
   }
   return { category: "elektronik-aksesuar", subcategory: slugify(raw) };
 }
@@ -44,33 +55,47 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
 function parseRow(row: Record<string, string>, index: number): Product {
   const rawCat = row["Kategori"] || row["Category"] || row["category"] || "";
   const { category, subcategory } = normalizeCategorySlug(rawCat);
-  const name = row["Ürün Adı"] || row["Name"] || row["name"] || `Ürün ${index + 1}`;
-  const sku = row["SKU"] || row["sku"] || row["ID"] || row["id"] || `SKU-${index}`;
+  const name = row["İsim"] || row["Ürün Adı"] || row["Name"] || row["name"] || `Ürün ${index + 1}`;
+  const sku = (row["SKU"] || row["sku"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
   const price = parseFloat(row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
   const salePrice = parseFloat(row["İndirimli Fiyat"] || row["Sale Price"] || row["sale_price"] || "0") || undefined;
   const brand = row["Marka"] || row["Brand"] || row["brand"] || "";
-  const image = row["Görsel"] || row["Image"] || row["image"] || "/placeholder.svg";
-  const images = (row["Görseller"] || row["Images"] || row["images"] || image).split(",").map(s => s.trim()).filter(Boolean);
-  const desc = row["Açıklama"] || row["Description"] || row["description"] || "";
+  const image = row["Image"] || row["Görsel"] || row["image"] || "/placeholder.svg";
+  const images = image ? image.split(",").map(s => s.trim()).filter(Boolean) : ["/placeholder.svg"];
+  const desc = row["Kısa Açıklama"] || row["Açıklama"] || row["Description"] || row["description"] || "";
   const stock = (row["Stok"] || row["Stock"] || row["stock"] || "evet").toLowerCase();
+  const tags = (row["Etiketler"] || row["Tags"] || "").split(",").map(s => s.trim()).filter(Boolean);
 
-  // Parse specs from any columns starting with "Spec:" or known spec fields
+  // Parse specs from attribute columns and known spec fields
   const specs: Record<string, string> = {};
+  for (let i = 1; i <= 5; i++) {
+    const attrName = row[`Nitelik ${i} ismi`];
+    const attrVal = row[`Nitelik ${i} değer(ler)i`];
+    if (attrName && attrVal) {
+      specs[attrName.trim()] = attrVal.trim();
+    }
+  }
   for (const [key, val] of Object.entries(row)) {
     if (key.startsWith("Spec:") || key.startsWith("spec:")) {
       specs[key.replace(/^[Ss]pec:\s*/, "")] = val;
     }
   }
-  // Common spec fields
   const specFields = ["Ekran", "BTU", "Kapasite", "Enerji Sınıfı", "Devir", "Panel", "Çözünürlük", "Litre", "No-Frost", "İnverter", "Smart"];
   specFields.forEach(f => { if (row[f]) specs[f] = row[f]; });
+
+  // Detect featured/new from tags
+  const tagsLower = tags.map(t => t.toLowerCase());
+  const isFeatured = tagsLower.some(t => t.includes("öne çıkan") || t.includes("featured")) || 
+    (row["Öne Çıkan"] || row["Featured"] || "").toLowerCase() === "evet";
+  const isNew = tagsLower.some(t => t.includes("yeni") || t.includes("new")) ||
+    (row["Yeni"] || row["New"] || "").toLowerCase() === "evet";
 
   return {
     id: sku,
     sku,
-    name,
     slug: `${slugify(sku)}-${slugify(name)}`,
-    brand,
+    name,
+    brand: brand.trim(),
     category,
     subcategory,
     price,
@@ -81,9 +106,9 @@ function parseRow(row: Record<string, string>, index: number): Product {
     description: desc,
     specs,
     inStock: stock !== "hayır" && stock !== "no" && stock !== "0",
-    isNew: (row["Yeni"] || row["New"] || "").toLowerCase() === "evet" || (row["Yeni"] || row["New"] || "").toLowerCase() === "yes",
-    isFeatured: (row["Öne Çıkan"] || row["Featured"] || "").toLowerCase() === "evet" || (row["Öne Çıkan"] || row["Featured"] || "").toLowerCase() === "yes",
-    tags: (row["Etiketler"] || row["Tags"] || "").split(",").map(s => s.trim()).filter(Boolean),
+    isNew,
+    isFeatured,
+    tags,
     createdAt: row["Tarih"] || row["Date"] || new Date().toISOString(),
   };
 }
