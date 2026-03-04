@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ShoppingCart, Trash2, Plus, Minus, ShieldPlus, Zap, ArrowLeft, CreditCard, Banknote } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -37,15 +38,41 @@ export default function CartPage() {
     );
   }
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!customerInfo.name || !customerInfo.phone) {
       toast.error("Lütfen ad ve telefon bilgilerinizi giriniz.");
       return;
     }
 
+    const orderId = `ORD-${Date.now()}`;
+    const orderItems = items.map(i => ({
+      productId: i.product.id,
+      name: i.product.name,
+      sku: i.product.sku,
+      quantity: i.quantity,
+      unitPrice: i.product.salePrice || i.product.price,
+      extendedWarranty: i.extendedWarranty,
+      expressDelivery: i.expressDelivery,
+    }));
+
+    // Save order to DB
+    try {
+      await supabase.from("orders").insert({
+        order_number: orderId,
+        customer_name: customerInfo.name,
+        customer_phone: customerInfo.phone,
+        customer_email: customerInfo.email || null,
+        shipping_address: customerInfo.address || null,
+        items: orderItems,
+        total_amount: grandTotal,
+        status: paymentMethod === "card" ? "pending" : "pending",
+        payment_method: paymentMethod === "card" ? "cardplus" : "cash_on_delivery",
+      });
+    } catch (err) {
+      console.error("Order save error:", err);
+    }
+
     if (paymentMethod === "card") {
-      // Redirect to CardPlus checkout
-      const orderId = `ORD-${Date.now()}`;
       const params = new URLSearchParams({
         amount: grandTotal.toString(),
         orderId,
@@ -62,10 +89,10 @@ export default function CartPage() {
         return line;
       }).join("\n");
 
-      const message = `🛒 Yeni Sipariş (Kapıda Ödeme)\n\n${orderLines}\n\n💰 Toplam: ${formatPrice(grandTotal)}\n\n👤 ${customerInfo.name}\n📱 ${customerInfo.phone}\n📧 ${customerInfo.email}\n📍 ${customerInfo.address}`;
+      const message = `🛒 Yeni Sipariş (Kapıda Ödeme)\n\nSipariş No: ${orderId}\n\n${orderLines}\n\n💰 Toplam: ${formatPrice(grandTotal)}\n\n👤 ${customerInfo.name}\n📱 ${customerInfo.phone}\n📧 ${customerInfo.email}\n📍 ${customerInfo.address}`;
 
       window.open(`https://wa.me/${BRAND.phone.replace(/\s/g, "")}?text=${encodeURIComponent(message)}`, "_blank");
-      toast.success("Siparişiniz WhatsApp üzerinden iletildi!");
+      toast.success("Siparişiniz oluşturuldu!");
       clearCart();
     }
   };
