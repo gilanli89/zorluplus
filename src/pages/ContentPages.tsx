@@ -165,13 +165,82 @@ export function KullanimKosullariPage() {
 
 export function IadeKosullariPage() {
   return (
-    <ContentPage title="İade Koşulları">
-      <p>Satın aldığınız ürünleri, teslim tarihinden itibaren 14 gün içinde iade edebilirsiniz.</p>
-      <h2>İade Şartları</h2>
+    <ContentPage title="İade Politikası">
+      <p className="text-sm text-muted-foreground mb-6">Son güncelleme tarihi: 23.12.2025</p>
+      <p>Bu İade Politikası, Zorlu Digital Plaza ("Şirket", "biz", "bize", "bizim") üzerinden satın alınan ürünler için geçerli iade, değişim ve iptal şartlarını açıklamaktadır. Müşteri memnuniyeti bizim için önceliklidir ve tüm süreçlerin açık, güvenilir ve kolay anlaşılır olmasına özen gösteririz.</p>
+
+      <h2>1. Genel İade Koşulları</h2>
       <ul>
-        <li>Ürün kullanılmamış ve orijinal ambalajında olmalıdır.</li>
-        <li>Fatura ve garanti belgesi ile birlikte iade edilmelidir.</li>
-        <li>Montajı yapılmış ürünlerde iade kabul edilmemektedir.</li>
+        <li>İade talebi, ürün teslim alındıktan sonra <strong>7 gün</strong> içinde yapılmalıdır.</li>
+        <li>Ürün kullanılmamış, orijinal ambalajında, eksiksiz ve yeniden satılabilir durumda olmalıdır.</li>
+        <li>Fatura veya dijital satın alma belgesinin ibrazı zorunludur.</li>
+        <li>Ürün ve ambalajında kullanıcı kaynaklı hasar / çizik / kırık bulunursa iade kabul edilmeyecektir.</li>
+      </ul>
+
+      <h2>2. İade Edilemeyen Ürünler</h2>
+      <p>Aşağıdaki ürünlerde, mevzuat gereği iade yapılamaz veya sadece arıza/defect durumunda iade alınabilir:</p>
+      <ul>
+        <li>Kulak içi kulaklıklar gibi hijyen gerektiren ürünler (paketi açılmışsa)</li>
+        <li>Yazılım, oyun, dijital lisans, aktivasyon kodları</li>
+        <li>Kurulumu yapılmış büyük beyaz eşyalar (buzdolabı, çamaşır makinesi vb.) kurulum sonrası memnuniyetsizlik gerekçesiyle iade edilemez</li>
+        <li>Özel siparişle getirilen veya müşteri talebine göre özelleştirilmiş ürünler</li>
+      </ul>
+      <p>Bu tip ürünlerde yalnızca üretim kaynaklı arızalar garanti kapsamında değerlendirilir.</p>
+
+      <h2>3. Arızalı / Ayıplı Ürün İadesi</h2>
+      <p><strong>Teslimat sırasında fark edilen hasarlar için:</strong></p>
+      <ul>
+        <li>Teslimatta ürünü kontrol ediniz.</li>
+        <li>Hasar varsa tutanak tutturmadan teslim almayınız.</li>
+      </ul>
+      <p><strong>Teslim sonrası fark edilen üretim kaynaklı arızalarda:</strong></p>
+      <ul>
+        <li>Ürün, teknik servis kontrolünden geçirilir.</li>
+        <li>Teknik servisin "ayıplı ürün" raporu düzenlemesi hâlinde iade veya değişim yapılır.</li>
+        <li>Servis raporu olmadan arızalı ürün iadesi kabul edilmez.</li>
+      </ul>
+
+      <h2>4. Değişim Koşulları</h2>
+      <p>Müşteri memnuniyeti kapsamında:</p>
+      <ul>
+        <li>Stoklarda bulunması kaydıyla ürün değişimi yapılabilir.</li>
+        <li>Ürün fiyat farkı oluşursa müşteri tarafından ödenir veya müşteriye iade edilir.</li>
+        <li>Değişim başvurusu da teslimden itibaren <strong>7 gün</strong> içinde yapılmalıdır.</li>
+      </ul>
+
+      <h2>5. İade Süreci</h2>
+      <p>İade talebinizi müşteri hizmetlerimize iletiniz:</p>
+      <ul>
+        <li><strong>Telefon:</strong> +90 548 878 31 31</li>
+        <li><strong>E-posta:</strong> info@zorluplus.com</li>
+      </ul>
+      <p>Ürün tarafımıza ulaştıktan sonra ortalama <strong>7 iş günü</strong> içinde incelenir. İade talebi onaylandığında, ödeme aynı yöntemle müşteriye iade edilir.</p>
+
+      <h2>6. Kargo ve Ücretlendirme</h2>
+      <ul>
+        <li>Arızalı/defolu ürünlerde iade kargo ücreti Şirket tarafından karşılanır.</li>
+        <li>Müşteri memnuniyeti veya kişisel tercih nedeniyle yapılan iadelerde kargo ücreti müşteriye aittir.</li>
+        <li>Kargo gönderiminde ürünün hasar görmeyecek şekilde paketlenmesi müşterinin sorumluluğundadır.</li>
+      </ul>
+
+      <h2>7. Kurulum Gerektiren Ürünler</h2>
+      <p>Beyaz eşya, klima, televizyon ve benzeri ürünlerde:</p>
+      <ul>
+        <li>Yetkili servis kurulum yapmadan kutu açılmamalıdır.</li>
+        <li>Yetkisiz müdahaleler garanti kapsamını geçersiz kılabilir.</li>
+        <li>Kurulum sonrası ortaya çıkan memnuniyetsizlikler iade kapsamına girmez.</li>
+      </ul>
+
+      <h2>8. İptal Koşulları</h2>
+      <ul>
+        <li>Sipariş kargoya verilmeden önce iptal talebi alınabilir.</li>
+        <li>Kargoya verilen siparişler için iade süreci uygulanır.</li>
+      </ul>
+
+      <h2>9. İade Bedelinin Ödenmesi</h2>
+      <ul>
+        <li>Ödeme iadesi, banka veya ödeme sağlayıcısına bağlı olarak <strong>10 iş günü</strong> sürebilir.</li>
+        <li>Kapıda ödeme iadeleri, banka hesabına yapılır.</li>
       </ul>
     </ContentPage>
   );
