@@ -108,7 +108,7 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const rawCat = row["Kategoriler"] || row["Kategori"] || row["Category"] || row["category"] || "";
   const { category, subcategory } = normalizeCategorySlug(rawCat);
   const name = row["İsim"] || row["Ürün Adı"] || row["Name"] || row["name"] || `Ürün ${index + 1}`;
-  const sku = (row["Stok kodu (SKU)"] || row["SKU"] || row["sku"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
+  const sku = (row["Stok kodu (SKU)"] || row["SKU"] || row["sku"] || row["Kimlik"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
   const price = parseFloat(row["Normal fiyat"] || row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
   const salePrice = parseFloat(row["İndirimli satış fiyatı"] || row["İndirimli Fiyat"] || row["Sale Price"] || "0") || undefined;
   const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
@@ -138,10 +138,11 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const specFields = ["Ekran", "BTU", "Kapasite", "Enerji Sınıfı", "Devir", "Panel", "Çözünürlük", "Litre", "No-Frost", "İnverter", "Smart"];
   specFields.forEach(f => { if (row[f]) specs[f] = row[f]; });
 
-  // Detect featured/new from tags
+  // Detect featured/new from tags and WooCommerce columns
   const tagsLower = tags.map(t => t.toLowerCase());
   const isFeatured = tagsLower.some(t => t.includes("öne çıkan") || t.includes("featured")) || 
-    (row["Öne Çıkan"] || row["Featured"] || "").toLowerCase() === "evet";
+    (row["Öne çıkan?"] || row["Öne Çıkan"] || row["Featured"] || "").trim() === "1" ||
+    (row["Öne çıkan?"] || row["Öne Çıkan"] || row["Featured"] || "").toLowerCase() === "evet";
   const isNew = tagsLower.some(t => t.includes("yeni") || t.includes("new")) ||
     (row["Yeni"] || row["New"] || "").toLowerCase() === "evet";
 
@@ -168,15 +169,28 @@ function parseRow(row: Record<string, string>, index: number): Product {
   };
 }
 
+const LOCAL_CSV = "/data/products.csv";
+
 export async function fetchProducts(): Promise<Product[]> {
-  if (!PRODUCT_FEED_URL) {
-    return generateDemoProducts();
+  // Try local CSV first (WooCommerce export), then Google Sheets fallback
+  const urls = [LOCAL_CSV, PRODUCT_FEED_URL].filter(Boolean);
+  
+  for (const url of urls) {
+    try {
+      const res = await fetch(url!);
+      if (!res.ok) continue;
+      const text = await res.text();
+      const parsed = Papa.parse<Record<string, string>>(text, { header: true, skipEmptyLines: true });
+      const products = parsed.data
+        .map((row, i) => parseRow(row, i))
+        .filter(p => p.name && p.price > 0);
+      if (products.length > 0) return products;
+    } catch {
+      continue;
+    }
   }
   
-  const res = await fetch(PRODUCT_FEED_URL);
-  const text = await res.text();
-  const parsed = Papa.parse<Record<string, string>>(text, { header: true, skipEmptyLines: true });
-  return parsed.data.map((row, i) => parseRow(row, i));
+  return generateDemoProducts();
 }
 
 function generateDemoProducts(): Product[] {
