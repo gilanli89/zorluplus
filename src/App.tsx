@@ -19,6 +19,8 @@ import {
   KullanimKosullariPage, IadeKosullariPage, GizlilikPolitikasiPage,
   SiparisTakipPage, OdemeYontemleriPage,
 } from "@/pages/ContentPages";
+import CheckoutPage from "@/pages/CheckoutPage";
+import PaymentResultPage from "@/pages/PaymentResultPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +53,8 @@ const App = () => (
             <Route path="/gizlilik-politikasi" element={<GizlilikPolitikasiPage />} />
             <Route path="/siparis-takip" element={<SiparisTakipPage />} />
             <Route path="/odeme-yontemleri" element={<OdemeYontemleriPage />} />
+            <Route path="/odeme" element={<CheckoutPage />} />
+            <Route path="/odeme/sonuc" element={<PaymentResultPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
