@@ -27,9 +27,14 @@ export default function ProductCard({ product }: ProductCardProps) {
           loading="lazy"
           onError={(e) => {
             const target = e.currentTarget;
-            if (target.src !== "/placeholder.svg") {
-              target.src = "/placeholder.svg";
-            }
+            // Try category fallback, then placeholder
+            const fallbacks = [
+              `/products/${product.category === "tv-goruntu" ? "samsung-oled-tv" : product.category === "klima-isitma" ? "klima" : product.category === "beyaz-esya" ? "samsung-buzdolabi" : "midea-su-sebili"}.png`,
+              "/placeholder.svg"
+            ];
+            const currentSrc = target.src;
+            const next = fallbacks.find(f => !currentSrc.endsWith(f));
+            if (next) target.src = next;
           }}
         />
         <div className="absolute top-2 left-2 flex flex-col gap-1">

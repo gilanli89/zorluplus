@@ -2,6 +2,30 @@ import Papa from "papaparse";
 import { Product } from "./types";
 import { PRODUCT_FEED_URL } from "./constants";
 
+const CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
+  "tv-goruntu": "/products/samsung-oled-tv.png",
+  "klima-isitma": "/products/klima.png",
+  "beyaz-esya": "/products/samsung-buzdolabi.png",
+  "kucuk-ev-aletleri": "/products/midea-su-sebili.png",
+};
+
+const SUBCATEGORY_FALLBACK_IMAGES: Record<string, string> = {
+  "tv": "/products/samsung-oled-tv.png",
+  "soundbar": "/products/lg-oled-tv.png",
+  "klima": "/products/klima.png",
+  "isiticilar": "/products/klima.png",
+  "buzdolabi": "/products/samsung-buzdolabi.png",
+  "camasir-makinesi": "/products/lg-camasir.png",
+  "kurutma-makinesi": "/products/lg-camasir.png",
+  "bulasik-makinesi": "/products/lg-camasir.png",
+  "derin-dondurucu": "/products/samsung-buzdolabi.png",
+  "su-sebili": "/products/midea-su-sebili.png",
+};
+
+function getFallbackImage(category: string, subcategory: string): string {
+  return SUBCATEGORY_FALLBACK_IMAGES[subcategory] || CATEGORY_FALLBACK_IMAGES[category] || "/placeholder.svg";
+}
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -60,8 +84,10 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const price = parseFloat(row["Normal fiyat"] || row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
   const salePrice = parseFloat(row["İndirimli satış fiyatı"] || row["İndirimli Fiyat"] || row["Sale Price"] || "0") || undefined;
   const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
-  const image = row["Görseller"] || row["Image"] || row["Görsel"] || row["image"] || "/placeholder.svg";
-  const images = image ? image.split(",").map(s => s.trim()).filter(Boolean) : ["/placeholder.svg"];
+  const fallback = getFallbackImage(category, subcategory);
+  const rawImage = row["Görseller"] || row["Image"] || row["Görsel"] || row["image"] || "";
+  const images = rawImage ? rawImage.split(",").map(s => s.trim()).filter(Boolean) : [];
+  const image = images[0] || fallback;
   const desc = row["Kısa açıklama"] || row["Kısa Açıklama"] || row["Açıklama"] || row["Description"] || "";
   const fullDesc = row["Açıklama"] || row["Description"] || "";
   const stock = (row["Stokta?"] || row["Stok"] || row["Stock"] || row["stock"] || "1").toLowerCase();
@@ -102,8 +128,8 @@ function parseRow(row: Record<string, string>, index: number): Product {
     price,
     salePrice: salePrice && salePrice > 0 && salePrice < price ? salePrice : undefined,
     currency: "TL",
-    image: images[0] || "/placeholder.svg",
-    images: images.length > 0 ? images : ["/placeholder.svg"],
+    image,
+    images: images.length > 0 ? images : [fallback],
     description: desc || fullDesc,
     specs,
     inStock: stock !== "hayır" && stock !== "no" && stock !== "0",
