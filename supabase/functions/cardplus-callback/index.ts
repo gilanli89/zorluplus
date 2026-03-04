@@ -5,12 +5,24 @@ serve(async (req) => {
     const storeKey = Deno.env.get("CARDPLUS_STORE_KEY");
     if (!storeKey) throw new Error("CARDPLUS_STORE_KEY is not configured");
 
-    // Bank sends POST with form data
-    const formData = await req.formData();
-    const params: Record<string, string> = {};
-    formData.forEach((value, key) => {
-      params[key] = value.toString();
-    });
+    // Parse body - handle both form-data and url-encoded
+    let params: Record<string, string> = {};
+    
+    const contentType = req.headers.get("content-type") || "";
+    
+    if (contentType.includes("multipart/form-data")) {
+      const formData = await req.formData();
+      formData.forEach((value, key) => {
+        params[key] = value.toString();
+      });
+    } else {
+      // application/x-www-form-urlencoded or missing content-type
+      const body = await req.text();
+      const urlParams = new URLSearchParams(body);
+      urlParams.forEach((value, key) => {
+        params[key] = value;
+      });
+    }
 
     console.log("CardPlus callback received:", JSON.stringify(params));
 
@@ -23,14 +35,11 @@ serve(async (req) => {
     const transId = params["TransId"] || "";
 
     // Verify hash from bank response
-    const hashParamsVal = params["HASHPARAMSVAL"] || "";
     const hashParams = params["HASHPARAMS"] || "";
     const returnHash = params["HASH"] || "";
 
     let hashValid = false;
     if (hashParams && returnHash) {
-      // Hash v3 response verification:
-      // Concatenate values of HASHPARAMS fields (separated by ":") + storeKey, separated by "|"
       const paramNames = hashParams.split(":");
       const values = paramNames
         .filter((p: string) => p.length > 0)
@@ -51,15 +60,14 @@ serve(async (req) => {
     }
 
     // Determine success
-    // mdStatus: 1 = full 3D auth, 2/5/6/7 = half 3D, 3/4 = fail
     const isSuccess =
       hashValid &&
       (mdStatus === "1" || mdStatus === "2" || mdStatus === "5" || mdStatus === "6" || mdStatus === "7") &&
       response === "Approved" &&
       procReturnCode === "00";
 
-    // Build redirect URL with result params
-    const baseUrl = Deno.env.get("SITE_URL") || params["okUrl"]?.split("/odeme")[0] || "";
+    // Build redirect URL
+    const siteUrl = Deno.env.get("SITE_URL") || "https://zorluplus.lovable.app";
     const resultParams = new URLSearchParams({
       status: isSuccess ? "success" : "fail",
       orderId: oid,
@@ -70,13 +78,12 @@ serve(async (req) => {
       mdStatus: mdStatus,
     });
 
-    const redirectUrl = `${baseUrl}/odeme/sonuc?${resultParams.toString()}`;
+    const redirectUrl = `${siteUrl}/odeme/sonuc?${resultParams.toString()}`;
 
-    // Return HTML redirect (bank expects HTML response or redirect)
     return new Response(
       `<!DOCTYPE html>
 <html>
-<head><meta http-equiv="refresh" content="0;url=${redirectUrl}"></head>
+<head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${redirectUrl}"></head>
 <body><p>Yönlendiriliyorsunuz...</p><script>window.location.href="${redirectUrl}";</script></body>
 </html>`,
       {
@@ -86,10 +93,19 @@ serve(async (req) => {
     );
   } catch (error: unknown) {
     console.error("CardPlus callback error:", error);
+    
+    // Redirect to error page instead of showing raw HTML
+    const siteUrl = Deno.env.get("SITE_URL") || "https://zorluplus.lovable.app";
+    const redirectUrl = `${siteUrl}/odeme/sonuc?status=fail&errorMessage=${encodeURIComponent("Ödeme işlemi sırasında bir hata oluştu.")}`;
+    
     return new Response(
-      `<!DOCTYPE html><html><body><h1>Ödeme işlemi sırasında bir hata oluştu.</h1></body></html>`,
+      `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=${redirectUrl}"></head>
+<body><p>Yönlendiriliyorsunuz...</p><script>window.location.href="${redirectUrl}";</script></body>
+</html>`,
       {
-        status: 500,
+        status: 200,
         headers: { "Content-Type": "text/html; charset=utf-8" },
       }
     );
