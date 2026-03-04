@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
 import { useProducts } from "@/hooks/useProducts";
 import { CATEGORIES } from "@/lib/constants";
 import { getProductsByCategory } from "@/lib/products";
@@ -8,6 +9,14 @@ import ProductCard from "@/components/ProductCard";
 import FilterSheet, { applyFilters } from "@/components/FilterSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { delay: i * 0.04, duration: 0.35, ease: [0.25, 0.1, 0.25, 1] as const },
+  }),
+};
 
 export default function CategoryPage() {
   const { categorySlug, subSlug } = useParams();
@@ -22,29 +31,29 @@ export default function CategoryPage() {
   const title = subcategory?.name || category?.name || "Ürünler";
 
   return (
-    <div className="container py-6">
+    <div className="container py-6 md:py-8">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-4">
-        <Link to="/" className="hover:text-foreground">Ana Sayfa</Link>
-        <span>/</span>
+      <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-5">
+        <Link to="/" className="hover:text-foreground transition-colors">Ana Sayfa</Link>
+        <span className="text-border">/</span>
         {category && (
           <>
-            <Link to={`/kategori/${category.slug}`} className="hover:text-foreground">{category.name}</Link>
-            {subcategory && <><span>/</span><span className="text-foreground">{subcategory.name}</span></>}
+            <Link to={`/kategori/${category.slug}`} className="hover:text-foreground transition-colors">{category.name}</Link>
+            {subcategory && <><span className="text-border">/</span><span className="text-foreground font-medium">{subcategory.name}</span></>}
           </>
         )}
       </nav>
 
-      <h1 className="font-display text-2xl font-bold mb-2 text-foreground">{title}</h1>
+      <h1 className="font-display text-2xl md:text-3xl font-bold mb-3 text-foreground">{title}</h1>
 
       {/* Subcategory chips */}
       {category && !subSlug && category.children.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-5">
           {category.children.map(sub => (
             <Link
               key={sub.slug}
               to={`/kategori/${category.slug}/${sub.slug}`}
-              className="rounded-full border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+              className="rounded-full border border-border bg-card px-4 py-2 text-xs font-semibold text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all"
             >
               {sub.name}
             </Link>
@@ -54,19 +63,31 @@ export default function CategoryPage() {
 
       <FilterSheet products={categoryProducts} filters={filters} onFiltersChange={setFilters} />
 
-      <p className="text-sm text-muted-foreground my-4">{filteredProducts.length} ürün bulundu</p>
+      <p className="text-sm text-muted-foreground my-5">{filteredProducts.length} ürün bulundu</p>
 
       {isLoading ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
           {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="aspect-[3/4] rounded-lg" />
+            <Skeleton key={i} className="aspect-[3/4] rounded-2xl" />
           ))}
         </div>
       ) : filteredProducts.length === 0 ? (
-        <p className="text-center text-muted-foreground py-12">Bu kriterlere uygun ürün bulunamadı.</p>
+        <div className="text-center py-16">
+          <p className="text-lg text-muted-foreground">Bu kriterlere uygun ürün bulunamadı.</p>
+        </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-          {filteredProducts.map(p => <ProductCard key={p.id} product={p} />)}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+          {filteredProducts.map((p, i) => (
+            <motion.div
+              key={p.id}
+              custom={i}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+            >
+              <ProductCard product={p} />
+            </motion.div>
+          ))}
         </div>
       )}
     </div>

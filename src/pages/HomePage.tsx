@@ -1,88 +1,141 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle, Tv, Snowflake, ChefHat, Smartphone, Zap, Box } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { BRAND, CATEGORIES, BRANCHES } from "@/lib/constants";
 import { useProducts } from "@/hooks/useProducts";
 import ProductCard from "@/components/ProductCard";
 import TrustSection from "@/components/TrustSection";
 
+const CATEGORY_ICONS: Record<string, React.ElementType> = {
+  "beyaz-esya": Box,
+  "ankastre": ChefHat,
+  "klima-isitma": Snowflake,
+  "tv-goruntu": Tv,
+  "kucuk-ev-aletleri": Zap,
+  "elektronik-aksesuar": Smartphone,
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { delay: i * 0.06, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] as const },
+  }),
+};
+
 export default function HomePage() {
   const { data: products = [] } = useProducts();
-  const featured = products.filter(p => p.isFeatured).slice(0, 4);
+  const featured = products.filter(p => p.isFeatured).slice(0, 8);
   const newArrivals = products.filter(p => p.isNew).slice(0, 4);
-  const onSale = products.filter(p => p.salePrice && p.salePrice < p.price).slice(0, 4);
 
   return (
     <>
       {/* Hero */}
-      <section className="bg-primary text-primary-foreground">
-        <div className="container py-12 md:py-20">
-          <div className="max-w-xl">
-            <h1 className="font-display text-3xl md:text-5xl font-extrabold leading-tight mb-4">
-              Teknolojide Güvenilir Adresiniz
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/80">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,hsl(217_91%_75%/0.3),transparent)]" />
+        <div className="container relative py-16 md:py-24">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-2xl"
+          >
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-foreground/15 px-3 py-1 text-xs font-medium text-primary-foreground mb-5">
+              ✨ Samsung & LG Yetkili Bayi
+            </span>
+            <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] mb-5 text-primary-foreground">
+              Evinize Teknoloji,<br />
+              <span className="text-primary-foreground/70">Hayatınıza Konfor.</span>
             </h1>
-            <p className="text-primary-foreground/80 text-lg mb-6">
-              Samsung & LG yetkili servis. 2 yıl garanti, ücretsiz montaj ve en uygun fiyatlar.
+            <p className="text-primary-foreground/70 text-lg md:text-xl mb-8 max-w-lg leading-relaxed">
+              2 yıl garanti, ücretsiz montaj ve kişiye özel fiyatlarla hayalinizdeki ürünlere ulaşın.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/kategoriler">
-                <Button size="lg" variant="secondary" className="font-semibold gap-2">
-                  Ürünleri İncele <ArrowRight className="h-4 w-4" />
+                <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg">
+                  Ürünleri Keşfet <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="font-semibold gap-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
-                  <MessageCircle className="h-4 w-4" /> WhatsApp
+                <Button size="lg" className="font-semibold gap-2 rounded-full px-6 bg-[#25D366] hover:bg-[#1ebe57] text-white border-0 shadow-lg">
+                  <MessageCircle className="h-4 w-4" /> WhatsApp ile Sor
                 </Button>
               </a>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
+      {/* Trust Bar - Compact */}
+      <TrustSection />
+
       {/* Categories */}
-      <section className="py-10">
+      <section className="py-12 md:py-16">
         <div className="container">
-          <h2 className="font-display text-xl font-bold mb-6 text-foreground">Kategoriler</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-            {CATEGORIES.map(cat => (
-              <Link
-                key={cat.slug}
-                to={`/kategori/${cat.slug}`}
-                className="flex flex-col items-center gap-2 rounded-xl border border-border bg-card p-4 hover:shadow-md hover:border-primary/30 transition-all text-center"
-              >
-                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary text-lg font-bold">
-                  {cat.name.charAt(0)}
-                </div>
-                <span className="text-xs font-semibold text-foreground leading-tight">{cat.name}</span>
-              </Link>
-            ))}
+          <div className="text-center mb-8">
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Kategoriler</h2>
+            <p className="text-muted-foreground mt-2">İhtiyacınıza uygun ürünü kolayca bulun</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
+            {CATEGORIES.map((cat, i) => {
+              const Icon = CATEGORY_ICONS[cat.slug] || Box;
+              return (
+                <motion.div
+                  key={cat.slug}
+                  custom={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeUp}
+                >
+                  <Link
+                    to={`/kategori/${cat.slug}`}
+                    className="card-lift flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-5 md:p-6 hover:border-primary/40 transition-colors text-center"
+                  >
+                    <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <span className="text-sm font-semibold text-foreground leading-tight">{cat.name}</span>
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* Featured */}
       {featured.length > 0 && (
-        <section className="py-10">
+        <section className="py-12 md:py-16 bg-muted/40">
           <div className="container">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="font-display text-xl font-bold text-foreground">Öne Çıkan Ürünler</h2>
-              <Link to="/kategoriler" className="text-sm font-medium text-primary hover:underline">Tümünü Gör</Link>
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Öne Çıkan Ürünler</h2>
+                <p className="text-muted-foreground mt-1">En çok tercih edilen ürünlerimiz</p>
+              </div>
+              <Link to="/kategoriler" className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
+                Tümünü Gör →
+              </Link>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-              {featured.map(p => <ProductCard key={p.id} product={p} />)}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+              {featured.map((p, i) => (
+                <motion.div
+                  key={p.id}
+                  custom={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeUp}
+                >
+                  <ProductCard product={p} />
+                </motion.div>
+              ))}
             </div>
-          </div>
-        </section>
-      )}
-
-      {/* On Sale */}
-      {onSale.length > 0 && (
-        <section className="py-10 bg-destructive/5">
-          <div className="container">
-            <h2 className="font-display text-xl font-bold mb-6 text-foreground">🔥 İndirimli Ürünler</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-              {onSale.map(p => <ProductCard key={p.id} product={p} />)}
+            <div className="text-center mt-6 sm:hidden">
+              <Link to="/kategoriler">
+                <Button variant="outline" className="rounded-full">Tümünü Gör</Button>
+              </Link>
             </div>
           </div>
         </section>
@@ -90,34 +143,51 @@ export default function HomePage() {
 
       {/* New Arrivals */}
       {newArrivals.length > 0 && (
-        <section className="py-10">
+        <section className="py-12 md:py-16">
           <div className="container">
-            <h2 className="font-display text-xl font-bold mb-6 text-foreground">Yeni Gelenler</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-              {newArrivals.map(p => <ProductCard key={p.id} product={p} />)}
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">🆕 Yeni Gelenler</h2>
+                <p className="text-muted-foreground mt-1">Mağazamıza yeni eklenen ürünler</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+              {newArrivals.map((p, i) => (
+                <motion.div
+                  key={p.id}
+                  custom={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeUp}
+                >
+                  <ProductCard product={p} />
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
       )}
 
-      <TrustSection />
-
       {/* Branches CTA */}
-      <section className="py-10">
+      <section className="py-12 md:py-16 bg-muted/40">
         <div className="container">
-          <h2 className="font-display text-xl font-bold mb-6 text-foreground">Şubelerimiz</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="text-center mb-8">
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Mağazalarımız</h2>
+            <p className="text-muted-foreground mt-2">Ürünleri yerinde görün, uzman ekibimizle tanışın</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
             {BRANCHES.map(b => (
-              <div key={b.id} className="rounded-xl border border-border bg-card p-5">
-                <h3 className="font-display font-bold text-foreground mb-1">{b.name}</h3>
+              <div key={b.id} className="card-lift rounded-2xl border border-border bg-card p-6">
+                <h3 className="font-display font-bold text-lg text-foreground mb-2">{b.name}</h3>
                 <p className="text-sm text-muted-foreground mb-1">{b.address}</p>
-                <p className="text-sm text-muted-foreground mb-3">{b.hours}</p>
+                <p className="text-sm text-muted-foreground mb-4">{b.hours}</p>
                 <div className="flex gap-2">
                   <a href={b.mapsLink} target="_blank" rel="noopener noreferrer">
-                    <Button size="sm" variant="outline">Yol Tarifi Al</Button>
+                    <Button size="sm" variant="outline" className="rounded-full">📍 Yol Tarifi</Button>
                   </a>
                   <a href={`tel:${b.phone}`}>
-                    <Button size="sm" variant="ghost">Ara</Button>
+                    <Button size="sm" variant="ghost" className="rounded-full">📞 Ara</Button>
                   </a>
                 </div>
               </div>

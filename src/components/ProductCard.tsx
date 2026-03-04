@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@/lib/types";
-import { formatPrice, getWhatsAppLink } from "@/lib/products";
+import { getWhatsAppLink } from "@/lib/products";
 import { MessageCircle } from "lucide-react";
 
 interface ProductCardProps {
@@ -15,14 +15,14 @@ export default function ProductCard({ product }: ProductCardProps) {
     : 0;
 
   return (
-    <div className="group flex flex-col rounded-lg border border-border bg-card overflow-hidden hover:shadow-md transition-shadow relative">
+    <div className="card-lift group flex flex-col rounded-2xl border border-border bg-card overflow-hidden relative">
       <Link to={`/urun/${product.slug}`} className="flex flex-col flex-1">
         {/* Image */}
-        <div className="relative aspect-square bg-muted overflow-hidden">
+        <div className="relative aspect-square bg-muted/50 overflow-hidden">
           <img
             src={product.image}
             alt={product.name}
-            className="h-full w-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+            className="h-full w-full object-contain p-5 group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
             onError={(e) => {
               const target = e.currentTarget;
@@ -35,21 +35,25 @@ export default function ProductCard({ product }: ProductCardProps) {
               if (next) target.src = next;
             }}
           />
-          <div className="absolute top-2 left-2 flex flex-col gap-1">
-            {product.isNew && <Badge className="bg-primary text-primary-foreground text-[10px]">Yeni</Badge>}
-            {hasDiscount && <Badge className="bg-destructive text-destructive-foreground text-[10px]">%{discountPercent}</Badge>}
+          <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
+            {product.isNew && (
+              <Badge className="bg-primary text-primary-foreground text-[10px] rounded-full px-2.5 shadow-sm">Yeni</Badge>
+            )}
+            {hasDiscount && (
+              <Badge className="bg-destructive text-destructive-foreground text-[10px] rounded-full px-2.5 shadow-sm">%{discountPercent}</Badge>
+            )}
           </div>
           {!product.inStock && (
-            <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
+            <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center">
               <span className="text-sm font-semibold text-muted-foreground">Stokta Yok</span>
             </div>
           )}
         </div>
 
         {/* Info */}
-        <div className="flex flex-col gap-1.5 p-3 flex-1">
-          <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">{product.brand}</p>
-          <h3 className="text-sm font-semibold text-foreground line-clamp-2 leading-tight group-hover:text-primary transition-colors">
+        <div className="flex flex-col gap-1.5 p-3.5 flex-1">
+          <p className="text-[11px] font-semibold text-primary/70 uppercase tracking-wider">{product.brand}</p>
+          <h3 className="text-sm font-semibold text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">
             {product.name}
           </h3>
         </div>
@@ -61,10 +65,10 @@ export default function ProductCard({ product }: ProductCardProps) {
         target="_blank"
         rel="noopener noreferrer"
         onClick={(e) => e.stopPropagation()}
-        className="flex items-center justify-center gap-1.5 mx-3 mb-3 py-2 rounded-md bg-[#25D366] text-white text-xs font-semibold hover:bg-[#1ebe57] transition-colors"
+        className="flex items-center justify-center gap-1.5 mx-3.5 mb-3.5 py-2.5 rounded-xl bg-[#25D366] text-white text-xs font-bold hover:bg-[#1ebe57] transition-colors shadow-sm"
       >
         <MessageCircle size={14} />
-        WhatsApp ile Sipariş
+        Fiyat Al · WhatsApp
       </a>
     </div>
   );

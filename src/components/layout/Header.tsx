@@ -23,15 +23,15 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
+    <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-lg supports-[backdrop-filter]:bg-card/80 shadow-sm">
       {/* Top bar */}
-      <div className="bg-primary text-primary-foreground">
-        <div className="container flex items-center justify-between py-1.5 text-xs">
-          <div className="flex items-center gap-4">
-            <span className="hidden sm:inline">Yetkili Servis: Samsung & LG</span>
-            <span>2 Yıl Garanti</span>
+      <div className="bg-foreground text-background">
+        <div className="container flex items-center justify-between py-1.5 text-[11px]">
+          <div className="flex items-center gap-4 font-medium">
+            <span className="hidden sm:inline">🏆 Samsung & LG Yetkili Bayi</span>
+            <span>✅ 2 Yıl Garanti</span>
           </div>
-          <a href={`tel:${BRAND.phone}`} className="flex items-center gap-1 font-medium">
+          <a href={`tel:${BRAND.phone}`} className="flex items-center gap-1.5 font-semibold hover:opacity-80 transition-opacity">
             <Phone className="h-3 w-3" />
             {BRAND.phoneDisplay}
           </a>
@@ -54,7 +54,7 @@ export default function Header() {
                 <div key={cat.slug}>
                   <Link
                     to={`/kategori/${cat.slug}`}
-                    className="block rounded-md px-3 py-2.5 font-medium text-foreground hover:bg-muted transition-colors"
+                    className="block rounded-xl px-3 py-2.5 font-medium text-foreground hover:bg-muted transition-colors"
                   >
                     {cat.name}
                   </Link>
@@ -64,7 +64,7 @@ export default function Header() {
                         <Link
                           key={sub.slug}
                           to={`/kategori/${cat.slug}/${sub.slug}`}
-                          className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                          className="block rounded-xl px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                         >
                           {sub.name}
                         </Link>
@@ -74,13 +74,13 @@ export default function Header() {
                 </div>
               ))}
               <hr className="my-3 border-border" />
-              <Link to="/e-katalog" className="flex items-center gap-2 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-md">
+              <Link to="/e-katalog" className="flex items-center gap-2 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl">
                 <FileText className="h-4 w-4" /> E-Katalog
               </Link>
-              <Link to="/subelerimiz" className="px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-md">
+              <Link to="/subelerimiz" className="px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl">
                 Şubelerimiz
               </Link>
-              <Link to="/iletisim" className="px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-md">
+              <Link to="/iletisim" className="px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl">
                 Bize Ulaşın
               </Link>
             </nav>
@@ -93,19 +93,19 @@ export default function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-0.5">
           {CATEGORIES.slice(0, 4).map(cat => (
             <Link
               key={cat.slug}
               to={`/kategori/${cat.slug}`}
-              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             >
               {cat.name}
             </Link>
           ))}
           <Link
             to="/e-katalog"
-            className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+            className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
             E-Katalog
           </Link>
@@ -119,7 +119,7 @@ export default function Header() {
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 placeholder="Ürün ara..."
-                className="w-40 sm:w-60 h-9"
+                className="w-40 sm:w-60 h-9 rounded-full"
                 autoFocus
               />
               <Button type="button" variant="ghost" size="icon" onClick={() => setSearchOpen(false)}>
@@ -127,12 +127,12 @@ export default function Header() {
               </Button>
             </form>
           ) : (
-            <Button variant="ghost" size="icon" onClick={() => setSearchOpen(true)}>
+            <Button variant="ghost" size="icon" className="rounded-full" onClick={() => setSearchOpen(true)}>
               <Search className="h-5 w-5" />
             </Button>
           )}
           <Link to="/teklif-al">
-            <Button size="sm" className="hidden sm:inline-flex font-semibold">
+            <Button size="sm" className="hidden sm:inline-flex font-semibold rounded-full px-5">
               Teklif Al
             </Button>
           </Link>
