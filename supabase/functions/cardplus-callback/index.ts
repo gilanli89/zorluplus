@@ -1,9 +1,14 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 serve(async (req) => {
   try {
     const storeKey = Deno.env.get("CARDPLUS_STORE_KEY");
     if (!storeKey) throw new Error("CARDPLUS_STORE_KEY is not configured");
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Parse body - handle both form-data and url-encoded
     let params: Record<string, string> = {};
@@ -16,7 +21,6 @@ serve(async (req) => {
         params[key] = value.toString();
       });
     } else {
-      // application/x-www-form-urlencoded or missing content-type
       const body = await req.text();
       const urlParams = new URLSearchParams(body);
       urlParams.forEach((value, key) => {
@@ -33,6 +37,7 @@ serve(async (req) => {
     const authCode = params["AuthCode"] || "";
     const errMsg = params["ErrMsg"] || "";
     const transId = params["TransId"] || "";
+    const amount = params["amount"] || "0";
 
     // Verify hash from bank response
     const hashParams = params["HASHPARAMS"] || "";
@@ -66,6 +71,30 @@ serve(async (req) => {
       response === "Approved" &&
       procReturnCode === "00";
 
+    // Save order to database
+    try {
+      const { error: dbError } = await supabase.from("orders").upsert({
+        order_number: oid,
+        customer_name: params["BillToName"] || "Müşteri",
+        total_amount: parseFloat(amount) || 0,
+        status: isSuccess ? "paid" : "cancelled",
+        payment_method: "cardplus",
+        payment_auth_code: authCode || null,
+        payment_trans_id: transId || null,
+        notes: isSuccess
+          ? `3D Secure başarılı. mdStatus: ${mdStatus}`
+          : `Ödeme başarısız. Hata: ${errMsg}. mdStatus: ${mdStatus}`,
+      }, { onConflict: "order_number" });
+
+      if (dbError) {
+        console.error("DB insert error:", dbError);
+      } else {
+        console.log(`Order ${oid} saved to DB. Status: ${isSuccess ? "paid" : "cancelled"}`);
+      }
+    } catch (dbErr) {
+      console.error("DB save failed:", dbErr);
+    }
+
     // Build redirect URL
     const siteUrl = Deno.env.get("SITE_URL") || "https://zorluplus.lovable.app";
     const resultParams = new URLSearchParams({
@@ -94,7 +123,6 @@ serve(async (req) => {
   } catch (error: unknown) {
     console.error("CardPlus callback error:", error);
     
-    // Redirect to error page instead of showing raw HTML
     const siteUrl = Deno.env.get("SITE_URL") || "https://zorluplus.lovable.app";
     const redirectUrl = `${siteUrl}/odeme/sonuc?status=fail&errorMessage=${encodeURIComponent("Ödeme işlemi sırasında bir hata oluştu.")}`;
     
