@@ -218,7 +218,7 @@ export function formatPrice(price: number): string {
 
 export function getWhatsAppLink(product: Product): string {
   const msg = encodeURIComponent(
-    `Merhaba, bu ürün hakkında bilgi almak istiyorum:\n\n${product.name}\nFiyat: ${formatPrice(product.salePrice || product.price)}\nSKU: ${product.sku}\n\nLink: ${window.location.origin}/urun/${product.slug}`
+    `Merhaba, bu ürün hakkında bilgi almak istiyorum:\n\n${product.name}\nSKU: ${product.sku}\n\nLink: ${window.location.origin}/urun/${product.slug}`
   );
-  return `https://wa.me/905488783131?text=${msg}`;
+  return `https://api.whatsapp.com/send/?phone=905488783131&text=${msg}&type=phone_number&app_absent=0`;
 }
