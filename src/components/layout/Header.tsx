@@ -209,15 +209,19 @@ export default function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden lg:flex items-center gap-0.5">
-          {CATEGORIES.slice(0, 4).map(cat => (
-            <Link
-              key={cat.slug}
-              to={`/kategori/${cat.slug}`}
-              className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-            >
-              {cat.name}
-            </Link>
-          ))}
+          {["tv-goruntu", "beyaz-esya", "ankastre", "klima-isitma"].map(slug => {
+            const cat = CATEGORIES.find(c => c.slug === slug);
+            if (!cat) return null;
+            return (
+              <Link
+                key={cat.slug}
+                to={`/kategori/${cat.slug}`}
+                className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              >
+                {cat.name}
+              </Link>
+            );
+          })}
           <Link
             to="/e-katalog"
             className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
