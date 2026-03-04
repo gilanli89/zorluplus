@@ -1,1 +1,7 @@
 project_id = "zbqulwroxnzqmysjqzjq"
+
+[functions.cardplus-initiate]
+verify_jwt = false
+
+[functions.cardplus-callback]
+verify_jwt = false
