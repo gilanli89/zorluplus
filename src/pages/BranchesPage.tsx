@@ -1,40 +1,59 @@
 import { BRANCHES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Clock } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function BranchesPage() {
   return (
-    <div className="container py-6">
-      <h1 className="font-display text-2xl font-bold mb-6 text-foreground">Şubelerimiz</h1>
-      <div className="grid gap-6">
-        {BRANCHES.map(b => (
-          <div key={b.id} className="rounded-xl border border-border bg-card overflow-hidden">
-            <div className="aspect-video">
+    <div className="container py-8 md:py-12">
+      <h1 className="font-display text-2xl md:text-3xl font-bold mb-2 text-foreground">Şubelerimiz</h1>
+      <p className="text-muted-foreground mb-8">Ürünleri yerinde görün, uzman ekibimizle tanışın</p>
+
+      <div className="grid gap-8">
+        {BRANCHES.map((b, i) => (
+          <motion.div
+            key={b.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.15, duration: 0.4 }}
+            className="rounded-2xl border border-border bg-card overflow-hidden shadow-sm"
+          >
+            <div className="aspect-video md:aspect-[21/9]">
               <iframe
                 src={b.mapEmbed}
                 className="w-full h-full border-0"
                 allowFullScreen
                 loading="lazy"
                 title={b.name}
+                referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
-            <div className="p-5">
-              <h2 className="font-display text-lg font-bold text-foreground mb-3">{b.name}</h2>
-              <div className="flex flex-col gap-2 text-sm text-muted-foreground mb-4">
-                <div className="flex items-center gap-2"><MapPin className="h-4 w-4 shrink-0" /> {b.address}</div>
-                <div className="flex items-center gap-2"><Phone className="h-4 w-4 shrink-0" /> {b.phone}</div>
-                <div className="flex items-center gap-2"><Clock className="h-4 w-4 shrink-0" /> {b.hours}</div>
+            <div className="p-6">
+              <h2 className="font-display text-xl font-bold text-foreground mb-4">{b.name}</h2>
+              <div className="flex flex-col gap-2.5 text-sm text-muted-foreground mb-5">
+                <div className="flex items-start gap-2.5">
+                  <MapPin className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
+                  {b.address}
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Phone className="h-4 w-4 shrink-0 text-primary" />
+                  <span>{b.phone}{b.phone2 ? ` / ${b.phone2}` : ""}</span>
+                </div>
+                <div className="flex items-start gap-2.5">
+                  <Clock className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
+                  {b.hours}
+                </div>
               </div>
               <div className="flex gap-3">
                 <a href={b.mapsLink} target="_blank" rel="noopener noreferrer">
-                  <Button className="gap-2"><MapPin className="h-4 w-4" /> Yol Tarifi Al</Button>
+                  <Button className="gap-2 rounded-full"><MapPin className="h-4 w-4" /> Yol Tarifi Al</Button>
                 </a>
                 <a href={`tel:${b.phone}`}>
-                  <Button variant="outline" className="gap-2"><Phone className="h-4 w-4" /> Ara</Button>
+                  <Button variant="outline" className="gap-2 rounded-full"><Phone className="h-4 w-4" /> Ara</Button>
                 </a>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
