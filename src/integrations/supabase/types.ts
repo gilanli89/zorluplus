@@ -40,8 +40,11 @@ export type Database = {
           id: string
           is_active: boolean
           min_quantity: number
+          original_price: number | null
+          price_updated_at: string | null
           product_name: string
           quantity: number
+          sale_price: number | null
           sku: string | null
           unit_price: number | null
           updated_at: string
@@ -53,8 +56,11 @@ export type Database = {
           id?: string
           is_active?: boolean
           min_quantity?: number
+          original_price?: number | null
+          price_updated_at?: string | null
           product_name: string
           quantity?: number
+          sale_price?: number | null
           sku?: string | null
           unit_price?: number | null
           updated_at?: string
@@ -66,8 +72,11 @@ export type Database = {
           id?: string
           is_active?: boolean
           min_quantity?: number
+          original_price?: number | null
+          price_updated_at?: string | null
           product_name?: string
           quantity?: number
+          sale_price?: number | null
           sku?: string | null
           unit_price?: number | null
           updated_at?: string
