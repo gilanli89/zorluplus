@@ -25,6 +25,12 @@ export default function ProductCard({ product }: ProductCardProps) {
           alt={product.name}
           className="h-full w-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
+          onError={(e) => {
+            const target = e.currentTarget;
+            if (target.src !== "/placeholder.svg") {
+              target.src = "/placeholder.svg";
+            }
+          }}
         />
         <div className="absolute top-2 left-2 flex flex-col gap-1">
           {product.isNew && <Badge className="bg-primary text-primary-foreground text-[10px]">Yeni</Badge>}
