@@ -154,11 +154,67 @@ export function DestekPage() {
 export function KullanimKosullariPage() {
   return (
     <ContentPage title="Kullanım Koşulları">
-      <p>Bu web sitesini kullanarak aşağıdaki koşulları kabul etmiş sayılırsınız.</p>
-      <h2>Genel</h2>
-      <p>Sitedeki tüm içerikler Zorlu Digital Plaza'ya aittir. İzinsiz kopyalanamaz ve çoğaltılamaz.</p>
-      <h2>Fiyatlar</h2>
-      <p>Sitede yer alan fiyatlar bilgilendirme amaçlıdır ve önceden haber verilmeksizin değiştirilebilir.</p>
+      <p>Bu Kullanım Koşulları, Zorlu Digital Plaza ("Şirket", "biz", "bize", "bizim") tarafından işletilen <strong>www.zorluplus.com</strong> ("Site") üzerinden sunulan tüm hizmetlerin kullanımına ilişkin şartları düzenler.</p>
+      <p>Siteyi kullanarak bu koşulları okuduğunuzu, anladığınızı ve kabul ettiğinizi beyan etmiş olursunuz.</p>
+
+      <h2>1. Genel Hükümler</h2>
+      <p>Bu Site'ye erişim sağlayan herkes, bu Kullanım Koşulları'nı ve ilgili tüm yasal düzenlemeleri kabul etmiş sayılır. Koşulları kabul etmiyorsanız, lütfen Site'yi kullanmayı bırakınız.</p>
+
+      <h2>2. Hizmetlerin Kapsamı</h2>
+      <p>Sitemiz üzerinden;</p>
+      <ul>
+        <li>Ürünler hakkında bilgi alınabilir,</li>
+        <li>Online sipariş oluşturulabilir,</li>
+        <li>Müşteri hizmetlerine talep gönderilebilir,</li>
+        <li>Servis, garanti ve teknik destek süreçleri başlatılabilir,</li>
+        <li>Kampanya ve duyurular takip edilebilir.</li>
+      </ul>
+      <p>Hizmetlerin kapsamı Şirket tarafından bildirimsiz olarak değiştirilebilir.</p>
+
+      <h2>3. Kullanıcı Yükümlülükleri</h2>
+      <p>Site'yi kullanan tüm kullanıcılar aşağıdaki yükümlülükleri kabul eder:</p>
+      <ul>
+        <li>Sitede yer alan hiçbir içeriği yasadışı amaçlarla kullanmamak,</li>
+        <li>Yanlış veya yanıltıcı bilgi vermemek,</li>
+        <li>Site'nin güvenliğini tehdit edecek girişimlerde bulunmamak,</li>
+        <li>Otomatik sistemlerle (bot, script vb.) içerik taraması yapmamak,</li>
+        <li>Site'deki içeriklerin telif haklarına saygı göstermek,</li>
+        <li>Site'nin düzgün çalışmasını engelleyebilecek herhangi bir davranışta bulunmamak.</li>
+      </ul>
+      <p>Bu yükümlülüklerin ihlali hâlinde erişiminiz geçici veya kalıcı olarak sonlandırılabilir.</p>
+
+      <h2>4. Fikri Mülkiyet Hakları</h2>
+      <p>Site'de yer alan tüm metin, görsel, logo, marka, grafik, tasarım, ürün bilgisi ve diğer içerikler Zorlu Digital Plaza'ya aittir veya lisansla kullanılmaktadır. Bu içerikler izinsiz kopyalanamaz, çoğaltılamaz, dağıtılamaz ve ticari amaçlarla kullanılamaz.</p>
+      <p>İzinsiz kullanım hukuki ve cezai yaptırımlara tabidir.</p>
+
+      <h2>5. Sipariş, Ödeme ve Teslimat Koşulları</h2>
+      <ul>
+        <li>Ürün fiyatları, stok bilgileri ve kampanyalar değişiklik gösterebilir.</li>
+        <li>Sipariş onaylanmadan hiçbir işlem kesinleşmiş sayılmaz.</li>
+        <li>Ödeme altyapısı, güvenlik protokolleri ve teslimat süreçleri üçüncü taraf sağlayıcılar ile yürütülebilir.</li>
+        <li>Kullanıcı, sipariş verirken doğru iletişim ve adres bilgisi vermekle yükümlüdür.</li>
+      </ul>
+
+      <h2>6. Garanti ve Teknik Servis</h2>
+      <p>Zorlu Digital Plaza'dan satın alınan tüm ürünler, ilgili marka veya 2 yıl süre ile tedarikçi garantisi altındadır. Servis, bakım, onarım ve yedek parça hizmetleri şirketimiz veya yetkili servisimiz tarafından sağlanır.</p>
+      <p>Garanti kapsamı dışında kalan durumlar (kullanıcı hatası, sıvı teması, düşme vb.) ücretli olabilir.</p>
+
+      <h2>7. Sorumluluk Reddi</h2>
+      <p>Zorlu Digital Plaza; sistem kesintilerinden, üçüncü taraf saldırılarından, teknik arızalardan, kullanıcı hatalarından ve internet kaynaklı bağlantı sorunlarından doğabilecek zararlardan sorumlu tutulamaz.</p>
+      <p>Site'de yer alan teknik özellikler, ürün açıklamaları ve görseller zaman zaman üretici kaynaklı değişiklik gösterebilir. Bu tür durumlarda sorumluluk üretici veya tedarikçiye aittir.</p>
+
+      <h2>8. Üçüncü Taraf Bağlantıları</h2>
+      <p>Site üzerinden üçüncü taraf web sitelerine yönlendiren bağlantılar bulunabilir. Bu sitelerin içeriklerinden, güvenliklerinden veya veri işleme politikalarından Şirket sorumlu değildir. Bu bağlantılar yalnızca kullanıcıya kolaylık sağlamak amacıyla sunulmaktadır.</p>
+
+      <h2>9. Gizlilik Politikası ile İlişki</h2>
+      <p>Bu Kullanım Koşulları, kişisel verilerin nasıl toplandığını, işlendiğini ve korunduğunu açıklayan Gizlilik Politikası ile birlikte değerlendirilir. Siteyi kullanarak Gizlilik Politikası'nı da kabul etmiş olursunuz.</p>
+
+      <h2>10. Koşullarda Değişiklik Yapma Hakkı</h2>
+      <p>Şirket, bu Kullanım Koşulları'nda önceden bildirim yapmaksızın değişiklik yapma hakkını saklı tutar. Güncellemeler Site'de yayınlandığı tarihten itibaren geçerli olur.</p>
+      <p>Kullanıcılar düzenli olarak bu koşulları gözden geçirmekle yükümlüdür.</p>
+
+      <h2>11. Uygulanacak Hukuk ve Yetkili Mahkeme</h2>
+      <p>Bu Kullanım Koşulları, Kuzey Kıbrıs Türk Cumhuriyeti yasalarına tabidir. Her türlü uyuşmazlıkta Lefkoşa Mahkemeleri yetkilidir.</p>
     </ContentPage>
   );
 }
