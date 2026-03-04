@@ -14,16 +14,231 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_emails: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      inventory: {
+        Row: {
+          brand: string | null
+          category: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          min_quantity: number
+          product_name: string
+          quantity: number
+          sku: string | null
+          unit_price: number | null
+          updated_at: string
+        }
+        Insert: {
+          brand?: string | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          min_quantity?: number
+          product_name: string
+          quantity?: number
+          sku?: string | null
+          unit_price?: number | null
+          updated_at?: string
+        }
+        Update: {
+          brand?: string | null
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          min_quantity?: number
+          product_name?: string
+          quantity?: number
+          sku?: string | null
+          unit_price?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          message: string | null
+          notes: string | null
+          phone: string | null
+          product_interest: string | null
+          source: Database["public"]["Enums"]["lead_source"]
+          status: Database["public"]["Enums"]["lead_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          message?: string | null
+          notes?: string | null
+          phone?: string | null
+          product_interest?: string | null
+          source?: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          message?: string | null
+          notes?: string | null
+          phone?: string | null
+          product_interest?: string | null
+          source?: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["lead_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          created_at: string
+          customer_email: string | null
+          customer_name: string
+          customer_phone: string | null
+          id: string
+          items: Json
+          notes: string | null
+          order_number: string
+          payment_auth_code: string | null
+          payment_method: string | null
+          payment_trans_id: string | null
+          shipping_address: string | null
+          status: Database["public"]["Enums"]["order_status"]
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_email?: string | null
+          customer_name: string
+          customer_phone?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          order_number: string
+          payment_auth_code?: string | null
+          payment_method?: string | null
+          payment_trans_id?: string | null
+          shipping_address?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          total_amount?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_email?: string | null
+          customer_name?: string
+          customer_phone?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          order_number?: string
+          payment_auth_code?: string | null
+          payment_method?: string | null
+          payment_trans_id?: string | null
+          shipping_address?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      service_requests: {
+        Row: {
+          address: string | null
+          brand: string | null
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          issue_description: string
+          phone: string
+          preferred_date: string | null
+          product_type: string | null
+          source: Database["public"]["Enums"]["lead_source"]
+          status: Database["public"]["Enums"]["service_status"]
+          technician_notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          brand?: string | null
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          issue_description: string
+          phone: string
+          preferred_date?: string | null
+          product_type?: string | null
+          source?: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["service_status"]
+          technician_notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          brand?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          issue_description?: string
+          phone?: string
+          preferred_date?: string | null
+          product_type?: string | null
+          source?: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["service_status"]
+          technician_notes?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: { check_email: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      lead_source: "zorluplus" | "zorluservis" | "whatsapp" | "phone" | "other"
+      lead_status: "new" | "contacted" | "qualified" | "converted" | "lost"
+      order_status:
+        | "pending"
+        | "paid"
+        | "shipped"
+        | "delivered"
+        | "cancelled"
+        | "refunded"
+      service_status: "pending" | "in_progress" | "completed" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +365,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      lead_source: ["zorluplus", "zorluservis", "whatsapp", "phone", "other"],
+      lead_status: ["new", "contacted", "qualified", "converted", "lost"],
+      order_status: [
+        "pending",
+        "paid",
+        "shipped",
+        "delivered",
+        "cancelled",
+        "refunded",
+      ],
+      service_status: ["pending", "in_progress", "completed", "cancelled"],
+    },
   },
 } as const
