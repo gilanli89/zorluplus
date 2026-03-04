@@ -27,10 +27,14 @@ const fadeUp = {
 
 export default function HomePage() {
   const { data: products = [] } = useProducts();
-  const featured = products.filter(p => p.isFeatured).slice(0, 8);
+  
+  const showcaseOrder = ["tv", "soundbar", "buzdolabi", "klima"];
+  const showcaseProducts = showcaseOrder
+    .map(sub => products.find(p => p.subcategory === sub))
+    .filter(Boolean) as typeof products;
+
   const newArrivals = products.filter(p => p.isNew).slice(0, 4);
-  const displayFeatured = featured.length > 0 ? featured : products.slice(0, 8);
-  const displayNew = newArrivals.length > 0 ? newArrivals : products.slice(8, 12);
+  const displayNew = newArrivals.length > 0 ? newArrivals : products.slice(0, 4);
 
   return (
     <>
@@ -76,20 +80,20 @@ export default function HomePage() {
       </section>
 
       {/* Featured */}
-      {displayFeatured.length > 0 && (
+      {showcaseProducts.length > 0 && (
         <section className="py-12 md:py-16 bg-muted/40">
           <div className="container">
             <div className="flex items-end justify-between mb-8">
               <div>
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Öne Çıkan Ürünler</h2>
-                <p className="text-muted-foreground mt-1">En çok tercih edilen ürünlerimiz</p>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Popüler Ürünler</h2>
+                <p className="text-muted-foreground mt-1">Her kategoriden seçme ürünler</p>
               </div>
               <Link to="/kategoriler" className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
                 Tümünü Gör →
               </Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-              {displayFeatured.map((p, i) => (
+              {showcaseProducts.map((p, i) => (
                 <motion.div
                   key={p.id}
                   custom={i}
