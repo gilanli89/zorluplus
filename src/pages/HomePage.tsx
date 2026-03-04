@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, MessageCircle, Tv, Snowflake, ChefHat, Smartphone, Zap, Box } from "lucide-react";
+import { ArrowRight, Tv, Snowflake, ChefHat, Smartphone, Zap, Box } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { BRAND, CATEGORIES, BRANCHES } from "@/lib/constants";
 import { useProducts } from "@/hooks/useProducts";
 import ProductCard from "@/components/ProductCard";
 import TrustSection from "@/components/TrustSection";
+import HeroBanner from "@/components/HeroBanner";
 
 const CATEGORY_ICONS: Record<string, React.ElementType> = {
   "beyaz-esya": Box,
@@ -28,47 +29,13 @@ export default function HomePage() {
   const { data: products = [] } = useProducts();
   const featured = products.filter(p => p.isFeatured).slice(0, 8);
   const newArrivals = products.filter(p => p.isNew).slice(0, 4);
-  // If no featured/new tags exist in the feed, show latest products
   const displayFeatured = featured.length > 0 ? featured : products.slice(0, 8);
   const displayNew = newArrivals.length > 0 ? newArrivals : products.slice(8, 12);
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/80">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,hsl(217_91%_75%/0.3),transparent)]" />
-        <div className="container relative py-16 md:py-24">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-2xl"
-          >
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-foreground/15 px-3 py-1 text-xs font-medium text-primary-foreground mb-5">
-              ✨ Samsung & LG Yetkili Bayi
-            </span>
-            <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] mb-5 text-primary-foreground">
-              Evinize Teknoloji,<br />
-              <span className="text-primary-foreground/70">Hayatınıza Konfor.</span>
-            </h1>
-            <p className="text-primary-foreground/70 text-lg md:text-xl mb-8 max-w-lg leading-relaxed">
-              2 yıl garanti, ücretsiz montaj ve kişiye özel fiyatlarla hayalinizdeki ürünlere ulaşın.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link to="/kategoriler">
-                <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg">
-                  Ürünleri Keşfet <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-              <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer">
-                <Button size="lg" className="font-semibold gap-2 rounded-full px-6 bg-[#25D366] hover:bg-[#1ebe57] text-white border-0 shadow-lg">
-                  <MessageCircle className="h-4 w-4" /> WhatsApp ile Sor
-                </Button>
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Hero Banner Slider */}
+      <HeroBanner />
 
       {/* Trust Bar - Compact */}
       <TrustSection />
