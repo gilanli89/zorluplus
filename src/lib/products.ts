@@ -6,7 +6,7 @@ const CLOUDINARY_CLOUD = "dj2oamfxf";
 
 function cloudinaryFetch(url: string, width = 600): string {
   if (!url || url.startsWith("/") || url.includes("res.cloudinary.com")) return url;
-  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/fetch/f_auto,q_auto,w_${width}/${encodeURIComponent(url)}`;
+  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD}/image/fetch/f_auto,q_auto,w_${width}/${url}`;
 }
 
 const CATEGORY_FALLBACK_IMAGES: Record<string, string> = {
