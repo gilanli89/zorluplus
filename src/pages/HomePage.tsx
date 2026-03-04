@@ -1,147 +1,98 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Tv, Snowflake, ChefHat, Smartphone, Zap, Box, MapPin, Phone } from "lucide-react";
+import { ArrowRight, MapPin, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { BRAND, CATEGORIES, BRANCHES } from "@/lib/constants";
-import { useProducts } from "@/hooks/useProducts";
-import ProductCard from "@/components/ProductCard";
+import { BRANCHES } from "@/lib/constants";
 import TrustSection from "@/components/TrustSection";
 import HeroBanner from "@/components/HeroBanner";
 
-const CATEGORY_ICONS: Record<string, React.ElementType> = {
-  "beyaz-esya": Box,
-  "ankastre": ChefHat,
-  "klima-isitma": Snowflake,
-  "tv-goruntu": Tv,
-  "kucuk-ev-aletleri": Zap,
-  "elektronik-aksesuar": Smartphone,
-};
+import widgetTv from "@/assets/widget-tv.jpg";
+import widgetBeyazEsya from "@/assets/widget-beyaz-esya.jpg";
+import widgetAnkastre from "@/assets/widget-ankastre.jpg";
+import widgetKlima from "@/assets/widget-klima.jpg";
+
+const CATEGORY_WIDGETS = [
+  {
+    slug: "tv-goruntu",
+    title: "TV & Görüntü Sistemleri",
+    subtitle: "Samsung & LG OLED, QLED, NanoCell",
+    image: widgetTv,
+  },
+  {
+    slug: "beyaz-esya",
+    title: "Beyaz Eşya",
+    subtitle: "Buzdolabı, Çamaşır & Bulaşık Makinesi",
+    image: widgetBeyazEsya,
+  },
+  {
+    slug: "ankastre",
+    title: "Ankastre Setler",
+    subtitle: "Fırın, Ocak & Davlumbaz",
+    image: widgetAnkastre,
+  },
+  {
+    slug: "klima-isitma",
+    title: "Klima & İklimlendirme",
+    subtitle: "Split Klima, Inverter Teknoloji",
+    image: widgetKlima,
+  },
+];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 30 },
   visible: (i: number) => ({
     opacity: 1, y: 0,
-    transition: { delay: i * 0.06, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] as const },
+    transition: { delay: i * 0.1, duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const },
   }),
 };
 
 export default function HomePage() {
-  const { data: products = [] } = useProducts();
-  
-  const showcaseOrder = ["tv", "soundbar", "buzdolabi", "klima"];
-  const showcaseProducts = showcaseOrder
-    .map(sub => products.find(p => p.subcategory === sub))
-    .filter(Boolean) as typeof products;
-
-  const newArrivals = products.filter(p => p.isNew).slice(0, 4);
-  const displayNew = newArrivals.length > 0 ? newArrivals : products.slice(0, 4);
-
   return (
     <>
-      {/* Hero Banner Slider */}
       <HeroBanner />
-
-      {/* Trust Bar - Compact */}
       <TrustSection />
 
-      {/* Categories */}
-      <section className="py-12 md:py-16">
-        <div className="container">
-          <div className="text-center mb-8">
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Kategoriler</h2>
-            <p className="text-muted-foreground mt-2">İhtiyacınıza uygun ürünü kolayca bulun</p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
-            {CATEGORIES.filter(cat => products.some(p => p.category === cat.slug)).map((cat, i) => {
-              const Icon = CATEGORY_ICONS[cat.slug] || Box;
-              return (
-                <motion.div
-                  key={cat.slug}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeUp}
-                >
-                  <Link
-                    to={`/kategori/${cat.slug}`}
-                    className="card-lift flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-5 md:p-6 hover:border-primary/40 transition-colors text-center"
-                  >
-                    <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <span className="text-sm font-semibold text-foreground leading-tight">{cat.name}</span>
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </div>
+      {/* Category Widgets */}
+      <section className="py-10 md:py-16">
+        <div className="container flex flex-col gap-4 md:gap-6">
+          {CATEGORY_WIDGETS.map((cat, i) => (
+            <motion.div
+              key={cat.slug}
+              custom={i}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={fadeUp}
+            >
+              <Link
+                to={`/kategori/${cat.slug}`}
+                className="group relative block overflow-hidden rounded-2xl h-48 md:h-64 lg:h-72"
+              >
+                <img
+                  src={cat.image}
+                  alt={cat.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-foreground/70 via-foreground/40 to-transparent" />
+                <div className="relative z-10 flex flex-col justify-center h-full px-6 md:px-12 lg:px-16 max-w-xl">
+                  <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
+                    {cat.title}
+                  </h2>
+                  <p className="text-white/80 text-sm md:text-base mt-2">
+                    {cat.subtitle}
+                  </p>
+                  <div className="mt-4">
+                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/30 rounded-full px-5 py-2 backdrop-blur-sm bg-white/10 group-hover:bg-white/20 transition-colors">
+                      Ürünleri İncele <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
         </div>
       </section>
-
-      {/* Featured */}
-      {showcaseProducts.length > 0 && (
-        <section className="py-12 md:py-16 bg-muted/40">
-          <div className="container">
-            <div className="flex items-end justify-between mb-8">
-              <div>
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Popüler Ürünler</h2>
-                <p className="text-muted-foreground mt-1">Her kategoriden seçme ürünler</p>
-              </div>
-              <Link to="/kategoriler" className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
-                Tümünü Gör →
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-              {showcaseProducts.map((p, i) => (
-                <motion.div
-                  key={p.id}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeUp}
-                >
-                  <ProductCard product={p} />
-                </motion.div>
-              ))}
-            </div>
-            <div className="text-center mt-6 sm:hidden">
-              <Link to="/kategoriler">
-                <Button variant="outline" className="rounded-full">Tümünü Gör</Button>
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* New Arrivals */}
-      {displayNew.length > 0 && (
-        <section className="py-12 md:py-16">
-          <div className="container">
-            <div className="flex items-end justify-between mb-8">
-              <div>
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Yeni Gelenler</h2>
-                <p className="text-muted-foreground mt-1">Mağazamıza yeni eklenen ürünler</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-              {displayNew.map((p, i) => (
-                <motion.div
-                  key={p.id}
-                  custom={i}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={fadeUp}
-                >
-                  <ProductCard product={p} />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Branches CTA */}
       <section className="py-12 md:py-16 bg-muted/40">
