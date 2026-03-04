@@ -65,13 +65,23 @@ export default function Header() {
     recognition.continuous = false;
     recognition.interimResults = true;
 
+    let finalTranscript = "";
+
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript;
       setSearchQuery(transcript);
+      if ((event.results[0] as any).isFinal) {
+        finalTranscript = transcript;
+      }
     };
 
     recognition.onend = () => {
       setIsListening(false);
+      if (finalTranscript.trim()) {
+        navigate(`/arama?q=${encodeURIComponent(finalTranscript.trim())}`);
+        setSearchOpen(false);
+        setSearchQuery("");
+      }
     };
 
     recognition.onerror = () => {
@@ -82,7 +92,7 @@ export default function Header() {
     recognition.start();
     setIsListening(true);
     setSearchOpen(true);
-  }, [hasSpeechSupport]);
+  }, [hasSpeechSupport, navigate]);
 
   useEffect(() => {
     return () => {
