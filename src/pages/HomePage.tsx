@@ -48,7 +48,7 @@ export default function HomePage() {
             <p className="text-muted-foreground mt-2">İhtiyacınıza uygun ürünü kolayca bulun</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
-            {CATEGORIES.map((cat, i) => {
+            {CATEGORIES.filter(cat => products.some(p => p.category === cat.slug)).map((cat, i) => {
               const Icon = CATEGORY_ICONS[cat.slug] || Box;
               return (
                 <motion.div
