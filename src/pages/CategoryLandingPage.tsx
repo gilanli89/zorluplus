@@ -169,7 +169,7 @@ export default function CategoryLandingPage() {
             className="max-w-2xl"
           >
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold text-white mb-5 border border-white/20">
-              ✨ {BRAND.name} — Yetkili Bayi
+              <Shield className="h-3.5 w-3.5" /> {BRAND.name} — Yetkili Bayi
             </span>
             <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] mb-4 text-white">
               {landing.headline}

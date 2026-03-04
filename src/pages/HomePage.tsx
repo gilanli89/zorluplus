@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Tv, Snowflake, ChefHat, Smartphone, Zap, Box } from "lucide-react";
+import { ArrowRight, Tv, Snowflake, ChefHat, Smartphone, Zap, Box, MapPin, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { BRAND, CATEGORIES, BRANCHES } from "@/lib/constants";
@@ -117,7 +117,7 @@ export default function HomePage() {
           <div className="container">
             <div className="flex items-end justify-between mb-8">
               <div>
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">🆕 Yeni Gelenler</h2>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Yeni Gelenler</h2>
                 <p className="text-muted-foreground mt-1">Mağazamıza yeni eklenen ürünler</p>
               </div>
             </div>
@@ -154,10 +154,10 @@ export default function HomePage() {
                 <p className="text-sm text-muted-foreground mb-4">{b.hours}</p>
                 <div className="flex gap-2">
                   <a href={b.mapsLink} target="_blank" rel="noopener noreferrer">
-                    <Button size="sm" variant="outline" className="rounded-full">📍 Yol Tarifi</Button>
+                    <Button size="sm" variant="outline" className="rounded-full gap-1.5"><MapPin className="h-3.5 w-3.5" /> Yol Tarifi</Button>
                   </a>
                   <a href={`tel:${b.phone}`}>
-                    <Button size="sm" variant="ghost" className="rounded-full">📞 Ara</Button>
+                    <Button size="sm" variant="ghost" className="rounded-full gap-1.5"><Phone className="h-3.5 w-3.5" /> Ara</Button>
                   </a>
                 </div>
               </div>

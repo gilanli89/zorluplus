@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight, Shield, Home, Snowflake } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BRAND } from "@/lib/constants";
 import banner1 from "@/assets/banner-1.jpg";
@@ -11,7 +11,7 @@ import banner3 from "@/assets/banner-3.jpg";
 const slides = [
   {
     image: banner1,
-    badge: "✨ Samsung & LG Yetkili Bayi",
+    badge: "Samsung & LG Yetkili Bayi",
     title: "Evinize Teknoloji,",
     subtitle: "Hayatınıza Konfor.",
     desc: "OLED TV, Soundbar ve daha fazlası — yetkili garantiyle evinize gelsin.",
@@ -20,7 +20,7 @@ const slides = [
   },
   {
     image: banner2,
-    badge: "🏠 Mutfağınızı Yenileyin",
+    badge: "Mutfağınızı Yenileyin",
     title: "Beyaz Eşyada",
     subtitle: "En İyi Fiyatlar.",
     desc: "2 yıl garanti, ücretsiz montaj ve kişiye özel fiyatlarla hayalinizdeki ürünlere ulaşın.",
@@ -29,7 +29,7 @@ const slides = [
   },
   {
     image: banner3,
-    badge: "❄️ Yaz Kampanyası",
+    badge: "Yaz Kampanyası",
     title: "Klima & İklimlendirme",
     subtitle: "Serinliğin Adresi.",
     desc: "Split klima, portatif klima ve ısıtıcılarda özel fiyatlar sizi bekliyor.",
