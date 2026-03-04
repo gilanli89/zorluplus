@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { CartProvider } from "@/contexts/CartContext";
 import Layout from "@/components/layout/Layout";
 import HomePage from "@/pages/HomePage";
 import CategoryPage from "@/pages/CategoryPage";
@@ -21,45 +22,49 @@ import {
 } from "@/pages/ContentPages";
 import CheckoutPage from "@/pages/CheckoutPage";
 import PaymentResultPage from "@/pages/PaymentResultPage";
+import CartPage from "@/pages/CartPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/kategoriler" element={<CategoriesPage />} />
-            <Route path="/kategori/:categorySlug" element={<CategoryPage />} />
-            <Route path="/kategori/:categorySlug/:subSlug" element={<CategoryPage />} />
-            <Route path="/urun/:slug" element={<ProductPage />} />
-            <Route path="/landing/:categorySlug" element={<CategoryLandingPage />} />
-            <Route path="/arama" element={<SearchPage />} />
-            <Route path="/e-katalog" element={<ECataloguePage />} />
-            <Route path="/subelerimiz" element={<BranchesPage />} />
-            <Route path="/iletisim" element={<ContactPage />} />
-            <Route path="/teklif-al" element={<QuotePage />} />
-            <Route path="/hakkimizda" element={<HakkimizdaPage />} />
-            <Route path="/kunye" element={<KunyePage />} />
-            <Route path="/ekibimiz" element={<EkibimizPage />} />
-            <Route path="/destek" element={<DestekPage />} />
-            <Route path="/kullanim-kosullari" element={<KullanimKosullariPage />} />
-            <Route path="/iade-kosullari" element={<IadeKosullariPage />} />
-            <Route path="/gizlilik-politikasi" element={<GizlilikPolitikasiPage />} />
-            <Route path="/siparis-takip" element={<SiparisTakipPage />} />
-            <Route path="/odeme-yontemleri" element={<OdemeYontemleriPage />} />
-            <Route path="/odeme" element={<CheckoutPage />} />
-            <Route path="/odeme/sonuc" element={<PaymentResultPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <CartProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/kategoriler" element={<CategoriesPage />} />
+              <Route path="/kategori/:categorySlug" element={<CategoryPage />} />
+              <Route path="/kategori/:categorySlug/:subSlug" element={<CategoryPage />} />
+              <Route path="/urun/:slug" element={<ProductPage />} />
+              <Route path="/landing/:categorySlug" element={<CategoryLandingPage />} />
+              <Route path="/arama" element={<SearchPage />} />
+              <Route path="/e-katalog" element={<ECataloguePage />} />
+              <Route path="/subelerimiz" element={<BranchesPage />} />
+              <Route path="/iletisim" element={<ContactPage />} />
+              <Route path="/teklif-al" element={<QuotePage />} />
+              <Route path="/hakkimizda" element={<HakkimizdaPage />} />
+              <Route path="/kunye" element={<KunyePage />} />
+              <Route path="/ekibimiz" element={<EkibimizPage />} />
+              <Route path="/destek" element={<DestekPage />} />
+              <Route path="/kullanim-kosullari" element={<KullanimKosullariPage />} />
+              <Route path="/iade-kosullari" element={<IadeKosullariPage />} />
+              <Route path="/gizlilik-politikasi" element={<GizlilikPolitikasiPage />} />
+              <Route path="/siparis-takip" element={<SiparisTakipPage />} />
+              <Route path="/odeme-yontemleri" element={<OdemeYontemleriPage />} />
+              <Route path="/odeme" element={<CheckoutPage />} />
+              <Route path="/odeme/sonuc" element={<PaymentResultPage />} />
+              <Route path="/sepet" element={<CartPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </CartProvider>
   </QueryClientProvider>
 );
 

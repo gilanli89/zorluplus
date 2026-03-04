@@ -1,18 +1,27 @@
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@/lib/types";
-import { getWhatsAppLink } from "@/lib/products";
-import { MessageCircle } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { addItem } = useCart();
   const hasDiscount = product.salePrice && product.salePrice < product.price;
   const discountPercent = hasDiscount
     ? Math.round(((product.price - product.salePrice!) / product.price) * 100)
     : 0;
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem(product);
+    toast.success(`${product.name} sepete eklendi`, { duration: 2000 });
+  };
 
   return (
     <div className="card-lift group flex flex-col rounded-2xl border border-border bg-card overflow-hidden relative">
@@ -59,17 +68,20 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
       </Link>
 
-      {/* WhatsApp Order Button */}
-      <a
-        href={getWhatsAppLink(product)}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={(e) => e.stopPropagation()}
-        className="flex items-center justify-center gap-1.5 mx-3.5 mb-3.5 py-2.5 rounded-xl bg-[#25D366] text-white text-xs font-bold hover:bg-[#1ebe57] transition-colors shadow-sm"
-      >
-        <MessageCircle size={14} />
-        Fiyat Al · WhatsApp
-      </a>
+      {/* Add to Cart Button */}
+      {product.inStock ? (
+        <button
+          onClick={handleAddToCart}
+          className="flex items-center justify-center gap-1.5 mx-3.5 mb-3.5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-colors shadow-sm"
+        >
+          <ShoppingCart size={14} />
+          Sepete Ekle
+        </button>
+      ) : (
+        <div className="mx-3.5 mb-3.5 py-2.5 rounded-xl bg-muted text-muted-foreground text-xs font-bold text-center">
+          Stokta Yok
+        </div>
+      )}
     </div>
   );
 }
