@@ -146,8 +146,6 @@ export default function ProductPage() {
         description: product.description,
         offers: {
           "@type": "Offer",
-          price: product.salePrice || product.price,
-          priceCurrency: "TRY",
           availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
         },
       })}} />

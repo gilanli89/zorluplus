@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SlidersHorizontal, X, Minus } from "lucide-react";
 import { FilterState, SortOption, Product } from "@/lib/types";
-import { getBrands, formatPrice } from "@/lib/products";
+import { getBrands } from "@/lib/products";
 
 /* ─── Category-specific attribute extraction ─── */
 interface DynamicAttribute {
@@ -139,10 +139,7 @@ interface FilterSheetProps {
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "popular", label: "En Popüler" },
-  { value: "price-asc", label: "Fiyat (Artan)" },
-  { value: "price-desc", label: "Fiyat (Azalan)" },
   { value: "newest", label: "Yeni Gelenler" },
-  { value: "sale", label: "İndirimdekiler" },
 ];
 
 /* ─── Shared filter body (used in both sidebar & mobile sheet) ─── */
@@ -155,7 +152,7 @@ function FilterBody({
 }: FilterSheetProps) {
   const brands = getBrands(products);
   const dynamicAttrs = getCategoryAttributes(products, subSlug || categorySlug);
-  const maxPrice = Math.max(...products.map(p => p.salePrice || p.price), 1);
+  // maxPrice removed - prices hidden
 
   // Brand counts
   const brandCounts: Record<string, number> = {};
@@ -170,44 +167,8 @@ function FilterBody({
     onFiltersChange({ ...filters, brands: next });
   };
 
-  const PRICE_MIN = 20000;
-  const PRICE_MAX = 500000;
-  const STEP = 5000;
-
-  const currentMin = filters.priceMin ?? PRICE_MIN;
-  const currentMax = filters.priceMax ?? PRICE_MAX;
-
-  const handleSliderChange = (values: number[]) => {
-    onFiltersChange({
-      ...filters,
-      priceMin: values[0] <= PRICE_MIN ? undefined : values[0],
-      priceMax: values[1] >= PRICE_MAX ? undefined : values[1],
-    });
-  };
-
   return (
     <div className="space-y-1">
-      {/* Price */}
-      <Collapsible defaultOpen>
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-1 border-b border-border text-sm font-semibold text-foreground hover:text-primary transition-colors">
-          Fiyat
-          <Minus className="h-3.5 w-3.5 text-muted-foreground" />
-        </CollapsibleTrigger>
-        <CollapsibleContent className="py-4 px-1">
-          <Slider
-            min={PRICE_MIN}
-            max={PRICE_MAX}
-            step={STEP}
-            value={[currentMin, currentMax]}
-            onValueChange={handleSliderChange}
-            className="mb-3"
-          />
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>{formatPrice(currentMin)}</span>
-            <span>{formatPrice(currentMax)}</span>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
 
       {/* Brand */}
       {brands.length > 0 && (
@@ -298,7 +259,7 @@ export function FilterSidebar(props: FilterSheetProps) {
     props.onFiltersChange({ brands: [], inStock: false, attributes: {}, sort: "popular" });
   };
   const attrCount = Object.values(props.filters.attributes).reduce((sum, arr) => sum + arr.length, 0);
-  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + (props.filters.priceMin ? 1 : 0) + (props.filters.priceMax ? 1 : 0) + attrCount;
+  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + attrCount;
 
   return (
     <aside className="hidden md:block w-[260px] flex-shrink-0">
@@ -320,9 +281,8 @@ export function FilterSidebar(props: FilterSheetProps) {
 /* ─── Mobile Filter Sheet ─── */
 export function MobileFilterTrigger(props: FilterSheetProps) {
   const [open, setOpen] = useState(false);
-  const maxPrice = Math.max(...props.products.map(p => p.price), 1);
   const attrCount = Object.values(props.filters.attributes).reduce((sum, arr) => sum + arr.length, 0);
-  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + (props.filters.priceMin ? 1 : 0) + (props.filters.priceMax ? 1 : 0) + attrCount;
+  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + attrCount;
 
   const clearFilters = () => {
     props.onFiltersChange({ brands: [], inStock: false, attributes: {}, sort: "popular" });
@@ -383,16 +343,6 @@ export function SortBar({ filters, onFiltersChange }: { filters: FilterState; on
         </Badge>
       ))}
 
-      {filters.priceMin != null && (
-        <Badge variant="secondary" className="gap-1 cursor-pointer" onClick={() => onFiltersChange({ ...filters, priceMin: undefined })}>
-          Min: {formatPrice(filters.priceMin)} <X className="h-3 w-3" />
-        </Badge>
-      )}
-      {filters.priceMax != null && (
-        <Badge variant="secondary" className="gap-1 cursor-pointer" onClick={() => onFiltersChange({ ...filters, priceMax: undefined })}>
-          Max: {formatPrice(filters.priceMax)} <X className="h-3 w-3" />
-        </Badge>
-      )}
 
       {/* Attribute chips */}
       {Object.entries(filters.attributes).flatMap(([key, vals]) =>
