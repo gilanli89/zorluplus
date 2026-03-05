@@ -44,7 +44,7 @@ const FAQ = [
 
 export default function TVLandingPage() {
   const { data: products = [] } = useProducts();
-  const tvProducts = useMemo(() => getProductsByCategory(products, "tv-goruntu"), [products]);
+  const tvProducts = useMemo(() => products.filter(p => p.category === "tv-goruntu" && p.subcategory === "tv"), [products]);
   const featured = tvProducts.filter(p => p.isFeatured).slice(0, 8);
   const display = featured.length >= 4 ? featured : tvProducts.slice(0, 8);
 
