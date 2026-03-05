@@ -285,28 +285,56 @@ export default function TVLandingPage() {
               Tümünü Gör <ArrowRight className="inline h-3.5 w-3.5" />
             </Link>
           </div>
-          {display.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-              {display.map((p, i) => (
-                <motion.div key={p.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-                  <ProductCard product={p} />
-                </motion.div>
-              ))}
+
+          <div className="flex gap-6">
+            {/* Desktop Sidebar */}
+            <aside className="hidden lg:block w-56 shrink-0">
+              <div className="sticky top-28 rounded-2xl border border-border bg-card p-5">
+                <h3 className="text-sm font-bold text-foreground mb-4 flex items-center gap-2">
+                  <SlidersHorizontal className="h-4 w-4" /> Filtrele
+                </h3>
+                <FilterContent />
+              </div>
+            </aside>
+
+            {/* Mobile Filter Trigger */}
+            <div className="lg:hidden mb-4 w-full">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="sm" className="rounded-full gap-2">
+                    <SlidersHorizontal className="h-4 w-4" />
+                    Filtrele
+                    {activeFilterCount > 0 && (
+                      <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-bold">{activeFilterCount}</span>
+                    )}
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto rounded-t-2xl">
+                  <SheetTitle className="text-lg font-bold mb-4">Filtrele</SheetTitle>
+                  <FilterContent />
+                </SheetContent>
+              </Sheet>
             </div>
-          ) : (
-            <div className="text-center py-12 rounded-2xl border border-border bg-card">
-              <p className="text-muted-foreground mb-4">TV modelleri yükleniyor...</p>
-              <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("tv_fallback")}>
-                <Button className="rounded-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
-                  <MessageCircle className="h-4 w-4" /> WhatsApp ile Sorun
-                </Button>
-              </a>
+
+            {/* Product Grid */}
+            <div className="flex-1 min-w-0">
+              {display.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+                  {display.map((p, i) => (
+                    <motion.div key={p.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
+                      <ProductCard product={p} />
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 rounded-2xl border border-border bg-card">
+                  <p className="text-muted-foreground mb-4">Bu filtrelere uygun TV bulunamadı.</p>
+                  <Button variant="outline" className="rounded-full gap-2" onClick={clearFilters}>
+                    <X className="h-4 w-4" /> Filtreleri Temizle
+                  </Button>
+                </div>
+              )}
             </div>
-          )}
-          <div className="text-center mt-6 sm:hidden">
-            <Link to="/kategori/tv-goruntu">
-              <Button variant="outline" className="rounded-full">Tüm TV'leri Gör</Button>
-            </Link>
           </div>
         </div>
       </section>
