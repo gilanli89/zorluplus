@@ -54,6 +54,7 @@ export default function ShopPage() {
           );
         })}
       </div>
+      </div>
 
 
       <div className="flex gap-6">
