@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { trackWhatsAppClick } from "@/lib/tracking";
 import { useEffect, useRef } from "react";
 import { Shield, Award, Wrench, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
@@ -97,7 +98,7 @@ export default function ProductPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer" className="flex-1">
+              <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer" className="flex-1" onClick={() => trackWhatsAppClick("product_page")}>
                 <Button size="lg" className="w-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white font-semibold">
                   <MessageCircle className="h-5 w-5" /> WhatsApp ile Sipariş Ver
                 </Button>

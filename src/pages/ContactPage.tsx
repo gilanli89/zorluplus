@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { BRAND, BRANCHES } from "@/lib/constants";
+import { trackWhatsAppClick } from "@/lib/tracking";
 import QuoteForm from "@/components/QuoteForm";
 
 export default function ContactPage() {
@@ -17,7 +18,7 @@ export default function ContactPage() {
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary"><Mail className="h-5 w-5" /></div>
               <div><p className="text-sm text-muted-foreground">E-posta</p><p className="font-semibold">{BRAND.email}</p></div>
             </a>
-            <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-foreground hover:text-success transition-colors">
+            <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("contact_page")} className="flex items-center gap-3 text-foreground hover:text-success transition-colors">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-success/10 text-success"><MessageCircle className="h-5 w-5" /></div>
               <div><p className="text-sm text-muted-foreground">WhatsApp</p><p className="font-semibold">{BRAND.phoneDisplay}</p></div>
             </a>
