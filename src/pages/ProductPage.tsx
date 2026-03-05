@@ -33,11 +33,41 @@ export default function ProductPage() {
   const category = CATEGORIES.find(c => c.slug === product.category);
   const subcategory = category?.children.find(s => s.slug === product.subcategory);
   const hasDiscount = false;
-  const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+  const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 12);
   const recentlyViewed = products.filter(p => recentIds.includes(p.id) && p.id !== product.id).slice(0, 4);
+  const stripRef = useRef<HTMLDivElement>(null);
+
+  const scrollStrip = (dir: "left" | "right") => {
+    stripRef.current?.scrollBy({ left: dir === "left" ? -260 : 260, behavior: "smooth" });
+  };
 
   return (
-    <div className="container py-6">
+    <div>
+      {/* Related products strip */}
+      {related.length > 0 && (
+        <div className="bg-muted/40 border-b border-border">
+          <div className="container py-3">
+            <div className="flex items-center gap-2 mb-2">
+              <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex-1">Benzer Ürünler</h2>
+              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => scrollStrip("left")}><ChevronLeft className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => scrollStrip("right")}><ChevronRight className="h-4 w-4" /></Button>
+            </div>
+            <div ref={stripRef} className="flex gap-3 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
+              {related.map(p => (
+                <Link key={p.id} to={`/urun/${p.slug}`} className="flex-shrink-0 w-36 group">
+                  <div className="aspect-square rounded-xl border border-border bg-card overflow-hidden mb-1.5">
+                    <img src={p.image} alt={p.name} className="h-full w-full object-contain p-3 group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                  </div>
+                  <p className="text-[10px] font-semibold text-primary/70 uppercase tracking-wider">{p.brand}</p>
+                  <p className="text-xs font-medium text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">{p.name}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="container py-6">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-4 flex-wrap">
         <Link to="/" className="hover:text-foreground">Ana Sayfa</Link>
