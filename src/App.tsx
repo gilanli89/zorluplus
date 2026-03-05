@@ -68,6 +68,16 @@ const App = () => (
               <Route path="/urun/:slug" element={<ProductPage />} />
               <Route path="/landing/:categorySlug" element={<CategoryLandingPage />} />
               <Route path="/televizyon" element={<TVLandingPage />} />
+              <Route path="/beyaz-esya" element={<BeyazEsyaLandingPage />} />
+              <Route path="/ankastre" element={<AnkastreLandingPage />} />
+              <Route path="/klima" element={<KlimaLandingPage />} />
+              <Route path="/camasir-makinesi" element={<CamasirMakinesiLandingPage />} />
+              <Route path="/bulasik-makinesi" element={<BulasikMakinesiLandingPage />} />
+              <Route path="/kurutma-makinesi" element={<KurutmaMakinesiLandingPage />} />
+              <Route path="/mikrodalga" element={<MikrodalgaLandingPage />} />
+              <Route path="/kahve-makinesi" element={<KahveMakinesiLandingPage />} />
+              <Route path="/ev-aletleri" element={<EvAletleriLandingPage />} />
+              <Route path="/airfryer" element={<AirfryerLandingPage />} />
               <Route path="/arama" element={<SearchPage />} />
               <Route path="/e-katalog" element={<ECataloguePage />} />
               <Route path="/subelerimiz" element={<BranchesPage />} />
