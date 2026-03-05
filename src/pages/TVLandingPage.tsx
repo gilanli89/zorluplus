@@ -6,6 +6,8 @@ import {
   Star, ArrowRight, Tv, Monitor, Volume2, Zap, Eye, Maximize2, SlidersHorizontal, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useProducts } from "@/hooks/useProducts";
 import { getProductsByCategory } from "@/lib/products";
 import { trackWhatsAppClick } from "@/lib/tracking";
