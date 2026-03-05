@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
+import { trackWhatsAppClick } from "@/lib/tracking";
 
 const LINKTREE_URL = "https://linktr.ee/zorludigitalplaza";
 
