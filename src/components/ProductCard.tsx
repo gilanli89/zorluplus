@@ -1,30 +1,19 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@/lib/types";
-import { ShoppingCart } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
-import { toast } from "sonner";
+import { MessageCircle, Eye } from "lucide-react";
+import { getWhatsAppLink } from "@/lib/products";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addItem } = useCart();
-  const navigate = useNavigate();
   const hasDiscount = product.salePrice && product.salePrice < product.price;
   const discountPercent = hasDiscount
     ? Math.round(((product.price - product.salePrice!) / product.price) * 100)
     : 0;
-
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    addItem(product);
-    toast.success(`${product.name} sepete eklendi`, { duration: 2000 });
-    navigate("/sepet");
-  };
 
   return (
     <motion.div
@@ -77,20 +66,27 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
       </Link>
 
-      {/* Add to Cart Button */}
-      {product.inStock ? (
-        <button
-          onClick={handleAddToCart}
-          className="flex items-center justify-center gap-1.5 mx-3.5 mb-3.5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-all duration-200 shadow-sm tap-scale"
+      {/* Action Buttons */}
+      <div className="flex gap-2 mx-3.5 mb-3.5">
+        <a
+          href={getWhatsAppLink(product)}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[hsl(142,70%,40%)] text-white text-xs font-bold hover:bg-[hsl(142,70%,35%)] transition-all duration-200 shadow-sm tap-scale"
         >
-          <ShoppingCart size={14} />
-          Sepete Ekle
-        </button>
-      ) : (
-        <div className="mx-3.5 mb-3.5 py-2.5 rounded-xl bg-muted text-muted-foreground text-xs font-bold text-center">
-          Stokta Yok
-        </div>
-      )}
+          <MessageCircle size={14} />
+          Sipariş Ver
+        </a>
+        <Link
+          to={`/urun/${product.slug}`}
+          onClick={(e) => e.stopPropagation()}
+          className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-all duration-200 tap-scale"
+        >
+          <Eye size={14} />
+          İncele
+        </Link>
+      </div>
     </motion.div>
   );
 }
