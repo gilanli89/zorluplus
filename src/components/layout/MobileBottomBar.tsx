@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Grid3X3, Search, ShoppingCart } from "lucide-react";
+import { Home, Grid3X3, BookOpen, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/contexts/CartContext";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 const items = [
   { icon: Home, label: "Ana Sayfa", href: "/" },
   { icon: Grid3X3, label: "Kategoriler", href: "/kategoriler" },
-  { icon: Search, label: "Ara", href: "/arama" },
+  { icon: BookOpen, label: "E-Katalog", href: "/e-katalog" },
   { icon: ShoppingCart, label: "Sepet", href: "/sepet" },
 ];
 
