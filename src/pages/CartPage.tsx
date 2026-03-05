@@ -91,7 +91,6 @@ export default function CartPage() {
 
     if (paymentMethod === "card") {
       const params = new URLSearchParams({
-        amount: grandTotal.toString(),
         orderId,
         product: items.map(i => i.product.name).join(", "),
       });

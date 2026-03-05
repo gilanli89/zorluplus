@@ -1,14 +1,26 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+const ALLOWED_ORIGINS = [
+  "https://zorluplus.lovable.app",
+  "https://id-preview--38e5c4a6-7669-4c9a-b2c6-395649c2f475.lovable.app",
+];
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("origin") || "";
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  };
+}
 
 const GATEWAY_3D = "https://sanalpos.card-plus.net/fim/est3Dgate";
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -20,9 +32,12 @@ serve(async (req) => {
     const storeKey = Deno.env.get("CARDPLUS_STORE_KEY");
     if (!storeKey) throw new Error("CARDPLUS_STORE_KEY is not configured");
 
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
     const body = await req.json();
     const {
-      amount,
       cardNumber,
       expMonth,
       expYear,
@@ -33,14 +48,38 @@ serve(async (req) => {
       failUrl,
     } = body;
 
-    if (!amount || !cardNumber || !expMonth || !expYear || !cvv || !okUrl || !failUrl) {
+    if (!cardNumber || !expMonth || !expYear || !cvv || !orderId || !okUrl || !failUrl) {
       return new Response(
         JSON.stringify({ error: "Missing required fields" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const oid = orderId || crypto.randomUUID();
+    // SECURITY: Look up the order in the database and use the stored total_amount
+    const { data: order, error: orderError } = await supabase
+      .from("orders")
+      .select("total_amount, status, order_number")
+      .eq("order_number", orderId)
+      .single();
+
+    if (orderError || !order) {
+      return new Response(
+        JSON.stringify({ error: "Sipariş bulunamadı. Lütfen tekrar deneyin." }),
+        { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (order.status !== "pending") {
+      return new Response(
+        JSON.stringify({ error: "Bu sipariş zaten işlenmiş." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Use the server-verified amount from the database
+    const amount = order.total_amount.toString();
+
+    const oid = orderId;
     const rnd = Date.now().toString();
     const storetype = "3d";
     const tranType = "Auth";
@@ -53,9 +92,6 @@ serve(async (req) => {
     const inst = installment || "";
 
     // Hash v3: fields sorted alphabetically by key, joined with "|", storeKey appended
-    // Fields used: amount|BillToCompany|BillToName|callbackUrl|clientId|currency|cv2|
-    //   Ecom_Payment_Card_ExpDate_Month|Ecom_Payment_Card_ExpDate_Year|failUrl|
-    //   hashAlgorithm|lang|oid|okUrl|pan|rnd|storetype|storeKey
     const hashStr = [
       amount,
       billToCompany,
@@ -82,7 +118,6 @@ serve(async (req) => {
     const data = encoder.encode(hashStr);
     const hashBuffer = await crypto.subtle.digest("SHA-512", data);
     const hashArray = new Uint8Array(hashBuffer);
-    // Convert to base64
     let binary = "";
     for (const byte of hashArray) {
       binary += String.fromCharCode(byte);
@@ -125,8 +160,8 @@ serve(async (req) => {
     );
   } catch (error: unknown) {
     console.error("CardPlus initiate error:", error);
-    const msg = error instanceof Error ? error.message : "Unknown error";
-    return new Response(JSON.stringify({ error: msg }), {
+    const corsHeaders = getCorsHeaders(req);
+    return new Response(JSON.stringify({ error: "Ödeme başlatılamadı." }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
