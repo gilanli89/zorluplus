@@ -34,7 +34,7 @@ const config: CategoryLandingConfig = {
   productsTitle: "Mikrodalga Fırınlar",
   productsCategoryLink: "/kategori/mutfak-aletleri/mikrodalga",
   productsCategoryLinkText: "Tümünü Gör",
-  filterProducts: (p) => (p.category === "mutfak-aletleri" && p.subcategory === "mikrodalga") || (p.category === "ankastre" && p.subcategory === "firin" && p.name.toLowerCase().includes("mikrodalga")),
+  filterProducts: (p) => (p.category === "mutfak-aletleri" && p.subcategory === "mikrodalga") || (p.category === "ankastre" && p.subcategory === "firin"),
   faq: [
     { q: "Solo mu grill mi almalıyım?", a: "Solo mikrodalga ısıtma ve çözme için idealdir. Grill modelleri ise üst ısıtıcı ile kızartma da yapabilir." },
     { q: "Ankastre mikrodalga var mı?", a: "Evet, Samsung ankastre mikrodalga modelleri mevcuttur. Mutfak dolabınıza entegre edilir." },

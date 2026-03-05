@@ -21,8 +21,8 @@ const config: CategoryLandingConfig = {
     { icon: Sparkles, label: "Premium Markalar", desc: "Philips, Samsung" },
   ],
   subtypes: [
-    { icon: Vacuum, name: "Elektrikli Süpürge", desc: "Dikey, robot ve torbalı süpürgeler", link: "/kategori/kucuk-ev-aletleri/supurge" },
-    { icon: Iron, name: "Ütü", desc: "Buhar istasyonlu ve normal ütüler", link: "/kategori/kucuk-ev-aletleri/utu" },
+    { icon: Wind, name: "Elektrikli Süpürge", desc: "Dikey, robot ve torbalı süpürgeler", link: "/kategori/kucuk-ev-aletleri/supurge" },
+    { icon: Shirt, name: "Ütü", desc: "Buhar istasyonlu ve normal ütüler", link: "/kategori/kucuk-ev-aletleri/utu" },
     { icon: Fan, name: "Vantilatör", desc: "Ayaklı, masa tipi ve kule vantilatörler", link: "/kategori/kucuk-ev-aletleri/ventilator" },
   ],
   benefits: [
