@@ -131,20 +131,20 @@ export function KunyePage() {
 
 export function EkibimizPage() {
   const team = [
-    { name: "Halil Kavaz", role: "CEO & Founder" },
-    { name: "Deniz Bisikletçiler", role: "Coordinator" },
-    { name: "Serkan Taras", role: "Mağusa – Store Manager" },
-    { name: "Çisem Özdoğan", role: "Lefkoşa – Store Manager" },
-    { name: "Mustafa Özdoğan", role: "Lefkoşa – Sales Representative" },
-    { name: "Dilfuza Jumakova", role: "Lefkoşa – Sales Representative" },
-    { name: "Alaaeddin Erdemci", role: "White Goods Chef" },
-    { name: "Abed Azbaki", role: "TV/AV Service Chief" },
-    { name: "Suhrap Alimov", role: "Air Conditioning Chef" },
-    { name: "Çakır Recepov", role: "TV Technician" },
-    { name: "Bilal Muhammed", role: "TV Technician" },
-    { name: "Umit Rozyev", role: "TV Technician" },
-    { name: "Ramazan Koshayev", role: "Air Conditioning Technician" },
-    { name: "Karetta", role: "Yapay Zeka Asistan" },
+    { name: "Halil Kavaz", role: "CEO & Founder", photo: "/team/halil-kavaz.png" },
+    { name: "Deniz Bisikletçiler", role: "Coordinator", photo: "/team/deniz-bisikletciler.png" },
+    { name: "Serkan Taras", role: "Mağusa – Store Manager", photo: "/team/serkan-taras.png" },
+    { name: "Çisem Özdoğan", role: "Lefkoşa – Store Manager", photo: "/team/cisem-ozdogan.png" },
+    { name: "Mustafa Özdoğan", role: "Lefkoşa – Sales Representative", photo: "/team/mustafa-ozdogan.png" },
+    { name: "Dilfuza Jumakova", role: "Lefkoşa – Sales Representative", photo: "/team/dilfuza-jumakova.png" },
+    { name: "Alaaeddin Erdemci", role: "White Goods Chef", photo: "/team/alaaeddin-erdemci.png" },
+    { name: "Abed Azbaki", role: "TV/AV Service Chief", photo: "/team/abed-azbaki.png" },
+    { name: "Suhrap Alimov", role: "Air Conditioning Chef", photo: "/team/suhrap-alimov.png" },
+    { name: "Çakır Recepov", role: "TV Technician", photo: "/team/cakir-recepov.png" },
+    { name: "Bilal Muhammed", role: "TV Technician", photo: "/team/bilal-muhammed.png" },
+    { name: "Umit Rozyev", role: "TV Technician", photo: "/team/umit-rozyev.png" },
+    { name: "Ramazan Koshayev", role: "Air Conditioning Technician", photo: "/team/ramazan-koshayev.png" },
+    { name: "Karetta", role: "Yapay Zeka Asistan", photo: "/team/karetta.jpg" },
   ];
 
   return (
@@ -153,9 +153,7 @@ export function EkibimizPage() {
       <div className="not-prose mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {team.map((m) => (
           <div key={m.name} className="flex flex-col items-center text-center p-4 rounded-xl border border-border bg-muted/30 hover:bg-muted/60 transition-colors">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-              <span className="text-xl font-bold text-primary">{m.name.charAt(0)}</span>
-            </div>
+            <img src={m.photo} alt={m.name} className="w-24 h-28 object-cover rounded-lg mb-3" loading="lazy" />
             <p className="font-display font-bold text-sm text-foreground leading-tight">{m.name}</p>
             <p className="text-xs text-muted-foreground mt-1">{m.role}</p>
           </div>
