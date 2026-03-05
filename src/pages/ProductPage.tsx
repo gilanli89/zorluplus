@@ -16,7 +16,6 @@ export default function ProductPage() {
   const { slug } = useParams();
   const { data: products = [], isLoading } = useProducts();
   const { recentIds, addViewed } = useRecentlyViewed();
-  const { addItem } = useCart();
   const navigate = useNavigate();
   const product = getProductBySlug(products, slug || "");
 
