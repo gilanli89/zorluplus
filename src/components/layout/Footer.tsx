@@ -108,15 +108,28 @@ export default function Footer() {
         >
           <h4 className="font-display font-bold text-xs uppercase tracking-wider mb-3 text-muted-foreground">Kategoriler</h4>
           <div className="flex flex-wrap gap-2">
-            {FOOTER_LINKS.kategoriler.map(l => (
-              <Link
-                key={l.href}
-                to={l.href}
-                className="text-xs px-3 py-1.5 rounded-full border border-border bg-muted/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-200"
-              >
-                {l.label}
-              </Link>
-            ))}
+            {FOOTER_LINKS.kategoriler.map(l => {
+              const isExternal = l.href.startsWith('http');
+              return isExternal ? (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs px-3 py-1.5 rounded-full border border-border bg-muted/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-200"
+                >
+                  {l.label}
+                </a>
+              ) : (
+                <Link
+                  key={l.href}
+                  to={l.href}
+                  className="text-xs px-3 py-1.5 rounded-full border border-border bg-muted/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-200"
+                >
+                  {l.label}
+                </Link>
+              );
+            })}
           </div>
         </motion.div>
 

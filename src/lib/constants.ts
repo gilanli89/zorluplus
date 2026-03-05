@@ -167,7 +167,7 @@ export const FOOTER_LINKS = {
     { label: "Beyaz Eşya", href: "/beyaz-esya" },
     { label: "Ankastre", href: "/ankastre" },
     { label: "Klima", href: "/klima" },
-    { label: "Televizyon", href: "/tv" },
+    { label: "Televizyon", href: "https://zorluplus.com/kategori/tv-goruntu" },
     { label: "Çamaşır Makinesi", href: "/camasir-makinesi" },
     { label: "Bulaşık Makinesi", href: "/bulasik-makinesi" },
     { label: "Kurutma Makinesi", href: "/kurutma-makinesi" },
