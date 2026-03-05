@@ -236,7 +236,7 @@ export default function Header() {
                 </Button>
                 {hasSpeechSupport && (
                   <Button variant="ghost" size="icon" className="rounded-full tap-scale" onClick={startListening} title="Sesle ara">
-                    <Mic className="h-5 w-5" />
+                    <Mic className="h-5 w-5 text-primary" />
                   </Button>
                 )}
               </motion.div>

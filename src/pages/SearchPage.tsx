@@ -87,7 +87,7 @@ export default function SearchPage() {
             onClick={isListening ? stopListening : startListening}
             title={isListening ? "Dinlemeyi durdur" : "Sesle ara"}
           >
-            {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+            {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5 text-primary" />}
           </Button>
         )}
       </div>
