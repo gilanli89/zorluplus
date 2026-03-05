@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { BRAND, BRANCHES } from "@/lib/constants";
+import { trackWhatsAppClick } from "@/lib/tracking";
 import QuoteForm from "@/components/QuoteForm";
 
 export default function ContactPage() {
