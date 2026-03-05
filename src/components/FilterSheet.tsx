@@ -281,9 +281,8 @@ export function FilterSidebar(props: FilterSheetProps) {
 /* ─── Mobile Filter Sheet ─── */
 export function MobileFilterTrigger(props: FilterSheetProps) {
   const [open, setOpen] = useState(false);
-  const maxPrice = Math.max(...props.products.map(p => p.price), 1);
   const attrCount = Object.values(props.filters.attributes).reduce((sum, arr) => sum + arr.length, 0);
-  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + (props.filters.priceMin ? 1 : 0) + (props.filters.priceMax ? 1 : 0) + attrCount;
+  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + attrCount;
 
   const clearFilters = () => {
     props.onFiltersChange({ brands: [], inStock: false, attributes: {}, sort: "popular" });
