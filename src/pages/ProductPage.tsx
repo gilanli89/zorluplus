@@ -120,7 +120,7 @@ export default function ProductPage() {
 
           {/* Quote form */}
           <div className="mt-6 rounded-xl border border-border bg-muted/30 p-5">
-            <h3 className="font-display font-bold text-foreground mb-3">Teklif Al</h3>
+            <h3 className="font-display font-bold text-foreground mb-3">Bu Ürün İçin Teklif Al</h3>
             <QuoteForm
               productId={product.id}
               productSku={product.sku}
