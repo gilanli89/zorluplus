@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Grid3X3, Search, ShoppingCart } from "lucide-react";
+import { Home, Grid3X3, BookOpen, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/contexts/CartContext";
 import { Badge } from "@/components/ui/badge";
