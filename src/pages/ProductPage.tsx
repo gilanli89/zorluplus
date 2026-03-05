@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { trackWhatsAppClick } from "@/lib/tracking";
 import { useEffect, useRef } from "react";
 import { Shield, Award, Wrench, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
