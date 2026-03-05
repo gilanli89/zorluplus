@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 const items = [
   { icon: Home, label: "Ana Sayfa", href: "/" },
   { icon: Grid3X3, label: "Kategoriler", href: "/kategoriler" },
-  { icon: Search, label: "Ara", href: "/arama" },
+  { icon: BookOpen, label: "E-Katalog", href: "/e-katalog" },
   { icon: ShoppingCart, label: "Sepet", href: "/sepet" },
 ];
 
