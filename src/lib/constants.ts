@@ -175,6 +175,7 @@ export const FOOTER_LINKS = {
     { label: "Kahve Makinesi", href: "/kahve-makinesi" },
     { label: "Ev Aletleri", href: "/ev-aletleri" },
     { label: "Airfryer", href: "/airfryer" },
+    { label: "Fırın", href: "/firin" },
   ],
   yasal: [
     { label: "Kullanım Koşulları", href: "/kullanim-kosullari" },

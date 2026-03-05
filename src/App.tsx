@@ -79,6 +79,7 @@ const App = () => (
               <Route path="/kahve-makinesi" element={<KahveMakinesiLandingPage />} />
               <Route path="/ev-aletleri" element={<EvAletleriLandingPage />} />
               <Route path="/airfryer" element={<AirfryerLandingPage />} />
+              <Route path="/firin" element={<FirinLandingPage />} />
               <Route path="/arama" element={<SearchPage />} />
               <Route path="/e-katalog" element={<ECataloguePage />} />
               <Route path="/subelerimiz" element={<BranchesPage />} />
