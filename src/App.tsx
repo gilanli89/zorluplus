@@ -55,6 +55,7 @@ const App = () => (
               <Route path="/kategori/:categorySlug/:subSlug" element={<CategoryPage />} />
               <Route path="/urun/:slug" element={<ProductPage />} />
               <Route path="/landing/:categorySlug" element={<CategoryLandingPage />} />
+              <Route path="/televizyon" element={<TVLandingPage />} />
               <Route path="/arama" element={<SearchPage />} />
               <Route path="/e-katalog" element={<ECataloguePage />} />
               <Route path="/subelerimiz" element={<BranchesPage />} />
