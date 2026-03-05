@@ -33,6 +33,7 @@ import AdminOrders from "@/pages/admin/AdminOrders";
 import AdminInventory from "@/pages/admin/AdminInventory";
 import AdminLeads from "@/pages/admin/AdminLeads";
 import AdminService from "@/pages/admin/AdminService";
+import AdminLeaveRequests from "@/pages/admin/AdminLeaveRequests";
 
 
 const queryClient = new QueryClient();
@@ -80,7 +81,7 @@ const App = () => (
               <Route path="stok" element={<AdminInventory />} />
               <Route path="talepler" element={<AdminLeads />} />
               <Route path="servis" element={<AdminService />} />
-              
+              <Route path="izinler" element={<AdminLeaveRequests />} />
             </Route>
           </Routes>
         </BrowserRouter>
