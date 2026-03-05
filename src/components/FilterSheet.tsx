@@ -259,7 +259,7 @@ export function FilterSidebar(props: FilterSheetProps) {
     props.onFiltersChange({ brands: [], inStock: false, attributes: {}, sort: "popular" });
   };
   const attrCount = Object.values(props.filters.attributes).reduce((sum, arr) => sum + arr.length, 0);
-  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + (props.filters.priceMin ? 1 : 0) + (props.filters.priceMax ? 1 : 0) + attrCount;
+  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + attrCount;
 
   return (
     <aside className="hidden md:block w-[260px] flex-shrink-0">
