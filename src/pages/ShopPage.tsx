@@ -31,8 +31,9 @@ export default function ShopPage() {
         <span className="text-foreground font-medium">Mağaza</span>
       </nav>
 
-      {/* Category icons */}
-      <div className="flex gap-2 overflow-x-auto pb-1 mb-5 scrollbar-hide">
+      {/* Category icons - sticky */}
+      <div className="sticky top-[88px] z-30 bg-background/95 backdrop-blur-sm -mx-4 px-4 py-2 mb-3">
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         {CATEGORIES.map((cat, i) => {
           const IconComp = icons[cat.icon as keyof typeof icons];
           return (
