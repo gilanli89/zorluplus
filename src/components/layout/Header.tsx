@@ -222,7 +222,7 @@ export default function Header() {
                     onClick={isListening ? stopListening : startListening}
                     title={isListening ? "Dinlemeyi durdur" : "Sesle ara"}
                   >
-                    {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                    {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4 text-primary" />}
                   </Button>
                 )}
                 <Button type="button" variant="ghost" size="icon" className="rounded-full shrink-0 tap-scale" onClick={() => { setSearchOpen(false); stopListening(); }}>
