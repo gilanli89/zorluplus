@@ -21,6 +21,7 @@ import MikrodalgaLandingPage from "@/pages/landings/MikrodalgaLandingPage";
 import KahveMakinesiLandingPage from "@/pages/landings/KahveMakinesiLandingPage";
 import EvAletleriLandingPage from "@/pages/landings/EvAletleriLandingPage";
 import AirfryerLandingPage from "@/pages/landings/AirfryerLandingPage";
+import FirinLandingPage from "@/pages/landings/FirinLandingPage";
 import SearchPage from "@/pages/SearchPage";
 import ECataloguePage from "@/pages/ECataloguePage";
 import BranchesPage from "@/pages/BranchesPage";
@@ -78,6 +79,7 @@ const App = () => (
               <Route path="/kahve-makinesi" element={<KahveMakinesiLandingPage />} />
               <Route path="/ev-aletleri" element={<EvAletleriLandingPage />} />
               <Route path="/airfryer" element={<AirfryerLandingPage />} />
+              <Route path="/firin" element={<FirinLandingPage />} />
               <Route path="/arama" element={<SearchPage />} />
               <Route path="/e-katalog" element={<ECataloguePage />} />
               <Route path="/subelerimiz" element={<BranchesPage />} />
