@@ -52,7 +52,7 @@ export default function QuoteForm({ productId, productSku, productName, productP
     setTimeout(() => {
       setLoading(false);
       toast.success("Talebiniz alındı! En kısa sürede sizinle iletişime geçeceğiz.");
-      setForm({ name: "", phone: "", email: "", branch: "", notes: "" });
+      setForm({ name: "", phone: "", email: "", address: "", branch: "", notes: "" });
     }, 1000);
   };
 
