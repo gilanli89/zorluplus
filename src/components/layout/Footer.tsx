@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Phone, Mail, Facebook, Instagram, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
 import { BRAND, FOOTER_LINKS, TRUST_BADGES } from "@/lib/constants";
+import zorluLogo from "@/assets/zorlu-logo.png";
 
 const stagger = {
   hidden: {},
