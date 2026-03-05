@@ -235,7 +235,7 @@ export default function CartPage() {
                           <img src={rp.image} alt={rp.name} className="h-20 w-full object-contain mb-2" loading="lazy" />
                         </Link>
                         <p className="text-xs font-medium text-foreground line-clamp-2 mb-1">{rp.name}</p>
-                        <p className="text-sm font-bold text-foreground mb-2">{formatPrice(rpPrice)}</p>
+                        {/* price hidden */}
                         <Button
                           size="sm"
                           className="w-full rounded-full text-xs gap-1"
