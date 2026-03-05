@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
-import { Monitor, Tv, Gamepad2, Film, Sun, Volume2, Ruler, ShieldCheck, ArrowRight, MessageCircle } from "lucide-react";
+import { Monitor, Tv, Gamepad2, Film, Sun, ArrowRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BRAND } from "@/lib/constants";
 import { trackWhatsAppClick } from "@/lib/tracking";
