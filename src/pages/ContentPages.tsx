@@ -130,9 +130,37 @@ export function KunyePage() {
 }
 
 export function EkibimizPage() {
+  const team = [
+    { name: "Halil Kavaz", role: "CEO & Founder" },
+    { name: "Deniz Bisikletçiler", role: "Coordinator" },
+    { name: "Serkan Taras", role: "Mağusa – Store Manager" },
+    { name: "Çisem Özdoğan", role: "Lefkoşa – Store Manager" },
+    { name: "Mustafa Özdoğan", role: "Lefkoşa – Sales Representative" },
+    { name: "Dilfuza Jumakova", role: "Lefkoşa – Sales Representative" },
+    { name: "Alaaeddin Erdemci", role: "White Goods Chef" },
+    { name: "Abed Azbaki", role: "TV/AV Service Chief" },
+    { name: "Suhrap Alimov", role: "Air Conditioning Chef" },
+    { name: "Çakır Recepov", role: "TV Technician" },
+    { name: "Bilal Muhammed", role: "TV Technician" },
+    { name: "Umit Rozyev", role: "TV Technician" },
+    { name: "Ramazan Koshayev", role: "Air Conditioning Technician" },
+    { name: "Karetta", role: "Yapay Zeka Asistan" },
+  ];
+
   return (
     <ContentPage title="Ekibimiz">
       <p>Zorlu Digital Plaza ailesi, alanında uzman satış danışmanları ve teknik servis ekibinden oluşmaktadır. Müşteri memnuniyetini ön planda tutan ekibimiz, size en doğru ürünü seçmenizde yardımcı olur.</p>
+      <div className="not-prose mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        {team.map((m) => (
+          <div key={m.name} className="flex flex-col items-center text-center p-4 rounded-xl border border-border bg-muted/30 hover:bg-muted/60 transition-colors">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+              <span className="text-xl font-bold text-primary">{m.name.charAt(0)}</span>
+            </div>
+            <p className="font-display font-bold text-sm text-foreground leading-tight">{m.name}</p>
+            <p className="text-xs text-muted-foreground mt-1">{m.role}</p>
+          </div>
+        ))}
+      </div>
     </ContentPage>
   );
 }
