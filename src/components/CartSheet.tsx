@@ -78,14 +78,7 @@ export default function CartSheet() {
 
             {/* Summary & Checkout */}
             <div className="border-t border-border pt-4 space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Ara Toplam</span>
-                <span className="font-semibold text-foreground">{formatPrice(subtotal)}</span>
-              </div>
-              <div className="flex justify-between text-base font-bold">
-                <span className="text-foreground">Toplam</span>
-                <span className="text-primary">{formatPrice(grandTotal)}</span>
-              </div>
+              {/* prices hidden */}
               <Link to="/sepet" onClick={() => setOpen(false)}>
                 <Button className="w-full rounded-full font-semibold gap-2" size="lg">
                   <ShoppingCart className="h-4 w-4" /> Sepete Git
