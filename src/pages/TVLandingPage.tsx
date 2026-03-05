@@ -1,11 +1,13 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Shield, Award, Wrench, MessageCircle, Phone, CheckCircle2,
-  Star, ArrowRight, Tv, Monitor, Volume2, Zap, Eye, Maximize2,
+  Star, ArrowRight, Tv, Monitor, Volume2, Zap, Eye, Maximize2, SlidersHorizontal, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useProducts } from "@/hooks/useProducts";
 import { getProductsByCategory } from "@/lib/products";
 import { trackWhatsAppClick } from "@/lib/tracking";
@@ -46,7 +48,150 @@ const FAQ = [
 export default function TVLandingPage() {
   const { data: products = [] } = useProducts();
   const tvProducts = useMemo(() => products.filter(p => p.category === "tv-goruntu" && p.subcategory === "tv"), [products]);
-  const display = tvProducts;
+
+  // TV-specific filters
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedInches, setSelectedInches] = useState<string[]>([]);
+  const [selectedPanels, setSelectedPanels] = useState<string[]>([]);
+  const [selectedOS, setSelectedOS] = useState<string[]>([]);
+
+  // Extract inch from product name (e.g. "55 inch", "65\"", "75"")
+  const getInch = (name: string): string | null => {
+    const match = name.match(/(\d{2,3})\s*["'"''ınç inç inch]|(\d{2,3})["']/i);
+    if (match) return match[1] || match[2];
+    // Try standalone common sizes
+    const sizeMatch = name.match(/\b(32|40|43|50|55|58|65|70|75|77|83|85|86|98)\b/);
+    return sizeMatch ? sizeMatch[1] : null;
+  };
+
+  // Extract panel type from name/tags
+  const getPanelType = (p: { name: string; tags: string[] }): string => {
+    const text = (p.name + " " + p.tags.join(" ")).toUpperCase();
+    if (text.includes("OLED") && !text.includes("QLED")) return "OLED";
+    if (text.includes("QLED") || text.includes("NEO QLED")) return "QLED";
+    if (text.includes("NANOCELL")) return "NanoCell";
+    if (text.includes("CRYSTAL") || text.includes("UHD")) return "Crystal UHD";
+    if (text.includes("LED")) return "LED";
+    return "Diğer";
+  };
+
+  // Extract OS from name/tags
+  const getOS = (p: { name: string; tags: string[] }): string => {
+    const text = (p.name + " " + p.tags.join(" ")).toUpperCase();
+    if (text.includes("TIZEN") || text.includes("SAMSUNG")) return "Tizen (Samsung)";
+    if (text.includes("WEBOS") || text.includes("LG")) return "webOS (LG)";
+    return "Diğer";
+  };
+
+  // Available filter options from products
+  const filterOptions = useMemo(() => {
+    const brands = new Set<string>();
+    const inches = new Set<string>();
+    const panels = new Set<string>();
+    const oses = new Set<string>();
+    tvProducts.forEach(p => {
+      if (p.brand) brands.add(p.brand);
+      const inch = getInch(p.name);
+      if (inch) inches.add(inch);
+      panels.add(getPanelType(p));
+      oses.add(getOS(p));
+    });
+    return {
+      brands: ["Samsung", "LG"].filter(b => brands.has(b) || brands.has(b.toUpperCase()) || brands.has(b.toLowerCase())),
+      inches: Array.from(inches).sort((a, b) => Number(a) - Number(b)),
+      panels: Array.from(panels).sort(),
+      oses: Array.from(oses).sort(),
+    };
+  }, [tvProducts]);
+
+  // Filtered display
+  const display = useMemo(() => {
+    return tvProducts.filter(p => {
+      if (selectedBrands.length > 0 && !selectedBrands.some(b => p.brand.toUpperCase().includes(b.toUpperCase()))) return false;
+      if (selectedInches.length > 0) {
+        const inch = getInch(p.name);
+        if (!inch || !selectedInches.includes(inch)) return false;
+      }
+      if (selectedPanels.length > 0 && !selectedPanels.includes(getPanelType(p))) return false;
+      if (selectedOS.length > 0 && !selectedOS.includes(getOS(p))) return false;
+      return true;
+    });
+  }, [tvProducts, selectedBrands, selectedInches, selectedPanels, selectedOS]);
+
+  const activeFilterCount = selectedBrands.length + selectedInches.length + selectedPanels.length + selectedOS.length;
+  const clearFilters = () => { setSelectedBrands([]); setSelectedInches([]); setSelectedPanels([]); setSelectedOS([]); };
+
+  const toggleFilter = (value: string, selected: string[], setSelected: React.Dispatch<React.SetStateAction<string[]>>) => {
+    setSelected(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+  };
+
+  const FilterContent = () => (
+    <div className="space-y-6">
+      {activeFilterCount > 0 && (
+        <button onClick={clearFilters} className="text-xs text-primary hover:underline flex items-center gap-1">
+          <X className="h-3 w-3" /> Filtreleri Temizle ({activeFilterCount})
+        </button>
+      )}
+
+      {/* Marka */}
+      <div>
+        <h4 className="text-sm font-bold text-foreground mb-3">Marka</h4>
+        <div className="space-y-2">
+          {filterOptions.brands.map(brand => (
+            <label key={brand} className="flex items-center gap-2 cursor-pointer text-sm">
+              <Checkbox checked={selectedBrands.includes(brand)} onCheckedChange={() => toggleFilter(brand, selectedBrands, setSelectedBrands)} />
+              <span className="text-foreground">{brand}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Ekran Boyutu */}
+      {filterOptions.inches.length > 0 && (
+        <div>
+          <h4 className="text-sm font-bold text-foreground mb-3">Ekran Boyutu</h4>
+          <div className="space-y-2">
+            {filterOptions.inches.map(inch => (
+              <label key={inch} className="flex items-center gap-2 cursor-pointer text-sm">
+                <Checkbox checked={selectedInches.includes(inch)} onCheckedChange={() => toggleFilter(inch, selectedInches, setSelectedInches)} />
+                <span className="text-foreground">{inch}"</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Panel Tipi */}
+      {filterOptions.panels.length > 0 && (
+        <div>
+          <h4 className="text-sm font-bold text-foreground mb-3">Panel Tipi</h4>
+          <div className="space-y-2">
+            {filterOptions.panels.map(panel => (
+              <label key={panel} className="flex items-center gap-2 cursor-pointer text-sm">
+                <Checkbox checked={selectedPanels.includes(panel)} onCheckedChange={() => toggleFilter(panel, selectedPanels, setSelectedPanels)} />
+                <span className="text-foreground">{panel}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* İşletim Sistemi */}
+      {filterOptions.oses.length > 0 && (
+        <div>
+          <h4 className="text-sm font-bold text-foreground mb-3">İşletim Sistemi</h4>
+          <div className="space-y-2">
+            {filterOptions.oses.map(os => (
+              <label key={os} className="flex items-center gap-2 cursor-pointer text-sm">
+                <Checkbox checked={selectedOS.includes(os)} onCheckedChange={() => toggleFilter(os, selectedOS, setSelectedOS)} />
+                <span className="text-foreground">{os}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   // SEO
   if (typeof document !== "undefined") {
@@ -140,28 +285,56 @@ export default function TVLandingPage() {
               Tümünü Gör <ArrowRight className="inline h-3.5 w-3.5" />
             </Link>
           </div>
-          {display.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-              {display.map((p, i) => (
-                <motion.div key={p.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-                  <ProductCard product={p} />
-                </motion.div>
-              ))}
+
+          <div className="flex gap-6">
+            {/* Desktop Sidebar */}
+            <aside className="hidden lg:block w-56 shrink-0">
+              <div className="sticky top-28 rounded-2xl border border-border bg-card p-5">
+                <h3 className="text-sm font-bold text-foreground mb-4 flex items-center gap-2">
+                  <SlidersHorizontal className="h-4 w-4" /> Filtrele
+                </h3>
+                <FilterContent />
+              </div>
+            </aside>
+
+            {/* Mobile Filter Trigger */}
+            <div className="lg:hidden mb-4 w-full">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="sm" className="rounded-full gap-2">
+                    <SlidersHorizontal className="h-4 w-4" />
+                    Filtrele
+                    {activeFilterCount > 0 && (
+                      <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-bold">{activeFilterCount}</span>
+                    )}
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto rounded-t-2xl">
+                  <SheetTitle className="text-lg font-bold mb-4">Filtrele</SheetTitle>
+                  <FilterContent />
+                </SheetContent>
+              </Sheet>
             </div>
-          ) : (
-            <div className="text-center py-12 rounded-2xl border border-border bg-card">
-              <p className="text-muted-foreground mb-4">TV modelleri yükleniyor...</p>
-              <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("tv_fallback")}>
-                <Button className="rounded-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
-                  <MessageCircle className="h-4 w-4" /> WhatsApp ile Sorun
-                </Button>
-              </a>
+
+            {/* Product Grid */}
+            <div className="flex-1 min-w-0">
+              {display.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+                  {display.map((p, i) => (
+                    <motion.div key={p.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
+                      <ProductCard product={p} />
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 rounded-2xl border border-border bg-card">
+                  <p className="text-muted-foreground mb-4">Bu filtrelere uygun TV bulunamadı.</p>
+                  <Button variant="outline" className="rounded-full gap-2" onClick={clearFilters}>
+                    <X className="h-4 w-4" /> Filtreleri Temizle
+                  </Button>
+                </div>
+              )}
             </div>
-          )}
-          <div className="text-center mt-6 sm:hidden">
-            <Link to="/kategori/tv-goruntu">
-              <Button variant="outline" className="rounded-full">Tüm TV'leri Gör</Button>
-            </Link>
           </div>
         </div>
       </section>
