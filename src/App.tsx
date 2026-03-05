@@ -10,6 +10,7 @@ import CategoryPage from "@/pages/CategoryPage";
 import CategoriesPage from "@/pages/CategoriesPage";
 import ProductPage from "@/pages/ProductPage";
 import CategoryLandingPage from "@/pages/CategoryLandingPage";
+import TVLandingPage from "@/pages/TVLandingPage";
 import SearchPage from "@/pages/SearchPage";
 import ECataloguePage from "@/pages/ECataloguePage";
 import BranchesPage from "@/pages/BranchesPage";
