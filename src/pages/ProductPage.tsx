@@ -32,7 +32,7 @@ export default function ProductPage() {
 
   const category = CATEGORIES.find(c => c.slug === product.category);
   const subcategory = category?.children.find(s => s.slug === product.subcategory);
-  const hasDiscount = product.salePrice && product.salePrice < product.price;
+  const hasDiscount = false;
   const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
   const recentlyViewed = products.filter(p => recentIds.includes(p.id) && p.id !== product.id).slice(0, 4);
 
