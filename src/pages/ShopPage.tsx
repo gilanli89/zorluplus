@@ -2,10 +2,12 @@ import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useProducts } from "@/hooks/useProducts";
 import { FilterState } from "@/lib/types";
+import { CATEGORIES } from "@/lib/constants";
 import ProductCard from "@/components/ProductCard";
 import { FilterSidebar, MobileFilterTrigger, SortBar, applyFilters } from "@/components/FilterSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
+import { icons } from "lucide-react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
