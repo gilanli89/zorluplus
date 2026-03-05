@@ -1,31 +1,51 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { CATEGORIES } from "@/lib/constants";
+import { icons } from "lucide-react";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { delay: i * 0.06, duration: 0.4, ease: [0.25, 0.1, 0.25, 1] as const },
+  }),
+};
 
 export default function CategoriesPage() {
   return (
-    <div className="container py-6">
-      <h1 className="font-display text-2xl font-bold mb-6 text-foreground">Tüm Kategoriler</h1>
-      <div className="grid gap-4">
-        {CATEGORIES.map(cat => (
-          <div key={cat.slug} className="rounded-xl border border-border bg-card p-5">
-            <Link to={`/kategori/${cat.slug}`} className="font-display font-bold text-lg text-foreground hover:text-primary transition-colors">
-              {cat.name}
-            </Link>
-            {cat.children.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {cat.children.map(sub => (
-                  <Link
-                    key={sub.slug}
-                    to={`/kategori/${cat.slug}/${sub.slug}`}
-                    className="rounded-full border border-border px-3 py-1.5 text-sm text-muted-foreground hover:border-primary hover:text-primary transition-colors"
-                  >
-                    {sub.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+    <div className="container py-6 md:py-8">
+      <h1 className="font-display text-2xl md:text-3xl font-bold mb-6 text-foreground">Mağaza</h1>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+        {CATEGORIES.map((cat, i) => {
+          const IconComp = icons[cat.icon as keyof typeof icons];
+          return (
+            <motion.div
+              key={cat.slug}
+              custom={i}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+            >
+              <Link
+                to={`/kategori/${cat.slug}`}
+                className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-5 md:p-6 hover:border-primary hover:shadow-lg hover:bg-primary/5 transition-all duration-300 tap-scale h-full"
+              >
+                <div className="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                  {IconComp && <IconComp className="h-7 w-7 md:h-8 md:w-8" />}
+                </div>
+                <span className="font-display font-bold text-sm md:text-base text-center text-foreground leading-tight">
+                  {cat.name}
+                </span>
+                {cat.children.length > 0 && (
+                  <span className="text-[11px] text-muted-foreground text-center leading-snug">
+                    {cat.children.slice(0, 3).map(s => s.name).join(", ")}
+                    {cat.children.length > 3 && " …"}
+                  </span>
+                )}
+              </Link>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
