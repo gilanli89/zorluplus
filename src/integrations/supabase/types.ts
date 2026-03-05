@@ -125,6 +125,54 @@ export type Database = {
         }
         Relationships: []
       }
+      leave_requests: {
+        Row: {
+          admin_note: string | null
+          branch: string
+          created_at: string
+          decided_at: string | null
+          end_date: string
+          full_name: string
+          id: string
+          leave_type: string
+          note: string | null
+          start_date: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          admin_note?: string | null
+          branch?: string
+          created_at?: string
+          decided_at?: string | null
+          end_date: string
+          full_name: string
+          id?: string
+          leave_type?: string
+          note?: string | null
+          start_date: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_note?: string | null
+          branch?: string
+          created_at?: string
+          decided_at?: string | null
+          end_date?: string
+          full_name?: string
+          id?: string
+          leave_type?: string
+          note?: string | null
+          start_date?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           created_at: string
