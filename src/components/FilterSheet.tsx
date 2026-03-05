@@ -10,10 +10,131 @@ import { SlidersHorizontal, X, Minus } from "lucide-react";
 import { FilterState, SortOption, Product } from "@/lib/types";
 import { getBrands, formatPrice } from "@/lib/products";
 
+/* ─── Category-specific attribute extraction ─── */
+interface DynamicAttribute {
+  key: string;
+  label: string;
+  values: { value: string; count: number }[];
+}
+
+function extractScreenSize(name: string): string | null {
+  const m = name.match(/(\d{2,3})[""′']\s*/i) || name.match(/(\d{2,3})\s*(?:inch|inç)/i);
+  if (m) return `${m[1]}"`;
+  // Try "43-inch" style
+  const m2 = name.match(/(\d{2,3})-inch/i);
+  if (m2) return `${m2[1]}"`;
+  return null;
+}
+
+function extractPanelType(name: string, desc: string): string | null {
+  const text = `${name} ${desc}`.toUpperCase();
+  if (text.includes("NEO QLED")) return "Neo QLED";
+  if (text.includes("QLED")) return "QLED";
+  if (text.includes("OLED")) return "OLED";
+  if (text.includes("NANOCELL")) return "NanoCell";
+  if (text.includes("CRYSTAL") || text.includes("KRİSTAL")) return "Crystal UHD";
+  if (text.includes("LED")) return "LED";
+  return null;
+}
+
+function extractBTU(name: string, desc: string): string | null {
+  const text = `${name} ${desc}`;
+  const m = text.match(/(\d{4,5})\s*BTU/i);
+  return m ? `${m[1]} BTU` : null;
+}
+
+function extractCapacity(name: string, desc: string): string | null {
+  const text = `${name} ${desc}`;
+  const mKg = text.match(/(\d+(?:[.,]\d+)?)\s*(?:KG|kg|Kg)/);
+  if (mKg) return `${mKg[1]} KG`;
+  const mKisilik = text.match(/(\d+)\s*(?:Kişilik|kişilik)/i);
+  if (mKisilik) return `${mKisilik[1]} Kişilik`;
+  const mLt = text.match(/(\d+(?:[.,]\d+)?)\s*(?:LT|lt|L)\b/i);
+  if (mLt) return `${mLt[1]} LT`;
+  return null;
+}
+
+function getCategoryAttributes(products: Product[], categorySlug?: string): DynamicAttribute[] {
+  if (!categorySlug) return [];
+  const attrs: DynamicAttribute[] = [];
+
+  if (categorySlug === "tv-goruntu" || categorySlug === "tv") {
+    // Screen size
+    const sizeCounts: Record<string, number> = {};
+    const panelCounts: Record<string, number> = {};
+    products.forEach(p => {
+      const size = extractScreenSize(p.name);
+      if (size) sizeCounts[size] = (sizeCounts[size] || 0) + 1;
+      const panel = extractPanelType(p.name, p.description);
+      if (panel) panelCounts[panel] = (panelCounts[panel] || 0) + 1;
+    });
+    if (Object.keys(sizeCounts).length > 0) {
+      attrs.push({
+        key: "screenSize",
+        label: "Ekran Boyutu",
+        values: Object.entries(sizeCounts)
+          .map(([value, count]) => ({ value, count }))
+          .sort((a, b) => parseInt(a.value) - parseInt(b.value)),
+      });
+    }
+    if (Object.keys(panelCounts).length > 0) {
+      attrs.push({
+        key: "panelType",
+        label: "Panel Tipi",
+        values: Object.entries(panelCounts)
+          .map(([value, count]) => ({ value, count }))
+          .sort((a, b) => b.count - a.count),
+      });
+    }
+  }
+
+  if (categorySlug === "klima-isitma" || categorySlug === "klima" || categorySlug === "split-klima" || categorySlug === "portatif-klima") {
+    const btuCounts: Record<string, number> = {};
+    products.forEach(p => {
+      const btu = extractBTU(p.name, p.description);
+      if (btu) btuCounts[btu] = (btuCounts[btu] || 0) + 1;
+    });
+    if (Object.keys(btuCounts).length > 0) {
+      attrs.push({
+        key: "btu",
+        label: "BTU",
+        values: Object.entries(btuCounts)
+          .map(([value, count]) => ({ value, count }))
+          .sort((a, b) => parseInt(a.value) - parseInt(b.value)),
+      });
+    }
+  }
+
+  if (["beyaz-esya", "camasir-makinesi", "bulasik-makinesi", "kurutma-makinesi", "buzdolabi", "derin-dondurucu", "mini-buzdolabi"].includes(categorySlug)) {
+    const capCounts: Record<string, number> = {};
+    products.forEach(p => {
+      const cap = extractCapacity(p.name, p.description);
+      if (cap) capCounts[cap] = (capCounts[cap] || 0) + 1;
+    });
+    if (Object.keys(capCounts).length > 0) {
+      attrs.push({
+        key: "capacity",
+        label: "Kapasite",
+        values: Object.entries(capCounts)
+          .map(([value, count]) => ({ value, count }))
+          .sort((a, b) => {
+            const numA = parseFloat(a.value);
+            const numB = parseFloat(b.value);
+            return numA - numB;
+          }),
+      });
+    }
+  }
+
+  return attrs;
+}
+
 interface FilterSheetProps {
   products: Product[];
   filters: FilterState;
   onFiltersChange: (f: FilterState) => void;
+  categorySlug?: string;
+  subSlug?: string;
 }
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
@@ -29,8 +150,11 @@ function FilterBody({
   products,
   filters,
   onFiltersChange,
+  categorySlug,
+  subSlug,
 }: FilterSheetProps) {
   const brands = getBrands(products);
+  const dynamicAttrs = getCategoryAttributes(products, subSlug || categorySlug);
   const maxPrice = Math.max(...products.map(p => p.salePrice || p.price), 1);
 
   // Brand counts
@@ -128,6 +252,40 @@ function FilterBody({
         </Collapsible>
       )}
 
+      {/* Dynamic category-specific attributes */}
+      {dynamicAttrs.map(attr => (
+        <Collapsible key={attr.key} defaultOpen>
+          <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-1 border-b border-border text-sm font-semibold text-foreground hover:text-primary transition-colors">
+            {attr.label}
+            <Minus className="h-3.5 w-3.5 text-muted-foreground" />
+          </CollapsibleTrigger>
+          <CollapsibleContent className="py-3 px-1 space-y-2 max-h-[280px] overflow-y-auto">
+            {attr.values.map(v => {
+              const selected = (filters.attributes[attr.key] || []).includes(v.value);
+              const toggleAttr = () => {
+                const current = filters.attributes[attr.key] || [];
+                const next = selected
+                  ? current.filter(x => x !== v.value)
+                  : [...current, v.value];
+                onFiltersChange({
+                  ...filters,
+                  attributes: { ...filters.attributes, [attr.key]: next },
+                });
+              };
+              return (
+                <label key={v.value} className="flex items-center gap-2.5 cursor-pointer group">
+                  <Checkbox checked={selected} onCheckedChange={toggleAttr} />
+                  <span className="text-sm text-foreground group-hover:text-primary transition-colors flex-1">
+                    {v.value}
+                  </span>
+                  <span className="text-xs text-muted-foreground">({v.count})</span>
+                </label>
+              );
+            })}
+          </CollapsibleContent>
+        </Collapsible>
+      ))}
+
       {/* Stock */}
       <Collapsible defaultOpen>
         <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-1 border-b border-border text-sm font-semibold text-foreground hover:text-primary transition-colors">
@@ -153,7 +311,8 @@ export function FilterSidebar(props: FilterSheetProps) {
   const clearFilters = () => {
     props.onFiltersChange({ brands: [], inStock: false, attributes: {}, sort: "popular" });
   };
-  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + (props.filters.priceMin ? 1 : 0) + (props.filters.priceMax ? 1 : 0);
+  const attrCount = Object.values(props.filters.attributes).reduce((sum, arr) => sum + arr.length, 0);
+  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + (props.filters.priceMin ? 1 : 0) + (props.filters.priceMax ? 1 : 0) + attrCount;
 
   return (
     <aside className="hidden md:block w-[260px] flex-shrink-0">
@@ -176,7 +335,8 @@ export function FilterSidebar(props: FilterSheetProps) {
 export function MobileFilterTrigger(props: FilterSheetProps) {
   const [open, setOpen] = useState(false);
   const maxPrice = Math.max(...props.products.map(p => p.price), 1);
-  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + (props.filters.priceMin ? 1 : 0) + (props.filters.priceMax ? 1 : 0);
+  const attrCount = Object.values(props.filters.attributes).reduce((sum, arr) => sum + arr.length, 0);
+  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + (props.filters.priceMin ? 1 : 0) + (props.filters.priceMax ? 1 : 0) + attrCount;
 
   const clearFilters = () => {
     props.onFiltersChange({ brands: [], inStock: false, attributes: {}, sort: "popular" });
@@ -247,12 +407,24 @@ export function SortBar({ filters, onFiltersChange }: { filters: FilterState; on
           Max: {formatPrice(filters.priceMax)} <X className="h-3 w-3" />
         </Badge>
       )}
+
+      {/* Attribute chips */}
+      {Object.entries(filters.attributes).flatMap(([key, vals]) =>
+        vals.map(v => (
+          <Badge key={`${key}-${v}`} variant="secondary" className="gap-1 cursor-pointer" onClick={() => {
+            const next = vals.filter(x => x !== v);
+            onFiltersChange({ ...filters, attributes: { ...filters.attributes, [key]: next } });
+          }}>
+            {v} <X className="h-3 w-3" />
+          </Badge>
+        ))
+      )}
     </div>
   );
 }
 
-/* ─── applyFilters stays the same ─── */
-export function applyFilters(products: Product[], filters: FilterState): Product[] {
+/* ─── applyFilters with attribute support ─── */
+export function applyFilters(products: Product[], filters: FilterState, categorySlug?: string, subSlug?: string): Product[] {
   let result = [...products];
 
   if (filters.brands.length > 0) {
@@ -266,6 +438,21 @@ export function applyFilters(products: Product[], filters: FilterState): Product
   }
   if (filters.priceMax != null) {
     result = result.filter(p => (p.salePrice || p.price) <= filters.priceMax!);
+  }
+
+  // Dynamic attribute filtering
+  const activeAttrs = Object.entries(filters.attributes).filter(([, vals]) => vals.length > 0);
+  if (activeAttrs.length > 0) {
+    result = result.filter(p => {
+      return activeAttrs.every(([key, vals]) => {
+        let extracted: string | null = null;
+        if (key === "screenSize") extracted = extractScreenSize(p.name);
+        else if (key === "panelType") extracted = extractPanelType(p.name, p.description);
+        else if (key === "btu") extracted = extractBTU(p.name, p.description);
+        else if (key === "capacity") extracted = extractCapacity(p.name, p.description);
+        return extracted && vals.includes(extracted);
+      });
+    });
   }
 
   switch (filters.sort) {

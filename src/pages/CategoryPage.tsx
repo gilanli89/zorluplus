@@ -26,7 +26,7 @@ export default function CategoryPage() {
   const category = CATEGORIES.find(c => c.slug === categorySlug);
   const subcategory = category?.children.find(s => s.slug === subSlug);
   const categoryProducts = useMemo(() => getProductsByCategory(products, categorySlug || "", subSlug), [products, categorySlug, subSlug]);
-  const filteredProducts = useMemo(() => applyFilters(categoryProducts, filters), [categoryProducts, filters]);
+  const filteredProducts = useMemo(() => applyFilters(categoryProducts, filters, categorySlug, subSlug), [categoryProducts, filters, categorySlug, subSlug]);
 
   const title = subcategory?.name || category?.name || "Ürünler";
 
@@ -63,12 +63,12 @@ export default function CategoryPage() {
 
       {/* Desktop: sidebar + grid / Mobile: sheet trigger */}
       <div className="flex gap-6">
-        <FilterSidebar products={categoryProducts} filters={filters} onFiltersChange={setFilters} />
+        <FilterSidebar products={categoryProducts} filters={filters} onFiltersChange={setFilters} categorySlug={categorySlug} subSlug={subSlug} />
 
         <div className="flex-1 min-w-0">
           {/* Sort bar + mobile filter */}
           <div className="flex flex-wrap items-center gap-2 mb-4">
-            <MobileFilterTrigger products={categoryProducts} filters={filters} onFiltersChange={setFilters} />
+            <MobileFilterTrigger products={categoryProducts} filters={filters} onFiltersChange={setFilters} categorySlug={categorySlug} subSlug={subSlug} />
             <SortBar filters={filters} onFiltersChange={setFilters} />
             <span className="ml-auto text-sm text-muted-foreground">{filteredProducts.length} ürün</span>
           </div>
