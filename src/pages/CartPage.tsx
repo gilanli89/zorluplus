@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ShoppingCart, Trash2, Plus, Minus, ShieldPlus, Zap, ArrowLeft, CreditCard, Banknote } from "lucide-react";
+import { ShoppingCart, Trash2, Plus, Minus, ShieldPlus, Zap, ArrowLeft, CreditCard, Banknote, Package } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,8 +8,9 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/contexts/CartContext";
+import { useProducts } from "@/hooks/useProducts";
 import { formatPrice } from "@/lib/products";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { BRAND } from "@/lib/constants";
 
@@ -17,13 +18,29 @@ const EXPRESS_FEE = 2000;
 
 export default function CartPage() {
   const {
-    items, removeItem, updateQuantity, clearCart,
+    items, removeItem, updateQuantity, clearCart, addItem,
     toggleWarranty, toggleExpressDelivery,
     subtotal, warrantyTotal, expressTotal, grandTotal, itemCount,
   } = useCart();
 
+  const { data: allProducts = [] } = useProducts();
   const [paymentMethod, setPaymentMethod] = useState<"card" | "cash">("card");
   const [customerInfo, setCustomerInfo] = useState({ name: "", phone: "", email: "", address: "" });
+
+  // Check if any cart item is a TV
+  const hasTv = items.some(i => i.product.category === "tv-goruntu" && !i.product.subcategory?.includes("aksesuar"));
+
+  // Recommended products: TV mounts + HDMI cables (not already in cart)
+  const recommended = useMemo(() => {
+    if (!hasTv) return [];
+    const cartIds = new Set(items.map(i => i.product.id));
+    return allProducts.filter(p => {
+      if (cartIds.has(p.id)) return false;
+      const nameL = p.name.toLowerCase();
+      const catL = (p.category + " " + p.subcategory).toLowerCase();
+      return nameL.includes("hdmi") || nameL.includes("askı") || nameL.includes("mount") || catL.includes("tv askı");
+    }).slice(0, 6);
+  }, [hasTv, items, allProducts]);
 
   if (items.length === 0) {
     return (
@@ -194,6 +211,37 @@ export default function CartPage() {
               </Card>
             );
           })}
+          {/* Recommended Products for TV */}
+          {recommended.length > 0 && (
+            <div className="mt-6">
+              <h3 className="font-display font-bold text-foreground text-lg mb-3 flex items-center gap-2">
+                <Package className="h-5 w-5 text-primary" /> Birlikte Öneriliyor
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {recommended.map(rp => {
+                  const rpPrice = rp.salePrice || rp.price;
+                  return (
+                    <Card key={rp.id} className="border-border overflow-hidden">
+                      <CardContent className="p-3">
+                        <Link to={`/urun/${rp.slug}`}>
+                          <img src={rp.image} alt={rp.name} className="h-20 w-full object-contain mb-2" loading="lazy" />
+                        </Link>
+                        <p className="text-xs font-medium text-foreground line-clamp-2 mb-1">{rp.name}</p>
+                        <p className="text-sm font-bold text-foreground mb-2">{formatPrice(rpPrice)}</p>
+                        <Button
+                          size="sm"
+                          className="w-full rounded-full text-xs gap-1"
+                          onClick={() => { addItem(rp); toast.success(`${rp.name} sepete eklendi`); }}
+                        >
+                          <ShoppingCart className="h-3 w-3" /> Sepete Ekle
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Sidebar: Summary + Payment */}

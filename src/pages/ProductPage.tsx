@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Shield, Award, Wrench, MessageCircle, ShoppingCart } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
@@ -18,6 +18,7 @@ export default function ProductPage() {
   const { data: products = [], isLoading } = useProducts();
   const { recentIds, addViewed } = useRecentlyViewed();
   const { addItem } = useCart();
+  const navigate = useNavigate();
   const product = getProductBySlug(products, slug || "");
 
   useEffect(() => {
@@ -91,7 +92,7 @@ export default function ProductPage() {
               <Button
                 size="lg"
                 className="flex-1 gap-2 font-semibold"
-                onClick={() => { addItem(product); toast.success("Sepete eklendi!"); }}
+                onClick={() => { addItem(product); toast.success("Sepete eklendi!"); navigate("/sepet"); }}
               >
                 <ShoppingCart className="h-5 w-5" /> Sepete Ekle
               </Button>
