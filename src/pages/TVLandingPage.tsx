@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Shield, Award, Wrench, MessageCircle, Phone, CheckCircle2,
-  Star, ArrowRight, Tv, Monitor, Volume2, Zap, Eye, Maximize2,
+  Star, ArrowRight, Tv, Monitor, Volume2, Zap, Eye, Maximize2, SlidersHorizontal, X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useProducts } from "@/hooks/useProducts";
