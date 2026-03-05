@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/ProductCard";
 import QuoteForm from "@/components/QuoteForm";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
+
 
 export default function ProductPage() {
   const { slug } = useParams();
