@@ -1,8 +1,7 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { Shield, Award, Wrench, MessageCircle, ShoppingCart } from "lucide-react";
+import { Shield, Award, Wrench, MessageCircle } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
-import { useCart } from "@/contexts/CartContext";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { getProductBySlug, formatPrice, getWhatsAppLink } from "@/lib/products";
 import { CATEGORIES } from "@/lib/constants";
