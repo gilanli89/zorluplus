@@ -127,9 +127,11 @@ export default function CartPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Cart Items */}
         <div className="lg:col-span-2 space-y-4">
-          {items.map(item => {
+          {items.map((item, index) => {
             const price = item.product.salePrice || item.product.price;
             const warrantyPrice = price * 0.5;
+            const isAccessory = /hdmi|askı|mount|kablo|aparat/i.test(item.product.name) || item.product.subcategory?.includes("aksesuar");
+            const showExpress = index === 0;
 
             return (
               <Card key={item.product.id} className="border-border">
@@ -166,47 +168,53 @@ export default function CartPage() {
                   </div>
 
                   {/* Upsells */}
-                  <div className="mt-4 space-y-3 border-t border-border pt-4">
-                    {/* Extended Warranty */}
-                    <div className="flex items-start gap-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 p-3">
-                      <ShieldPlus className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-sm font-semibold text-foreground">+2 Yıl Ekstra Garanti</p>
-                            <p className="text-xs text-muted-foreground">Toplam 4 yıl garanti kapsamı</p>
+                  {(!isAccessory || showExpress) && (
+                    <div className="mt-4 space-y-3 border-t border-border pt-4">
+                      {/* Extended Warranty - hide for accessories */}
+                      {!isAccessory && (
+                        <div className="flex items-start gap-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 p-3">
+                          <ShieldPlus className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="text-sm font-semibold text-foreground">+2 Yıl Ekstra Garanti</p>
+                                <p className="text-xs text-muted-foreground">Toplam 4 yıl garanti kapsamı</p>
+                              </div>
+                              <Switch
+                                checked={item.extendedWarranty}
+                                onCheckedChange={() => toggleWarranty(item.product.id)}
+                              />
+                            </div>
+                            <p className="text-sm font-bold text-amber-700 dark:text-amber-400 mt-1">
+                              +{formatPrice(warrantyPrice)}
+                            </p>
                           </div>
-                          <Switch
-                            checked={item.extendedWarranty}
-                            onCheckedChange={() => toggleWarranty(item.product.id)}
-                          />
                         </div>
-                        <p className="text-sm font-bold text-amber-700 dark:text-amber-400 mt-1">
-                          +{formatPrice(warrantyPrice)}
-                        </p>
-                      </div>
-                    </div>
+                      )}
 
-                    {/* Express Delivery */}
-                    <div className="flex items-start gap-3 rounded-xl bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 p-3">
-                      <Zap className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-sm font-semibold text-foreground">Express Kurulum (Bugün)</p>
-                            <p className="text-xs text-muted-foreground">Aynı gün teslimat ve kurulum</p>
+                      {/* Express Delivery - only for first item */}
+                      {showExpress && (
+                        <div className="flex items-start gap-3 rounded-xl bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 p-3">
+                          <Zap className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="text-sm font-semibold text-foreground">Express Kurulum (Bugün)</p>
+                                <p className="text-xs text-muted-foreground">Aynı gün teslimat ve kurulum</p>
+                              </div>
+                              <Switch
+                                checked={item.expressDelivery}
+                                onCheckedChange={() => toggleExpressDelivery(item.product.id)}
+                              />
+                            </div>
+                            <p className="text-sm font-bold text-blue-700 dark:text-blue-400 mt-1">
+                              +{formatPrice(EXPRESS_FEE)}
+                            </p>
                           </div>
-                          <Switch
-                            checked={item.expressDelivery}
-                            onCheckedChange={() => toggleExpressDelivery(item.product.id)}
-                          />
                         </div>
-                        <p className="text-sm font-bold text-blue-700 dark:text-blue-400 mt-1">
-                          +{formatPrice(EXPRESS_FEE)}
-                        </p>
-                      </div>
+                      )}
                     </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             );
