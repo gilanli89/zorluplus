@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ShoppingCart, Trash2, Plus, Minus, ShieldPlus, Zap, ArrowLeft, CreditCard, Banknote, Package } from "lucide-react";
+import { ShoppingCart, Trash2, Plus, Minus, ShieldPlus, Zap, ArrowLeft, CreditCard, Banknote, Package, Building2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,7 +24,7 @@ export default function CartPage() {
   } = useCart();
 
   const { data: allProducts = [] } = useProducts();
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "cash">("card");
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "cash" | "transfer">("card");
   const [customerInfo, setCustomerInfo] = useState({ name: "", phone: "", email: "", address: "" });
 
   // Check if any cart item is a TV
@@ -83,7 +83,7 @@ export default function CartPage() {
         items: orderItems,
         total_amount: grandTotal,
         status: paymentMethod === "card" ? "pending" : "pending",
-        payment_method: paymentMethod === "card" ? "cardplus" : "cash_on_delivery",
+        payment_method: paymentMethod === "card" ? "cardplus" : paymentMethod === "transfer" ? "bank_transfer" : "cash_on_delivery",
       });
     } catch (err) {
       console.error("Order save error:", err);
@@ -96,7 +96,8 @@ export default function CartPage() {
       });
       window.location.href = `/odeme?${params.toString()}`;
     } else {
-      // Cash on delivery — send WhatsApp order
+      // Cash on delivery or bank transfer — send WhatsApp order
+      const methodLabel = paymentMethod === "transfer" ? "Havale/EFT" : "Kapıda Ödeme";
       const orderLines = items.map(i => {
         const price = i.product.salePrice || i.product.price;
         let line = `• ${i.product.name} x${i.quantity} — ${formatPrice(price * i.quantity)}`;
@@ -105,10 +106,10 @@ export default function CartPage() {
         return line;
       }).join("\n");
 
-      const message = `🛒 Yeni Sipariş (Kapıda Ödeme)\n\nSipariş No: ${orderId}\n\n${orderLines}\n\n💰 Toplam: ${formatPrice(grandTotal)}\n\n👤 ${customerInfo.name}\n📱 ${customerInfo.phone}\n📧 ${customerInfo.email}\n📍 ${customerInfo.address}`;
+      const message = `🛒 Yeni Sipariş (${methodLabel})\n\nSipariş No: ${orderId}\n\n${orderLines}\n\n💰 Toplam: ${formatPrice(grandTotal)}\n\n👤 ${customerInfo.name}\n📱 ${customerInfo.phone}\n📧 ${customerInfo.email}\n📍 ${customerInfo.address}`;
 
       window.open(`https://wa.me/${BRAND.phone.replace(/\s/g, "")}?text=${encodeURIComponent(message)}`, "_blank");
-      toast.success("Siparişiniz oluşturuldu!");
+      toast.success(paymentMethod === "transfer" ? "Siparişiniz oluşturuldu! Havale sonrası onaylanacaktır." : "Siparişiniz oluşturuldu!");
       clearCart();
     }
   };
@@ -278,7 +279,7 @@ export default function CartPage() {
           <Card className="border-border">
             <CardContent className="p-4 space-y-3">
               <h3 className="font-display font-bold text-foreground">Ödeme Yöntemi</h3>
-              <RadioGroup value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as "card" | "cash")}>
+              <RadioGroup value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as "card" | "cash" | "transfer")}>
                 <div className="flex items-center gap-3 rounded-xl border border-border p-3 cursor-pointer hover:bg-muted/50 transition-colors">
                   <RadioGroupItem value="card" id="card" />
                   <Label htmlFor="card" className="flex items-center gap-2 cursor-pointer flex-1">
@@ -290,9 +291,19 @@ export default function CartPage() {
                   </Label>
                 </div>
                 <div className="flex items-center gap-3 rounded-xl border border-border p-3 cursor-pointer hover:bg-muted/50 transition-colors">
+                  <RadioGroupItem value="transfer" id="transfer" />
+                  <Label htmlFor="transfer" className="flex items-center gap-2 cursor-pointer flex-1">
+                    <Building2 className="h-4 w-4 text-primary" />
+                    <div>
+                      <p className="font-semibold text-sm">Havale / EFT</p>
+                      <p className="text-xs text-muted-foreground">Banka havalesi ile ödeme</p>
+                    </div>
+                  </Label>
+                </div>
+                <div className="flex items-center gap-3 rounded-xl border border-border p-3 cursor-pointer hover:bg-muted/50 transition-colors">
                   <RadioGroupItem value="cash" id="cash" />
                   <Label htmlFor="cash" className="flex items-center gap-2 cursor-pointer flex-1">
-                    <Banknote className="h-4 w-4 text-success" />
+                    <Banknote className="h-4 w-4 text-primary" />
                     <div>
                       <p className="font-semibold text-sm">Kapıda Ödeme</p>
                       <p className="text-xs text-muted-foreground">Nakit veya POS ile</p>
@@ -300,6 +311,15 @@ export default function CartPage() {
                   </Label>
                 </div>
               </RadioGroup>
+              {paymentMethod === "transfer" && (
+                <div className="mt-3 rounded-xl bg-muted/50 border border-border p-4 space-y-1.5">
+                  <p className="text-sm font-bold text-foreground">Banka Hesap Bilgileri</p>
+                  <p className="text-xs text-muted-foreground">Zorlu Digital Trade and Services Ltd.</p>
+                  <p className="text-xs text-muted-foreground">Türkiye İş Bankası — Hamitköy Lefkoşa Şubesi</p>
+                  <p className="text-xs font-mono font-semibold text-foreground select-all">TR75 0006 4000 0016 8180 8102 16</p>
+                  <p className="text-xs text-muted-foreground mt-2">Açıklama kısmına sipariş numaranızı yazınız.</p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -336,6 +356,8 @@ export default function CartPage() {
               >
                 {paymentMethod === "card" ? (
                   <><CreditCard className="h-4 w-4" /> Kredi Kartı ile Öde</>
+                ) : paymentMethod === "transfer" ? (
+                  <><Building2 className="h-4 w-4" /> Havale ile Sipariş Ver</>
                 ) : (
                   <><Banknote className="h-4 w-4" /> Kapıda Ödeme ile Sipariş Ver</>
                 )}
