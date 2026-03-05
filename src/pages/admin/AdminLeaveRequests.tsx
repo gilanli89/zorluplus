@@ -1,4 +1,6 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -8,13 +10,28 @@ import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getLeaveRequests, updateLeaveRequest } from "@/lib/leaveStore";
 import { employees } from "@/data/employees";
-import type { LeaveRequest, RequestStatus } from "@/types/leave";
 import { toast } from "sonner";
 import { Eye, Check, X, CalendarDays, Clock, Users, AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
 import { format, addDays, isWithinInterval, startOfDay, differenceInCalendarDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, getDay } from "date-fns";
 import { tr } from "date-fns/locale";
+
+type RequestStatus = "Beklemede" | "Onaylandı" | "Reddedildi";
+
+interface LeaveRequest {
+  id: string;
+  created_at: string;
+  full_name: string;
+  branch: string;
+  title: string;
+  leave_type: string;
+  start_date: string;
+  end_date: string;
+  note: string;
+  status: RequestStatus;
+  admin_note: string;
+  decided_at: string | null;
+}
 
 function statusColor(status: RequestStatus) {
   if (status === "Onaylandı") return "bg-green-500/15 text-green-700 border-green-200";
@@ -31,14 +48,14 @@ function statusDot(status: RequestStatus) {
 function getLeaveForDay(date: Date, requests: LeaveRequest[]) {
   return requests.filter((r) => {
     if (r.status === "Reddedildi") return false;
-    const start = startOfDay(new Date(r.startDate));
-    const end = startOfDay(new Date(r.endDate));
+    const start = startOfDay(new Date(r.start_date));
+    const end = startOfDay(new Date(r.end_date));
     return isWithinInterval(startOfDay(date), { start, end });
   });
 }
 
 export default function AdminLeaveRequests() {
-  const [requests, setRequests] = useState<LeaveRequest[]>([]);
+  const qc = useQueryClient();
   const [branchFilter, setBranchFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
@@ -46,11 +63,34 @@ export default function AdminLeaveRequests() {
   const [adminNote, setAdminNote] = useState("");
   const [calendarMonth, setCalendarMonth] = useState(new Date());
 
-  useEffect(() => {
-    refresh();
-  }, []);
+  const { data: requests = [], isLoading } = useQuery({
+    queryKey: ["admin-leave-requests"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("leave_requests")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data as LeaveRequest[];
+    },
+  });
 
-  const refresh = () => setRequests(getLeaveRequests());
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, status, admin_note }: { id: string; status: RequestStatus; admin_note: string }) => {
+      const { error } = await supabase
+        .from("leave_requests")
+        .update({ status, admin_note, decided_at: new Date().toISOString() })
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-leave-requests"] });
+      toast.success("Talep güncellendi.");
+      setSelected(null);
+      setAdminNote("");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
 
   const today = startOfDay(new Date());
 
@@ -58,15 +98,15 @@ export default function AdminLeaveRequests() {
   const approvedCount = requests.filter((r) => r.status === "Onaylandı").length;
   const todayOnLeave = requests.filter((r) => {
     if (r.status !== "Onaylandı") return false;
-    const start = startOfDay(new Date(r.startDate));
-    const end = startOfDay(new Date(r.endDate));
+    const start = startOfDay(new Date(r.start_date));
+    const end = startOfDay(new Date(r.end_date));
     return isWithinInterval(today, { start, end });
   });
 
   const employeeBalances = useMemo(() => {
     return employees.filter(e => !e.isAdmin).map((emp) => {
-      const empRequests = requests.filter((r) => r.fullName === emp.fullName && r.leaveType === "Yıllık" && r.status !== "Reddedildi");
-      const used = empRequests.reduce((sum, r) => sum + differenceInCalendarDays(new Date(r.endDate), new Date(r.startDate)) + 1, 0);
+      const empRequests = requests.filter((r) => r.full_name === emp.fullName && r.leave_type === "Yıllık" && r.status !== "Reddedildi");
+      const used = empRequests.reduce((sum, r) => sum + differenceInCalendarDays(new Date(r.end_date), new Date(r.start_date)) + 1, 0);
       return { ...emp, used, remaining: Math.max(0, emp.annualLeave - used) };
     });
   }, [requests]);
@@ -81,22 +121,20 @@ export default function AdminLeaveRequests() {
     if (statusFilter !== "all" && r.status !== statusFilter) return false;
     if (search) {
       const q = search.toLowerCase();
-      if (!r.fullName.toLowerCase().includes(q) && !r.title.toLowerCase().includes(q)) return false;
+      if (!r.full_name.toLowerCase().includes(q) && !r.title.toLowerCase().includes(q)) return false;
     }
     return true;
   });
 
   const decide = (id: string, status: RequestStatus) => {
-    updateLeaveRequest(id, { status, adminNote, decidedAt: new Date().toISOString() });
-    toast.success(status === "Onaylandı" ? "Talep onaylandı." : "Talep reddedildi.");
-    setSelected(null);
-    setAdminNote("");
-    refresh();
+    updateMutation.mutate({ id, status, admin_note: adminNote });
   };
 
   const fmt = (d: string) => {
     try { return format(new Date(d), "dd MMM yyyy", { locale: tr }); } catch { return d; }
   };
+
+  if (isLoading) return <div className="text-muted-foreground">Yükleniyor...</div>;
 
   return (
     <div>
@@ -119,7 +157,7 @@ export default function AdminLeaveRequests() {
           <div className="flex flex-wrap gap-2">
             {todayOnLeave.map((r) => (
               <Badge key={r.id} variant="secondary" className="text-sm py-1 px-3">
-                {r.fullName} <span className="text-muted-foreground ml-1">({r.leaveType})</span>
+                {r.full_name} <span className="text-muted-foreground ml-1">({r.leave_type})</span>
               </Badge>
             ))}
           </div>
@@ -176,10 +214,10 @@ export default function AdminLeaveRequests() {
                         <div
                           key={r.id}
                           className="flex items-center gap-1 cursor-pointer hover:opacity-80"
-                          onClick={() => { setSelected(r); setAdminNote(r.adminNote); }}
+                          onClick={() => { setSelected(r); setAdminNote(r.admin_note || ""); }}
                         >
                           <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${statusDot(r.status)}`} />
-                          <span className="truncate text-[10px] text-foreground">{r.fullName.split(" ")[0]}</span>
+                          <span className="truncate text-[10px] text-foreground">{r.full_name.split(" ")[0]}</span>
                         </div>
                       ))}
                       {onLeave.length > 3 && (
@@ -239,16 +277,16 @@ export default function AdminLeaveRequests() {
               <tbody>
                 {filtered.map((r) => (
                   <tr key={r.id} className="border-t border-border hover:bg-muted/50 transition-colors">
-                    <td className="p-3 text-muted-foreground">{fmt(r.createdAt)}</td>
-                    <td className="p-3 font-medium text-foreground">{r.fullName}</td>
+                    <td className="p-3 text-muted-foreground">{fmt(r.created_at)}</td>
+                    <td className="p-3 font-medium text-foreground">{r.full_name}</td>
                     <td className="p-3 text-foreground">{r.title}</td>
                     <td className="p-3 text-muted-foreground">{r.branch}</td>
-                    <td className="p-3 text-muted-foreground">{r.leaveType}</td>
-                    <td className="p-3 text-muted-foreground">{fmt(r.startDate)} – {fmt(r.endDate)}</td>
+                    <td className="p-3 text-muted-foreground">{r.leave_type}</td>
+                    <td className="p-3 text-muted-foreground">{fmt(r.start_date)} – {fmt(r.end_date)}</td>
                     <td className="p-3"><Badge className={statusColor(r.status)}>{r.status}</Badge></td>
                     <td className="p-3">
                       <div className="flex gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => { setSelected(r); setAdminNote(r.adminNote); }}>
+                        <Button variant="ghost" size="icon" onClick={() => { setSelected(r); setAdminNote(r.admin_note || ""); }}>
                           <Eye className="h-4 w-4" />
                         </Button>
                         {r.status === "Beklemede" && (
@@ -277,13 +315,13 @@ export default function AdminLeaveRequests() {
             {filtered.map((r) => (
               <div key={r.id} className="border border-border rounded-xl p-3 bg-card space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium text-foreground">{r.fullName}</span>
+                  <span className="font-medium text-foreground">{r.full_name}</span>
                   <Badge className={statusColor(r.status)}>{r.status}</Badge>
                 </div>
                 <p className="text-sm text-foreground">{r.title}</p>
-                <p className="text-xs text-muted-foreground">{r.branch} · {r.leaveType} · {fmt(r.startDate)} – {fmt(r.endDate)}</p>
+                <p className="text-xs text-muted-foreground">{r.branch} · {r.leave_type} · {fmt(r.start_date)} – {fmt(r.end_date)}</p>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => { setSelected(r); setAdminNote(r.adminNote); }}>Görüntüle</Button>
+                  <Button variant="outline" size="sm" onClick={() => { setSelected(r); setAdminNote(r.admin_note || ""); }}>Görüntüle</Button>
                   {r.status === "Beklemede" && (
                     <>
                       <Button size="sm" className="bg-green-600 text-white hover:bg-green-700" onClick={() => decide(r.id, "Onaylandı")}>Onayla</Button>
@@ -334,16 +372,16 @@ export default function AdminLeaveRequests() {
                 <SheetTitle>Talep Detayı</SheetTitle>
               </SheetHeader>
               <div className="mt-4 space-y-3 text-sm">
-                <Detail label="Ad Soyad" value={selected.fullName} />
+                <Detail label="Ad Soyad" value={selected.full_name} />
                 <Detail label="Şube" value={selected.branch} />
                 <Detail label="Başlık" value={selected.title} />
-                <Detail label="İzin Türü" value={selected.leaveType} />
-                <Detail label="Başlangıç" value={fmt(selected.startDate)} />
-                <Detail label="Bitiş" value={fmt(selected.endDate)} />
-                <Detail label="Süre" value={`${differenceInCalendarDays(new Date(selected.endDate), new Date(selected.startDate)) + 1} gün`} />
+                <Detail label="İzin Türü" value={selected.leave_type} />
+                <Detail label="Başlangıç" value={fmt(selected.start_date)} />
+                <Detail label="Bitiş" value={fmt(selected.end_date)} />
+                <Detail label="Süre" value={`${differenceInCalendarDays(new Date(selected.end_date), new Date(selected.start_date)) + 1} gün`} />
                 <Detail label="Not" value={selected.note || "—"} />
                 <Detail label="Durum" value={selected.status} />
-                {selected.decidedAt && <Detail label="Karar Tarihi" value={fmt(selected.decidedAt)} />}
+                {selected.decided_at && <Detail label="Karar Tarihi" value={fmt(selected.decided_at)} />}
 
                 <div className="space-y-2 pt-2">
                   <Label>Admin Notu</Label>
