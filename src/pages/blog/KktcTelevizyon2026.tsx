@@ -29,37 +29,29 @@ export default function KktcTelevizyon2026() {
 
   return (
     <>
-      <Helmet>
-        <title>{TITLE}</title>
-        <meta name="description" content={DESC} />
-        <link rel="canonical" href={CANONICAL} />
-        <meta property="og:title" content={TITLE} />
-        <meta property="og:description" content={DESC} />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={CANONICAL} />
-        <script type="application/ld+json">{JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Article",
-          headline: TITLE,
-          description: DESC,
-          url: CANONICAL,
-          datePublished: "2026-03-05",
-          dateModified: "2026-03-05",
-          author: { "@type": "Organization", name: BRAND.name },
-          publisher: { "@type": "Organization", name: BRAND.name },
-          mainEntityOfPage: { "@type": "WebPage", "@id": CANONICAL },
-        })}</script>
-        <script type="application/ld+json">{JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: [
-            { "@type": "Question", name: "KKTC televizyon fiyatları neden bu kadar değişken?", acceptedAnswer: { "@type": "Answer", text: "TV fiyatını; ekran boyutu, panel türü (LED/QLED/OLED), 120 Hz, HDR performansı, Smart platform, stok durumu ve kampanyalar belirler." } },
-            { "@type": "Question", name: "KKTC'de 55 inç mi 65 inç mi daha mantıklı?", acceptedAnswer: { "@type": "Answer", text: "Salonunuz ortalama büyüklükteyse 55\" genelde tam karar olur. Daha büyük salon ve 2.5–3 metre üzeri izleme mesafesinde 65\" çok daha etkileyici bir deneyim verir." } },
-            { "@type": "Question", name: "Oyun için TV alırken en önemli özellik nedir?", acceptedAnswer: { "@type": "Answer", text: "Yeni nesil konsollar için 120 Hz + HDMI 2.1 + VRR/ALLM kombinasyonu belirleyicidir." } },
-            { "@type": "Question", name: "QLED mi OLED mi?", acceptedAnswer: { "@type": "Answer", text: "Aydınlık salonda canlı renk ve parlaklık istiyorsanız QLED, sinema keyfi ve siyah performansı istiyorsanız OLED daha avantajlıdır." } },
-          ],
-        })}</script>
-      </Helmet>
+      {/* JSON-LD */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: TITLE,
+        description: DESC,
+        url: CANONICAL,
+        datePublished: "2026-03-05",
+        dateModified: "2026-03-05",
+        author: { "@type": "Organization", name: BRAND.name },
+        publisher: { "@type": "Organization", name: BRAND.name },
+        mainEntityOfPage: { "@type": "WebPage", "@id": CANONICAL },
+      }) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          { "@type": "Question", name: "KKTC televizyon fiyatları neden bu kadar değişken?", acceptedAnswer: { "@type": "Answer", text: "TV fiyatını; ekran boyutu, panel türü (LED/QLED/OLED), 120 Hz, HDR performansı, Smart platform, stok durumu ve kampanyalar belirler." } },
+          { "@type": "Question", name: "KKTC'de 55 inç mi 65 inç mi daha mantıklı?", acceptedAnswer: { "@type": "Answer", text: "Salonunuz ortalama büyüklükteyse 55\" genelde tam karar olur. Daha büyük salon ve 2.5–3 metre üzeri izleme mesafesinde 65\" çok daha etkileyici bir deneyim verir." } },
+          { "@type": "Question", name: "Oyun için TV alırken en önemli özellik nedir?", acceptedAnswer: { "@type": "Answer", text: "Yeni nesil konsollar için 120 Hz + HDMI 2.1 + VRR/ALLM kombinasyonu belirleyicidir." } },
+          { "@type": "Question", name: "QLED mi OLED mi?", acceptedAnswer: { "@type": "Answer", text: "Aydınlık salonda canlı renk ve parlaklık istiyorsanız QLED, sinema keyfi ve siyah performansı istiyorsanız OLED daha avantajlıdır." } },
+        ],
+      }) }} />
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-16 md:py-24">

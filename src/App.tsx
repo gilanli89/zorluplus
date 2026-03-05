@@ -37,6 +37,7 @@ import CheckoutPage from "@/pages/CheckoutPage";
 import PaymentResultPage from "@/pages/PaymentResultPage";
 import CartPage from "@/pages/CartPage";
 import NotFound from "@/pages/NotFound";
+import KktcTelevizyon2026 from "@/pages/blog/KktcTelevizyon2026";
 import ScrollToTop from "@/components/ScrollToTop";
 
 // Admin
