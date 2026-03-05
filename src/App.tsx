@@ -11,6 +11,16 @@ import CategoriesPage from "@/pages/CategoriesPage";
 import ProductPage from "@/pages/ProductPage";
 import CategoryLandingPage from "@/pages/CategoryLandingPage";
 import TVLandingPage from "@/pages/TVLandingPage";
+import BeyazEsyaLandingPage from "@/pages/landings/BeyazEsyaLandingPage";
+import AnkastreLandingPage from "@/pages/landings/AnkastreLandingPage";
+import KlimaLandingPage from "@/pages/landings/KlimaLandingPage";
+import CamasirMakinesiLandingPage from "@/pages/landings/CamasirMakinesiLandingPage";
+import BulasikMakinesiLandingPage from "@/pages/landings/BulasikMakinesiLandingPage";
+import KurutmaMakinesiLandingPage from "@/pages/landings/KurutmaMakinesiLandingPage";
+import MikrodalgaLandingPage from "@/pages/landings/MikrodalgaLandingPage";
+import KahveMakinesiLandingPage from "@/pages/landings/KahveMakinesiLandingPage";
+import EvAletleriLandingPage from "@/pages/landings/EvAletleriLandingPage";
+import AirfryerLandingPage from "@/pages/landings/AirfryerLandingPage";
 import SearchPage from "@/pages/SearchPage";
 import ECataloguePage from "@/pages/ECataloguePage";
 import BranchesPage from "@/pages/BranchesPage";
@@ -58,6 +68,16 @@ const App = () => (
               <Route path="/urun/:slug" element={<ProductPage />} />
               <Route path="/landing/:categorySlug" element={<CategoryLandingPage />} />
               <Route path="/televizyon" element={<TVLandingPage />} />
+              <Route path="/beyaz-esya" element={<BeyazEsyaLandingPage />} />
+              <Route path="/ankastre" element={<AnkastreLandingPage />} />
+              <Route path="/klima" element={<KlimaLandingPage />} />
+              <Route path="/camasir-makinesi" element={<CamasirMakinesiLandingPage />} />
+              <Route path="/bulasik-makinesi" element={<BulasikMakinesiLandingPage />} />
+              <Route path="/kurutma-makinesi" element={<KurutmaMakinesiLandingPage />} />
+              <Route path="/mikrodalga" element={<MikrodalgaLandingPage />} />
+              <Route path="/kahve-makinesi" element={<KahveMakinesiLandingPage />} />
+              <Route path="/ev-aletleri" element={<EvAletleriLandingPage />} />
+              <Route path="/airfryer" element={<AirfryerLandingPage />} />
               <Route path="/arama" element={<SearchPage />} />
               <Route path="/e-katalog" element={<ECataloguePage />} />
               <Route path="/subelerimiz" element={<BranchesPage />} />
