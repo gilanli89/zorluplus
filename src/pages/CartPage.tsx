@@ -208,7 +208,7 @@ export default function CartPage() {
                               />
                             </div>
                             <p className="text-sm font-bold text-blue-700 dark:text-blue-400 mt-1">
-                              +{formatPrice(EXPRESS_FEE)}
+                              Express Ücreti
                             </p>
                           </div>
                         </div>
