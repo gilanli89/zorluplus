@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useProducts } from "@/hooks/useProducts";
 import { BRAND, BRANCHES } from "@/lib/constants";
+import { trackWhatsAppClick } from "@/lib/tracking";
 import ProductCard from "@/components/ProductCard";
 import QuoteForm from "@/components/QuoteForm";
 
