@@ -67,21 +67,11 @@ export default function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       {/* Action Buttons */}
-      <div className="flex gap-2 mx-3.5 mb-3.5">
-        <a
-          href={getWhatsAppLink(product)}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[hsl(142,70%,40%)] text-white text-xs font-bold hover:bg-[hsl(142,70%,35%)] transition-all duration-200 shadow-sm tap-scale"
-        >
-          <MessageCircle size={14} />
-          Sipariş Ver
-        </a>
+      <div className="mx-3.5 mb-3.5">
         <Link
           to={`/urun/${product.slug}`}
           onClick={(e) => e.stopPropagation()}
-          className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-all duration-200 tap-scale"
+          className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-all duration-200 tap-scale"
         >
           <Eye size={14} />
           İncele
