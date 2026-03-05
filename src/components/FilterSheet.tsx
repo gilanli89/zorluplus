@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SlidersHorizontal, X, Minus } from "lucide-react";
 import { FilterState, SortOption, Product } from "@/lib/types";
-import { getBrands, formatPrice } from "@/lib/products";
+import { getBrands } from "@/lib/products";
 
 /* ─── Category-specific attribute extraction ─── */
 interface DynamicAttribute {

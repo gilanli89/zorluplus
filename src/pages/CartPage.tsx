@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/contexts/CartContext";
 import { useProducts } from "@/hooks/useProducts";
-import { formatPrice } from "@/lib/products";
+
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { BRAND } from "@/lib/constants";
