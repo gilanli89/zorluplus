@@ -226,7 +226,7 @@ export default function TVLandingPage() {
           ) : (
             <div className="text-center py-12 rounded-2xl border border-border bg-card">
               <p className="text-muted-foreground mb-4">TV modelleri yükleniyor...</p>
-              <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer">
+              <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("tv_fallback")}>
                 <Button className="rounded-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
                   <MessageCircle className="h-4 w-4" /> WhatsApp ile Sorun
                 </Button>
