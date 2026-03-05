@@ -278,9 +278,9 @@ export default function Header() {
               <Wrench className="h-5 w-5 text-primary" />
             </Button>
           </a>
-          <Link to="/teklif-al">
+          <Link to="/magaza">
             <Button size="sm" className="hidden sm:inline-flex font-semibold rounded-full px-5 tap-scale shadow-md hover:shadow-lg transition-shadow">
-              Teklif Al
+              Mağaza
             </Button>
           </Link>
         </div>

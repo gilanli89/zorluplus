@@ -59,6 +59,7 @@ const App = () => (
               <Route path="/subelerimiz" element={<BranchesPage />} />
               <Route path="/iletisim" element={<ContactPage />} />
               <Route path="/teklif-al" element={<QuotePage />} />
+              <Route path="/magaza" element={<ShopPage />} />
               <Route path="/hakkimizda" element={<HakkimizdaPage />} />
               <Route path="/kunye" element={<KunyePage />} />
               <Route path="/ekibimiz" element={<EkibimizPage />} />
