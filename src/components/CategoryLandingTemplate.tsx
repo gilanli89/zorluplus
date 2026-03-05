@@ -148,6 +148,46 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         </div>
       </section>
 
+      {/* Products Grid - right after trust bar */}
+      <section id="urunler" className="py-12 md:py-16">
+        <div className="container">
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+                {config.productsTitle}
+              </h2>
+              <p className="text-muted-foreground mt-1">{display.length} ürün listeleniyor</p>
+            </div>
+            <Link to={config.productsCategoryLink} className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
+              {config.productsCategoryLinkText} <ArrowRight className="inline h-3.5 w-3.5" />
+            </Link>
+          </div>
+          {display.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+              {display.map((p, i) => (
+                <motion.div key={p.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
+                  <ProductCard product={p} />
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 rounded-2xl border border-border bg-card">
+              <p className="text-muted-foreground mb-4">Ürünler yükleniyor...</p>
+              <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_fallback")}>
+                <Button className="rounded-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
+                  <MessageCircle className="h-4 w-4" /> WhatsApp ile Sorun
+                </Button>
+              </a>
+            </div>
+          )}
+          <div className="text-center mt-6 sm:hidden">
+            <Link to={config.productsCategoryLink}>
+              <Button variant="outline" className="rounded-full">{config.productsCategoryLinkText}</Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Subtypes */}
       {config.subtypes.length > 0 && (
         <section className="py-12 md:py-16">
@@ -215,46 +255,6 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
               </p>
               <QuoteForm />
             </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Products Grid */}
-      <section id="urunler" className="py-12 md:py-16">
-        <div className="container">
-          <div className="flex items-end justify-between mb-8">
-            <div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                {config.productsTitle}
-              </h2>
-              <p className="text-muted-foreground mt-1">{display.length} ürün listeleniyor</p>
-            </div>
-            <Link to={config.productsCategoryLink} className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
-              {config.productsCategoryLinkText} <ArrowRight className="inline h-3.5 w-3.5" />
-            </Link>
-          </div>
-          {display.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-              {display.map((p, i) => (
-                <motion.div key={p.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-                  <ProductCard product={p} />
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 rounded-2xl border border-border bg-card">
-              <p className="text-muted-foreground mb-4">Ürünler yükleniyor...</p>
-              <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_fallback")}>
-                <Button className="rounded-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
-                  <MessageCircle className="h-4 w-4" /> WhatsApp ile Sorun
-                </Button>
-              </a>
-            </div>
-          )}
-          <div className="text-center mt-6 sm:hidden">
-            <Link to={config.productsCategoryLink}>
-              <Button variant="outline" className="rounded-full">{config.productsCategoryLinkText}</Button>
-            </Link>
           </div>
         </div>
       </section>
