@@ -125,70 +125,46 @@ export default function TVLandingPage() {
     setSelected(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
   };
 
+  const FilterSection = ({ title, items, selected, onToggle }: { title: string; items: string[]; selected: string[]; onToggle: (v: string) => void }) => {
+    const hasActive = selected.length > 0;
+    return (
+      <div>
+        <h4 className={`text-sm font-bold mb-3 flex items-center gap-2 ${hasActive ? 'text-primary' : 'text-foreground'}`}>
+          {hasActive && <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+          {title}
+        </h4>
+        <div className="space-y-2">
+          {items.map(item => {
+            const isActive = selected.includes(item);
+            return (
+              <label key={item} className={`flex items-center gap-2 cursor-pointer text-sm rounded-lg px-2 py-1.5 transition-colors ${isActive ? 'bg-primary/10 text-primary font-medium' : 'text-foreground hover:bg-muted'}`}>
+                <Checkbox checked={isActive} onCheckedChange={() => onToggle(item)} />
+                <span>{item}</span>
+              </label>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   const FilterContent = () => (
     <div className="space-y-6">
       {activeFilterCount > 0 && (
-        <button onClick={clearFilters} className="text-xs text-primary hover:underline flex items-center gap-1">
+        <button onClick={clearFilters} className="text-xs text-primary hover:underline flex items-center gap-1 font-semibold">
           <X className="h-3 w-3" /> Filtreleri Temizle ({activeFilterCount})
         </button>
       )}
 
-      {/* Marka */}
-      <div>
-        <h4 className="text-sm font-bold text-foreground mb-3">Marka</h4>
-        <div className="space-y-2">
-          {filterOptions.brands.map(brand => (
-            <label key={brand} className="flex items-center gap-2 cursor-pointer text-sm">
-              <Checkbox checked={selectedBrands.includes(brand)} onCheckedChange={() => toggleFilter(brand, selectedBrands, setSelectedBrands)} />
-              <span className="text-foreground">{brand}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Ekran Boyutu */}
+      <FilterSection title="Marka" items={filterOptions.brands} selected={selectedBrands} onToggle={(v) => toggleFilter(v, selectedBrands, setSelectedBrands)} />
       {filterOptions.inches.length > 0 && (
-        <div>
-          <h4 className="text-sm font-bold text-foreground mb-3">Ekran Boyutu</h4>
-          <div className="space-y-2">
-            {filterOptions.inches.map(inch => (
-              <label key={inch} className="flex items-center gap-2 cursor-pointer text-sm">
-                <Checkbox checked={selectedInches.includes(inch)} onCheckedChange={() => toggleFilter(inch, selectedInches, setSelectedInches)} />
-                <span className="text-foreground">{inch}"</span>
-              </label>
-            ))}
-          </div>
-        </div>
+        <FilterSection title="Ekran Boyutu" items={filterOptions.inches.map(i => i)} selected={selectedInches} onToggle={(v) => toggleFilter(v, selectedInches, setSelectedInches)} />
       )}
-
-      {/* Panel Tipi */}
       {filterOptions.panels.length > 0 && (
-        <div>
-          <h4 className="text-sm font-bold text-foreground mb-3">Panel Tipi</h4>
-          <div className="space-y-2">
-            {filterOptions.panels.map(panel => (
-              <label key={panel} className="flex items-center gap-2 cursor-pointer text-sm">
-                <Checkbox checked={selectedPanels.includes(panel)} onCheckedChange={() => toggleFilter(panel, selectedPanels, setSelectedPanels)} />
-                <span className="text-foreground">{panel}</span>
-              </label>
-            ))}
-          </div>
-        </div>
+        <FilterSection title="Panel Tipi" items={filterOptions.panels} selected={selectedPanels} onToggle={(v) => toggleFilter(v, selectedPanels, setSelectedPanels)} />
       )}
-
-      {/* İşletim Sistemi */}
       {filterOptions.oses.length > 0 && (
-        <div>
-          <h4 className="text-sm font-bold text-foreground mb-3">İşletim Sistemi</h4>
-          <div className="space-y-2">
-            {filterOptions.oses.map(os => (
-              <label key={os} className="flex items-center gap-2 cursor-pointer text-sm">
-                <Checkbox checked={selectedOS.includes(os)} onCheckedChange={() => toggleFilter(os, selectedOS, setSelectedOS)} />
-                <span className="text-foreground">{os}</span>
-              </label>
-            ))}
-          </div>
-        </div>
+        <FilterSection title="İşletim Sistemi" items={filterOptions.oses} selected={selectedOS} onToggle={(v) => toggleFilter(v, selectedOS, setSelectedOS)} />
       )}
     </div>
   );
