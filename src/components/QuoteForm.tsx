@@ -16,10 +16,11 @@ interface QuoteFormProps {
 
 export default function QuoteForm({ productId, productSku, productName, productPrice, compact }: QuoteFormProps) {
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<Partial<LeadFormData>>({
+  const [form, setForm] = useState<Partial<LeadFormData & { address: string }>>({
     name: "",
     phone: "",
     email: "",
+    address: "",
     branch: "",
     notes: "",
   });
