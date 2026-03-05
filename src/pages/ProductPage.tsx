@@ -88,18 +88,9 @@ export default function ProductPage() {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3">
-            {product.inStock && (
-              <Button
-                size="lg"
-                className="flex-1 gap-2 font-semibold"
-                onClick={() => { addItem(product); toast.success("Sepete eklendi!"); navigate("/sepet"); }}
-              >
-                <ShoppingCart className="h-5 w-5" /> Sepete Ekle
-              </Button>
-            )}
             <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer" className="flex-1">
-              <Button size="lg" variant="outline" className="w-full gap-2 border-success/50 text-success hover:bg-success/5 font-semibold">
-                <MessageCircle className="h-5 w-5" /> WhatsApp ile Sipariş
+              <Button size="lg" className="w-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white font-semibold">
+                <MessageCircle className="h-5 w-5" /> WhatsApp ile Sipariş Ver
               </Button>
             </a>
           </div>
