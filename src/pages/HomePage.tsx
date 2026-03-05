@@ -146,12 +146,12 @@ export default function HomePage() {
                 ].map(brand => (
                   <div
                     key={`${loop}-${brand.name}`}
-                    className="flex items-center justify-center rounded-xl border border-border bg-card px-8 py-5 min-w-[160px] hover:shadow-md hover:border-primary/30 transition-all duration-300"
+                    className="flex items-center justify-center rounded-xl border border-border bg-card px-10 py-6 min-w-[200px] hover:shadow-md hover:border-primary/30 transition-all duration-300"
                   >
                     <img
                       src={brand.src}
                       alt={`${brand.name} logo`}
-                      className="h-10 md:h-12 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                      className="h-14 md:h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
                       loading="lazy"
                     />
                   </div>
