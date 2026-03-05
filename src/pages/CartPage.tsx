@@ -56,8 +56,8 @@ export default function CartPage() {
   }
 
   const handleCheckout = async () => {
-    if (!customerInfo.name || !customerInfo.phone) {
-      toast.error("Lütfen ad ve telefon bilgilerinizi giriniz.");
+    if (!customerInfo.name || !customerInfo.phone || !customerInfo.address) {
+      toast.error("Lütfen ad, telefon ve adres bilgilerinizi giriniz.");
       return;
     }
 
@@ -276,7 +276,7 @@ export default function CartPage() {
                 type="email"
               />
               <Input
-                placeholder="Teslimat Adresi"
+                placeholder="Teslimat Adresi *"
                 value={customerInfo.address}
                 onChange={e => setCustomerInfo(p => ({ ...p, address: e.target.value }))}
               />
