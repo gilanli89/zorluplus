@@ -31,7 +31,29 @@ export default function ShopPage() {
         <span className="text-foreground font-medium">Mağaza</span>
       </nav>
 
-      <h1 className="font-display text-2xl md:text-3xl font-bold mb-3 text-foreground">Tüm Ürünler</h1>
+      {/* Category icons */}
+      <div className="flex gap-2 overflow-x-auto pb-1 mb-5 scrollbar-hide">
+        {CATEGORIES.map((cat, i) => {
+          const IconComp = icons[cat.icon as keyof typeof icons];
+          return (
+            <motion.div
+              key={cat.slug}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.04, duration: 0.3 }}
+            >
+              <Link
+                to={`/kategori/${cat.slug}`}
+                className="flex flex-col items-center gap-1.5 min-w-[72px] rounded-xl border border-border bg-card px-3 py-3 text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all tap-scale"
+              >
+                {IconComp && <IconComp className="h-5 w-5" />}
+                <span className="text-[10px] font-semibold text-center leading-tight whitespace-nowrap">{cat.name}</span>
+              </Link>
+            </motion.div>
+          );
+        })}
+      </div>
+
 
       <div className="flex gap-6">
         <FilterSidebar products={products} filters={filters} onFiltersChange={setFilters} />
