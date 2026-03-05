@@ -4,7 +4,7 @@ export const BRAND = {
   phone: "+90 548 878 31 31",
   phoneDisplay: "0548 878 31 31",
   email: "info@zorluplus.com",
-  whatsappLink: "https://wa.me/905488783131",
+  whatsappLink: "https://api.whatsapp.com/send/?phone=905488783131&text&type=phone_number&app_absent=0",
   social: {
     facebook: "https://facebook.com/zorluplus",
     instagram: "https://instagram.com/zorluplus",
