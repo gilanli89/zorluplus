@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect } from "react";
-import { Shield, Award, Wrench, MessageCircle } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { Shield, Award, Wrench, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { getProductBySlug, formatPrice, getWhatsAppLink } from "@/lib/products";
