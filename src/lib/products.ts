@@ -70,6 +70,8 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
     { match: "isitici", category: "klima-isitma", subcategory: "isiticilar" },
     // TV
     { match: "televizyon", category: "tv-goruntu", subcategory: "tv" },
+    { match: "kulaklık", category: "ses-sistemleri", subcategory: "kulaklik" },
+    { match: "kulaklik", category: "ses-sistemleri", subcategory: "kulaklik" },
     { match: "tv", category: "tv-goruntu", subcategory: "tv" },
     { match: "soundbar", category: "tv-goruntu", subcategory: "soundbar" },
     { match: "ses sistem", category: "tv-goruntu", subcategory: "soundbar" },
