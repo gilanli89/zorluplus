@@ -139,10 +139,7 @@ interface FilterSheetProps {
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "popular", label: "En Popüler" },
-  { value: "price-asc", label: "Fiyat (Artan)" },
-  { value: "price-desc", label: "Fiyat (Azalan)" },
   { value: "newest", label: "Yeni Gelenler" },
-  { value: "sale", label: "İndirimdekiler" },
 ];
 
 /* ─── Shared filter body (used in both sidebar & mobile sheet) ─── */
