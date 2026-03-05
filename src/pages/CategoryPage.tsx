@@ -6,7 +6,7 @@ import { CATEGORIES } from "@/lib/constants";
 import { getProductsByCategory } from "@/lib/products";
 import { FilterState } from "@/lib/types";
 import ProductCard from "@/components/ProductCard";
-import FilterSheet, { applyFilters } from "@/components/FilterSheet";
+import { FilterSidebar, MobileFilterTrigger, SortBar, applyFilters } from "@/components/FilterSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 
@@ -61,35 +61,45 @@ export default function CategoryPage() {
         </div>
       )}
 
-      <FilterSheet products={categoryProducts} filters={filters} onFiltersChange={setFilters} />
+      {/* Desktop: sidebar + grid / Mobile: sheet trigger */}
+      <div className="flex gap-6">
+        <FilterSidebar products={categoryProducts} filters={filters} onFiltersChange={setFilters} />
 
-      <p className="text-sm text-muted-foreground my-5">{filteredProducts.length} ürün bulundu</p>
+        <div className="flex-1 min-w-0">
+          {/* Sort bar + mobile filter */}
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <MobileFilterTrigger products={categoryProducts} filters={filters} onFiltersChange={setFilters} />
+            <SortBar filters={filters} onFiltersChange={setFilters} />
+            <span className="ml-auto text-sm text-muted-foreground">{filteredProducts.length} ürün</span>
+          </div>
 
-      {isLoading ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="aspect-[3/4] rounded-2xl" />
-          ))}
+          {isLoading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+              {Array.from({ length: 9 }).map((_, i) => (
+                <Skeleton key={i} className="aspect-[3/4] rounded-2xl" />
+              ))}
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-lg text-muted-foreground">Bu kriterlere uygun ürün bulunamadı.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+              {filteredProducts.map((p, i) => (
+                <motion.div
+                  key={p.id}
+                  custom={i}
+                  initial="hidden"
+                  animate="visible"
+                  variants={fadeUp}
+                >
+                  <ProductCard product={p} />
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
-      ) : filteredProducts.length === 0 ? (
-        <div className="text-center py-16">
-          <p className="text-lg text-muted-foreground">Bu kriterlere uygun ürün bulunamadı.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
-          {filteredProducts.map((p, i) => (
-            <motion.div
-              key={p.id}
-              custom={i}
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-            >
-              <ProductCard product={p} />
-            </motion.div>
-          ))}
-        </div>
-      )}
+      </div>
     </div>
   );
 }
