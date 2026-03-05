@@ -16,7 +16,7 @@ export default function Logo({ size = "md" }: LogoProps) {
     <img
       src={zorluLogo}
       alt="Zorlu Digital Plaza"
-      className={`${heights[size]} w-auto object-contain select-none`}
+      className={`${heights[size]} w-auto object-contain select-none mix-blend-multiply dark:mix-blend-screen`}
     />
   );
 }
