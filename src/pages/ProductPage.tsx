@@ -32,7 +32,7 @@ export default function ProductPage() {
 
   const category = CATEGORIES.find(c => c.slug === product.category);
   const subcategory = category?.children.find(s => s.slug === product.subcategory);
-  const hasDiscount = product.salePrice && product.salePrice < product.price;
+  const hasDiscount = false;
   const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
   const recentlyViewed = products.filter(p => recentIds.includes(p.id) && p.id !== product.id).slice(0, 4);
 
@@ -58,20 +58,8 @@ export default function ProductPage() {
           <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{product.brand}</p>
           <h1 className="font-display text-2xl font-bold text-foreground">{product.name}</h1>
 
-          {/* Price */}
-          <div className="flex items-baseline gap-3">
-            <span className="font-display text-3xl font-extrabold text-foreground">
-              {formatPrice(product.salePrice || product.price)}
-            </span>
-            {hasDiscount && (
-              <>
-                <span className="text-lg text-muted-foreground line-through">{formatPrice(product.price)}</span>
-                <Badge className="bg-destructive text-destructive-foreground">
-                  %{Math.round(((product.price - product.salePrice!) / product.price) * 100)} İndirim
-                </Badge>
-              </>
-            )}
-          </div>
+          {/* Price hidden */}
+          <p className="text-sm font-medium text-primary">Fiyat bilgisi için bizi arayın</p>
 
           <Badge variant={product.inStock ? "default" : "secondary"} className="w-fit">
             {product.inStock ? "Stokta" : "Stokta Yok"}

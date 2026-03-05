@@ -149,7 +149,7 @@ export default function CartPage() {
                       <Link to={`/urun/${item.product.slug}`}>
                         <p className="text-sm font-semibold text-foreground line-clamp-2 hover:text-primary transition-colors">{item.product.name}</p>
                       </Link>
-                      <p className="text-lg font-bold text-foreground mt-1">{formatPrice(price)}</p>
+                      {/* price hidden */}
 
                       {/* Quantity */}
                       <div className="flex items-center gap-2 mt-2">
@@ -186,7 +186,7 @@ export default function CartPage() {
                               />
                             </div>
                             <p className="text-sm font-bold text-amber-700 dark:text-amber-400 mt-1">
-                              +{formatPrice(warrantyPrice)}
+                              Garanti Ücreti
                             </p>
                           </div>
                         </div>
@@ -208,7 +208,7 @@ export default function CartPage() {
                               />
                             </div>
                             <p className="text-sm font-bold text-blue-700 dark:text-blue-400 mt-1">
-                              +{formatPrice(EXPRESS_FEE)}
+                              Express Ücreti
                             </p>
                           </div>
                         </div>
@@ -235,7 +235,7 @@ export default function CartPage() {
                           <img src={rp.image} alt={rp.name} className="h-20 w-full object-contain mb-2" loading="lazy" />
                         </Link>
                         <p className="text-xs font-medium text-foreground line-clamp-2 mb-1">{rp.name}</p>
-                        <p className="text-sm font-bold text-foreground mb-2">{formatPrice(rpPrice)}</p>
+                        {/* price hidden */}
                         <Button
                           size="sm"
                           className="w-full rounded-full text-xs gap-1"
@@ -337,25 +337,9 @@ export default function CartPage() {
               <h3 className="font-display font-bold text-foreground mb-3">Sipariş Özeti</h3>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Ürünler ({itemCount})</span>
-                <span className="font-medium">{formatPrice(subtotal)}</span>
               </div>
-              {warrantyTotal > 0 && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-amber-600">+2 Yıl Garanti</span>
-                  <span className="font-medium text-amber-600">{formatPrice(warrantyTotal)}</span>
-                </div>
-              )}
-              {expressTotal > 0 && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-blue-600">Express Kurulum</span>
-                  <span className="font-medium text-blue-600">{formatPrice(expressTotal)}</span>
-                </div>
-              )}
               <hr className="border-border" />
-              <div className="flex justify-between text-lg font-bold">
-                <span className="text-foreground">Toplam</span>
-                <span className="text-primary">{formatPrice(grandTotal)}</span>
-              </div>
+              <p className="text-sm text-primary font-medium">Fiyat bilgisi için bizi arayın</p>
 
               <Button
                 className="w-full rounded-full font-semibold gap-2 mt-2"

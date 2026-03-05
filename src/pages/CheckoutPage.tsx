@@ -145,13 +145,7 @@ export default function CheckoutPage() {
           {productName && (
             <p className="text-sm font-semibold text-foreground mt-2">{productName}</p>
           )}
-          {loadingOrder ? (
-            <Loader2 className="h-5 w-5 animate-spin mx-auto mt-2 text-muted-foreground" />
-          ) : orderAmount !== null ? (
-            <p className="text-2xl font-display font-bold text-primary mt-1">
-              {new Intl.NumberFormat("tr-TR").format(orderAmount)} TL
-            </p>
-          ) : null}
+          {/* amount hidden */}
         </CardHeader>
 
         <CardContent>

@@ -54,7 +54,7 @@ export default function CartSheet() {
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-semibold text-primary/70 uppercase">{item.product.brand}</p>
                         <p className="text-sm font-medium text-foreground line-clamp-2">{item.product.name}</p>
-                        <p className="text-sm font-bold text-foreground mt-0.5">{formatPrice(price)}</p>
+                        {/* price hidden */}
                       </div>
                       <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => removeItem(item.product.id)}>
                         <Trash2 className="h-4 w-4" />
@@ -69,7 +69,7 @@ export default function CartSheet() {
                       <Button variant="outline" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
                         <Plus className="h-3 w-3" />
                       </Button>
-                      <span className="ml-auto text-sm font-bold text-foreground">{formatPrice(price * item.quantity)}</span>
+                      {/* line total hidden */}
                     </div>
                   </div>
                 );
@@ -78,14 +78,7 @@ export default function CartSheet() {
 
             {/* Summary & Checkout */}
             <div className="border-t border-border pt-4 space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Ara Toplam</span>
-                <span className="font-semibold text-foreground">{formatPrice(subtotal)}</span>
-              </div>
-              <div className="flex justify-between text-base font-bold">
-                <span className="text-foreground">Toplam</span>
-                <span className="text-primary">{formatPrice(grandTotal)}</span>
-              </div>
+              {/* prices hidden */}
               <Link to="/sepet" onClick={() => setOpen(false)}>
                 <Button className="w-full rounded-full font-semibold gap-2" size="lg">
                   <ShoppingCart className="h-4 w-4" /> Sepete Git

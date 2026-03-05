@@ -10,10 +10,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const hasDiscount = product.salePrice && product.salePrice < product.price;
-  const discountPercent = hasDiscount
-    ? Math.round(((product.price - product.salePrice!) / product.price) * 100)
-    : 0;
+  const hasDiscount = false;
 
   return (
     <motion.div
@@ -45,9 +42,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
             {product.isNew && (
               <Badge className="bg-primary text-primary-foreground text-[10px] rounded-full px-2.5 shadow-sm">Yeni</Badge>
-            )}
-            {hasDiscount && (
-              <Badge className="bg-destructive text-destructive-foreground text-[10px] rounded-full px-2.5 shadow-sm">%{discountPercent}</Badge>
             )}
           </div>
           {!product.inStock && (
