@@ -16,10 +16,11 @@ interface QuoteFormProps {
 
 export default function QuoteForm({ productId, productSku, productName, productPrice, compact }: QuoteFormProps) {
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<Partial<LeadFormData>>({
+  const [form, setForm] = useState<Partial<LeadFormData & { address: string }>>({
     name: "",
     phone: "",
     email: "",
+    address: "",
     branch: "",
     notes: "",
   });
@@ -51,7 +52,7 @@ export default function QuoteForm({ productId, productSku, productName, productP
     setTimeout(() => {
       setLoading(false);
       toast.success("Talebiniz alındı! En kısa sürede sizinle iletişime geçeceğiz.");
-      setForm({ name: "", phone: "", email: "", branch: "", notes: "" });
+      setForm({ name: "", phone: "", email: "", address: "", branch: "", notes: "" });
     }, 1000);
   };
 
@@ -80,6 +81,12 @@ export default function QuoteForm({ productId, productSku, productName, productP
             value={form.email}
             onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
             maxLength={255}
+          />
+          <Input
+            placeholder="Adres"
+            value={form.address}
+            onChange={e => setForm(f => ({ ...f, address: e.target.value }))}
+            maxLength={300}
           />
           <Select value={form.branch} onValueChange={v => setForm(f => ({ ...f, branch: v }))}>
             <SelectTrigger>
