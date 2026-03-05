@@ -186,7 +186,7 @@ export default function CartPage() {
                               />
                             </div>
                             <p className="text-sm font-bold text-amber-700 dark:text-amber-400 mt-1">
-                              +{formatPrice(warrantyPrice)}
+                              Garanti Ücreti
                             </p>
                           </div>
                         </div>
