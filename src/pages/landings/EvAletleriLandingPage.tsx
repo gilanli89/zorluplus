@@ -1,5 +1,5 @@
 import {
-  Shield, Award, Wrench, Zap, Vacuum, Fan, Iron, Sparkles,
+  Shield, Award, Wrench, Zap, Fan, Sparkles, Wind, Shirt,
 } from "lucide-react";
 import CategoryLandingTemplate, { CategoryLandingConfig } from "@/components/CategoryLandingTemplate";
 
