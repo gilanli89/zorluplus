@@ -69,7 +69,7 @@ export default function CartSheet() {
                       <Button variant="outline" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
                         <Plus className="h-3 w-3" />
                       </Button>
-                      <span className="ml-auto text-sm font-bold text-foreground">{formatPrice(price * item.quantity)}</span>
+                      {/* line total hidden */}
                     </div>
                   </div>
                 );
