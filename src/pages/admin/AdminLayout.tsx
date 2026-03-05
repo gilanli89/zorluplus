@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate, Link, useLocation } from "react-router-dom";
-import { ShoppingCart, Package, Users, Wrench, Map, LogOut, LayoutDashboard } from "lucide-react";
+import { ShoppingCart, Package, Users, Wrench, LogOut, LayoutDashboard } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/Logo";
@@ -24,7 +24,6 @@ const NAV_ITEMS = [
   { title: "Stok Yönetimi", url: "/admin/stok", icon: Package },
   { title: "Müşteri Talepleri", url: "/admin/talepler", icon: Users },
   { title: "Servis Talepleri", url: "/admin/servis", icon: Wrench },
-  { title: "Harita", url: "/admin/harita", icon: Map },
 ];
 
 export default function AdminLayout() {
