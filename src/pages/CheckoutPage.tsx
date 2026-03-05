@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import { CreditCard, Lock, ShieldCheck, CheckCircle2, XCircle, ArrowLeft, Loader2 } from "lucide-react";
+import { CreditCard, Lock, ShieldCheck, Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,9 +19,11 @@ const cardSchema = z.object({
 
 export default function CheckoutPage() {
   const [searchParams] = useSearchParams();
-  const amount = searchParams.get("amount") || "";
   const orderId = searchParams.get("orderId") || "";
   const productName = searchParams.get("product") || "Ödeme";
+
+  const [orderAmount, setOrderAmount] = useState<number | null>(null);
+  const [loadingOrder, setLoadingOrder] = useState(true);
 
   const [form, setForm] = useState({
     cardNumber: "",
@@ -34,6 +36,23 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const hiddenFormRef = useRef<HTMLFormElement>(null);
   const [gatewayData, setGatewayData] = useState<{ gatewayUrl: string; formData: Record<string, string> } | null>(null);
+
+  // Fetch order amount from DB for display only
+  useEffect(() => {
+    if (!orderId) {
+      setLoadingOrder(false);
+      return;
+    }
+    supabase
+      .from("orders")
+      .select("total_amount")
+      .eq("order_number", orderId)
+      .single()
+      .then(({ data }) => {
+        if (data) setOrderAmount(data.total_amount);
+        setLoadingOrder(false);
+      });
+  }, [orderId]);
 
   const formatCardNumber = (value: string) => {
     const digits = value.replace(/\D/g, "").slice(0, 16);
@@ -70,8 +89,8 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (!amount || parseFloat(amount) <= 0) {
-      toast.error("Geçersiz tutar");
+    if (!orderId) {
+      toast.error("Geçersiz sipariş");
       return;
     }
 
@@ -83,12 +102,11 @@ export default function CheckoutPage() {
 
       const { data, error } = await supabase.functions.invoke("cardplus-initiate", {
         body: {
-          amount: amount,
           cardNumber: form.cardNumber,
           expMonth: form.expMonth,
           expYear: form.expYear,
           cvv: form.cvv,
-          orderId: orderId || undefined,
+          orderId,
           okUrl,
           failUrl,
         },
@@ -97,7 +115,6 @@ export default function CheckoutPage() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
 
-      // Auto-submit hidden form to bank gateway
       setGatewayData(data);
     } catch (err: any) {
       console.error("Payment initiation error:", err);
@@ -106,7 +123,6 @@ export default function CheckoutPage() {
     }
   };
 
-  // Auto-submit when gateway data is ready
   useEffect(() => {
     if (gatewayData && hiddenFormRef.current) {
       hiddenFormRef.current.submit();
@@ -115,8 +131,8 @@ export default function CheckoutPage() {
 
   return (
     <div className="container max-w-lg py-8 md:py-16">
-      <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6">
-        <ArrowLeft className="h-4 w-4" /> Mağazaya Dön
+      <Link to="/sepet" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6">
+        <ArrowLeft className="h-4 w-4" /> Sepete Dön
       </Link>
 
       <Card className="border-border">
@@ -129,11 +145,13 @@ export default function CheckoutPage() {
           {productName && (
             <p className="text-sm font-semibold text-foreground mt-2">{productName}</p>
           )}
-          {amount && (
+          {loadingOrder ? (
+            <Loader2 className="h-5 w-5 animate-spin mx-auto mt-2 text-muted-foreground" />
+          ) : orderAmount !== null ? (
             <p className="text-2xl font-display font-bold text-primary mt-1">
-              {new Intl.NumberFormat("tr-TR").format(parseFloat(amount))} TL
+              {new Intl.NumberFormat("tr-TR").format(orderAmount)} TL
             </p>
-          )}
+          ) : null}
         </CardHeader>
 
         <CardContent>
@@ -210,7 +228,7 @@ export default function CheckoutPage() {
               type="submit"
               className="w-full rounded-full gap-2"
               size="lg"
-              disabled={loading}
+              disabled={loading || !orderId}
             >
               {loading ? (
                 <>
@@ -231,7 +249,6 @@ export default function CheckoutPage() {
         </CardContent>
       </Card>
 
-      {/* Hidden form for 3D Secure redirect */}
       {gatewayData && (
         <form
           ref={hiddenFormRef}
