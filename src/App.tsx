@@ -15,6 +15,7 @@ import ECataloguePage from "@/pages/ECataloguePage";
 import BranchesPage from "@/pages/BranchesPage";
 import ContactPage from "@/pages/ContactPage";
 import QuotePage from "@/pages/QuotePage";
+import ShopPage from "@/pages/ShopPage";
 import {
   HakkimizdaPage, KunyePage, EkibimizPage, DestekPage,
   KullanimKosullariPage, IadeKosullariPage, GizlilikPolitikasiPage,
@@ -58,6 +59,7 @@ const App = () => (
               <Route path="/subelerimiz" element={<BranchesPage />} />
               <Route path="/iletisim" element={<ContactPage />} />
               <Route path="/teklif-al" element={<QuotePage />} />
+              <Route path="/magaza" element={<ShopPage />} />
               <Route path="/hakkimizda" element={<HakkimizdaPage />} />
               <Route path="/kunye" element={<KunyePage />} />
               <Route path="/ekibimiz" element={<EkibimizPage />} />
