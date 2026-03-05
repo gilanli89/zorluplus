@@ -296,7 +296,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
               <MessageCircle className="h-10 w-10 text-[hsl(142,70%,40%)] mx-auto mb-4" />
               <h3 className="font-display text-xl font-bold text-foreground mb-2">WhatsApp ile Sipariş</h3>
               <p className="text-sm text-muted-foreground mb-5">Hızlı sipariş ve bilgi almak için WhatsApp'tan yazın.</p>
-              <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer">
+              <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_cta")}>
                 <Button size="lg" className="rounded-full gap-2 font-semibold bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
                   <MessageCircle className="h-4 w-4" /> WhatsApp'a Yaz
                 </Button>

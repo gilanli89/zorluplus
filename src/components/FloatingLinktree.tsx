@@ -32,6 +32,7 @@ export default function FloatingLinktree() {
               href={LINKTREE_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackWhatsAppClick("floating_linktree")}
               className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
             >
               <MessageCircle className="h-4 w-4" />
