@@ -167,44 +167,8 @@ function FilterBody({
     onFiltersChange({ ...filters, brands: next });
   };
 
-  const PRICE_MIN = 20000;
-  const PRICE_MAX = 500000;
-  const STEP = 5000;
-
-  const currentMin = filters.priceMin ?? PRICE_MIN;
-  const currentMax = filters.priceMax ?? PRICE_MAX;
-
-  const handleSliderChange = (values: number[]) => {
-    onFiltersChange({
-      ...filters,
-      priceMin: values[0] <= PRICE_MIN ? undefined : values[0],
-      priceMax: values[1] >= PRICE_MAX ? undefined : values[1],
-    });
-  };
-
   return (
     <div className="space-y-1">
-      {/* Price */}
-      <Collapsible defaultOpen>
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-1 border-b border-border text-sm font-semibold text-foreground hover:text-primary transition-colors">
-          Fiyat
-          <Minus className="h-3.5 w-3.5 text-muted-foreground" />
-        </CollapsibleTrigger>
-        <CollapsibleContent className="py-4 px-1">
-          <Slider
-            min={PRICE_MIN}
-            max={PRICE_MAX}
-            step={STEP}
-            value={[currentMin, currentMax]}
-            onValueChange={handleSliderChange}
-            className="mb-3"
-          />
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>{formatPrice(currentMin)}</span>
-            <span>{formatPrice(currentMax)}</span>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
 
       {/* Brand */}
       {brands.length > 0 && (
