@@ -270,7 +270,7 @@ export default function Header() {
         {/* Actions */}
         <div className="flex items-center gap-2">
           <CartSheet />
-          <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer">
+          <a href="https://servis.zorluplus.com/" target="_blank" rel="noopener noreferrer">
             <Button variant="outline" size="sm" className="rounded-full gap-1.5 border-primary/30 text-primary hover:bg-primary/5 font-semibold hidden sm:inline-flex tap-scale">
               <Wrench className="h-3.5 w-3.5" /> Servis Talebi
             </Button>
