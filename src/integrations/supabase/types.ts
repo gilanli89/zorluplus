@@ -38,6 +38,7 @@ export type Database = {
           category: string | null
           created_at: string
           id: string
+          image_url: string | null
           is_active: boolean
           min_quantity: number
           original_price: number | null
@@ -54,6 +55,7 @@ export type Database = {
           category?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           is_active?: boolean
           min_quantity?: number
           original_price?: number | null
@@ -70,6 +72,7 @@ export type Database = {
           category?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           is_active?: boolean
           min_quantity?: number
           original_price?: number | null
