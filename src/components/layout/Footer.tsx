@@ -37,7 +37,7 @@ export default function Footer() {
 
       <div className="container py-8">
         <motion.div
-          className="grid grid-cols-2 gap-8 md:grid-cols-5"
+          className="grid grid-cols-2 gap-8 md:grid-cols-4"
           variants={stagger}
           initial="hidden"
           whileInView="visible"
@@ -57,16 +57,6 @@ export default function Footer() {
               <a href={BRAND.social.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="hover:text-foreground transition-colors icon-hover-rotate"><Youtube className="h-5 w-5" /></a>
               <a href={BRAND.social.tiktok} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="text-sm font-bold hover:text-foreground transition-colors">TT</a>
             </div>
-          </motion.div>
-
-          {/* Kategoriler */}
-          <motion.div variants={fadeItem}>
-            <h4 className="font-display font-bold text-sm mb-3 text-foreground">Kategoriler</h4>
-            <nav className="flex flex-col gap-2">
-              {FOOTER_LINKS.kategoriler.map(l => (
-                <Link key={l.href} to={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors link-underline w-fit">{l.label}</Link>
-              ))}
-            </nav>
           </motion.div>
 
           {/* Kurumsal */}
@@ -106,6 +96,28 @@ export default function Footer() {
               ))}
             </div>
           </motion.div>
+        </motion.div>
+
+        {/* Kategori Chips */}
+        <motion.div
+          className="mt-8 pt-6 border-t border-border"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
+          <h4 className="font-display font-bold text-xs uppercase tracking-wider mb-3 text-muted-foreground">Kategoriler</h4>
+          <div className="flex flex-wrap gap-2">
+            {FOOTER_LINKS.kategoriler.map(l => (
+              <Link
+                key={l.href}
+                to={l.href}
+                className="text-xs px-3 py-1.5 rounded-full border border-border bg-muted/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-200"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </div>
         </motion.div>
 
         <div className="mt-8 pt-6 border-t border-border text-center text-xs text-muted-foreground">
