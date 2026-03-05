@@ -46,6 +46,16 @@ const fadeUp = {
   }),
 };
 
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
+const branchCard = {
+  hidden: { opacity: 0, y: 20, scale: 0.97 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const } },
+};
+
 export default function HomePage() {
   return (
     <>
@@ -83,8 +93,8 @@ export default function HomePage() {
                     {cat.subtitle}
                   </p>
                   <div className="mt-4">
-                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/30 rounded-full px-5 py-2 backdrop-blur-sm bg-white/10 group-hover:bg-white/20 transition-colors">
-                      Ürünleri İncele <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/30 rounded-full px-5 py-2 backdrop-blur-sm bg-white/10 group-hover:bg-white/20 transition-all duration-300">
+                      Ürünleri İncele <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
                 </div>
@@ -97,45 +107,67 @@ export default function HomePage() {
       {/* Branches CTA */}
       <section className="py-12 md:py-16 bg-muted/40">
         <div className="container">
-          <div className="text-center mb-8">
+          <motion.div
+            className="text-center mb-8"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
             <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Mağazalarımız</h2>
             <p className="text-muted-foreground mt-2">Ürünleri yerinde görün, uzman ekibimizle tanışın</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
+          </motion.div>
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {BRANCHES.map(b => (
-              <div key={b.id} className="card-lift rounded-2xl border border-border bg-card p-6">
+              <motion.div
+                key={b.id}
+                variants={branchCard}
+                className="card-lift rounded-2xl border border-border bg-card p-6"
+              >
                 <h3 className="font-display font-bold text-lg text-foreground mb-2">{b.name}</h3>
                 <p className="text-sm text-muted-foreground mb-1">{b.address}</p>
                 <p className="text-sm text-muted-foreground mb-4">{b.hours}</p>
                 <div className="flex gap-2">
                   <a href={b.mapsLink} target="_blank" rel="noopener noreferrer">
-                    <Button size="sm" variant="outline" className="rounded-full gap-1.5"><MapPin className="h-3.5 w-3.5" /> Yol Tarifi</Button>
+                    <Button size="sm" variant="outline" className="rounded-full gap-1.5 tap-scale"><MapPin className="h-3.5 w-3.5" /> Yol Tarifi</Button>
                   </a>
                   <a href={`tel:${b.phone}`}>
-                    <Button size="sm" variant="ghost" className="rounded-full gap-1.5"><Phone className="h-3.5 w-3.5" /> Ara</Button>
+                    <Button size="sm" variant="ghost" className="rounded-full gap-1.5 tap-scale"><Phone className="h-3.5 w-3.5" /> Ara</Button>
                   </a>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Brand Logos Carousel */}
       <section className="py-10 md:py-14 overflow-hidden">
         <div className="container">
-          <h3 className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-8">
+          <motion.h3
+            className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-8"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
             Yetkili Bayi & Servis Markalarımız
-          </h3>
+          </motion.h3>
         </div>
         <div className="relative">
           {/* Fade edges */}
           <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
           <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
           {/* Scrolling track */}
-          <div className="flex animate-marquee gap-6 w-max">
+          <div className="flex animate-marquee gap-8 w-max">
             {[...Array(2)].map((_, loop) => (
-              <div key={loop} className="flex gap-6">
+              <div key={loop} className="flex gap-8">
                 {[
                   { name: "Samsung", src: "/brands/samsung.png" },
                   { name: "LG", src: "/brands/lg.png" },
@@ -151,7 +183,7 @@ export default function HomePage() {
                     <img
                       src={brand.src}
                       alt={`${brand.name} logo`}
-                      className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                      className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-500"
                       loading="lazy"
                     />
                   </div>

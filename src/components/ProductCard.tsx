@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@/lib/types";
 import { ShoppingCart } from "lucide-react";
@@ -26,14 +27,20 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="card-lift group flex flex-col rounded-2xl border border-border bg-card overflow-hidden relative">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-30px" }}
+      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+      className="card-lift group flex flex-col rounded-2xl border border-border bg-card overflow-hidden relative"
+    >
       <Link to={`/urun/${product.slug}`} className="flex flex-col flex-1">
         {/* Image */}
         <div className="relative aspect-square bg-muted/50 overflow-hidden">
           <img
             src={product.image}
             alt={product.name}
-            className="h-full w-full object-contain p-5 group-hover:scale-105 transition-transform duration-300"
+            className="h-full w-full object-contain p-5 group-hover:scale-105 transition-transform duration-500 ease-out"
             loading="lazy"
             onError={(e) => {
               const target = e.currentTarget;
@@ -64,7 +71,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Info */}
         <div className="flex flex-col gap-1.5 p-3.5 flex-1">
           <p className="text-[11px] font-semibold text-primary/70 uppercase tracking-wider">{product.brand}</p>
-          <h3 className="text-sm font-semibold text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+          <h3 className="text-sm font-semibold text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors duration-200">
             {product.name}
           </h3>
         </div>
@@ -74,7 +81,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       {product.inStock ? (
         <button
           onClick={handleAddToCart}
-          className="flex items-center justify-center gap-1.5 mx-3.5 mb-3.5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-colors shadow-sm"
+          className="flex items-center justify-center gap-1.5 mx-3.5 mb-3.5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-all duration-200 shadow-sm tap-scale"
         >
           <ShoppingCart size={14} />
           Sepete Ekle
@@ -84,6 +91,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           Stokta Yok
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
