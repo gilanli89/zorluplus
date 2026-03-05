@@ -43,9 +43,6 @@ export default function ProductCard({ product }: ProductCardProps) {
             {product.isNew && (
               <Badge className="bg-primary text-primary-foreground text-[10px] rounded-full px-2.5 shadow-sm">Yeni</Badge>
             )}
-            {hasDiscount && (
-              <Badge className="bg-destructive text-destructive-foreground text-[10px] rounded-full px-2.5 shadow-sm">%{discountPercent}</Badge>
-            )}
           </div>
           {!product.inStock && (
             <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center">
