@@ -99,14 +99,13 @@ export default function CartPage() {
       // Cash on delivery or bank transfer — send WhatsApp order
       const methodLabel = paymentMethod === "transfer" ? "Havale/EFT" : "Kapıda Ödeme";
       const orderLines = items.map(i => {
-        const price = i.product.salePrice || i.product.price;
-        let line = `• ${i.product.name} x${i.quantity} — ${formatPrice(price * i.quantity)}`;
-        if (i.extendedWarranty) line += ` (+2 Yıl Garanti: ${formatPrice(price * 0.5 * i.quantity)})`;
-        if (i.expressDelivery) line += ` (Express Kurulum: ${formatPrice(EXPRESS_FEE * i.quantity)})`;
+        let line = `• ${i.product.name} x${i.quantity}`;
+        if (i.extendedWarranty) line += ` (+2 Yıl Garanti)`;
+        if (i.expressDelivery) line += ` (Express Kurulum)`;
         return line;
       }).join("\n");
 
-      const message = `🛒 Yeni Sipariş (${methodLabel})\n\nSipariş No: ${orderId}\n\n${orderLines}\n\n💰 Toplam: ${formatPrice(grandTotal)}\n\n👤 ${customerInfo.name}\n📱 ${customerInfo.phone}\n📧 ${customerInfo.email}\n📍 ${customerInfo.address}`;
+      const message = `🛒 Yeni Sipariş (${methodLabel})\n\nSipariş No: ${orderId}\n\n${orderLines}\n\n👤 ${customerInfo.name}\n📱 ${customerInfo.phone}\n📧 ${customerInfo.email}\n📍 ${customerInfo.address}`;
 
       window.open(`https://wa.me/${BRAND.phone.replace(/\s/g, "")}?text=${encodeURIComponent(message)}`, "_blank");
       toast.success(paymentMethod === "transfer" ? "Siparişiniz oluşturuldu! Havale sonrası onaylanacaktır." : "Siparişiniz oluşturuldu!");

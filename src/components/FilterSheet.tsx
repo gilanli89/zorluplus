@@ -343,16 +343,6 @@ export function SortBar({ filters, onFiltersChange }: { filters: FilterState; on
         </Badge>
       ))}
 
-      {filters.priceMin != null && (
-        <Badge variant="secondary" className="gap-1 cursor-pointer" onClick={() => onFiltersChange({ ...filters, priceMin: undefined })}>
-          Min: {formatPrice(filters.priceMin)} <X className="h-3 w-3" />
-        </Badge>
-      )}
-      {filters.priceMax != null && (
-        <Badge variant="secondary" className="gap-1 cursor-pointer" onClick={() => onFiltersChange({ ...filters, priceMax: undefined })}>
-          Max: {formatPrice(filters.priceMax)} <X className="h-3 w-3" />
-        </Badge>
-      )}
 
       {/* Attribute chips */}
       {Object.entries(filters.attributes).flatMap(([key, vals]) =>
