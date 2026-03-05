@@ -121,28 +121,42 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Brand Logos */}
-      <section className="py-10 md:py-14">
+      {/* Brand Logos Carousel */}
+      <section className="py-10 md:py-14 overflow-hidden">
         <div className="container">
           <h3 className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-8">
             Yetkili Bayi & Servis Markalarımız
           </h3>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 opacity-70">
-            {[
-              { name: "Samsung", src: "/brands/samsung.png" },
-              { name: "LG", src: "/brands/lg.png" },
-              { name: "Bosch", src: "/brands/bosch.png" },
-              { name: "Philips", src: "/brands/philips.png" },
-              { name: "Midea", src: "/brands/midea.png" },
-              { name: "Sharp", src: "/brands/sharp.png" },
-            ].map(brand => (
-              <img
-                key={brand.name}
-                src={brand.src}
-                alt={`${brand.name} logo`}
-                className="h-10 md:h-12 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
-                loading="lazy"
-              />
+        </div>
+        <div className="relative">
+          {/* Fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
+          {/* Scrolling track */}
+          <div className="flex animate-marquee gap-6 w-max">
+            {[...Array(2)].map((_, loop) => (
+              <div key={loop} className="flex gap-6">
+                {[
+                  { name: "Samsung", src: "/brands/samsung.png" },
+                  { name: "LG", src: "/brands/lg.png" },
+                  { name: "Bosch", src: "/brands/bosch.png" },
+                  { name: "Philips", src: "/brands/philips.png" },
+                  { name: "Midea", src: "/brands/midea.png" },
+                  { name: "Sharp", src: "/brands/sharp.png" },
+                ].map(brand => (
+                  <div
+                    key={`${loop}-${brand.name}`}
+                    className="flex items-center justify-center rounded-xl border border-border bg-card px-8 py-5 min-w-[160px] hover:shadow-md hover:border-primary/30 transition-all duration-300"
+                  >
+                    <img
+                      src={brand.src}
+                      alt={`${brand.name} logo`}
+                      className="h-10 md:h-12 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
             ))}
           </div>
         </div>
