@@ -99,6 +99,7 @@ const App = () => (
               <Route path="/odeme" element={<CheckoutPage />} />
               <Route path="/odeme/sonuc" element={<PaymentResultPage />} />
               <Route path="/sepet" element={<CartPage />} />
+              <Route path="/blog/kktc-televizyon-fiyatlari-2026" element={<KktcTelevizyon2026 />} />
               <Route path="*" element={<NotFound />} />
             </Route>
 
