@@ -12,6 +12,19 @@ const CANONICAL = "https://zorluplus.com/blog/kktc-televizyon-fiyatlari-2026";
 export default function KktcTelevizyon2026() {
   useEffect(() => {
     window.scrollTo(0, 0);
+    document.title = TITLE;
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", DESC);
+    else {
+      const m = document.createElement("meta");
+      m.name = "description";
+      m.content = DESC;
+      document.head.appendChild(m);
+    }
+    // canonical
+    let canon = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!canon) { canon = document.createElement("link"); canon.rel = "canonical"; document.head.appendChild(canon); }
+    canon.href = CANONICAL;
   }, []);
 
   return (
