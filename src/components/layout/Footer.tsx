@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Phone, Mail, Facebook, Instagram, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
 import { BRAND, FOOTER_LINKS, TRUST_BADGES } from "@/lib/constants";
+import zorluLogo from "@/assets/zorlu-logo.png";
 
 const stagger = {
   hidden: {},
@@ -45,10 +46,7 @@ export default function Footer() {
           {/* Brand */}
           <motion.div variants={fadeItem} className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-display font-extrabold text-xs">
-                Z+
-              </div>
-              <span className="font-display font-bold text-foreground">{BRAND.shortName}</span>
+              <img src={zorluLogo} alt="Zorlu Digital Plaza" className="h-10 object-contain" />
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
               Kuzey Kıbrıs'ın güvenilir elektronik mağazası. Samsung & LG yetkili servis.
