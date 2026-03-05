@@ -37,7 +37,7 @@ export default function Footer() {
 
       <div className="container py-8">
         <motion.div
-          className="grid grid-cols-2 gap-8 md:grid-cols-4"
+          className="grid grid-cols-2 gap-8 md:grid-cols-5"
           variants={stagger}
           initial="hidden"
           whileInView="visible"
@@ -57,6 +57,16 @@ export default function Footer() {
               <a href={BRAND.social.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="hover:text-foreground transition-colors icon-hover-rotate"><Youtube className="h-5 w-5" /></a>
               <a href={BRAND.social.tiktok} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="text-sm font-bold hover:text-foreground transition-colors">TT</a>
             </div>
+          </motion.div>
+
+          {/* Kategoriler */}
+          <motion.div variants={fadeItem}>
+            <h4 className="font-display font-bold text-sm mb-3 text-foreground">Kategoriler</h4>
+            <nav className="flex flex-col gap-2">
+              {FOOTER_LINKS.kategoriler.map(l => (
+                <Link key={l.href} to={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors link-underline w-fit">{l.label}</Link>
+              ))}
+            </nav>
           </motion.div>
 
           {/* Kurumsal */}
