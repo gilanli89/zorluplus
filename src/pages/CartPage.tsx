@@ -149,7 +149,7 @@ export default function CartPage() {
                       <Link to={`/urun/${item.product.slug}`}>
                         <p className="text-sm font-semibold text-foreground line-clamp-2 hover:text-primary transition-colors">{item.product.name}</p>
                       </Link>
-                      <p className="text-lg font-bold text-foreground mt-1">{formatPrice(price)}</p>
+                      {/* price hidden */}
 
                       {/* Quantity */}
                       <div className="flex items-center gap-2 mt-2">
