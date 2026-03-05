@@ -54,7 +54,7 @@ export default function CartSheet() {
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-semibold text-primary/70 uppercase">{item.product.brand}</p>
                         <p className="text-sm font-medium text-foreground line-clamp-2">{item.product.name}</p>
-                        <p className="text-sm font-bold text-foreground mt-0.5">{formatPrice(price)}</p>
+                        {/* price hidden */}
                       </div>
                       <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => removeItem(item.product.id)}>
                         <Trash2 className="h-4 w-4" />
