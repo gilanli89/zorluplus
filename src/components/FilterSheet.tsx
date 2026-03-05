@@ -152,7 +152,7 @@ function FilterBody({
 }: FilterSheetProps) {
   const brands = getBrands(products);
   const dynamicAttrs = getCategoryAttributes(products, subSlug || categorySlug);
-  const maxPrice = Math.max(...products.map(p => p.salePrice || p.price), 1);
+  // maxPrice removed - prices hidden
 
   // Brand counts
   const brandCounts: Record<string, number> = {};
