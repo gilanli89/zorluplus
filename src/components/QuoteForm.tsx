@@ -87,6 +87,7 @@ export default function QuoteForm({ productId, productSku, productName, productP
             value={form.address}
             onChange={e => setForm(f => ({ ...f, address: e.target.value }))}
             maxLength={300}
+          />
           <Select value={form.branch} onValueChange={v => setForm(f => ({ ...f, branch: v }))}>
             <SelectTrigger>
               <SelectValue placeholder="Tercih Ettiğiniz Şube" />
