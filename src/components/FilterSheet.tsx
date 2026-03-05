@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SlidersHorizontal, X, Minus } from "lucide-react";
@@ -170,14 +170,18 @@ function FilterBody({
     onFiltersChange({ ...filters, brands: next });
   };
 
-  const [minInput, setMinInput] = useState(filters.priceMin?.toString() || "");
-  const [maxInput, setMaxInput] = useState(filters.priceMax?.toString() || "");
+  const PRICE_MIN = 20000;
+  const PRICE_MAX = 500000;
+  const STEP = 5000;
 
-  const applyPrice = () => {
+  const currentMin = filters.priceMin ?? PRICE_MIN;
+  const currentMax = filters.priceMax ?? PRICE_MAX;
+
+  const handleSliderChange = (values: number[]) => {
     onFiltersChange({
       ...filters,
-      priceMin: minInput ? Number(minInput) : undefined,
-      priceMax: maxInput ? Number(maxInput) : undefined,
+      priceMin: values[0] <= PRICE_MIN ? undefined : values[0],
+      priceMax: values[1] >= PRICE_MAX ? undefined : values[1],
     });
   };
 
@@ -189,36 +193,18 @@ function FilterBody({
           Fiyat
           <Minus className="h-3.5 w-3.5 text-muted-foreground" />
         </CollapsibleTrigger>
-        <CollapsibleContent className="py-3 px-1">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5 flex-1">
-              <span className="text-xs text-muted-foreground">₺</span>
-              <Input
-                placeholder="ELAÇ."
-                value={minInput}
-                onChange={e => setMinInput(e.target.value)}
-                onBlur={applyPrice}
-                onKeyDown={e => e.key === "Enter" && applyPrice()}
-                className="h-9 text-xs"
-                type="number"
-              />
-            </div>
-            <span className="text-muted-foreground text-xs">-</span>
-            <div className="flex items-center gap-1.5 flex-1">
-              <span className="text-xs text-muted-foreground">₺</span>
-              <Input
-                placeholder="MAK."
-                value={maxInput}
-                onChange={e => setMaxInput(e.target.value)}
-                onBlur={applyPrice}
-                onKeyDown={e => e.key === "Enter" && applyPrice()}
-                className="h-9 text-xs"
-                type="number"
-              />
-            </div>
-            <Button size="sm" className="h-9 px-3 text-xs font-bold" onClick={applyPrice}>
-              BUL
-            </Button>
+        <CollapsibleContent className="py-4 px-1">
+          <Slider
+            min={PRICE_MIN}
+            max={PRICE_MAX}
+            step={STEP}
+            value={[currentMin, currentMax]}
+            onValueChange={handleSliderChange}
+            className="mb-3"
+          />
+          <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <span>{formatPrice(currentMin)}</span>
+            <span>{formatPrice(currentMax)}</span>
           </div>
         </CollapsibleContent>
       </Collapsible>
