@@ -48,7 +48,150 @@ const FAQ = [
 export default function TVLandingPage() {
   const { data: products = [] } = useProducts();
   const tvProducts = useMemo(() => products.filter(p => p.category === "tv-goruntu" && p.subcategory === "tv"), [products]);
-  const display = tvProducts;
+
+  // TV-specific filters
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedInches, setSelectedInches] = useState<string[]>([]);
+  const [selectedPanels, setSelectedPanels] = useState<string[]>([]);
+  const [selectedOS, setSelectedOS] = useState<string[]>([]);
+
+  // Extract inch from product name (e.g. "55 inch", "65\"", "75"")
+  const getInch = (name: string): string | null => {
+    const match = name.match(/(\d{2,3})\s*["'"''ınç inç inch]|(\d{2,3})["']/i);
+    if (match) return match[1] || match[2];
+    // Try standalone common sizes
+    const sizeMatch = name.match(/\b(32|40|43|50|55|58|65|70|75|77|83|85|86|98)\b/);
+    return sizeMatch ? sizeMatch[1] : null;
+  };
+
+  // Extract panel type from name/tags
+  const getPanelType = (p: { name: string; tags: string[] }): string => {
+    const text = (p.name + " " + p.tags.join(" ")).toUpperCase();
+    if (text.includes("OLED") && !text.includes("QLED")) return "OLED";
+    if (text.includes("QLED") || text.includes("NEO QLED")) return "QLED";
+    if (text.includes("NANOCELL")) return "NanoCell";
+    if (text.includes("CRYSTAL") || text.includes("UHD")) return "Crystal UHD";
+    if (text.includes("LED")) return "LED";
+    return "Diğer";
+  };
+
+  // Extract OS from name/tags
+  const getOS = (p: { name: string; tags: string[] }): string => {
+    const text = (p.name + " " + p.tags.join(" ")).toUpperCase();
+    if (text.includes("TIZEN") || text.includes("SAMSUNG")) return "Tizen (Samsung)";
+    if (text.includes("WEBOS") || text.includes("LG")) return "webOS (LG)";
+    return "Diğer";
+  };
+
+  // Available filter options from products
+  const filterOptions = useMemo(() => {
+    const brands = new Set<string>();
+    const inches = new Set<string>();
+    const panels = new Set<string>();
+    const oses = new Set<string>();
+    tvProducts.forEach(p => {
+      if (p.brand) brands.add(p.brand);
+      const inch = getInch(p.name);
+      if (inch) inches.add(inch);
+      panels.add(getPanelType(p));
+      oses.add(getOS(p));
+    });
+    return {
+      brands: ["Samsung", "LG"].filter(b => brands.has(b) || brands.has(b.toUpperCase()) || brands.has(b.toLowerCase())),
+      inches: Array.from(inches).sort((a, b) => Number(a) - Number(b)),
+      panels: Array.from(panels).sort(),
+      oses: Array.from(oses).sort(),
+    };
+  }, [tvProducts]);
+
+  // Filtered display
+  const display = useMemo(() => {
+    return tvProducts.filter(p => {
+      if (selectedBrands.length > 0 && !selectedBrands.some(b => p.brand.toUpperCase().includes(b.toUpperCase()))) return false;
+      if (selectedInches.length > 0) {
+        const inch = getInch(p.name);
+        if (!inch || !selectedInches.includes(inch)) return false;
+      }
+      if (selectedPanels.length > 0 && !selectedPanels.includes(getPanelType(p))) return false;
+      if (selectedOS.length > 0 && !selectedOS.includes(getOS(p))) return false;
+      return true;
+    });
+  }, [tvProducts, selectedBrands, selectedInches, selectedPanels, selectedOS]);
+
+  const activeFilterCount = selectedBrands.length + selectedInches.length + selectedPanels.length + selectedOS.length;
+  const clearFilters = () => { setSelectedBrands([]); setSelectedInches([]); setSelectedPanels([]); setSelectedOS([]); };
+
+  const toggleFilter = (value: string, selected: string[], setSelected: React.Dispatch<React.SetStateAction<string[]>>) => {
+    setSelected(prev => prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]);
+  };
+
+  const FilterContent = () => (
+    <div className="space-y-6">
+      {activeFilterCount > 0 && (
+        <button onClick={clearFilters} className="text-xs text-primary hover:underline flex items-center gap-1">
+          <X className="h-3 w-3" /> Filtreleri Temizle ({activeFilterCount})
+        </button>
+      )}
+
+      {/* Marka */}
+      <div>
+        <h4 className="text-sm font-bold text-foreground mb-3">Marka</h4>
+        <div className="space-y-2">
+          {filterOptions.brands.map(brand => (
+            <label key={brand} className="flex items-center gap-2 cursor-pointer text-sm">
+              <Checkbox checked={selectedBrands.includes(brand)} onCheckedChange={() => toggleFilter(brand, selectedBrands, setSelectedBrands)} />
+              <span className="text-foreground">{brand}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Ekran Boyutu */}
+      {filterOptions.inches.length > 0 && (
+        <div>
+          <h4 className="text-sm font-bold text-foreground mb-3">Ekran Boyutu</h4>
+          <div className="space-y-2">
+            {filterOptions.inches.map(inch => (
+              <label key={inch} className="flex items-center gap-2 cursor-pointer text-sm">
+                <Checkbox checked={selectedInches.includes(inch)} onCheckedChange={() => toggleFilter(inch, selectedInches, setSelectedInches)} />
+                <span className="text-foreground">{inch}"</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Panel Tipi */}
+      {filterOptions.panels.length > 0 && (
+        <div>
+          <h4 className="text-sm font-bold text-foreground mb-3">Panel Tipi</h4>
+          <div className="space-y-2">
+            {filterOptions.panels.map(panel => (
+              <label key={panel} className="flex items-center gap-2 cursor-pointer text-sm">
+                <Checkbox checked={selectedPanels.includes(panel)} onCheckedChange={() => toggleFilter(panel, selectedPanels, setSelectedPanels)} />
+                <span className="text-foreground">{panel}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* İşletim Sistemi */}
+      {filterOptions.oses.length > 0 && (
+        <div>
+          <h4 className="text-sm font-bold text-foreground mb-3">İşletim Sistemi</h4>
+          <div className="space-y-2">
+            {filterOptions.oses.map(os => (
+              <label key={os} className="flex items-center gap-2 cursor-pointer text-sm">
+                <Checkbox checked={selectedOS.includes(os)} onCheckedChange={() => toggleFilter(os, selectedOS, setSelectedOS)} />
+                <span className="text-foreground">{os}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   // SEO
   if (typeof document !== "undefined") {
