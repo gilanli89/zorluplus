@@ -7,6 +7,7 @@ import { BRAND } from "@/lib/constants";
 import banner1 from "@/assets/banner-1.jpg";
 import banner2 from "@/assets/banner-2.jpg";
 import banner3 from "@/assets/banner-3.jpg";
+import bannerServis from "@/assets/banner-servis.jpg";
 
 const slides = [
   {
@@ -35,6 +36,15 @@ const slides = [
     desc: "Split klima, portatif klima ve ısıtıcılarda özel fiyatlar sizi bekliyor.",
     cta: { label: "Klimaları İncele", href: "/kategori/klima-isitma" },
     overlay: "from-black/60 via-black/30 to-transparent",
+  },
+  {
+    image: bannerServis,
+    badge: "Yetkili Servis Merkezi",
+    title: "Samsung & LG",
+    subtitle: "Yetkili Servis.",
+    desc: "Orijinal yedek parça, uzman teknisyen kadrosu ve garanti kapsamında profesyonel teknik servis hizmeti.",
+    cta: { label: "Servis Talebi Oluştur", href: "/servis" },
+    overlay: "from-black/70 via-black/40 to-transparent",
   },
 ];
 

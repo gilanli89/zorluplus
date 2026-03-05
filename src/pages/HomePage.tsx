@@ -120,6 +120,33 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Brand Logos */}
+      <section className="py-10 md:py-14">
+        <div className="container">
+          <h3 className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-8">
+            Yetkili Bayi & Servis Markalarımız
+          </h3>
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 opacity-70">
+            {[
+              { name: "Samsung", src: "/brands/samsung.png" },
+              { name: "LG", src: "/brands/lg.png" },
+              { name: "Bosch", src: "/brands/bosch.png" },
+              { name: "Philips", src: "/brands/philips.png" },
+              { name: "Midea", src: "/brands/midea.png" },
+              { name: "Sharp", src: "/brands/sharp.png" },
+            ].map(brand => (
+              <img
+                key={brand.name}
+                src={brand.src}
+                alt={`${brand.name} logo`}
+                className="h-10 md:h-12 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                loading="lazy"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   );
 }
