@@ -1,0 +1,1 @@
+DELETE FROM inventory WHERE id IN ('59b1c11c-6b1c-4d92-a63c-4d8d7f464064', '5f160de2-1e67-4f5c-8a03-c12fde92aaa4');
