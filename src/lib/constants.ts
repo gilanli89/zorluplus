@@ -6,10 +6,10 @@ export const BRAND = {
   email: "info@zorluplus.com",
   whatsappLink: "https://api.whatsapp.com/send/?phone=905488783131&text&type=phone_number&app_absent=0",
   social: {
-    facebook: "https://facebook.com/zorluplus",
-    instagram: "https://instagram.com/zorluplus",
-    youtube: "https://youtube.com/@zorluplus",
-    tiktok: "https://tiktok.com/@zorluplus",
+    facebook: "https://www.facebook.com/ZorluDigitalPlaza/",
+    instagram: "https://www.instagram.com/zorludigitalplaza/",
+    youtube: "https://www.youtube.com/@zorludigitalplaza6273",
+    tiktok: "https://www.tiktok.com/@zorludigitalplaza",
   },
 };
 
