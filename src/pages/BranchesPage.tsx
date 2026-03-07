@@ -9,7 +9,7 @@ export default function BranchesPage() {
 
   return (
     <div className="container py-8 md:py-12">
-      <h1 className="font-display text-2xl md:text-3xl font-bold mb-2 text-foreground">{t("branches.title")}</h1>
+      <h1 className="heading-2 mb-2 text-foreground pulse-heading">{t("branches.title")}</h1>
       <p className="text-muted-foreground mb-8">{t("branches.subtitle")}</p>
 
       <div className="grid gap-8">
