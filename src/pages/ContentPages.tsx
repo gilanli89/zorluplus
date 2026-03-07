@@ -1160,16 +1160,148 @@ export function SiparisTakipPage() {
 }
 
 export function OdemeYontemleriPage() {
+  const paymentMethods = [
+    { icon: "banknote", title: "Nakit Ödeme", desc: "Mağazamızda gerçekleştireceğiniz alışverişlerde nakit ödeme kolaylığı." },
+    { icon: "card", title: "Kredi / Banka Kartı", desc: "Tüm banka ve kredi kartları ile hızlı, güvenli ve Premium işlem altyapısı." },
+    { icon: "building", title: "Havale / EFT", desc: "Banka hesaplarımıza anında transfer seçeneği ile dijital ödeme konforu." },
+    { icon: "chart", title: "Ayrıcalıklı Taksit İmkanları", desc: "Anlaşmalı bankalar aracılığıyla bütçenize uygun, avantajlı taksit seçenekleri." },
+  ];
+
+  const iconMap: Record<string, React.ReactNode> = {
+    banknote: <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>,
+    card: <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>,
+    building: <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M12 14h.01M16 10h.01M16 14h.01M8 10h.01M8 14h.01"/></svg>,
+    chart: <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>,
+  };
+
   return (
-    <ContentPage title="Ödeme Yöntemleri">
-      <h2>Kabul Edilen Ödeme Yöntemleri</h2>
-      <ul>
-        <li>Nakit</li>
-        <li>Kredi Kartı / Banka Kartı</li>
-        <li>Havale / EFT</li>
-        <li>Taksitli Ödeme</li>
-      </ul>
-      <p>Detaylı bilgi için mağazamızı ziyaret edebilir veya bizi arayabilirsiniz.</p>
-    </ContentPage>
+    <div className="container py-12 md:py-16 max-w-3xl">
+      <motion.h1
+        className="font-display text-3xl md:text-4xl font-extrabold mb-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.span
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Premium Ödeme Seçenekleri
+        </motion.span>
+      </motion.h1>
+
+      <motion.div
+        className="space-y-8 text-muted-foreground leading-relaxed"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+      >
+        <p>
+          <strong className="text-foreground">Zorlu Digital Plaza</strong>'da alışveriş deneyiminizi kolaylaştırmak için esnek ve güvenilir Premium ödeme yöntemleri sunuyoruz. Size en uygun yöntemi seçerek teknolojiye hızla ulaşabilirsiniz.
+        </p>
+
+        {/* Ödeme Yöntemleri */}
+        <motion.div
+          className="rounded-2xl border border-border bg-card p-6 md:p-8 space-y-5 relative overflow-hidden"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <motion.div
+            className="absolute inset-0 rounded-2xl pointer-events-none"
+            animate={{
+              boxShadow: [
+                "inset 0 0 30px hsl(221,83%,53%,0.0)",
+                "inset 0 0 30px hsl(221,83%,53%,0.08)",
+                "inset 0 0 30px hsl(221,83%,53%,0.0)",
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.h2
+            className="font-display text-xl md:text-2xl font-bold relative z-10"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            Kabul Edilen Ödeme Yöntemleri
+          </motion.h2>
+
+          <div className="relative z-10 space-y-4">
+            {paymentMethods.map((m, i) => (
+              <div key={m.title} className="flex items-start gap-3">
+                <motion.span
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 mt-0.5"
+                  animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.25)", "0 0 0px hsl(221,83%,53%,0)"] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+                >
+                  {iconMap[m.icon]}
+                </motion.span>
+                <p><strong className="text-foreground">{m.title}:</strong> {m.desc}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Detaylı Bilgi */}
+        <motion.div
+          className="rounded-2xl border border-border bg-card p-6 md:p-8 space-y-4 relative overflow-hidden"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.45 }}
+        >
+          <motion.div
+            className="absolute inset-0 rounded-2xl pointer-events-none"
+            animate={{
+              boxShadow: [
+                "inset 0 0 30px hsl(221,83%,53%,0.0)",
+                "inset 0 0 30px hsl(221,83%,53%,0.08)",
+                "inset 0 0 30px hsl(221,83%,53%,0.0)",
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          />
+          <motion.h2
+            className="font-display text-xl md:text-2xl font-bold relative z-10"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          >
+            Detaylı Bilgi ve Destek
+          </motion.h2>
+          <p className="relative z-10">Ödeme süreçleri, güncel taksit oranları ve Premium avantajlar hakkında daha fazla bilgi almak için bizimle iletişime geçin:</p>
+          <div className="flex flex-col gap-3 relative z-10">
+            <a href="#" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
+              <motion.span
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
+                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <MapPin className="h-5 w-5 text-primary" />
+              </motion.span>
+              Mağaza Ziyareti: Sizi ağırlamaktan mutluluk duyarız.
+            </a>
+            <a href="tel:+905488783131" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
+              <motion.span
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
+                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+              >
+                <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </motion.span>
+              Müşteri Hattı: +90 548 878 31 31
+            </a>
+            <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
+              <motion.span
+                className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
+                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+              >
+                <Mail className="h-5 w-5 text-primary" />
+              </motion.span>
+              E-posta: deniz@zorludigitalplaza.com
+            </a>
+          </div>
+        </motion.div>
+      </motion.div>
+    </div>
   );
 }
