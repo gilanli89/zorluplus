@@ -40,6 +40,7 @@ import PaymentResultPage from "@/pages/PaymentResultPage";
 import CartPage from "@/pages/CartPage";
 import NotFound from "@/pages/NotFound";
 import KktcTelevizyon2026 from "@/pages/blog/KktcTelevizyon2026";
+import B2BPage from "@/pages/B2BPage";
 import ScrollToTop from "@/components/ScrollToTop";
 
 // Admin
