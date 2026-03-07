@@ -102,6 +102,7 @@ const App = () => (
               <Route path="/cerez-politikasi" element={<CerezPolitikasiPage />} />
               <Route path="/mesafeli-satis-sozlesmesi" element={<MesafeliSatisSozlesmesiPage />} />
               <Route path="/surdurulebilirlik" element={<SurdurulebilirlikPage />} />
+              <Route path="/b2b" element={<B2BPage />} />
               <Route path="/siparis-takip" element={<SiparisTakipPage />} />
               <Route path="/odeme-yontemleri" element={<OdemeYontemleriPage />} />
               <Route path="/odeme" element={<CheckoutPage />} />
