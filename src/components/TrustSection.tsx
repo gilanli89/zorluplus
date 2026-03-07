@@ -2,10 +2,10 @@ import { Shield, Award, Wrench, Truck } from "lucide-react";
 import { motion } from "framer-motion";
 
 const items = [
-  { icon: Shield, label: "Yetkili Servis", desc: "Samsung & LG" },
-  { icon: Award, label: "2 Yıl Garanti", desc: "Resmi garanti" },
-  { icon: Wrench, label: "Ücretsiz Montaj", desc: "Uygun ürünlerde" },
-  { icon: Truck, label: "Hızlı Teslimat", desc: "Tüm KKTC'ye" },
+  { icon: Shield, label: "Yetkili Servis", desc: "Samsung & LG", hasBrandLogos: true },
+  { icon: Award, label: "2 Yıl Garanti", desc: "Resmi garanti", hasBrandLogos: false },
+  { icon: Wrench, label: "Ücretsiz Montaj", desc: "Uygun ürünlerde", hasBrandLogos: false },
+  { icon: Truck, label: "Hızlı Teslimat", desc: "Tüm KKTC'ye", hasBrandLogos: false },
 ];
 
 const containerVariants = {
@@ -42,7 +42,15 @@ export default function TrustSection() {
               </div>
               <div>
                 <p className="font-display font-bold text-sm text-foreground leading-tight">{item.label}</p>
-                <p className="text-xs text-muted-foreground">{item.desc}</p>
+                {item.hasBrandLogos ? (
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <img src="/brands/samsung.png" alt="Samsung" className="h-3.5 w-auto object-contain dark:brightness-0 dark:invert opacity-70" />
+                    <span className="text-xs text-muted-foreground">&</span>
+                    <img src="/brands/lg.png" alt="LG" className="h-3.5 w-auto object-contain dark:brightness-0 dark:invert opacity-70" />
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">{item.desc}</p>
+                )}
               </div>
             </motion.div>
           ))}
