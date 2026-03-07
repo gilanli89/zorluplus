@@ -263,7 +263,7 @@ export function HakkimizdaPage() {
             {brands.map((brand, i) => (
               <motion.div
                 key={brand.name}
-                className="rounded-2xl border border-border bg-card p-6 flex flex-col items-center justify-center gap-3 relative overflow-hidden group"
+                className="rounded-2xl border border-border bg-card p-8 flex items-center justify-center aspect-[3/2] relative overflow-hidden group"
                 variants={{ hidden: { opacity: 0, y: 20, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1 } }}
                 whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.2)" }}
               >
@@ -271,8 +271,7 @@ export function HakkimizdaPage() {
                   className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{ background: "linear-gradient(135deg, hsl(221,83%,53%,0.1), transparent, hsl(221,83%,53%,0.05))" }}
                 />
-                <img src={brand.logo} alt={brand.name} className="h-12 w-auto object-contain relative z-10" />
-                <span className="text-sm font-semibold text-muted-foreground relative z-10">{brand.name}</span>
+                <img src={brand.logo} alt={brand.name} className="max-h-full max-w-[80%] object-contain relative z-10" />
               </motion.div>
             ))}
           </div>
