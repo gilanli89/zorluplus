@@ -1360,6 +1360,191 @@ export function GizlilikPolitikasiPage() {
           </a>
         </motion.div>
       </motion.div>
+
+      {/* Çerez Politikası */}
+      <motion.div
+        className="mt-16 space-y-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.6 }}
+      >
+        <motion.h2
+          className="font-display text-2xl md:text-3xl font-extrabold"
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Çerez Politikası
+        </motion.h2>
+
+        <div className="prose prose-sm max-w-none text-muted-foreground [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-base [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3">
+          <h3>1. Çerez Nedir?</h3>
+          <p>Çerezler (cookies), ziyaret ettiğiniz web siteleri tarafından tarayıcınıza kaydedilen küçük veri dosyalarıdır. Bu dosyalar site deneyiminizi geliştirmek amacıyla kullanılır.</p>
+
+          <h3>2. Kullanılan Çerez Türleri</h3>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            { title: "Zorunlu Çerezler", desc: "Site'nin temel işlevlerinin çalışmasını sağlar." },
+            { title: "Performans Çerezleri", desc: "Site kullanımını analiz etmek için kullanılır." },
+            { title: "İşlevsel Çerezler", desc: "Kullanıcı tercihlerini hatırlamak için kullanılır." },
+            { title: "Pazarlama Çerezleri", desc: "Kampanya ve reklam içeriklerinin optimize edilmesini sağlar." },
+          ].map((item, i) => (
+            <motion.div
+              key={item.title}
+              className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden"
+            >
+              <motion.div
+                className="absolute inset-0 rounded-2xl pointer-events-none"
+                animate={{
+                  boxShadow: [
+                    "inset 0 0 25px hsl(221,83%,53%,0.0)",
+                    "inset 0 0 25px hsl(221,83%,53%,0.07)",
+                    "inset 0 0 25px hsl(221,83%,53%,0.0)",
+                  ],
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+              />
+              <p className="relative z-10 font-display font-bold text-foreground text-sm mb-1">{item.title}</p>
+              <p className="relative z-10 text-xs text-muted-foreground">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="prose prose-sm max-w-none text-muted-foreground [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-base [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3">
+          <h3>3. Çerezlerin Kullanım Amaçları</h3>
+          <ul>
+            <li>Site performansını artırmak</li>
+            <li>Kullanıcı deneyimini geliştirmek</li>
+            <li>Güvenliği sağlamak</li>
+            <li>Analiz ve istatistik yapmak</li>
+            <li>Kişiselleştirilmiş içerik sunmak</li>
+          </ul>
+
+          <h3>4. Çerezlerin Kontrolü</h3>
+          <p>Tarayıcı ayarlarınızdan çerezleri kontrol edebilir veya tamamen devre dışı bırakabilirsiniz.</p>
+          <p>Ancak bazı çerezlerin devre dışı bırakılması site işlevlerinin düzgün çalışmasını engelleyebilir.</p>
+        </div>
+      </motion.div>
+
+      {/* Mesafeli Satış Sözleşmesi */}
+      <motion.div
+        className="mt-16 space-y-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.7 }}
+      >
+        <motion.h2
+          className="font-display text-2xl md:text-3xl font-extrabold"
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Mesafeli Satış Sözleşmesi
+        </motion.h2>
+
+        <div className="prose prose-sm max-w-none text-muted-foreground [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-base [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3">
+          <h3>1. Taraflar</h3>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Satıcı */}
+          <motion.div className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden">
+            <motion.div
+              className="absolute inset-0 rounded-2xl pointer-events-none"
+              animate={{
+                boxShadow: [
+                  "inset 0 0 25px hsl(221,83%,53%,0.0)",
+                  "inset 0 0 25px hsl(221,83%,53%,0.07)",
+                  "inset 0 0 25px hsl(221,83%,53%,0.0)",
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <p className="relative z-10 font-display font-bold text-foreground text-sm mb-2">Satıcı</p>
+            <div className="relative z-10 text-xs text-muted-foreground space-y-1">
+              <p><strong className="text-foreground">Zorlu Digital Plaza</strong></p>
+              <p>Web: www.zorluplus.com</p>
+              <div className="flex flex-col gap-1 mt-2">
+                <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+                  <motion.span
+                    className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10"
+                    animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <Mail className="h-3.5 w-3.5 text-primary" />
+                  </motion.span>
+                  deniz@zorludigitalplaza.com
+                </a>
+                <a href="tel:+905428783131" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+                  <motion.span
+                    className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10"
+                    animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+                  >
+                    <svg className="h-3.5 w-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  </motion.span>
+                  +90 542 878 31 31
+                </a>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Alıcı */}
+          <motion.div className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden">
+            <motion.div
+              className="absolute inset-0 rounded-2xl pointer-events-none"
+              animate={{
+                boxShadow: [
+                  "inset 0 0 25px hsl(221,83%,53%,0.0)",
+                  "inset 0 0 25px hsl(221,83%,53%,0.07)",
+                  "inset 0 0 25px hsl(221,83%,53%,0.0)",
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+            />
+            <p className="relative z-10 font-display font-bold text-foreground text-sm mb-2">Alıcı</p>
+            <p className="relative z-10 text-xs text-muted-foreground">Site üzerinden sipariş oluşturan kullanıcı.</p>
+          </motion.div>
+        </div>
+
+        <div className="prose prose-sm max-w-none text-muted-foreground [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-base [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3">
+          <h3>2. Konu</h3>
+          <p>Bu sözleşme, alıcının satıcıya ait internet sitesi üzerinden elektronik ortamda sipariş verdiği ürünlerin satışı ve teslimine ilişkin hak ve yükümlülükleri düzenler.</p>
+
+          <h3>3. Ürün ve Hizmet Bilgileri</h3>
+          <p>Ürünlerin temel özellikleri, satış fiyatı ve ödeme bilgileri sipariş sayfasında belirtilir.</p>
+
+          <h3>4. Ödeme</h3>
+          <p>Ödeme aşağıdaki yöntemlerle yapılabilir:</p>
+          <ul>
+            <li>Kredi kartı</li>
+            <li>Banka kartı</li>
+            <li>Havale / EFT</li>
+            <li>Online ödeme sistemleri</li>
+          </ul>
+
+          <h3>5. Teslimat</h3>
+          <p>Siparişler stok durumuna göre en kısa sürede hazırlanarak kargo firması aracılığıyla teslim edilir.</p>
+          <p>Teslimat süresi bölgeye göre değişiklik gösterebilir.</p>
+
+          <h3>6. Cayma Hakkı</h3>
+          <p>Tüketici, ürünü teslim aldığı tarihten itibaren <strong className="text-foreground">14 gün</strong> içinde herhangi bir gerekçe göstermeden cayma hakkına sahiptir.</p>
+          <p>İade edilen ürün:</p>
+          <ul>
+            <li>Kullanılmamış</li>
+            <li>Zarar görmemiş</li>
+            <li>Orijinal ambalajında</li>
+          </ul>
+          <p>olmalıdır.</p>
+
+          <h3>7. Garanti</h3>
+          <p>Satın alınan ürünler üretici garantisi veya en az <strong className="text-foreground">2 yıl garanti</strong> kapsamındadır.</p>
+
+          <h3>8. Uyuşmazlıkların Çözümü</h3>
+          <p>Bu sözleşme Kuzey Kıbrıs Türk Cumhuriyeti yasalarına tabidir.</p>
+          <p>Uyuşmazlık durumunda <strong className="text-foreground">Lefkoşa Mahkemeleri</strong> yetkilidir.</p>
+        </div>
+      </motion.div>
     </div>
   );
 }
