@@ -101,19 +101,23 @@
   /* ===== GLOBAL TYPOGRAPHY SCALE ===== */
   /* H1 - Page hero titles */
   .heading-1 {
-    @apply font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight;
   }
   /* H2 - Section titles */
   .heading-2 {
-    @apply font-display text-xl sm:text-2xl md:text-3xl font-bold leading-snug;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    @apply text-xl sm:text-2xl md:text-3xl font-bold leading-snug;
   }
   /* H3 - Sub-section / card titles */
   .heading-3 {
-    @apply font-display text-lg sm:text-xl md:text-2xl font-bold leading-snug;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    @apply text-lg sm:text-xl md:text-2xl font-bold leading-snug;
   }
   /* H4 - Small titles */
   .heading-4 {
-    @apply font-display text-base sm:text-lg font-bold;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    @apply text-base sm:text-lg font-bold;
   }
   /* Body large */
   .body-lg {
