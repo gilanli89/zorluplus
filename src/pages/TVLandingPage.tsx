@@ -396,9 +396,9 @@ export default function TVLandingPage() {
         <div className="container max-w-3xl">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
             <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
-              Sık Sorulan Sorular
+              {t("lp.tv.faqTitle")}
             </h2>
-            <p className="text-muted-foreground">TV seçimi ve hizmetlerimiz hakkında merak ettikleriniz</p>
+            <p className="text-muted-foreground">{t("lp.tv.faqDesc")}</p>
           </motion.div>
           <div className="space-y-3">
             {FAQ.map((item, i) => (
