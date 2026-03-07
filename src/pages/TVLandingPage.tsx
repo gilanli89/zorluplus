@@ -380,10 +380,10 @@ export default function TVLandingPage() {
               className="rounded-2xl border border-border bg-card p-6 shadow-lg"
             >
               <h3 className="font-display font-bold text-lg text-foreground mb-1">
-                TV Fiyat Teklifi Alın
+                {t("lp.tv.quoteTitle")}
               </h3>
               <p className="text-sm text-muted-foreground mb-5">
-                Bilgilerinizi bırakın, size özel TV teklifimizi sunalım.
+                {t("lp.tv.quoteDesc")}
               </p>
               <QuoteForm />
             </motion.div>
