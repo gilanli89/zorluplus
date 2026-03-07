@@ -54,7 +54,15 @@ export default function TrustSection() {
               </div>
               <div>
                 <p className="font-display font-bold text-sm text-foreground leading-tight">{item.label}</p>
-                <p className="text-xs text-muted-foreground">{item.desc}</p>
+                {item.hasBrandLogos ? (
+                  <div className="flex items-center gap-2 text-muted-foreground mt-0.5">
+                    {samsungLogo}
+                    <span className="text-xs">&</span>
+                    {lgLogo}
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">{item.desc}</p>
+                )}
               </div>
             </motion.div>
           ))}
