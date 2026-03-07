@@ -123,6 +123,20 @@ const translations: Record<string, Record<Lang, string>> = {
   "cat.aksesuar": { tr: "Aksesuarlar", en: "Accessories" },
   "cat.oyun": { tr: "Oyun", en: "Gaming" },
   "cat.elektronik-aksesuar": { tr: "Diğer Ürünler", en: "Other Products" },
+
+  // Team page
+  "team.title": { tr: "Ekibimiz", en: "Our Team" },
+  "team.description": { tr: "Zorlu Digital Plaza ailesi, alanında uzman satış danışmanları ve teknik servis ekibinden oluşmaktadır. Müşteri memnuniyetini ön planda tutan ekibimiz, size en doğru ürünü seçmenizde yardımcı olur.", en: "The Zorlu Digital Plaza family consists of expert sales consultants and a technical service team. Our team, which prioritizes customer satisfaction, helps you choose the right product." },
+  "team.role.ceo": { tr: "CEO & Kurucu", en: "CEO & Founder" },
+  "team.role.coordinator": { tr: "Koordinatör", en: "Coordinator" },
+  "team.role.storeManager": { tr: "Mağaza Müdürü", en: "Store Manager" },
+  "team.role.salesRep": { tr: "Satış Temsilcisi", en: "Sales Representative" },
+  "team.role.whiteGoodsChef": { tr: "Beyaz Eşya Şefi", en: "White Goods Chef" },
+  "team.role.acTechnician": { tr: "Klima Teknisyeni", en: "Air Conditioning Technician" },
+  "team.role.acChef": { tr: "Klima Şefi", en: "Air Conditioning Chef" },
+  "team.role.tvTechnician": { tr: "TV Teknisyeni", en: "TV Technician" },
+  "team.role.tvAvChief": { tr: "TV/AV Servis Şefi", en: "TV/AV Service Chief" },
+  "team.role.aiAssistant": { tr: "Yapay Zeka Asistan", en: "AI Assistant" },
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
