@@ -47,6 +47,7 @@ export default function Footer() {
     { label: "Çerez Politikası", href: "/cerez-politikasi" },
     { label: "Mesafeli Satış Sözleşmesi", href: "/mesafeli-satis-sozlesmesi" },
     { label: "Sürdürülebilirlik", href: "/surdurulebilirlik" },
+    { label: "B2B Kurumsal Satış", href: "/b2b" },
   ];
 
   return (

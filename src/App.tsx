@@ -40,6 +40,7 @@ import PaymentResultPage from "@/pages/PaymentResultPage";
 import CartPage from "@/pages/CartPage";
 import NotFound from "@/pages/NotFound";
 import KktcTelevizyon2026 from "@/pages/blog/KktcTelevizyon2026";
+import B2BPage from "@/pages/B2BPage";
 import ScrollToTop from "@/components/ScrollToTop";
 
 // Admin
@@ -101,6 +102,7 @@ const App = () => (
               <Route path="/cerez-politikasi" element={<CerezPolitikasiPage />} />
               <Route path="/mesafeli-satis-sozlesmesi" element={<MesafeliSatisSozlesmesiPage />} />
               <Route path="/surdurulebilirlik" element={<SurdurulebilirlikPage />} />
+              <Route path="/b2b" element={<B2BPage />} />
               <Route path="/siparis-takip" element={<SiparisTakipPage />} />
               <Route path="/odeme-yontemleri" element={<OdemeYontemleriPage />} />
               <Route path="/odeme" element={<CheckoutPage />} />
