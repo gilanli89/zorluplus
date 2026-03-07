@@ -66,9 +66,9 @@ export default function Footer() {
               {trustBadges[0].label}
             </motion.p>
             <div className="flex items-center justify-center gap-3 mt-2">
-              <img src="/brands/samsung-logo.jpg" alt="Samsung" className="h-10 md:h-12 w-auto object-contain dark:invert" />
+              <img src="/brands/samsung-logo.png" alt="Samsung" className="h-10 md:h-12 w-auto object-contain dark:invert" />
               <span className="text-lg text-muted-foreground">&</span>
-              <img src="/brands/lg-logo.jpg" alt="LG" className="h-28 md:h-36 w-auto object-contain" />
+              <img src="/brands/lg-logo.png" alt="LG" className="h-16 md:h-20 w-auto object-contain" />
             </div>
           </motion.div>
 
