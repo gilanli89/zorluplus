@@ -1210,6 +1210,83 @@ export function GizlilikPolitikasiPage() {
         </div>
       </motion.div>
 
+      {/* Çerez Politikası */}
+      <motion.div
+        className="mt-12 pt-10 border-t border-border"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.h2
+          className="font-display text-2xl md:text-3xl font-extrabold mb-6"
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Çerez Politikası
+        </motion.h2>
+
+        <div className="prose prose-sm max-w-none text-muted-foreground [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-lg [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4">
+          <h3>1. Çerez Nedir?</h3>
+          <p>Çerezler (cookies), ziyaret ettiğiniz web siteleri tarafından tarayıcınıza kaydedilen küçük veri dosyalarıdır. Bu dosyalar site deneyiminizi geliştirmek amacıyla kullanılır.</p>
+
+          <h3>2. Kullanılan Çerez Türleri</h3>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 mb-6">
+          {[
+            { title: "Zorunlu Çerezler", desc: "Site'nin temel işlevlerinin çalışmasını sağlar." },
+            { title: "Performans Çerezleri", desc: "Site kullanımını analiz etmek için kullanılır." },
+            { title: "İşlevsel Çerezler", desc: "Kullanıcı tercihlerini hatırlamak için kullanılır." },
+            { title: "Pazarlama Çerezleri", desc: "Kampanya ve reklam içeriklerinin optimize edilmesini sağlar." },
+          ].map((item, i) => (
+            <motion.div
+              key={item.title}
+              className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+            >
+              <motion.div
+                className="absolute inset-0 rounded-2xl pointer-events-none"
+                animate={{
+                  boxShadow: [
+                    "inset 0 0 25px hsl(221,83%,53%,0.0)",
+                    "inset 0 0 25px hsl(221,83%,53%,0.07)",
+                    "inset 0 0 25px hsl(221,83%,53%,0.0)",
+                  ],
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
+              />
+              <motion.h4
+                className="font-display font-bold text-sm mb-1 relative z-10"
+                animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+              >
+                {item.title}
+              </motion.h4>
+              <p className="text-sm text-muted-foreground relative z-10">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="prose prose-sm max-w-none text-muted-foreground [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-lg [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4">
+          <h3>3. Çerezlerin Kullanım Amaçları</h3>
+          <ul>
+            <li>Site performansını artırmak</li>
+            <li>Kullanıcı deneyimini geliştirmek</li>
+            <li>Güvenliği sağlamak</li>
+            <li>Analiz ve istatistik yapmak</li>
+            <li>Kişiselleştirilmiş içerik sunmak</li>
+          </ul>
+
+          <h3>4. Çerezlerin Kontrolü</h3>
+          <p>Tarayıcı ayarlarınızdan çerezleri kontrol edebilir veya tamamen devre dışı bırakabilirsiniz.</p>
+          <p>Ancak bazı çerezlerin devre dışı bırakılması site işlevlerinin düzgün çalışmasını engelleyebilir.</p>
+        </div>
+      </motion.div>
+
       <motion.p
         className="text-center font-display font-bold text-lg md:text-xl mt-10 italic"
         animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }}
