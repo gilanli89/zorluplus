@@ -447,8 +447,8 @@ export default function TVLandingPage() {
               className="rounded-2xl border border-border bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 text-center"
             >
               <Phone className="h-10 w-10 text-primary mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">Telefonla Arayın</h3>
-              <p className="text-sm text-muted-foreground mb-5">Uzman danışmanlarımız TV seçiminde size yardımcı olsun.</p>
+              <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.callUs")}</h3>
+              <p className="text-sm text-muted-foreground mb-5">{t("landing.callUsDesc")}</p>
               <a href={`tel:${BRAND.phone.replace(/\s/g, "")}`}>
                 <Button size="lg" variant="outline" className="rounded-full gap-2 font-semibold">
                   <Phone className="h-4 w-4" /> {BRAND.phoneDisplay}
