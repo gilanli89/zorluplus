@@ -25,7 +25,7 @@ export default function TrustSection() {
     <section className="border-b border-border bg-card">
       <div className="container py-5">
         <motion.div
-          className="grid grid-cols-2 sm:grid-cols-4 gap-4"
+          className="flex flex-wrap items-center justify-center gap-6 sm:gap-10"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -35,14 +35,14 @@ export default function TrustSection() {
           <motion.div
             key={item.label}
             variants={itemVariants}
-            className="flex items-center gap-3 group">
+            className="flex items-center justify-center gap-3 group">
             
               {item.hasBrandLogos ?
-            <img src="/brands/yetkili-servis-badge.png" alt="Samsung & LG Yetkili Servis" className="h-56 w-auto object-contain mx-auto" /> :
+            <img src="/brands/yetkili-servis-badge.png" alt="Samsung & LG Yetkili Servis" className="h-16 sm:h-20 w-auto object-contain" /> :
 
-            <div>
-                  <p className="font-display font-bold text-sm text-foreground leading-tight">{item.label}</p>
-                  <p className="text-xs text-muted-foreground">{item.desc}</p>
+            <div className="text-center">
+                  <p className="font-display font-bold text-sm sm:text-base text-foreground leading-tight">{item.label}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{item.desc}</p>
                 </div>
             }
             </motion.div>
