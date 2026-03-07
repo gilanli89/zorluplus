@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import ContentPage from "@/components/ContentPage";
 import { motion } from "framer-motion";
 import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin } from "lucide-react";
@@ -11,10 +12,42 @@ const testimonials = [
 ];
 
 const stats = [
-  { value: "60,000+", label: "Mutlu Müşteri", icon: Users },
-  { value: "26", label: "Gurur Dolu Yıl", icon: Clock },
-  { value: "3", label: "Mağaza", icon: MapPin },
+  { value: 60000, suffix: "+", label: "Mutlu Müşteri", icon: Users },
+  { value: 26, suffix: "", label: "Gurur Dolu Yıl", icon: Clock },
+  { value: 2, suffix: "", label: "Mağaza", icon: MapPin },
 ];
+
+function CountUp({ target, suffix, duration = 2 }: { target: number; suffix: string; duration?: number }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          const startTime = performance.now();
+          const step = (now: number) => {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / (duration * 1000), 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.floor(eased * target));
+            if (progress < 1) requestAnimationFrame(step);
+            else setCount(target);
+          };
+          requestAnimationFrame(step);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [target, duration]);
+
+  const formatted = target >= 1000 ? count.toLocaleString("tr-TR") : count.toString();
+  return <span ref={ref}>{formatted}{suffix}</span>;
+}
 
 export function HakkimizdaPage() {
   return (
@@ -78,7 +111,7 @@ export function HakkimizdaPage() {
                       animate={{ color: ["hsl(0,0%,100%)", "hsl(210,100%,85%)", "hsl(0,0%,100%)"] }}
                       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
                     >
-                      {s.value}
+                      <CountUp target={s.value} suffix={s.suffix} />
                     </motion.p>
                     <p className="text-primary-foreground/70 text-sm">{s.label}</p>
                   </div>
