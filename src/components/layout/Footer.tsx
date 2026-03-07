@@ -52,58 +52,6 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-border bg-card pb-24 lg:pb-8">
-      {/* Trust bar */}
-      <div className="border-b border-border bg-gradient-to-r from-primary/5 via-card to-primary/5">
-        <motion.div
-          className="container flex items-center justify-around py-8 gap-6"
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          {/* Yetkili Servis Badge */}
-          <motion.div variants={fadeItem} className="flex items-center justify-center flex-1">
-            <img src="/brands/yetkili-servis-banner.png" alt="Samsung & LG Yetkili Servis" className="h-20 md:h-28 w-auto object-contain" />
-          </motion.div>
-
-          {/* 2 Yıl Garanti */}
-          <motion.div variants={fadeItem} className="flex flex-col items-center text-center flex-1">
-            <motion.p
-              className="font-display font-bold text-xl md:text-3xl"
-              animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-            >
-              {trustBadges[1].label}
-            </motion.p>
-            <motion.p
-              className="text-base md:text-lg mt-1"
-              animate={{ color: ["hsl(215,16%,47%)", "hsl(221,83%,70%)", "hsl(215,16%,47%)"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-            >
-              {trustBadges[1].desc}
-            </motion.p>
-          </motion.div>
-
-          {/* Ücretsiz Montaj */}
-          <motion.div variants={fadeItem} className="flex flex-col items-center text-center flex-1">
-            <motion.p
-              className="font-display font-bold text-xl md:text-3xl"
-              animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            >
-              {trustBadges[2].label}
-            </motion.p>
-            <motion.p
-              className="text-base md:text-lg mt-1"
-              animate={{ color: ["hsl(215,16%,47%)", "hsl(221,83%,70%)", "hsl(215,16%,47%)"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            >
-              {trustBadges[2].desc}
-            </motion.p>
-          </motion.div>
-        </motion.div>
-      </div>
-
       <div className="container py-8">
         <motion.div
           className="grid grid-cols-2 gap-8 md:grid-cols-4"
