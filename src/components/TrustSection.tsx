@@ -45,7 +45,7 @@ export default function TrustSection() {
                 )}
               </div>
               {item.hasBrandLogos ? (
-                <img src="/brands/yetkili-servis-badge.png" alt="Samsung & LG Yetkili Servis" className="h-10 w-auto object-contain" />
+                <img src="/brands/yetkili-servis-badge.png" alt="Samsung & LG Yetkili Servis" className="h-14 w-auto object-contain mx-auto" />
               ) : (
                 <div>
                   <p className="font-display font-bold text-sm text-foreground leading-tight">{item.label}</p>
