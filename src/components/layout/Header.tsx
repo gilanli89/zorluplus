@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award, Mic, MicOff } from "lucide-react";
+import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award, Mic, MicOff, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CartSheet from "@/components/CartSheet";
 import Logo from "@/components/Logo";
@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { BRAND, CATEGORIES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Speech Recognition types
 interface SpeechRecognitionEvent {
@@ -40,10 +41,10 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const navigate = useNavigate();
+  const { lang, setLang, t, greeting } = useLanguage();
 
   const hasSpeechSupport = typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
 
-  // Track scroll for header shadow
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -67,15 +68,12 @@ export default function Header() {
 
   const startListening = useCallback(() => {
     if (!hasSpeechSupport) return;
-
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
-    recognition.lang = "tr-TR";
+    recognition.lang = lang === "tr" ? "tr-TR" : "en-US";
     recognition.continuous = false;
     recognition.interimResults = true;
-
     let finalTranscript = "";
-
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript;
       setSearchQuery(transcript);
@@ -83,7 +81,6 @@ export default function Header() {
         finalTranscript = transcript;
       }
     };
-
     recognition.onend = () => {
       setIsListening(false);
       if (finalTranscript.trim()) {
@@ -92,22 +89,18 @@ export default function Header() {
         setSearchQuery("");
       }
     };
-
-    recognition.onerror = () => {
-      setIsListening(false);
-    };
-
+    recognition.onerror = () => setIsListening(false);
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
     setSearchOpen(true);
-  }, [hasSpeechSupport, navigate]);
+  }, [hasSpeechSupport, navigate, lang]);
 
   useEffect(() => {
-    return () => {
-      recognitionRef.current?.stop();
-    };
+    return () => { recognitionRef.current?.stop(); };
   }, []);
+
+  const getCatName = (slug: string) => t(`cat.${slug}`) || CATEGORIES.find(c => c.slug === slug)?.name || slug;
 
   return (
     <header className={cn(
@@ -118,13 +111,25 @@ export default function Header() {
       <div className="bg-foreground text-background">
         <div className="container flex items-center justify-between py-1.5 text-[11px]">
           <div className="flex items-center gap-4 font-medium">
-            <span className="hidden sm:inline-flex items-center gap-1"><Shield className="h-3 w-3" /> Samsung & LG Yetkili Bayi</span>
-            <span className="inline-flex items-center gap-1"><Award className="h-3 w-3" /> 2 Yıl Garanti</span>
+            <span className="hidden sm:inline-flex items-center gap-1 text-primary-foreground/80 font-semibold">{greeting}</span>
+            <span className="hidden md:inline-flex items-center gap-1"><Shield className="h-3 w-3" /> {t("header.authorized")}</span>
+            <span className="inline-flex items-center gap-1"><Award className="h-3 w-3" /> {t("header.warranty")}</span>
           </div>
-          <a href={`tel:${BRAND.phone}`} className="flex items-center gap-1.5 font-semibold hover:opacity-80 transition-opacity">
-            <Phone className="h-3 w-3" />
-            {BRAND.phoneDisplay}
-          </a>
+          <div className="flex items-center gap-3">
+            {/* Language switcher */}
+            <button
+              onClick={() => setLang(lang === "tr" ? "en" : "tr")}
+              className="flex items-center gap-1 font-semibold hover:opacity-80 transition-opacity"
+              title={lang === "tr" ? "Switch to English" : "Türkçeye geç"}
+            >
+              <Globe className="h-3 w-3" />
+              <span>{lang === "tr" ? "EN" : "TR"}</span>
+            </button>
+            <a href={`tel:${BRAND.phone}`} className="flex items-center gap-1.5 font-semibold hover:opacity-80 transition-opacity">
+              <Phone className="h-3 w-3" />
+              {BRAND.phoneDisplay}
+            </a>
+          </div>
         </div>
       </div>
 
@@ -151,7 +156,7 @@ export default function Header() {
                     to={`/kategori/${cat.slug}`}
                     className="block rounded-xl px-3 py-2.5 font-medium text-foreground hover:bg-muted transition-colors"
                   >
-                    {cat.name}
+                    {getCatName(cat.slug)}
                   </Link>
                   {cat.children.length > 0 && (
                     <div className="ml-4 flex flex-col">
@@ -170,13 +175,13 @@ export default function Header() {
               ))}
               <hr className="my-3 border-border" />
               <Link to="/e-katalog" className="flex items-center gap-2 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-                <FileText className="h-4 w-4" /> E-Katalog
+                <FileText className="h-4 w-4" /> {t("header.eCatalogue")}
               </Link>
               <Link to="/subelerimiz" className="px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-                Şubelerimiz
+                {t("header.branches")}
               </Link>
               <Link to="/iletisim" className="px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-                Bize Ulaşın
+                {t("header.contactUs")}
               </Link>
             </nav>
           </SheetContent>
@@ -205,7 +210,7 @@ export default function Header() {
                   <Input
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
-                    placeholder="Ürün ara..."
+                    placeholder={t("header.search")}
                     className="w-40 sm:w-64 h-9 rounded-full pl-9 pr-3 border-primary/30 focus-visible:ring-primary/20"
                     autoFocus
                   />
@@ -220,7 +225,7 @@ export default function Header() {
                       isListening && "text-destructive bg-destructive/10 animate-pulse"
                     )}
                     onClick={isListening ? stopListening : startListening}
-                    title={isListening ? "Dinlemeyi durdur" : "Sesle ara"}
+                    title={isListening ? t("header.stopListening") : t("header.voiceSearch")}
                   >
                     {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4 text-primary" />}
                   </Button>
@@ -235,7 +240,7 @@ export default function Header() {
                   <Search className="h-5 w-5" />
                 </Button>
                 {hasSpeechSupport && (
-                  <Button variant="ghost" size="icon" className="rounded-full tap-scale" onClick={startListening} title="Sesle ara">
+                  <Button variant="ghost" size="icon" className="rounded-full tap-scale" onClick={startListening} title={t("header.voiceSearch")}>
                     <Mic className="h-5 w-5 text-primary" />
                   </Button>
                 )}
@@ -255,7 +260,7 @@ export default function Header() {
                 to={`/kategori/${cat.slug}`}
                 className="link-underline rounded-full px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
-                {cat.name}
+                {getCatName(cat.slug)}
               </Link>
             );
           })}
@@ -263,7 +268,7 @@ export default function Header() {
             to="/e-katalog"
             className="link-underline rounded-full px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
-            E-Katalog
+            {t("header.eCatalogue")}
           </Link>
         </nav>
 
@@ -272,7 +277,7 @@ export default function Header() {
           <CartSheet />
           <a href="https://servis.zorluplus.com/" target="_blank" rel="noopener noreferrer">
             <Button variant="outline" size="sm" className="rounded-full gap-1.5 border-primary/30 text-primary hover:bg-primary/5 font-semibold hidden sm:inline-flex tap-scale">
-              <Wrench className="h-3.5 w-3.5" /> Servis Talebi
+              <Wrench className="h-3.5 w-3.5" /> {t("header.serviceRequest")}
             </Button>
             <Button variant="ghost" size="icon" className="rounded-full sm:hidden tap-scale">
               <Wrench className="h-5 w-5 text-primary" />
@@ -280,7 +285,7 @@ export default function Header() {
           </a>
           <Link to="/magaza">
             <Button size="sm" className="hidden sm:inline-flex font-semibold rounded-full px-5 tap-scale shadow-md hover:shadow-lg transition-shadow">
-              Mağaza
+              {t("header.store")}
             </Button>
           </Link>
         </div>
