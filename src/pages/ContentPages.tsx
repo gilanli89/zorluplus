@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import ContentPage from "@/components/ContentPage";
 import { motion } from "framer-motion";
-import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, Mail, Recycle, BatteryCharging, Zap, Globe, Lightbulb, Leaf } from "lucide-react";
+import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, Mail, Recycle, BatteryCharging, Zap, Globe, Lightbulb, Leaf, Monitor, Snowflake, Refrigerator, Coffee, Volume2, Cpu, CheckCircle, Wrench, Building2, Phone } from "lucide-react";
 import { BRANCHES } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -52,11 +52,53 @@ function CountUp({ target, suffix, duration = 2 }: { target: number; suffix: str
 }
 
 export function HakkimizdaPage() {
+  const { t } = useLanguage();
+
+  const brands = ["Samsung", "LG", "Midea", "AUX", "Toshiba", "Philips", "Krups", "Sharp"];
+
+  const whyFeatures = [
+    t("about.why.f1"), t("about.why.f2"), t("about.why.f3"),
+    t("about.why.f4"), t("about.why.f5"), t("about.why.f6"),
+  ];
+
+  const serviceItems = [
+    t("about.service.s1"), t("about.service.s2"), t("about.service.s3"),
+    t("about.service.s4"), t("about.service.s5"), t("about.service.s6"),
+  ];
+
+  const b2bFeatures = [
+    t("about.b2b.f1"), t("about.b2b.f2"), t("about.b2b.f3"),
+    t("about.b2b.f4"), t("about.b2b.f5"),
+  ];
+
+  const b2bProducts = [
+    { icon: Monitor, label: t("about.cat.tv") },
+    { icon: Snowflake, label: t("about.cat.ac") },
+    { icon: Refrigerator, label: t("about.cat.white") },
+    { icon: Volume2, label: t("about.cat.audio") },
+    { icon: Coffee, label: t("about.cat.small") },
+    { icon: Cpu, label: t("about.cat.acc") },
+  ];
+
+  const categories = [
+    { icon: Monitor, title: t("about.cat.tv"), sub: t("about.cat.tvSub"), color: "from-blue-500/20 to-blue-600/10" },
+    { icon: Snowflake, title: t("about.cat.ac"), sub: t("about.cat.acSub"), color: "from-cyan-500/20 to-cyan-600/10" },
+    { icon: Refrigerator, title: t("about.cat.white"), sub: t("about.cat.whiteSub"), color: "from-slate-500/20 to-slate-600/10" },
+    { icon: Coffee, title: t("about.cat.small"), sub: t("about.cat.smallSub"), color: "from-amber-500/20 to-amber-600/10" },
+    { icon: Volume2, title: t("about.cat.audio"), sub: t("about.cat.audioSub"), color: "from-purple-500/20 to-purple-600/10" },
+    { icon: Cpu, title: t("about.cat.acc"), sub: t("about.cat.accSub"), color: "from-emerald-500/20 to-emerald-600/10" },
+  ];
+
+  const statsData = [
+    { value: 60000, suffix: "+", label: t("about.stat.customers"), icon: Users },
+    { value: 26, suffix: "", label: t("about.stat.years"), icon: Clock },
+    { value: 2, suffix: "", label: t("about.stat.stores"), icon: MapPin },
+  ];
+
   return (
     <>
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground">
-        {/* Animated background particles */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div className="absolute top-[10%] left-[5%] w-64 h-64 rounded-full bg-white/5 blur-3xl" animate={{ x: [0, 40, 0], y: [0, -20, 0], scale: [1, 1.2, 1] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} />
           <motion.div className="absolute bottom-[10%] right-[10%] w-48 h-48 rounded-full bg-white/8 blur-3xl" animate={{ x: [0, -30, 0], y: [0, 30, 0], scale: [1.1, 0.9, 1.1] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
@@ -69,29 +111,30 @@ export function HakkimizdaPage() {
               animate={{ color: ["rgba(255,255,255,0.6)", "rgba(255,255,255,1)", "rgba(255,255,255,0.6)"] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
-              1999'dan beri
+              {t("about.since")}
             </motion.span>
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-12">
+            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-4">
               <motion.span
                 className="inline-block"
                 animate={{ color: ["hsl(0,0%,100%)", "hsl(210,100%,80%)", "hsl(0,0%,100%)"] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               >
-                Kaliteyi ve Güvenilir
-              </motion.span>
-              <br />
-              <motion.span
-                className="inline-block"
-                animate={{ color: ["hsl(210,100%,80%)", "hsl(0,0%,100%)", "hsl(210,100%,80%)"] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              >
-                Ürünleri Benimsiyoruz
+                {t("about.heroTitle1")}
               </motion.span>
             </h1>
+            <motion.p
+              className="text-lg md:text-xl text-primary-foreground/80 mb-2"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
+              {t("about.heroTitle2")}
+            </motion.p>
+            <p className="text-primary-foreground/60 text-sm md:text-base mb-12">{t("about.heroSubtitle")}</p>
+
             <div className="flex flex-wrap justify-center gap-8 md:gap-16">
-              {stats.map((s, i) => (
+              {statsData.map((s, i) => (
                 <motion.div
-                  key={s.label}
+                  key={i}
                   className="flex flex-col items-center gap-2"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -130,137 +173,223 @@ export function HakkimizdaPage() {
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           >
-            Hakkımızda
+            {t("about.intro.title")}
           </motion.h2>
           <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
-            <p><strong className="text-foreground">Zorlu Digital Plaza</strong>, Kuzey Kıbrıs'ta teknoloji, elektronik ve yaşam çözümleri alanında 26 yılı aşkın deneyimiyle güvenin ve kalite standartlarının simgesi hâline gelmiş köklü bir kuruluştur.</p>
-            <p>Kurulduğu günden bu yana şirketimiz; yenilikçi vizyonu, dünya markalarıyla güçlü iş ortaklıkları ve müşteri memnuniyetini merkeze alan hizmet anlayışı ile sektörde öncü ve güvenilir bir teknoloji platformu olarak konumlanmıştır.</p>
-            <p><strong className="text-foreground">Zorlu Digital Plaza</strong> yalnızca bir elektronik perakendecisi değildir. Biz, teknolojiyi günlük yaşamın konforu ile buluşturan; müşterilerine en doğru ürünü, en doğru hizmetle ve en doğru deneyimle sunmayı hedefleyen bir teknoloji ekosistemiyiz.</p>
-            <p>Yirmi altı yıllık yolculuğumuz boyunca kazandığımız deneyim, güçlü operasyonel altyapımız ve uzman kadromuz sayesinde Zorlu Digital Plaza bugün Kuzey Kıbrıs'ın en saygın teknoloji ve elektronik merkezlerinden biri olarak faaliyet göstermektedir.</p>
+            <p>{t("about.intro.p1")}</p>
+            <p>{t("about.intro.p2")}</p>
+            <p>{t("about.intro.p3")}</p>
           </div>
         </motion.section>
 
-        {/* Biz Kimiz */}
+        {/* Neden Zorlu Digital Plaza */}
         <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <motion.h2
             className="font-display text-2xl md:text-3xl font-bold mb-4"
             animate={{ color: ["hsl(210,40%,20%)", "hsl(221,83%,53%)", "hsl(210,40%,20%)"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           >
-            Biz Kimiz
+            {t("about.why.title")}
           </motion.h2>
-          <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
-            <p>1999 yılında kurulan <strong className="text-foreground">Zorlu Digital Plaza</strong>, Kuzey Kıbrıs'ta markalı elektronik ürünler, beyaz eşya ve iklimlendirme çözümleri alanında lider teknoloji perakendecilerinden biri olarak hizmet vermektedir.</p>
-            <p>Şirketimizin temel felsefesi; müşterilerimize yalnızca ürün sunmak değil, başından sonuna <strong className="text-foreground">kusursuz bir teknoloji deneyimi</strong> yaşatmaktır.</p>
-            <p>Bu anlayış doğrultusunda;</p>
-            <motion.ul
-              className="space-y-2 list-none pl-0"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
-            >
-              {["Alanında uzman satış danışmanları", "Profesyonel satış sonrası destek ekipleri", "Güçlü teknik servis altyapısı", "Dünya markalarıyla kurulan stratejik iş birlikleri"].map((item, i) => (
-                <motion.li
-                  key={item}
-                  className="flex items-center gap-3 text-muted-foreground"
-                  variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
-                >
-                  <motion.span
-                    className="h-2 w-2 rounded-full shrink-0"
-                    animate={{ backgroundColor: ["hsl(221,83%,53%)", "hsl(0,0%,100%)", "hsl(221,83%,53%)"] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-                  />
-                  {item}
-                </motion.li>
-              ))}
-            </motion.ul>
-            <p>Zorlu Digital Plaza'nın başarısının temel yapı taşlarını oluşturmaktadır.</p>
-            <p>Bugün şirketimiz; yenilikçi yaklaşımı, müşteri odaklı hizmet modeli ve sürekli gelişen teknoloji altyapısıyla bölgede <strong className="text-foreground">kalite, güven ve teknoloji mükemmeliyetinin</strong> referans noktalarından biri olarak kabul edilmektedir.</p>
-          </div>
-        </motion.section>
-
-        {/* Tarihçe */}
-        <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-          <motion.h2
-            className="font-display text-2xl md:text-3xl font-bold mb-4"
+          <p className="text-muted-foreground text-lg mb-6">{t("about.why.desc")}</p>
+          <motion.h3
+            className="font-display text-xl font-bold mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
-            Tarihçemiz
-          </motion.h2>
-          <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
-            <p>Zorlu Digital Plaza'nın hikâyesi, tek bir mağaza ile başlayan ve zamanla Kuzey Kıbrıs'ın en güçlü teknoloji perakende ve dağıtım ağlarından birine dönüşen bir büyüme yolculuğudur.</p>
-            <p>Yıllar içinde yapılan stratejik yatırımlar sayesinde şirketimiz; <strong className="text-foreground">Lefkoşa</strong> ve <strong className="text-foreground">Mağusa</strong> bölgelerinde konumlanan mağazaları ve merkezi dağıtım altyapısı ile ülke genelinde geniş bir müşteri kitlesine hizmet vermektedir.</p>
-            <p>Bugün Zorlu Digital Plaza, yalnızca ürün satışı yapan bir perakendeci değil; aynı zamanda teknoloji danışmanlığı, satış sonrası destek ve güvenilir hizmet anlayışı ile <strong className="text-foreground">bütüncül bir teknoloji çözüm merkezi</strong> olarak faaliyet göstermektedir.</p>
-            <p>Çok nesilli deneyimimiz, güçlü lojistik altyapımız ve sürekli gelişen hizmet vizyonumuz ile Zorlu Digital Plaza, Kuzey Kıbrıs'ta teknoloji perakendeciliğinin geleceğini şekillendiren markalar arasında yer almaktadır.</p>
-          </div>
+            {t("about.why.subtitle")}
+          </motion.h3>
+          <motion.ul
+            className="space-y-3 list-none pl-0 mb-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+          >
+            {whyFeatures.map((item, i) => (
+              <motion.li
+                key={i}
+                className="flex items-center gap-3 text-muted-foreground"
+                variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
+              >
+                <motion.div
+                  className="shrink-0"
+                  animate={{ color: ["hsl(221,83%,53%)", "hsl(221,83%,73%)", "hsl(221,83%,53%)"] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+                >
+                  <CheckCircle className="h-5 w-5" />
+                </motion.div>
+                {item}
+              </motion.li>
+            ))}
+          </motion.ul>
+          <p className="text-muted-foreground">{t("about.why.goal")}</p>
         </motion.section>
 
-        {/* Değerler */}
+        {/* Markalarımız */}
         <motion.section
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.15 } } }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
         >
           <motion.h2
-            className="font-display text-2xl md:text-3xl font-bold mb-6"
+            className="font-display text-2xl md:text-3xl font-bold mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           >
-            Kaliteli Ürünlere Olan İnancımız
+            {t("about.brands.title")}
           </motion.h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { icon: Truck, title: "Ücretsiz Teslimat", desc: "5000 TL ve üzeri alışverişlerde" },
-              { icon: Star, title: "100% Memnuniyet", desc: "Para iade garantisi" },
-              { icon: HeartHandshake, title: "7/24 Destek", desc: "Kesintisiz hizmet" },
-              { icon: ShieldCheck, title: "Güvenli Ödeme", desc: "100% güvenli ödeme seçenekleri" },
-            ].map((item, i) => (
+          <p className="text-muted-foreground text-lg mb-4">{t("about.brands.desc")}</p>
+          <motion.h3
+            className="font-display text-xl font-bold mb-4"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+          >
+            {t("about.brands.global")}
+          </motion.h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+            {brands.map((brand, i) => (
               <motion.div
-                key={item.title}
-                className="card-lift rounded-2xl border border-border bg-card p-6 text-center relative overflow-hidden group"
-                variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1 } }}
+                key={brand}
+                className="rounded-2xl border border-border bg-card p-4 text-center font-semibold text-foreground relative overflow-hidden group"
+                variants={{ hidden: { opacity: 0, y: 20, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1 } }}
                 whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.2)" }}
-                transition={{ duration: 0.4 }}
               >
-                {/* Animated gradient border glow */}
                 <motion.div
                   className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{ background: "linear-gradient(135deg, hsl(221,83%,53%,0.1), transparent, hsl(221,83%,53%,0.05))" }}
                 />
-                <motion.div
-                  className="h-12 w-12 mx-auto rounded-xl flex items-center justify-center mb-3 relative"
-                  animate={{
-                    backgroundColor: ["hsl(221,83%,53%,0.1)", "hsl(221,83%,53%,0.2)", "hsl(221,83%,53%,0.1)"],
-                    boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 15px hsl(221,83%,53%,0.15)", "0 0 0px hsl(221,83%,53%,0)"],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
-                >
-                  <motion.div
-                    animate={{ rotate: [0, 5, -5, 0], scale: [1, 1.1, 1] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
-                    className="text-primary"
-                  >
-                    <item.icon className="h-6 w-6" />
-                  </motion.div>
-                </motion.div>
-                <motion.h3
-                  className="font-display font-bold mb-1"
+                <motion.span
+                  className="relative z-10"
                   animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.6 }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
                 >
-                  {item.title}
-                </motion.h3>
-                <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  {brand}
+                </motion.span>
               </motion.div>
             ))}
           </div>
+          <p className="text-muted-foreground mb-2">{t("about.brands.services")}</p>
+          <p className="text-muted-foreground">{t("about.brands.mission")}</p>
         </motion.section>
 
-        {/* Testimonials */}
+        {/* Teknik Servis */}
+        <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+          <motion.h2
+            className="font-display text-2xl md:text-3xl font-bold mb-4"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t("about.service.title")}
+          </motion.h2>
+          <p className="text-muted-foreground text-lg mb-4">{t("about.service.desc")}</p>
+          <motion.h3
+            className="font-display text-xl font-bold mb-4"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t("about.service.subtitle")}
+          </motion.h3>
+          <motion.ul
+            className="space-y-3 list-none pl-0 mb-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
+          >
+            {serviceItems.map((item, i) => (
+              <motion.li
+                key={i}
+                className="flex items-center gap-3 text-muted-foreground"
+                variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
+              >
+                <motion.div
+                  className="shrink-0"
+                  animate={{ color: ["hsl(221,83%,53%)", "hsl(221,83%,73%)", "hsl(221,83%,53%)"] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
+                >
+                  <Wrench className="h-5 w-5" />
+                </motion.div>
+                {item}
+              </motion.li>
+            ))}
+          </motion.ul>
+          <p className="text-muted-foreground">{t("about.service.footer")}</p>
+        </motion.section>
+
+        {/* Kurumsal Satış */}
+        <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+          <motion.h2
+            className="font-display text-2xl md:text-3xl font-bold mb-4"
+            animate={{ color: ["hsl(210,40%,20%)", "hsl(221,83%,53%)", "hsl(210,40%,20%)"] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          >
+            {t("about.b2b.title")}
+          </motion.h2>
+          <p className="text-muted-foreground text-lg mb-4">{t("about.b2b.desc")}</p>
+          <motion.ul
+            className="space-y-3 list-none pl-0 mb-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+          >
+            {b2bFeatures.map((item, i) => (
+              <motion.li
+                key={i}
+                className="flex items-center gap-3 text-muted-foreground"
+                variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
+              >
+                <motion.div
+                  className="shrink-0"
+                  animate={{ color: ["hsl(221,83%,53%)", "hsl(221,83%,73%)", "hsl(221,83%,53%)"] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+                >
+                  <CheckCircle className="h-5 w-5" />
+                </motion.div>
+                {item}
+              </motion.li>
+            ))}
+          </motion.ul>
+          <motion.h3
+            className="font-display text-xl font-bold mb-4"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t("about.b2b.productGroups")}
+          </motion.h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+            {b2bProducts.map((item, i) => (
+              <motion.div
+                key={i}
+                className="rounded-2xl border border-border bg-card p-4 flex items-center gap-3 group relative overflow-hidden"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.2)" }}
+              >
+                <motion.div
+                  className="h-10 w-10 rounded-xl flex items-center justify-center shrink-0"
+                  animate={{
+                    backgroundColor: ["hsl(221,83%,53%,0.1)", "hsl(221,83%,53%,0.2)", "hsl(221,83%,53%,0.1)"],
+                    boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.15)", "0 0 0px hsl(221,83%,53%,0)"],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
+                >
+                  <item.icon className="h-5 w-5 text-primary" />
+                </motion.div>
+                <span className="text-sm font-semibold text-foreground">{item.label}</span>
+              </motion.div>
+            ))}
+          </div>
+          <p className="text-muted-foreground">{t("about.b2b.footer")}</p>
+        </motion.section>
+
+        {/* Kategori Bölümleri */}
         <motion.section
           initial="hidden"
           whileInView="visible"
@@ -273,10 +402,57 @@ export function HakkimizdaPage() {
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           >
-            Müşterilerimiz Ne Diyor?
+            {t("about.categories.title")}
           </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {testimonials.map((t, i) => (
+            {categories.map((cat, i) => (
+              <motion.div
+                key={i}
+                className={`rounded-2xl border border-border bg-gradient-to-br ${cat.color} p-6 relative overflow-hidden group`}
+                variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1 } }}
+                whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.15)" }}
+                transition={{ duration: 0.4 }}
+              >
+                <motion.div
+                  className="h-12 w-12 rounded-xl flex items-center justify-center mb-3"
+                  animate={{
+                    backgroundColor: ["hsl(221,83%,53%,0.1)", "hsl(221,83%,53%,0.2)", "hsl(221,83%,53%,0.1)"],
+                    boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 15px hsl(221,83%,53%,0.15)", "0 0 0px hsl(221,83%,53%,0)"],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
+                >
+                  <cat.icon className="h-6 w-6 text-primary" />
+                </motion.div>
+                <motion.h3
+                  className="font-display font-bold mb-1"
+                  animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+                >
+                  {cat.title}
+                </motion.h3>
+                <p className="text-sm text-muted-foreground">{cat.sub}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Müşteri Yorumları */}
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
+        >
+          <motion.h2
+            className="font-display text-2xl md:text-3xl font-bold mb-6"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+          >
+            {t("about.testimonials.title")}
+          </motion.h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {testimonials.map((item, i) => (
               <motion.div
                 key={i}
                 className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden group"
@@ -291,7 +467,7 @@ export function HakkimizdaPage() {
                 >
                   <Quote className="h-8 w-8" />
                 </motion.div>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4 relative z-10">"{t.text}"</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4 relative z-10">"{item.text}"</p>
                 <div className="flex items-center gap-3 relative z-10">
                   <motion.div
                     className="h-9 w-9 rounded-full flex items-center justify-center font-bold text-sm text-primary-foreground"
@@ -301,17 +477,16 @@ export function HakkimizdaPage() {
                     }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
                   >
-                    {t.name.charAt(0)}
+                    {item.name.charAt(0)}
                   </motion.div>
                   <motion.p
                     className="font-semibold text-sm"
                     animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
                   >
-                    {t.name}
+                    {item.name}
                   </motion.p>
                 </div>
-                {/* Google Maps rating stars */}
                 <div className="flex items-center gap-1 mt-3 pt-3 border-t border-border">
                   {[...Array(5)].map((_, si) => (
                     <motion.div
@@ -359,7 +534,7 @@ export function HakkimizdaPage() {
                   {[...Array(5)].map((_, si) => (
                     <Star key={si} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   ))}
-                  <span className="text-xs text-muted-foreground ml-1">Google Maps üzerinde</span>
+                  <span className="text-xs text-muted-foreground ml-1">{t("about.maps.review")}</span>
                 </div>
               </div>
             </div>
@@ -380,12 +555,59 @@ export function HakkimizdaPage() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-foreground">{b.name}</p>
-                    <p className="text-xs text-muted-foreground">Google Maps'te görüntüle</p>
+                    <p className="text-xs text-muted-foreground">{t("about.maps.view")}</p>
                   </div>
                 </motion.a>
               ))}
             </div>
           </motion.div>
+        </motion.section>
+
+        {/* Kurumsal İletişim CTA */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="rounded-2xl border border-border bg-gradient-to-br from-primary/5 to-primary/10 p-8 md:p-12 text-center"
+        >
+          <motion.h2
+            className="font-display text-2xl md:text-3xl font-bold mb-4"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t("about.contact.title")}
+          </motion.h2>
+          <p className="text-muted-foreground text-lg mb-6">{t("about.contact.desc")}</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+            <motion.a
+              href="mailto:deniz@zorludigitalplaza.com"
+              className="flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-3 text-foreground hover:border-primary/30 transition-colors"
+              whileHover={{ scale: 1.02, boxShadow: "0 4px 15px hsl(221 83% 53% / 0.1)" }}
+            >
+              <Mail className="h-5 w-5 text-primary" />
+              <span className="text-sm font-medium">deniz@zorludigitalplaza.com</span>
+            </motion.a>
+            <motion.a
+              href="tel:+905428783131"
+              className="flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-3 text-foreground hover:border-primary/30 transition-colors"
+              whileHover={{ scale: 1.02, boxShadow: "0 4px 15px hsl(221 83% 53% / 0.1)" }}
+            >
+              <Phone className="h-5 w-5 text-primary" />
+              <span className="text-sm font-medium">+90 542 878 31 31</span>
+            </motion.a>
+          </div>
+          <div className="pt-6 border-t border-border">
+            <motion.p
+              className="font-display font-bold text-lg"
+              animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              {t("about.heroTitle1")}
+            </motion.p>
+            <p className="text-sm text-muted-foreground">{t("about.footer.brand")}</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("about.footer.desc")}</p>
+          </div>
         </motion.section>
       </div>
     </>
