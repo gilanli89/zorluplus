@@ -437,7 +437,7 @@ export default function TVLandingPage() {
               <p className="text-sm text-muted-foreground mb-5">{t("landing.whatsappOrderDesc")}</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("tv_cta")}>
                 <Button size="lg" className="rounded-full gap-2 font-semibold bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
-                  <MessageCircle className="h-4 w-4" /> WhatsApp'a Yaz
+                  <MessageCircle className="h-4 w-4" /> {t("landing.writeWhatsapp")}
                 </Button>
               </a>
             </motion.div>
