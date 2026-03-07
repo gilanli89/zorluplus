@@ -69,7 +69,7 @@ export default function HomePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-foreground/70 via-foreground/40 to-transparent" />
                 <div className="relative z-10 flex flex-col justify-center h-full px-6 md:px-12 lg:px-16 max-w-xl">
-                  <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
+                  <h2 className="heading-2 text-white leading-tight">
                     {t(cat.titleKey)}
                   </h2>
                   <p className="text-white/80 text-sm md:text-base mt-2">
