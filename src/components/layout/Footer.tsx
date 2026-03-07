@@ -38,6 +38,7 @@ export default function Footer() {
     { label: t("footer.orderTracking"), href: "/siparis-takip" },
     { label: t("footer.paymentMethods"), href: "/odeme-yontemleri" },
     { label: t("footer.returnPolicy"), href: "/iade-kosullari" },
+    { label: t("footer.b2b"), href: "/b2b" },
   ];
 
   const footerYasal = [
@@ -47,7 +48,6 @@ export default function Footer() {
     { label: t("footer.cookiePolicy"), href: "/cerez-politikasi" },
     { label: t("footer.distanceSales"), href: "/mesafeli-satis-sozlesmesi" },
     { label: t("footer.sustainability"), href: "/surdurulebilirlik" },
-    { label: t("footer.b2b"), href: "/b2b" },
   ];
 
   return (
