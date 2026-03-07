@@ -1,9 +1,9 @@
-import { Shield, Award, Wrench, Truck } from "lucide-react";
+import { Wrench, Truck } from "lucide-react";
 import { motion } from "framer-motion";
 
 const items = [
-{ icon: Shield, label: "Yetkili Servis", desc: "Samsung & LG", hasBrandLogos: true, customIcon: null },
-{ icon: Award, label: "2 Yıl Garanti", desc: "Resmi garanti", hasBrandLogos: false, customIcon: null },
+{ icon: null, label: "Yetkili Servis", desc: "Samsung & LG", hasBrandLogos: true, customIcon: null },
+{ icon: null, label: "2 Yıl Garanti", desc: "Resmi garanti", hasBrandLogos: false, customIcon: null },
 { icon: Wrench, label: "Ücretsiz Montaj", desc: "Uygun ürünlerde", hasBrandLogos: false, customIcon: "/icons/montaj.gif" },
 { icon: Truck, label: "Hızlı Teslimat", desc: "Tüm KKTC'ye", hasBrandLogos: false, customIcon: "/icons/delivery-truck.gif" }];
 
@@ -37,13 +37,14 @@ export default function TrustSection() {
             variants={itemVariants}
             className="flex items-center gap-3 group">
             
+              {(item.customIcon || item.icon) && (
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary/15 transition-colors duration-300 overflow-hidden">
                 {item.customIcon ?
               <img src={item.customIcon} alt={item.label} className="h-12 w-12 object-contain" /> :
-
-              <item.icon className="h-5 w-5 icon-hover-rotate" />
+              item.icon && <item.icon className="h-5 w-5 icon-hover-rotate" />
               }
               </div>
+              )}
               {item.hasBrandLogos ?
             <img src="/brands/yetkili-servis-badge.png" alt="Samsung & LG Yetkili Servis" className="h-56 w-auto object-contain mx-auto" /> :
 
