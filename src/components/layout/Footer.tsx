@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, Facebook, Instagram, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
-import { BRAND, FOOTER_LINKS, TRUST_BADGES } from "@/lib/constants";
+import { BRAND, FOOTER_LINKS } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 import zorluLogo from "@/assets/zorlu-logo.png";
 
 const stagger = {
@@ -15,6 +16,34 @@ const fadeItem = {
 };
 
 export default function Footer() {
+  const { t } = useLanguage();
+
+  const trustBadges = [
+    { label: t("trust.authorizedService"), desc: t("trust.authorizedServiceDesc") },
+    { label: t("trust.warranty"), desc: t("trust.warrantyDesc") },
+    { label: t("trust.freeInstall"), desc: t("trust.freeInstallDesc") },
+  ];
+
+  const footerKurumsal = [
+    { label: t("footer.about"), href: "/hakkimizda" },
+    { label: t("footer.imprint"), href: "/kunye" },
+    { label: t("footer.team"), href: "/ekibimiz" },
+    { label: t("footer.contactLink"), href: "/iletisim" },
+    { label: t("footer.branchesLink"), href: "/subelerimiz" },
+  ];
+
+  const footerDestek = [
+    { label: t("footer.supportLink"), href: "/destek" },
+    { label: t("footer.orderTracking"), href: "/siparis-takip" },
+    { label: t("footer.paymentMethods"), href: "/odeme-yontemleri" },
+    { label: t("footer.returnPolicy"), href: "/iade-kosullari" },
+  ];
+
+  const footerYasal = [
+    { label: t("footer.terms"), href: "/kullanim-kosullari" },
+    { label: t("footer.privacy"), href: "/gizlilik-politikasi" },
+  ];
+
   return (
     <footer className="border-t border-border bg-card pb-24 lg:pb-8">
       {/* Trust bar */}
@@ -26,7 +55,7 @@ export default function Footer() {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {TRUST_BADGES.map(b => (
+          {trustBadges.map(b => (
             <motion.div key={b.label} variants={fadeItem} className="text-center">
               <p className="font-display font-bold text-sm text-foreground">{b.label}</p>
               <p className="text-xs text-muted-foreground">{b.desc}</p>
@@ -49,7 +78,7 @@ export default function Footer() {
               <img src={zorluLogo} alt="Zorlu Digital Plaza" className="h-10 object-contain" />
             </Link>
             <p className="text-sm text-muted-foreground mb-4">
-              Kuzey Kıbrıs'ın güvenilir elektronik mağazası. Samsung & LG yetkili servis.
+              {t("footer.description")}
             </p>
             <div className="flex items-center gap-3 text-muted-foreground">
               <a href={BRAND.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-foreground transition-colors icon-hover-rotate"><Facebook className="h-5 w-5" /></a>
@@ -61,9 +90,9 @@ export default function Footer() {
 
           {/* Kurumsal */}
           <motion.div variants={fadeItem}>
-            <h4 className="font-display font-bold text-sm mb-3 text-foreground">Kurumsal</h4>
+            <h4 className="font-display font-bold text-sm mb-3 text-foreground">{t("footer.corporate")}</h4>
             <nav className="flex flex-col gap-2">
-              {FOOTER_LINKS.kurumsal.map(l => (
+              {footerKurumsal.map(l => (
                 <Link key={l.href} to={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors link-underline w-fit">{l.label}</Link>
               ))}
             </nav>
@@ -71,9 +100,9 @@ export default function Footer() {
 
           {/* Destek */}
           <motion.div variants={fadeItem}>
-            <h4 className="font-display font-bold text-sm mb-3 text-foreground">Destek</h4>
+            <h4 className="font-display font-bold text-sm mb-3 text-foreground">{t("footer.support")}</h4>
             <nav className="flex flex-col gap-2">
-              {FOOTER_LINKS.destek.map(l => (
+              {footerDestek.map(l => (
                 <Link key={l.href} to={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors link-underline w-fit">{l.label}</Link>
               ))}
             </nav>
@@ -81,7 +110,7 @@ export default function Footer() {
 
           {/* İletişim */}
           <motion.div variants={fadeItem}>
-            <h4 className="font-display font-bold text-sm mb-3 text-foreground">İletişim</h4>
+            <h4 className="font-display font-bold text-sm mb-3 text-foreground">{t("footer.contact")}</h4>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
               <a href={`tel:${BRAND.phone}`} className="flex items-center gap-2 hover:text-foreground transition-colors">
                 <Phone className="h-4 w-4" /> {BRAND.phoneDisplay}
@@ -91,7 +120,7 @@ export default function Footer() {
               </a>
             </div>
             <div className="mt-4 flex flex-col gap-1.5">
-              {FOOTER_LINKS.yasal.map(l => (
+              {footerYasal.map(l => (
                 <Link key={l.href} to={l.href} className="text-xs text-muted-foreground hover:text-foreground transition-colors">{l.label}</Link>
               ))}
             </div>
@@ -106,7 +135,7 @@ export default function Footer() {
           viewport={{ once: true }}
           transition={{ duration: 0.4, delay: 0.2 }}
         >
-          <h4 className="font-display font-bold text-xs uppercase tracking-wider mb-3 text-muted-foreground">Kategoriler</h4>
+          <h4 className="font-display font-bold text-xs uppercase tracking-wider mb-3 text-muted-foreground">{t("footer.categories")}</h4>
           <div className="flex flex-wrap gap-2">
             {FOOTER_LINKS.kategoriler.map(l => {
               const isExternal = l.href.startsWith('http');
@@ -134,7 +163,7 @@ export default function Footer() {
         </motion.div>
 
         <div className="mt-8 pt-6 border-t border-border text-center text-xs text-muted-foreground">
-          ©ZorluPlus bir Zorlu Digital Trade & Services Ltd. kuruluşudur. Tüm hakları saklıdır. 2026
+          {t("footer.rights")} 2026
         </div>
       </div>
     </footer>
