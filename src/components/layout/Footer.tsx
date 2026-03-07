@@ -66,10 +66,10 @@ export default function Footer() {
                 {b.label}
               </motion.p>
               {i === 0 ? (
-                <div className="flex items-center justify-center gap-2 mt-1">
-                  <img src="/brands/samsung.png" alt="Samsung" className="h-4 w-auto object-contain dark:brightness-0 dark:invert opacity-80" />
-                  <span className="text-sm text-muted-foreground">&</span>
-                  <img src="/brands/lg.png" alt="LG" className="h-4 w-auto object-contain dark:brightness-0 dark:invert opacity-80" />
+                <div className="flex items-center justify-center gap-3 mt-1">
+                  <img src="/brands/samsung.png" alt="Samsung" className="h-10 md:h-12 w-auto object-contain dark:brightness-0 dark:invert opacity-80" />
+                  <span className="text-lg text-muted-foreground">&</span>
+                  <img src="/brands/lg.png" alt="LG" className="h-10 md:h-12 w-auto object-contain dark:brightness-0 dark:invert opacity-80" />
                 </div>
               ) : (
                 <motion.p
