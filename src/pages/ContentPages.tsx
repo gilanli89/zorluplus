@@ -826,23 +826,58 @@ export function EkibimizPage() {
 }
 
 export function DestekPage() {
-  const samsungServices = [
-    "Samsung televizyon arıza tamiri",
-    "Samsung LED / QLED TV servis hizmeti",
-    "Samsung klima bakım ve onarım",
-    "Samsung beyaz eşya servis desteği",
+  const { t, lang } = useLanguage();
+
+  const samsungServices = lang === "tr" ? [
+    "Samsung televizyon arıza tamiri", "Samsung LED / QLED TV servis hizmeti",
+    "Samsung klima bakım ve onarım", "Samsung beyaz eşya servis desteği",
     "Samsung yazılım güncelleme ve sistem kontrolü",
+  ] : [
+    "Samsung TV fault repair", "Samsung LED / QLED TV service",
+    "Samsung AC maintenance and repair", "Samsung white goods service support",
+    "Samsung software update and system check",
   ];
 
-  const lgServices = [
-    "LG televizyon arıza tespiti",
-    "LG OLED / Smart TV servis hizmeti",
-    "LG klima bakım ve onarım",
-    "LG beyaz eşya teknik servis",
+  const lgServices = lang === "tr" ? [
+    "LG televizyon arıza tespiti", "LG OLED / Smart TV servis hizmeti",
+    "LG klima bakım ve onarım", "LG beyaz eşya teknik servis",
     "LG yazılım güncelleme ve sistem bakımı",
+  ] : [
+    "LG TV fault detection", "LG OLED / Smart TV service",
+    "LG AC maintenance and repair", "LG white goods technical service",
+    "LG software update and system maintenance",
   ];
 
-  const servisBolgeleri = ["Lefkoşa", "Girne", "Gazimağusa", "Güzelyurt", "İskele"];
+  const servisBolgeleri = lang === "tr" ? ["Lefkoşa", "Girne", "Gazimağusa", "Güzelyurt", "İskele"]
+    : ["Nicosia", "Kyrenia", "Famagusta", "Guzelyurt", "Iskele"];
+
+  const garantiItems = lang === "tr" ? [
+    "Arıza tespiti", "Garanti kontrolü", "Parça değişimi",
+    "Bakım ve onarım işlemleri", "Servis raporu oluşturulması",
+  ] : [
+    "Fault detection", "Warranty check", "Parts replacement",
+    "Maintenance and repair", "Service report creation",
+  ];
+
+  const nedenBiz = lang === "tr" ? [
+    "Uzman teknik servis ekibi", "Samsung ve LG cihazlarında deneyim",
+    "Orijinal yedek parça kullanımı", "Hızlı servis ve arıza tespiti",
+    "Profesyonel müşteri destek hizmeti", "KKTC genelinde servis ağı",
+  ] : [
+    "Expert technical service team", "Experience with Samsung and LG devices",
+    "Original spare parts usage", "Fast service and fault detection",
+    "Professional customer support service", "Service network across N.Cyprus",
+  ];
+
+  const sikAranan = lang === "tr" ? [
+    "Samsung TV Servisi", "LG TV Servisi", "Samsung Klima Servisi",
+    "LG Klima Servisi", "KKTC Elektronik Teknik Servis", "Lefkoşa Televizyon Servisi",
+    "Girne TV Servisi", "Samsung Yetkili Servis KKTC", "LG Yetkili Servis KKTC",
+  ] : [
+    "Samsung TV Service", "LG TV Service", "Samsung AC Service",
+    "LG AC Service", "N.Cyprus Electronics Service", "Nicosia TV Service",
+    "Kyrenia TV Service", "Samsung Authorized Service N.Cyprus", "LG Authorized Service N.Cyprus",
+  ];
 
   const garantiItems = [
     "Arıza tespiti",
