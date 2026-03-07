@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const items = [
   { icon: Shield, label: "Yetkili Servis", desc: "Samsung & LG", hasBrandLogos: true, customIcon: null },
-  { icon: Award, label: "2 Yıl Garanti", desc: "Resmi garanti", hasBrandLogos: false, customIcon: null },
+  
   { icon: Wrench, label: "Ücretsiz Montaj", desc: "Uygun ürünlerde", hasBrandLogos: false, customIcon: "/icons/montaj.gif" },
   { icon: Truck, label: "Hızlı Teslimat", desc: "Tüm KKTC'ye", hasBrandLogos: false, customIcon: "/icons/delivery-truck.gif" },
 ];
@@ -24,8 +24,8 @@ export default function TrustSection() {
   return (
     <section className="border-b border-border bg-card">
       <div className="container py-5">
-        <motion.div
-          className="grid grid-cols-2 sm:grid-cols-4 gap-4"
+         <motion.div
+          className="grid grid-cols-3 gap-4"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
