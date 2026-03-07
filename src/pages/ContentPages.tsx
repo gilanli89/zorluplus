@@ -166,7 +166,7 @@ export function HakkimizdaPage() {
                   >
                     <CountUp target={s.value} suffix={s.suffix} />
                   </motion.p>
-                  <p className="text-primary-foreground/70 text-sm md:text-base">{s.label}</p>
+                  <p className="text-primary-foreground/70 body-sm">{s.label}</p>
                 </motion.div>
               ))}
             </div>
