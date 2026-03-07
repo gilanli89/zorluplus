@@ -132,7 +132,7 @@ export function HakkimizdaPage() {
               </motion.span>
             </h1>
             <motion.p
-              className="text-lg md:text-xl text-primary-foreground/80 mb-2"
+              className="body-lg text-primary-foreground/80 mb-2"
               animate={{ opacity: [0.7, 1, 0.7] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
