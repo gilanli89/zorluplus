@@ -82,7 +82,7 @@ export default function TVLandingPage() {
     const text = (p.name + " " + p.tags.join(" ")).toUpperCase();
     if (text.includes("TIZEN") || text.includes("SAMSUNG")) return "Tizen (Samsung)";
     if (text.includes("WEBOS") || text.includes("LG")) return "webOS (LG)";
-    return "Diğer";
+    return t("lp.tv.other");
   };
 
   // Available filter options from products
