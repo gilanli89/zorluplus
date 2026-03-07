@@ -91,32 +91,76 @@ export function HakkimizdaPage() {
 
       <div className="container py-12 md:py-16 space-y-16">
         {/* Hakkımızda */}
-        <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4">Hakkımızda</h2>
+        <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+          <motion.h2
+            className="font-display text-2xl md:text-3xl font-bold mb-4"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            Hakkımızda
+          </motion.h2>
           <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
-            <p><strong className="text-foreground">Zorlu Digital Plaza</strong>, Kuzey Kıbrıs'ta 26 yıllık faaliyet süresi boyunca olağanüstü bir performans sergilemiştir. Yirmi yılı aşkın sürede şirket, teknoloji, elektronik ve müşteri hizmetleri alanlarında güvenilir bir lider olarak kendini başarıyla konumlandırmıştır.</p>
-            <p>Sürekli inovasyon, yüksek kaliteli ürün yelpazesi ve güçlü müşteri memnuniyeti odaklı yaklaşımı sayesinde Zorlu Digital Plaza, sektörde sağlam bir itibar kazanmıştır.</p>
+            <p><strong className="text-foreground">Zorlu Digital Plaza</strong>, Kuzey Kıbrıs'ta teknoloji, elektronik ve yaşam çözümleri alanında 26 yılı aşkın deneyimiyle güvenin ve kalite standartlarının simgesi hâline gelmiş köklü bir kuruluştur.</p>
+            <p>Kurulduğu günden bu yana şirketimiz; yenilikçi vizyonu, dünya markalarıyla güçlü iş ortaklıkları ve müşteri memnuniyetini merkeze alan hizmet anlayışı ile sektörde öncü ve güvenilir bir teknoloji platformu olarak konumlanmıştır.</p>
+            <p><strong className="text-foreground">Zorlu Digital Plaza</strong> yalnızca bir elektronik perakendecisi değildir. Biz, teknolojiyi günlük yaşamın konforu ile buluşturan; müşterilerine en doğru ürünü, en doğru hizmetle ve en doğru deneyimle sunmayı hedefleyen bir teknoloji ekosistemiyiz.</p>
+            <p>Yirmi altı yıllık yolculuğumuz boyunca kazandığımız deneyim, güçlü operasyonel altyapımız ve uzman kadromuz sayesinde Zorlu Digital Plaza bugün Kuzey Kıbrıs'ın en saygın teknoloji ve elektronik merkezlerinden biri olarak faaliyet göstermektedir.</p>
           </div>
         </motion.section>
 
         {/* Biz Kimiz */}
-        <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4">Biz Kimiz</h2>
+        <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+          <motion.h2
+            className="font-display text-2xl md:text-3xl font-bold mb-4"
+            animate={{ color: ["hsl(210,40%,20%)", "hsl(221,83%,53%)", "hsl(210,40%,20%)"] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          >
+            Biz Kimiz
+          </motion.h2>
           <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
-            <p>1999 yılından bu yana Zorlu Digital Plaza, Kuzey Kıbrıs'ta markalı elektronik, beyaz eşya ve klima çözümleri alanında güvenilir bir lider olmuştur.</p>
-            <p>Yirmi yılı aşkın deneyimiyle şirket, yalnızca yüksek kaliteli ürünler sunmasıyla değil, aynı zamanda ilk temas anından satış sonrası süreçlere kadar uzanan <strong className="text-foreground">kusursuz müşteri deneyimi</strong> ile de güçlü bir itibar kazanmıştır.</p>
-            <p>Zorlu Digital Plaza'nın gücü; uzman satış ekibi, derin sektör bilgisi ve yüksek nitelikli satış sonrası hizmet departmanından gelmektedir.</p>
-            <p>Dünya çapında önde gelen markalarla iş ortaklıkları yaparak ve hizmet altyapısına sürekli yatırım yaparak Zorlu Digital Plaza, bölgede <strong className="text-foreground">kalite, güven ve teknoloji mükemmeliyeti</strong> için bir referans noktası hâline gelmiştir.</p>
+            <p>1999 yılında kurulan <strong className="text-foreground">Zorlu Digital Plaza</strong>, Kuzey Kıbrıs'ta markalı elektronik ürünler, beyaz eşya ve iklimlendirme çözümleri alanında lider teknoloji perakendecilerinden biri olarak hizmet vermektedir.</p>
+            <p>Şirketimizin temel felsefesi; müşterilerimize yalnızca ürün sunmak değil, başından sonuna <strong className="text-foreground">kusursuz bir teknoloji deneyimi</strong> yaşatmaktır.</p>
+            <p>Bu anlayış doğrultusunda;</p>
+            <motion.ul
+              className="space-y-2 list-none pl-0"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+            >
+              {["Alanında uzman satış danışmanları", "Profesyonel satış sonrası destek ekipleri", "Güçlü teknik servis altyapısı", "Dünya markalarıyla kurulan stratejik iş birlikleri"].map((item, i) => (
+                <motion.li
+                  key={item}
+                  className="flex items-center gap-3 text-muted-foreground"
+                  variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
+                >
+                  <motion.span
+                    className="h-2 w-2 rounded-full shrink-0"
+                    animate={{ backgroundColor: ["hsl(221,83%,53%)", "hsl(0,0%,100%)", "hsl(221,83%,53%)"] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+                  />
+                  {item}
+                </motion.li>
+              ))}
+            </motion.ul>
+            <p>Zorlu Digital Plaza'nın başarısının temel yapı taşlarını oluşturmaktadır.</p>
+            <p>Bugün şirketimiz; yenilikçi yaklaşımı, müşteri odaklı hizmet modeli ve sürekli gelişen teknoloji altyapısıyla bölgede <strong className="text-foreground">kalite, güven ve teknoloji mükemmeliyetinin</strong> referans noktalarından biri olarak kabul edilmektedir.</p>
           </div>
         </motion.section>
 
         {/* Tarihçe */}
-        <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4">Tarihçemiz</h2>
+        <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+          <motion.h2
+            className="font-display text-2xl md:text-3xl font-bold mb-4"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          >
+            Tarihçemiz
+          </motion.h2>
           <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
-            <p>Tek bir mağazadan merkezi bir dağıtım deposuna uzanan yolculuğu boyunca Zorlu Digital Plaza, Kuzey Kıbrıs'ın en güçlü perakende ve lojistik ağlarından birine dönüşmüştür.</p>
-            <p>Girne, Lefkoşa ve Mağusa'da bulunan stratejik mağaza lokasyonları sayesinde şirket, her büyük bölgedeki müşterilere ulaşarak markalı elektronik ürünler, beyaz eşya ve iklimlendirme çözümlerini uzun yıllara dayanan uzmanlıkla sunmaktadır.</p>
-            <p>Bugün Zorlu Digital Plaza, çok nesilli deneyimi ve güçlü dağıtım ağıyla sektörde yeni standartlar belirleyen; <strong className="text-foreground">güven, kalite ve mükemmeliyetin simgesi</strong> olarak öne çıkmaktadır.</p>
+            <p>Zorlu Digital Plaza'nın hikâyesi, tek bir mağaza ile başlayan ve zamanla Kuzey Kıbrıs'ın en güçlü teknoloji perakende ve dağıtım ağlarından birine dönüşen bir büyüme yolculuğudur.</p>
+            <p>Yıllar içinde yapılan stratejik yatırımlar sayesinde şirketimiz; <strong className="text-foreground">Lefkoşa</strong> ve <strong className="text-foreground">Mağusa</strong> bölgelerinde konumlanan mağazaları ve merkezi dağıtım altyapısı ile ülke genelinde geniş bir müşteri kitlesine hizmet vermektedir.</p>
+            <p>Bugün Zorlu Digital Plaza, yalnızca ürün satışı yapan bir perakendeci değil; aynı zamanda teknoloji danışmanlığı, satış sonrası destek ve güvenilir hizmet anlayışı ile <strong className="text-foreground">bütüncül bir teknoloji çözüm merkezi</strong> olarak faaliyet göstermektedir.</p>
+            <p>Çok nesilli deneyimimiz, güçlü lojistik altyapımız ve sürekli gelişen hizmet vizyonumuz ile Zorlu Digital Plaza, Kuzey Kıbrıs'ta teknoloji perakendeciliğinin geleceğini şekillendiren markalar arasında yer almaktadır.</p>
           </div>
         </motion.section>
 
