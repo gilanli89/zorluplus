@@ -69,10 +69,10 @@ export default function HomePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-foreground/70 via-foreground/40 to-transparent" />
                 <div className="relative z-10 flex flex-col justify-center h-full px-6 md:px-12 lg:px-16 max-w-xl">
-                  <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
+                  <h2 className="heading-2 text-white leading-tight">
                     {t(cat.titleKey)}
                   </h2>
-                  <p className="text-white/80 text-sm md:text-base mt-2">
+                  <p className="text-white/80 body-sm mt-2">
                     {t(cat.subtitleKey)}
                   </p>
                   <div className="mt-4">
@@ -97,7 +97,7 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">{t("home.branches")}</h2>
+            <h2 className="heading-2 text-foreground">{t("home.branches")}</h2>
             <p className="text-muted-foreground mt-2">{t("home.branchesDesc")}</p>
           </motion.div>
           <motion.div
@@ -113,7 +113,7 @@ export default function HomePage() {
                 variants={branchCard}
                 className="card-lift rounded-2xl border border-border bg-card p-6"
               >
-                <h3 className="font-display font-bold text-lg text-foreground mb-2">{b.name}</h3>
+                <h3 className="heading-4 text-foreground mb-2">{b.name}</h3>
                 <p className="text-sm text-muted-foreground mb-1">{b.address}</p>
                 <p className="text-sm text-muted-foreground mb-4">{b.hours}</p>
                 <div className="flex gap-2">

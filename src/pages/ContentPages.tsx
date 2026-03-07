@@ -122,7 +122,7 @@ export function HakkimizdaPage() {
             >
               {t("about.since")}
             </motion.span>
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-4">
+            <h1 className="heading-1 mb-4">
               <motion.span
                 className="inline-block"
                 animate={{ color: ["hsl(0,0%,100%)", "hsl(210,100%,80%)", "hsl(0,0%,100%)"] }}
@@ -132,13 +132,13 @@ export function HakkimizdaPage() {
               </motion.span>
             </h1>
             <motion.p
-              className="text-lg md:text-xl text-primary-foreground/80 mb-2"
+              className="body-lg text-primary-foreground/80 mb-2"
               animate={{ opacity: [0.7, 1, 0.7] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
               {t("about.heroTitle2")}
             </motion.p>
-            <p className="text-primary-foreground/60 text-sm md:text-base mb-12">{t("about.heroSubtitle")}</p>
+            <p className="text-primary-foreground/60 body-sm mb-12">{t("about.heroSubtitle")}</p>
 
             <div className="flex flex-wrap justify-center gap-8 md:gap-16">
               {statsData.map((s, i) => (
@@ -160,13 +160,13 @@ export function HakkimizdaPage() {
                     <s.icon className="h-8 w-8" />
                   </motion.div>
                   <motion.p
-                    className="font-display text-4xl md:text-5xl font-extrabold"
+                    className="font-display text-3xl md:text-4xl font-extrabold"
                     animate={{ color: ["hsl(0,0%,100%)", "hsl(210,100%,85%)", "hsl(0,0%,100%)"] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
                   >
                     <CountUp target={s.value} suffix={s.suffix} />
                   </motion.p>
-                  <p className="text-primary-foreground/70 text-sm md:text-base">{s.label}</p>
+                  <p className="text-primary-foreground/70 body-sm">{s.label}</p>
                 </motion.div>
               ))}
             </div>
@@ -178,13 +178,13 @@ export function HakkimizdaPage() {
         {/* Hakkımızda */}
         <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <motion.h2
-            className="font-display text-2xl md:text-3xl font-bold mb-4"
+             className="heading-2 mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           >
             {t("about.intro.title")}
           </motion.h2>
-          <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
+          <div className="prose prose-lg max-w-none text-muted-foreground space-y-4 body-lg">
             <p>{t("about.intro.p1")}</p>
             <p>{t("about.intro.p2")}</p>
             <p>{t("about.intro.p3")}</p>
@@ -194,15 +194,15 @@ export function HakkimizdaPage() {
         {/* Neden Zorlu Digital Plaza */}
         <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <motion.h2
-            className="font-display text-2xl md:text-3xl font-bold mb-4"
+             className="heading-2 mb-4"
             animate={{ color: ["hsl(210,40%,20%)", "hsl(221,83%,53%)", "hsl(210,40%,20%)"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           >
             {t("about.why.title")}
           </motion.h2>
-          <p className="text-muted-foreground text-lg mb-6">{t("about.why.desc")}</p>
+          <p className="text-muted-foreground body-lg mb-6">{t("about.why.desc")}</p>
           <motion.h3
-            className="font-display text-xl font-bold mb-4"
+             className="heading-3 mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
@@ -243,16 +243,16 @@ export function HakkimizdaPage() {
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
         >
           <motion.h2
-            className="font-display text-2xl md:text-3xl font-bold mb-4"
+             className="heading-2 mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           >
             {t("about.brands.title")}
           </motion.h2>
-          <p className="text-muted-foreground text-lg mb-4">{t("about.brands.desc")}</p>
+          <p className="text-muted-foreground body-lg mb-4">{t("about.brands.desc")}</p>
           <motion.h3
-            className="font-display text-xl font-bold mb-4"
+             className="heading-3 mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
@@ -282,15 +282,15 @@ export function HakkimizdaPage() {
         {/* Teknik Servis */}
         <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <motion.h2
-            className="font-display text-2xl md:text-3xl font-bold mb-4"
+             className="heading-2 mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           >
             {t("about.service.title")}
           </motion.h2>
-          <p className="text-muted-foreground text-lg mb-4">{t("about.service.desc")}</p>
+          <p className="text-muted-foreground body-lg mb-4">{t("about.service.desc")}</p>
           <motion.h3
-            className="font-display text-xl font-bold mb-4"
+             className="heading-3 mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
@@ -326,13 +326,13 @@ export function HakkimizdaPage() {
         {/* Kurumsal Satış */}
         <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <motion.h2
-            className="font-display text-2xl md:text-3xl font-bold mb-4"
+             className="heading-2 mb-4"
             animate={{ color: ["hsl(210,40%,20%)", "hsl(221,83%,53%)", "hsl(210,40%,20%)"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           >
             {t("about.b2b.title")}
           </motion.h2>
-          <p className="text-muted-foreground text-lg mb-4">{t("about.b2b.desc")}</p>
+          <p className="text-muted-foreground body-lg mb-4">{t("about.b2b.desc")}</p>
           <motion.ul
             className="space-y-3 list-none pl-0 mb-6"
             initial="hidden"
@@ -358,7 +358,7 @@ export function HakkimizdaPage() {
             ))}
           </motion.ul>
           <motion.h3
-            className="font-display text-xl font-bold mb-4"
+            className="heading-3 mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
@@ -400,7 +400,7 @@ export function HakkimizdaPage() {
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
         >
           <motion.h2
-            className="font-display text-2xl md:text-3xl font-bold mb-6"
+             className="heading-2 mb-6"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
@@ -427,7 +427,7 @@ export function HakkimizdaPage() {
                   <cat.icon className="h-6 w-6 text-primary" />
                 </motion.div>
                 <motion.h3
-                  className="font-display font-bold mb-1"
+                  className="heading-4 mb-1"
                   animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
                 >
@@ -447,7 +447,7 @@ export function HakkimizdaPage() {
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
         >
           <motion.h2
-            className="font-display text-2xl md:text-3xl font-bold mb-6"
+            className="heading-2 mb-6"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}

@@ -90,11 +90,11 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold text-white mb-5 border border-white/20">
               <Shield className="h-3.5 w-3.5" /> {config.heroBadge}
             </span>
-            <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.08] mb-4 text-white">
+            <h1 className="heading-1 mb-4 text-white">
               {config.heroTitle}<br />
               <span className={`bg-gradient-to-r ${heroGradient} bg-clip-text text-transparent`}>{config.heroTitleHighlight}</span>
             </h1>
-            <p className="text-white/80 text-lg md:text-xl mb-8 max-w-lg leading-relaxed">{config.heroDescription}</p>
+            <p className="text-white/80 body-lg mb-8 max-w-lg">{config.heroDescription}</p>
             <div className="flex flex-wrap gap-3">
               <a href="#urunler">
                 <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg">
@@ -133,7 +133,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         <div className="container">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">{config.productsTitle}</h2>
+              <h2 className="heading-2 text-foreground">{config.productsTitle}</h2>
               <p className="text-muted-foreground mt-1">{display.length} {t("landing.productsListing")}</p>
             </div>
             <Link to={config.productsCategoryLink} className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
@@ -171,7 +171,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         <section className="py-12 md:py-16">
           <div className="container">
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">{t("landing.suitableProduct")}</h2>
+              <h2 className="heading-2 text-foreground mb-2">{t("landing.suitableProduct")}</h2>
             </motion.div>
             <div className={`grid grid-cols-2 ${config.subtypes.length >= 4 ? "md:grid-cols-4" : config.subtypes.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"} gap-3 md:gap-5`}>
               {config.subtypes.map((type, i) => (
@@ -193,7 +193,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-3">{config.benefitsTitle}</h2>
+              <h2 className="heading-2 text-foreground mb-3">{config.benefitsTitle}</h2>
               <p className="text-muted-foreground leading-relaxed mb-6">{config.benefitsDescription}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {config.benefits.map((b, i) => (
@@ -208,7 +208,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
               </div>
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="rounded-2xl border border-border bg-card p-6 shadow-lg">
-              <h3 className="font-display font-bold text-lg text-foreground mb-1">{config.quoteTitle}</h3>
+              <h3 className="heading-4 text-foreground mb-1">{config.quoteTitle}</h3>
               <p className="text-sm text-muted-foreground mb-5">{config.quoteDescription}</p>
               <QuoteForm />
             </motion.div>
@@ -220,7 +220,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
       <section className="py-12 md:py-16 bg-muted/40">
         <div className="container max-w-3xl">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">{config.faqTitle}</h2>
+            <h2 className="heading-2 text-foreground mb-2">{config.faqTitle}</h2>
             <p className="text-muted-foreground">{config.faqDescription}</p>
           </motion.div>
           <div className="space-y-3">
@@ -245,7 +245,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="rounded-2xl border border-border bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center">
               <MessageCircle className="h-10 w-10 text-[hsl(142,70%,40%)] mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
+              <h3 className="heading-3 text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
               <p className="text-sm text-muted-foreground mb-5">{t("landing.whatsappOrderDesc")}</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_cta")}>
                 <Button size="lg" className="rounded-full gap-2 font-semibold bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
@@ -255,7 +255,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="rounded-2xl border border-border bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 text-center">
               <Phone className="h-10 w-10 text-primary mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.callUs")}</h3>
+              <h3 className="heading-3 text-foreground mb-2">{t("landing.callUs")}</h3>
               <p className="text-sm text-muted-foreground mb-5">{t("landing.callUsDesc")}</p>
               <a href={`tel:${BRAND.phone.replace(/\s/g, "")}`}>
                 <Button size="lg" variant="outline" className="rounded-full gap-2 font-semibold">

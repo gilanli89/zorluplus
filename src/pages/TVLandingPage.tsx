@@ -197,13 +197,13 @@ export default function TVLandingPage() {
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold text-white mb-5 border border-white/20">
               <Shield className="h-3.5 w-3.5" /> {t("lp.tv.heroBadge")}
             </span>
-            <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.08] mb-4 text-white">
+            <h1 className="heading-1 mb-4 text-white">
               {t("lp.tv.heroTitle")}<br />
               <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
                 {t("lp.tv.heroHighlight")}
               </span>
             </h1>
-            <p className="text-white/80 text-lg md:text-xl mb-8 max-w-lg leading-relaxed">
+            <p className="text-white/80 body-lg mb-8 max-w-lg">
               {t("lp.tv.heroDesc")}
             </p>
             <div className="flex flex-wrap gap-3">
@@ -254,7 +254,7 @@ export default function TVLandingPage() {
         <div className="container">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+              <h2 className="heading-2 text-foreground">
                 {t("lp.tv.productsTitle")}
               </h2>
               <p className="text-muted-foreground mt-1">{display.length} {t("lp.tv.productsCount")}</p>
@@ -321,7 +321,7 @@ export default function TVLandingPage() {
       <section className="py-12 md:py-16">
         <div className="container">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
+            <h2 className="heading-2 text-foreground mb-2">
               {t("lp.tv.suitableTitle")}
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto">
@@ -352,7 +352,7 @@ export default function TVLandingPage() {
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-3">
+              <h2 className="heading-2 text-foreground mb-3">
                 {t("lp.tv.benTitle")}
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-6">
@@ -395,7 +395,7 @@ export default function TVLandingPage() {
       <section className="py-12 md:py-16 bg-muted/40">
         <div className="container max-w-3xl">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
+            <h2 className="heading-2 text-foreground mb-2">
               {t("lp.tv.faqTitle")}
             </h2>
             <p className="text-muted-foreground">{t("lp.tv.faqDesc")}</p>
