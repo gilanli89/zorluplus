@@ -173,9 +173,9 @@ export default function TVLandingPage() {
 
   // SEO
   if (typeof document !== "undefined") {
-    document.title = "Televizyon Fiyatları | Samsung & LG OLED TV QLED TV - Kıbrıs | Zorlu Digital Plaza";
+    document.title = t("lp.tv.seoTitle") !== "lp.tv.seoTitle" ? t("lp.tv.seoTitle") : "Televizyon Fiyatları | Samsung & LG OLED TV QLED TV - Kıbrıs | Zorlu Digital Plaza";
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Kıbrıs'ta Samsung ve LG OLED TV, QLED TV, 4K ve 8K televizyon modelleri. Ücretsiz duvar montajı, 2 yıl garanti. Yetkili bayi güvencesiyle TV alın. Zorlu Digital Plaza.");
+    if (meta) meta.setAttribute("content", t("lp.tv.seoDesc") !== "lp.tv.seoDesc" ? t("lp.tv.seoDesc") : "Kıbrıs'ta Samsung ve LG OLED TV, QLED TV, 4K ve 8K televizyon modelleri.");
   }
 
   return (
