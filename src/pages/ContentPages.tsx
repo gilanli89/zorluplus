@@ -1217,6 +1217,149 @@ export function GizlilikPolitikasiPage() {
       >
         Zorlu Digital Plaza | Teknolojiye Güvenli ve Premium Dokunuş
       </motion.p>
+
+      {/* KVKK / GDPR Uyum Metni */}
+      <motion.div
+        className="mt-12 space-y-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+      >
+        <motion.h2
+          className="font-display text-2xl md:text-3xl font-extrabold"
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          KVKK / GDPR Uyum Metni
+        </motion.h2>
+        <p className="text-sm text-muted-foreground italic">Kişisel Verilerin Korunması ve Gizlilik Bildirimi</p>
+
+        <motion.div
+          className="prose prose-sm max-w-none text-muted-foreground [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-base [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3"
+        >
+          <h3>1. Veri Sorumlusu</h3>
+          <p>Bu aydınlatma metni, <strong className="text-foreground">Zorlu Digital Plaza</strong> tarafından işletilen <strong className="text-foreground">www.zorluplus.com</strong> internet sitesi üzerinden toplanan kişisel verilerin işlenmesine ilişkin usul ve esasları açıklamak amacıyla hazırlanmıştır.</p>
+          <p>Şirketimiz, kişisel verilerinizi Kuzey Kıbrıs Türk Cumhuriyeti veri koruma mevzuatı, Türkiye KVKK (6698) ve Avrupa Birliği GDPR ilkeleri doğrultusunda korumayı taahhüt eder.</p>
+        </motion.div>
+
+        {/* Veri Sorumlusu İletişim */}
+        <motion.div
+          className="rounded-2xl border border-border bg-card p-6 space-y-3 relative overflow-hidden"
+        >
+          <motion.div
+            className="absolute inset-0 rounded-2xl pointer-events-none"
+            animate={{
+              boxShadow: [
+                "inset 0 0 30px hsl(221,83%,53%,0.0)",
+                "inset 0 0 30px hsl(221,83%,53%,0.08)",
+                "inset 0 0 30px hsl(221,83%,53%,0.0)",
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <p className="relative z-10 font-semibold text-foreground text-sm">Veri sorumlusu: Zorlu Digital Plaza</p>
+          <div className="flex flex-col gap-2 relative z-10">
+            <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors text-sm">
+              <motion.span
+                className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10"
+                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 14px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Mail className="h-4 w-4 text-primary" />
+              </motion.span>
+              deniz@zorludigitalplaza.com
+            </a>
+            <a href="tel:+905428783131" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors text-sm">
+              <motion.span
+                className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10"
+                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 14px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+              >
+                <svg className="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </motion.span>
+              +90 542 878 31 31
+            </a>
+          </div>
+        </motion.div>
+
+        <div className="prose prose-sm max-w-none text-muted-foreground [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-base [&_h3]:mt-6 [&_h3]:mb-2 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3">
+          <h3>2. Toplanan Kişisel Veriler</h3>
+          <p>Siteyi kullanmanız durumunda aşağıdaki bilgiler toplanabilir:</p>
+          <ul>
+            <li>Ad ve soyad</li>
+            <li>Telefon numarası</li>
+            <li>E-posta adresi</li>
+            <li>Teslimat adresi</li>
+            <li>IP adresi</li>
+            <li>Cihaz ve tarayıcı bilgileri</li>
+            <li>Sipariş ve ödeme bilgileri</li>
+            <li>Müşteri destek talepleri</li>
+          </ul>
+
+          <h3>3. Kişisel Verilerin İşlenme Amaçları</h3>
+          <p>Toplanan veriler aşağıdaki amaçlarla işlenebilir:</p>
+          <ul>
+            <li>Sipariş süreçlerinin yürütülmesi</li>
+            <li>Teslimat ve servis hizmetlerinin sağlanması</li>
+            <li>Teknik servis ve garanti işlemlerinin yürütülmesi</li>
+            <li>Müşteri destek hizmetlerinin verilmesi</li>
+            <li>Kampanya ve duyuruların iletilmesi</li>
+            <li>Site güvenliğinin sağlanması</li>
+            <li>Yasal yükümlülüklerin yerine getirilmesi</li>
+          </ul>
+
+          <h3>4. Verilerin Saklanma Süresi</h3>
+          <p>Kişisel veriler; yasal yükümlülükler, ticari kayıt zorunlulukları ve müşteri hizmetleri süreçleri gerektiği süre boyunca saklanır ve süre sonunda güvenli şekilde silinir veya anonim hale getirilir.</p>
+
+          <h3>5. Verilerin Üçüncü Taraflarla Paylaşılması</h3>
+          <p>Kişisel veriler aşağıdaki durumlarda paylaşılabilir:</p>
+          <ul>
+            <li>Ödeme altyapı sağlayıcıları</li>
+            <li>Kargo firmaları</li>
+            <li>Teknik servis sağlayıcıları</li>
+            <li>Resmi kurum ve otoriteler</li>
+          </ul>
+          <p>Bu paylaşımlar yalnızca hizmetlerin sağlanması amacıyla yapılır.</p>
+
+          <h3>6. Kullanıcı Hakları</h3>
+          <p>Kullanıcılar aşağıdaki haklara sahiptir:</p>
+          <ul>
+            <li>Kişisel verilerin işlenip işlenmediğini öğrenme</li>
+            <li>Verilerin düzeltilmesini talep etme</li>
+            <li>Verilerin silinmesini talep etme</li>
+            <li>Veri işlenmesine itiraz etme</li>
+            <li>Veri taşınabilirliği talep etme</li>
+          </ul>
+        </div>
+
+        {/* Talepler İletişim */}
+        <motion.div
+          className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden"
+        >
+          <motion.div
+            className="absolute inset-0 rounded-2xl pointer-events-none"
+            animate={{
+              boxShadow: [
+                "inset 0 0 30px hsl(221,83%,53%,0.0)",
+                "inset 0 0 30px hsl(221,83%,53%,0.08)",
+                "inset 0 0 30px hsl(221,83%,53%,0.0)",
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          />
+          <p className="relative z-10 text-sm text-muted-foreground mb-3">Taleplerinizi şu adrese iletebilirsiniz:</p>
+          <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors text-sm relative z-10">
+            <motion.span
+              className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10"
+              animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 14px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Mail className="h-4 w-4 text-primary" />
+            </motion.span>
+            deniz@zorludigitalplaza.com
+          </a>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
