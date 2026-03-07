@@ -1734,6 +1734,7 @@ export function GizlilikPolitikasiPage() {
 
 export function KvkkPage() {
   const { t } = useLanguage();
+  return (
     <div className="container py-12 md:py-16 max-w-3xl">
       <motion.h1
         className="font-display text-3xl md:text-4xl font-extrabold mb-6"
