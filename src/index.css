@@ -133,6 +133,50 @@
   }
 }
 
+/* ===== BLUE PULSE ANIMATIONS ===== */
+
+/* Heading color pulse */
+@keyframes heading-pulse {
+  0%, 100% { color: hsl(var(--foreground)); }
+  50% { color: hsl(var(--primary)); }
+}
+.pulse-heading {
+  animation: heading-pulse 4s ease-in-out infinite;
+}
+
+/* Icon glow pulse */
+@keyframes icon-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0);
+    background-color: hsl(var(--primary) / 0.1);
+  }
+  50% {
+    box-shadow: 0 0 16px 4px hsl(var(--primary) / 0.2);
+    background-color: hsl(var(--primary) / 0.2);
+  }
+}
+.pulse-icon {
+  animation: icon-pulse 3s ease-in-out infinite;
+}
+
+/* Card border glow pulse */
+@keyframes card-pulse {
+  0%, 100% { border-color: hsl(var(--border)); box-shadow: 0 0 0 0 hsl(var(--primary) / 0); }
+  50% { border-color: hsl(var(--primary) / 0.4); box-shadow: 0 0 20px -4px hsl(var(--primary) / 0.15); }
+}
+.pulse-card {
+  animation: card-pulse 4s ease-in-out infinite;
+}
+
+/* Button pulse */
+@keyframes btn-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4); }
+  50% { box-shadow: 0 0 0 8px hsl(var(--primary) / 0); }
+}
+.pulse-btn {
+  animation: btn-pulse 2.5s ease-in-out infinite;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
