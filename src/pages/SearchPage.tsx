@@ -6,6 +6,7 @@ import { Search, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import ProductCard from "@/components/ProductCard";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -14,6 +15,7 @@ export default function SearchPage() {
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
   const { data: products = [] } = useProducts();
+  const { t, lang } = useLanguage();
 
   const hasSpeechSupport = typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
 
@@ -26,7 +28,7 @@ export default function SearchPage() {
     if (!hasSpeechSupport) return;
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SR();
-    recognition.lang = "tr-TR";
+    recognition.lang = lang === "tr" ? "tr-TR" : "en-US";
     recognition.continuous = false;
     recognition.interimResults = true;
 
@@ -42,7 +44,7 @@ export default function SearchPage() {
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
-  }, [hasSpeechSupport, setSearchParams]);
+  }, [hasSpeechSupport, setSearchParams, lang]);
 
   useEffect(() => () => { recognitionRef.current?.stop(); }, []);
 
@@ -63,14 +65,14 @@ export default function SearchPage() {
 
   return (
     <div className="container py-6">
-      <h1 className="font-display text-2xl font-bold mb-4 text-foreground">Ürün Ara</h1>
+      <h1 className="font-display text-2xl font-bold mb-4 text-foreground">{t("search.title")}</h1>
       <div className="relative mb-6 flex items-center gap-2">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             value={query}
             onChange={e => handleSearch(e.target.value)}
-            placeholder="Ürün adı, marka veya kategori..."
+            placeholder={t("search.placeholder")}
             className="pl-10 h-11"
             autoFocus
           />
@@ -85,14 +87,14 @@ export default function SearchPage() {
               isListening && "text-destructive bg-destructive/10 animate-pulse"
             )}
             onClick={isListening ? stopListening : startListening}
-            title={isListening ? "Dinlemeyi durdur" : "Sesle ara"}
+            title={isListening ? t("search.stopListening") : t("search.voiceSearch")}
           >
             {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5 text-primary" />}
           </Button>
         )}
       </div>
       {query.trim() && (
-        <p className="text-sm text-muted-foreground mb-4">{results.length} sonuç bulundu</p>
+        <p className="text-sm text-muted-foreground mb-4">{results.length} {t("general.resultsFound")}</p>
       )}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {results.map(p => <ProductCard key={p.id} product={p} />)}

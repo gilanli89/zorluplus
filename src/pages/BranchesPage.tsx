@@ -2,12 +2,15 @@ import { BRANCHES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Clock } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function BranchesPage() {
+  const { t } = useLanguage();
+
   return (
     <div className="container py-8 md:py-12">
-      <h1 className="font-display text-2xl md:text-3xl font-bold mb-2 text-foreground">Şubelerimiz</h1>
-      <p className="text-muted-foreground mb-8">Ürünleri yerinde görün, uzman ekibimizle tanışın</p>
+      <h1 className="font-display text-2xl md:text-3xl font-bold mb-2 text-foreground">{t("branches.title")}</h1>
+      <p className="text-muted-foreground mb-8">{t("branches.subtitle")}</p>
 
       <div className="grid gap-8">
         {BRANCHES.map((b, i) => (
@@ -46,10 +49,10 @@ export default function BranchesPage() {
               </div>
               <div className="flex gap-3">
                 <a href={b.mapsLink} target="_blank" rel="noopener noreferrer">
-                  <Button className="gap-2 rounded-full"><MapPin className="h-4 w-4" /> Yol Tarifi Al</Button>
+                  <Button className="gap-2 rounded-full"><MapPin className="h-4 w-4" /> {t("branches.getDirections")}</Button>
                 </a>
                 <a href={`tel:${b.phone}`}>
-                  <Button variant="outline" className="gap-2 rounded-full"><Phone className="h-4 w-4" /> Ara</Button>
+                  <Button variant="outline" className="gap-2 rounded-full"><Phone className="h-4 w-4" /> {t("branches.call")}</Button>
                 </a>
               </div>
             </div>

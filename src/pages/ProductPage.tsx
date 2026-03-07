@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/ProductCard";
 import QuoteForm from "@/components/QuoteForm";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 
 export default function ProductPage() {
@@ -18,6 +19,7 @@ export default function ProductPage() {
   const { data: products = [], isLoading } = useProducts();
   const { recentIds, addViewed } = useRecentlyViewed();
   const stripRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
   
   const product = getProductBySlug(products, slug || "");
 
@@ -28,7 +30,7 @@ export default function ProductPage() {
   }, [product?.id]);
 
   if (isLoading) return <div className="container py-8"><Skeleton className="h-96 rounded-xl" /></div>;
-  if (!product) return <div className="container py-16 text-center"><h1 className="text-2xl font-bold text-foreground">Ürün bulunamadı</h1><Link to="/" className="text-primary mt-4 inline-block">Ana Sayfaya Dön</Link></div>;
+  if (!product) return <div className="container py-16 text-center"><h1 className="text-2xl font-bold text-foreground">{t("product.notFound")}</h1><Link to="/" className="text-primary mt-4 inline-block">{t("product.goHome")}</Link></div>;
 
   const category = CATEGORIES.find(c => c.slug === product.category);
   const subcategory = category?.children.find(s => s.slug === product.subcategory);
@@ -46,7 +48,7 @@ export default function ProductPage() {
         <div className="bg-muted/40 border-b border-border">
           <div className="container py-3">
             <div className="flex items-center gap-2 mb-2">
-              <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex-1">Benzer Ürünler</h2>
+              <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex-1">{t("product.similar")}</h2>
               <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => scrollStrip("left")}><ChevronLeft className="h-4 w-4" /></Button>
               <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => scrollStrip("right")}><ChevronRight className="h-4 w-4" /></Button>
             </div>
@@ -68,9 +70,9 @@ export default function ProductPage() {
       <div className="container py-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-4 flex-wrap">
-          <Link to="/" className="hover:text-foreground">Ana Sayfa</Link>
+          <Link to="/" className="hover:text-foreground">{t("general.homePage")}</Link>
           <span>/</span>
-          {category && <><Link to={`/kategori/${category.slug}`} className="hover:text-foreground">{category.name}</Link><span>/</span></>}
+          {category && <><Link to={`/kategori/${category.slug}`} className="hover:text-foreground">{t(`cat.${category.slug}`) || category.name}</Link><span>/</span></>}
           {subcategory && <><Link to={`/kategori/${category!.slug}/${subcategory.slug}`} className="hover:text-foreground">{subcategory.name}</Link><span>/</span></>}
           <span className="text-foreground line-clamp-1">{product.name}</span>
         </nav>
@@ -85,29 +87,29 @@ export default function ProductPage() {
           <div className="flex flex-col gap-4">
             <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{product.brand}</p>
             <h1 className="font-display text-2xl font-bold text-foreground">{product.name}</h1>
-            <p className="text-sm font-medium text-primary">Fiyat bilgisi için bizi arayın</p>
+            <p className="text-sm font-medium text-primary">{t("product.callForPrice")}</p>
 
             <Badge variant={product.inStock ? "default" : "secondary"} className="w-fit">
-              {product.inStock ? "Stokta" : "Stokta Yok"}
+              {product.inStock ? t("product.inStock") : t("product.outOfStock")}
             </Badge>
 
             <div className="flex flex-wrap gap-3 py-2">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><Shield className="h-4 w-4 text-primary" /> Yetkili Servis</div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><Award className="h-4 w-4 text-primary" /> 2 Yıl Garanti</div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><Wrench className="h-4 w-4 text-primary" /> Ücretsiz Montaj</div>
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><Shield className="h-4 w-4 text-primary" /> {t("product.authorizedService")}</div>
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><Award className="h-4 w-4 text-primary" /> {t("product.warranty")}</div>
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><Wrench className="h-4 w-4 text-primary" /> {t("product.freeInstall")}</div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
               <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer" className="flex-1" onClick={() => trackWhatsAppClick("product_page")}>
                 <Button size="lg" className="w-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white font-semibold">
-                  <MessageCircle className="h-5 w-5" /> WhatsApp ile Sipariş Ver
+                  <MessageCircle className="h-5 w-5" /> {t("product.orderWhatsApp")}
                 </Button>
               </a>
             </div>
 
             {Object.keys(product.specs).length > 0 && (
               <div className="mt-4">
-                <h3 className="font-display font-bold text-foreground mb-3">Teknik Özellikler</h3>
+                <h3 className="font-display font-bold text-foreground mb-3">{t("product.specs")}</h3>
                 <table className="w-full text-sm">
                   <tbody>
                     {Object.entries(product.specs).map(([k, v]) => (
@@ -123,13 +125,13 @@ export default function ProductPage() {
 
             {product.description && (
               <div className="mt-4">
-                <h3 className="font-display font-bold text-foreground mb-2">Ürün Açıklaması</h3>
+                <h3 className="font-display font-bold text-foreground mb-2">{t("product.description")}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{product.description}</p>
               </div>
             )}
 
             <div className="mt-6 rounded-xl border border-border bg-muted/30 p-5">
-              <h3 className="font-display font-bold text-foreground mb-3">Bu Ürün İçin Teklif Al</h3>
+              <h3 className="font-display font-bold text-foreground mb-3">{t("product.getQuote")}</h3>
               <QuoteForm
                 productId={product.id}
                 productSku={product.sku}
@@ -142,7 +144,7 @@ export default function ProductPage() {
 
         {recentlyViewed.length > 0 && (
           <section className="mt-12">
-            <h2 className="font-display text-xl font-bold mb-4 text-foreground">Son Görüntülenen</h2>
+            <h2 className="font-display text-xl font-bold mb-4 text-foreground">{t("product.recentlyViewed")}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{recentlyViewed.map(p => <ProductCard key={p.id} product={p} />)}</div>
           </section>
         )}
