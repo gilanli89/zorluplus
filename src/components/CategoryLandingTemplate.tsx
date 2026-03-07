@@ -197,7 +197,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
               <p className="text-muted-foreground leading-relaxed mb-6">{config.benefitsDescription}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {config.benefits.map((b, i) => (
-                  <motion.div key={b.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex gap-3 rounded-xl border border-border bg-card p-4">
+                  <motion.div key={b.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex gap-3 rounded-xl border border-border bg-card p-4 pulse-card" style={{ animationDelay: `${i * 0.6}s` }}>
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary pulse-icon" style={{ animationDelay: `${i * 0.4}s` }}><b.icon className="h-5 w-5" /></div>
                     <div>
                       <p className="text-sm font-bold text-foreground">{b.title}</p>
