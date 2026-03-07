@@ -203,7 +203,7 @@ export default function TVLandingPage() {
                 {t("lp.tv.heroHighlight")}
               </span>
             </h1>
-            <p className="text-white/80 text-lg md:text-xl mb-8 max-w-lg leading-relaxed">
+            <p className="text-white/80 body-lg mb-8 max-w-lg">
               {t("lp.tv.heroDesc")}
             </p>
             <div className="flex flex-wrap gap-3">
