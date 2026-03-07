@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { BRAND, FOOTER_LINKS } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 import zorluLogo from "@/assets/zorlu-logo.png";
-import zorluDtasLogo from "@/assets/zorlu-dtas-logo.png";
+import zorluDigitalLogo from "@/assets/zorlu-digital-logo.png";
 
 const stagger = {
   hidden: {},
@@ -163,9 +163,26 @@ export default function Footer() {
           </div>
         </motion.div>
 
-        <div className="mt-8 pt-6 border-t border-border flex flex-col items-center gap-4 text-center">
-          <img src={zorluDtasLogo} alt="Zorlu Digital Trade & Services Ltd." className="h-32 md:h-40 w-auto object-contain shrink-0 dark:brightness-0 dark:invert" />
-          <p className="text-sm md:text-base font-bold text-muted-foreground">
+        <div className="mt-8 pt-6 border-t border-border flex items-center gap-6 relative overflow-hidden rounded-2xl p-6 bg-gradient-to-r from-card via-card to-card">
+          {/* Blockchain circuit animation */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div className="blockchain-line blockchain-line-1" />
+            <div className="blockchain-line blockchain-line-2" />
+            <div className="blockchain-line blockchain-line-3" />
+            <div className="blockchain-dot blockchain-dot-1" />
+            <div className="blockchain-dot blockchain-dot-2" />
+            <div className="blockchain-dot blockchain-dot-3" />
+            <div className="blockchain-dot blockchain-dot-4" />
+            <div className="blockchain-dot blockchain-dot-5" />
+          </div>
+          <motion.img
+            src={zorluDigitalLogo}
+            alt="Zorlu Digital Trade & Services Ltd."
+            className="h-24 md:h-32 w-auto object-contain shrink-0 relative z-10 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+            animate={{ filter: ["drop-shadow(0 0 8px rgba(59,130,246,0.3))", "drop-shadow(0 0 20px rgba(59,130,246,0.6))", "drop-shadow(0 0 8px rgba(59,130,246,0.3))"] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <p className="text-sm md:text-base font-bold text-muted-foreground relative z-10">
             ZorluPlus bir Zorlu Digital Trade &amp; Services Ltd. kuruluşudur. Tüm hakları saklıdır. 2026©
           </p>
         </div>
