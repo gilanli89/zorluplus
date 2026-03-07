@@ -94,7 +94,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
               {config.heroTitle}<br />
               <span className={`bg-gradient-to-r ${heroGradient} bg-clip-text text-transparent`}>{config.heroTitleHighlight}</span>
             </h1>
-            <p className="text-white/80 text-lg md:text-xl mb-8 max-w-lg leading-relaxed">{config.heroDescription}</p>
+            <p className="text-white/80 body-lg mb-8 max-w-lg">{config.heroDescription}</p>
             <div className="flex flex-wrap gap-3">
               <a href="#urunler">
                 <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg">
