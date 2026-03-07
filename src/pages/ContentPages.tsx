@@ -122,7 +122,7 @@ export function HakkimizdaPage() {
             >
               {t("about.since")}
             </motion.span>
-            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-4">
+            <h1 className="heading-1 mb-4">
               <motion.span
                 className="inline-block"
                 animate={{ color: ["hsl(0,0%,100%)", "hsl(210,100%,80%)", "hsl(0,0%,100%)"] }}
