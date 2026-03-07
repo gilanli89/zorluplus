@@ -56,10 +56,22 @@ export default function Footer() {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {trustBadges.map(b => (
+          {trustBadges.map((b, i) => (
             <motion.div key={b.label} variants={fadeItem} className="text-center">
-              <p className="font-display font-bold text-sm text-foreground">{b.label}</p>
-              <p className="text-xs text-muted-foreground">{b.desc}</p>
+              <motion.p
+                className="font-display font-bold text-base md:text-lg"
+                animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+              >
+                {b.label}
+              </motion.p>
+              <motion.p
+                className="text-sm md:text-base"
+                animate={{ color: ["hsl(215,16%,47%)", "hsl(221,83%,70%)", "hsl(215,16%,47%)"] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+              >
+                {b.desc}
+              </motion.p>
             </motion.div>
           ))}
         </motion.div>
