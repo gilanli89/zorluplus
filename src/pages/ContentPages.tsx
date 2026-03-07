@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import ContentPage from "@/components/ContentPage";
 import { motion } from "framer-motion";
-import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote } from "lucide-react";
+import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, Mail } from "lucide-react";
 import { BRANCHES } from "@/lib/constants";
 
 const testimonials = [
