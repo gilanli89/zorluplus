@@ -20,24 +20,69 @@ export function HakkimizdaPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground">
-        <div className="container py-16 md:py-24">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="text-primary-foreground/60 font-semibold text-sm tracking-wider uppercase">1999'dan beri</span>
-            <h1 className="font-display text-3xl md:text-5xl font-extrabold leading-tight mt-3 mb-6">
-              Kaliteyi ve Güvenilir<br />Ürünleri Benimsiyoruz
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground">
+        {/* Animated background particles */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div className="absolute top-[10%] left-[5%] w-64 h-64 rounded-full bg-white/5 blur-3xl" animate={{ x: [0, 40, 0], y: [0, -20, 0], scale: [1, 1.2, 1] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} />
+          <motion.div className="absolute bottom-[10%] right-[10%] w-48 h-48 rounded-full bg-white/8 blur-3xl" animate={{ x: [0, -30, 0], y: [0, 30, 0], scale: [1.1, 0.9, 1.1] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
+          <motion.div className="absolute top-[40%] right-[30%] w-32 h-32 rounded-full bg-white/5 blur-2xl" animate={{ x: [0, 20, 0], y: [0, 20, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }} />
+        </div>
+        <div className="container relative z-10 py-16 md:py-24">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+            <motion.span
+              className="inline-block font-semibold text-sm tracking-wider uppercase mb-3"
+              animate={{ color: ["rgba(255,255,255,0.6)", "rgba(255,255,255,1)", "rgba(255,255,255,0.6)"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
+              1999'dan beri
+            </motion.span>
+            <h1 className="font-display text-3xl md:text-5xl font-extrabold leading-tight mb-8">
+              <motion.span
+                className="inline-block"
+                animate={{ color: ["hsl(0,0%,100%)", "hsl(210,100%,80%)", "hsl(0,0%,100%)"] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                Kaliteyi ve Güvenilir
+              </motion.span>
+              <br />
+              <motion.span
+                className="inline-block"
+                animate={{ color: ["hsl(210,100%,80%)", "hsl(0,0%,100%)", "hsl(210,100%,80%)"] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                Ürünleri Benimsiyoruz
+              </motion.span>
             </h1>
             <div className="flex flex-wrap gap-6 md:gap-10">
-              {stats.map(s => (
-                <div key={s.label} className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-xl bg-primary-foreground/15 flex items-center justify-center">
+              {stats.map((s, i) => (
+                <motion.div
+                  key={s.label}
+                  className="flex items-center gap-3"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 + i * 0.15 }}
+                >
+                  <motion.div
+                    className="h-12 w-12 rounded-xl flex items-center justify-center"
+                    animate={{
+                      backgroundColor: ["rgba(255,255,255,0.15)", "rgba(255,255,255,0.25)", "rgba(255,255,255,0.15)"],
+                      boxShadow: ["0 0 0px rgba(255,255,255,0)", "0 0 20px rgba(255,255,255,0.2)", "0 0 0px rgba(255,255,255,0)"],
+                    }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+                  >
                     <s.icon className="h-6 w-6" />
-                  </div>
+                  </motion.div>
                   <div>
-                    <p className="font-display text-2xl font-extrabold">{s.value}</p>
+                    <motion.p
+                      className="font-display text-2xl font-extrabold"
+                      animate={{ color: ["hsl(0,0%,100%)", "hsl(210,100%,85%)", "hsl(0,0%,100%)"] }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
+                    >
+                      {s.value}
+                    </motion.p>
                     <p className="text-primary-foreground/70 text-sm">{s.label}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </motion.div>
