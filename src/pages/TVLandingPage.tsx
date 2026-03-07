@@ -269,7 +269,7 @@ export default function TVLandingPage() {
             <aside className="hidden lg:block w-56 shrink-0">
               <div className="sticky top-28 rounded-2xl border border-border bg-card p-5">
                 <h3 className="text-sm font-bold text-foreground mb-4 flex items-center gap-2">
-                  <SlidersHorizontal className="h-4 w-4" /> Filtrele
+                  <SlidersHorizontal className="h-4 w-4" /> {t("lp.tv.filter")}
                 </h3>
                 <FilterContent />
               </div>
