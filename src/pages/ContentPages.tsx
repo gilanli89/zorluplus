@@ -332,7 +332,7 @@ export function HakkimizdaPage() {
           >
             {t("about.b2b.title")}
           </motion.h2>
-          <p className="text-muted-foreground text-lg mb-4">{t("about.b2b.desc")}</p>
+          <p className="text-muted-foreground body-lg mb-4">{t("about.b2b.desc")}</p>
           <motion.ul
             className="space-y-3 list-none pl-0 mb-6"
             initial="hidden"
