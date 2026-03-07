@@ -288,7 +288,7 @@ export default function TVLandingPage() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto rounded-t-2xl">
-                  <SheetTitle className="text-lg font-bold mb-4">Filtrele</SheetTitle>
+                  <SheetTitle className="text-lg font-bold mb-4">{t("lp.tv.filter")}</SheetTitle>
                   <FilterContent />
                 </SheetContent>
               </Sheet>
