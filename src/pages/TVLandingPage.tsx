@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
 import {
   Shield, Award, Wrench, MessageCircle, Phone, CheckCircle2,
