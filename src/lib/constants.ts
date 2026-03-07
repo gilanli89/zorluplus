@@ -3,7 +3,7 @@ export const BRAND = {
   shortName: "ZorluPlus",
   phone: "+90 548 878 31 31",
   phoneDisplay: "0548 878 31 31",
-  email: "info@zorluplus.com",
+  email: "deniz@zorludigitalplaza.com",
   whatsappLink: "https://api.whatsapp.com/send/?phone=905488783131&text&type=phone_number&app_absent=0",
   social: {
     facebook: "https://www.facebook.com/ZorluDigitalPlaza/",
