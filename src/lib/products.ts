@@ -72,6 +72,10 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
     { match: "televizyon", category: "tv-goruntu", subcategory: "tv" },
     { match: "kulaklık", category: "ses-sistemleri", subcategory: "kulaklik" },
     { match: "kulaklik", category: "ses-sistemleri", subcategory: "kulaklik" },
+    { match: "askı aparat", category: "tv-goruntu", subcategory: "duvar-masaustu-aparatlari" },
+    { match: "tv askı", category: "tv-goruntu", subcategory: "duvar-masaustu-aparatlari" },
+    { match: "duvar aparat", category: "tv-goruntu", subcategory: "duvar-masaustu-aparatlari" },
+    { match: "masaüstü aparat", category: "tv-goruntu", subcategory: "duvar-masaustu-aparatlari" },
     { match: "tv", category: "tv-goruntu", subcategory: "tv" },
     { match: "soundbar", category: "tv-goruntu", subcategory: "soundbar" },
     { match: "ses sistem", category: "tv-goruntu", subcategory: "soundbar" },
@@ -108,12 +112,25 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
 
 function parseRow(row: Record<string, string>, index: number): Product {
   const rawCat = row["Kategoriler"] || row["Kategori"] || row["Category"] || row["category"] || "";
-  const { category, subcategory } = normalizeCategorySlug(rawCat);
+  let { category, subcategory } = normalizeCategorySlug(rawCat);
   const name = row["İsim"] || row["Ürün Adı"] || row["Name"] || row["name"] || `Ürün ${index + 1}`;
+  const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
+
+  // Override: route mount/bracket products to duvar-masaustu-aparatlari
+  const nameLower = name.toLowerCase();
+  const brandLower = brand.toLowerCase().trim();
+  if (
+    brandLower === "brateck" || brandLower === "aksesuar" ||
+    nameLower.includes("askı aparat") || nameLower.includes("tv askı") ||
+    nameLower.includes("duvar aparat") || nameLower.includes("masaüstü aparat") ||
+    nameLower.includes("wall mount") || nameLower.includes("desk mount")
+  ) {
+    category = "tv-goruntu";
+    subcategory = "duvar-masaustu-aparatlari";
+  }
   const sku = (row["Stok kodu (SKU)"] || row["SKU"] || row["sku"] || row["Kimlik"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
   const price = parseFloat(row["Normal fiyat"] || row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
   const salePrice = parseFloat(row["İndirimli satış fiyatı"] || row["İndirimli Fiyat"] || row["Sale Price"] || "0") || undefined;
-  const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
   const fallback = getFallbackImage(category, subcategory);
   const rawImage = row["Görseller"] || row["Image"] || row["Görsel"] || row["image"] || "";
   const images = rawImage ? rawImage.split(",").map(s => s.trim()).filter(Boolean).map(u => cloudinaryFetch(u)) : [];

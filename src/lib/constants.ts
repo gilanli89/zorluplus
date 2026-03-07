@@ -84,6 +84,7 @@ export const CATEGORIES = [
     children: [
       { slug: "tv", name: "Televizyon" },
       { slug: "soundbar", name: "Soundbar / Ses Sistemleri" },
+      { slug: "duvar-masaustu-aparatlari", name: "Duvar ve Masaüstü Aparatları" },
     ],
   },
   {
