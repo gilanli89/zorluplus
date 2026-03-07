@@ -2,10 +2,10 @@ import { Shield, Award, Wrench, Truck } from "lucide-react";
 import { motion } from "framer-motion";
 
 const items = [
-  { icon: Shield, label: "Yetkili Servis", desc: "Samsung & LG", hasBrandLogos: true },
-  { icon: Award, label: "2 Yıl Garanti", desc: "Resmi garanti", hasBrandLogos: false },
-  { icon: Wrench, label: "Ücretsiz Montaj", desc: "Uygun ürünlerde", hasBrandLogos: false },
-  { icon: Truck, label: "Hızlı Teslimat", desc: "Tüm KKTC'ye", hasBrandLogos: false },
+  { icon: Shield, label: "Yetkili Servis", desc: "Samsung & LG", hasBrandLogos: true, customIcon: null },
+  { icon: Award, label: "2 Yıl Garanti", desc: "Resmi garanti", hasBrandLogos: false, customIcon: null },
+  { icon: Wrench, label: "Ücretsiz Montaj", desc: "Uygun ürünlerde", hasBrandLogos: false, customIcon: null },
+  { icon: Truck, label: "Hızlı Teslimat", desc: "Tüm KKTC'ye", hasBrandLogos: false, customIcon: "/icons/delivery-truck.gif" },
 ];
 
 const containerVariants = {
@@ -37,8 +37,12 @@ export default function TrustSection() {
               variants={itemVariants}
               className="flex items-center gap-3 group"
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary/15 transition-colors duration-300">
-                <item.icon className="h-5 w-5 icon-hover-rotate" />
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary/15 transition-colors duration-300 overflow-hidden">
+                {item.customIcon ? (
+                  <img src={item.customIcon} alt={item.label} className="h-8 w-8 object-contain" />
+                ) : (
+                  <item.icon className="h-5 w-5 icon-hover-rotate" />
+                )}
               </div>
               {item.hasBrandLogos ? (
                 <img src="/brands/yetkili-servis-badge.png" alt="Samsung & LG Yetkili Servis" className="h-10 w-auto object-contain" />
