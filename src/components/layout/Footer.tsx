@@ -46,6 +46,7 @@ export default function Footer() {
     { label: "KVKK / GDPR", href: "/kvkk" },
     { label: "Çerez Politikası", href: "/cerez-politikasi" },
     { label: "Mesafeli Satış Sözleşmesi", href: "/mesafeli-satis-sozlesmesi" },
+    { label: "Sürdürülebilirlik", href: "/surdurulebilirlik" },
   ];
 
   return (

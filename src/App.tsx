@@ -100,6 +100,7 @@ const App = () => (
               <Route path="/kvkk" element={<KvkkPage />} />
               <Route path="/cerez-politikasi" element={<CerezPolitikasiPage />} />
               <Route path="/mesafeli-satis-sozlesmesi" element={<MesafeliSatisSozlesmesiPage />} />
+              <Route path="/surdurulebilirlik" element={<SurdurulebilirlikPage />} />
               <Route path="/siparis-takip" element={<SiparisTakipPage />} />
               <Route path="/odeme-yontemleri" element={<OdemeYontemleriPage />} />
               <Route path="/odeme" element={<CheckoutPage />} />
