@@ -46,7 +46,7 @@ export default function TrustSection() {
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <img src="/brands/samsung-logo.jpg" alt="Samsung" className="h-3.5 w-auto object-contain dark:invert" />
                     <span className="text-xs text-muted-foreground">&</span>
-                    <img src="/brands/lg-logo.png" alt="LG" className="h-3.5 w-auto object-contain" />
+                    <img src="/brands/lg-logo.jpg" alt="LG" className="h-3.5 w-auto object-contain" />
                   </div>
                 ) : (
                   <p className="text-xs text-muted-foreground">{item.desc}</p>
