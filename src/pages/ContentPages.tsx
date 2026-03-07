@@ -54,7 +54,16 @@ function CountUp({ target, suffix, duration = 2 }: { target: number; suffix: str
 export function HakkimizdaPage() {
   const { t } = useLanguage();
 
-  const brands = ["Samsung", "LG", "Midea", "AUX", "Toshiba", "Philips", "Krups", "Sharp"];
+  const brands = [
+    { name: "Samsung", logo: "/brands/samsung-logo.png" },
+    { name: "LG", logo: "/brands/lg-logo.png" },
+    { name: "Midea", logo: "/brands/midea.png" },
+    { name: "AUX", logo: "/brands/aux.png" },
+    { name: "Toshiba", logo: "/brands/toshiba.png" },
+    { name: "Philips", logo: "/brands/philips.png" },
+    { name: "Krups", logo: "/brands/krups.png" },
+    { name: "Sharp", logo: "/brands/sharp.png" },
+  ];
 
   const whyFeatures = [
     t("about.why.f1"), t("about.why.f2"), t("about.why.f3"),
