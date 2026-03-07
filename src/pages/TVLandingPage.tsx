@@ -254,7 +254,7 @@ export default function TVLandingPage() {
         <div className="container">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="heading-2 text-foreground">
+              <h2 className="heading-2 text-foreground pulse-heading">
                 {t("lp.tv.productsTitle")}
               </h2>
               <p className="text-muted-foreground mt-1">{display.length} {t("lp.tv.productsCount")}</p>
