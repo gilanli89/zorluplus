@@ -1406,7 +1406,7 @@ export function IadeKosullariPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Premium İade ve Değişim Politikası
+          {t("content.returns.title")}
         </motion.span>
       </motion.h1>
       <p className="text-sm text-muted-foreground mb-8">Son Güncelleme Tarihi: 23.12.2025</p>
