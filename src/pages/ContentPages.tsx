@@ -3,6 +3,7 @@ import ContentPage from "@/components/ContentPage";
 import { motion } from "framer-motion";
 import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, Mail, Recycle, BatteryCharging, Zap, Globe, Lightbulb, Leaf } from "lucide-react";
 import { BRANCHES } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const testimonials = [
   { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
@@ -583,21 +584,23 @@ export function KunyePage() {
 }
 
 export function EkibimizPage() {
+  const { t } = useLanguage();
+  
   const team = [
-    { name: "Halil Kavaz", role: "CEO & Founder", photo: "/team/halil-kavaz.png" },
-    { name: "Deniz Bisikletçiler", role: "Coordinator", photo: "/team/deniz-bisikletciler.png" },
-    { name: "Serkan Taras", role: "Mağusa – Store Manager", photo: "/team/serkan-taras.png" },
-    { name: "Çisem Özdoğan", role: "Lefkoşa – Store Manager", photo: "/team/cisem-ozdogan.png" },
-    { name: "Mustafa Özdoğan", role: "Lefkoşa – Sales Representative", photo: "/team/mustafa-ozdogan.png" },
-    { name: "Dilfuza Jumakova", role: "Lefkoşa – Sales Representative", photo: "/team/dilfuza-jumakova.png" },
-    { name: "Alaaeddin Erdemci", role: "White Goods Chef", photo: "/team/alaaeddin-erdemci.png" },
-    { name: "Abed Azbaki", role: "Air Conditioning Technician", photo: "/team/abed-azbaki.png" },
-    { name: "Suhrap Alimov", role: "Air Conditioning Chef", photo: "/team/suhrap-alimov.png" },
-    { name: "Çakır Recepov", role: "TV Technician", photo: "/team/cakir-recepov.png" },
-    { name: "Bilal Muhammed", role: "TV Technician", photo: "/team/bilal-muhammed.png" },
-    { name: "Umit Rozyev", role: "TV Technician", photo: "/team/umit-rozyev.png" },
-    { name: "Ramazan Koshayev", role: "TV/AV Service Chief", photo: "/team/ramazan-koshayev.png" },
-    { name: "Karetta", role: "Yapay Zeka Asistan", photo: "/team/karetta.jpg" },
+    { name: "Halil Kavaz", roleKey: "team.role.ceo", branch: "", photo: "/team/halil-kavaz.png" },
+    { name: "Deniz Bisikletçiler", roleKey: "team.role.coordinator", branch: "", photo: "/team/deniz-bisikletciler.png" },
+    { name: "Serkan Taras", roleKey: "team.role.storeManager", branch: "Mağusa", photo: "/team/serkan-taras.png" },
+    { name: "Çisem Özdoğan", roleKey: "team.role.storeManager", branch: "Lefkoşa", photo: "/team/cisem-ozdogan.png" },
+    { name: "Mustafa Özdoğan", roleKey: "team.role.salesRep", branch: "Lefkoşa", photo: "/team/mustafa-ozdogan.png" },
+    { name: "Dilfuza Jumakova", roleKey: "team.role.salesRep", branch: "Lefkoşa", photo: "/team/dilfuza-jumakova.png" },
+    { name: "Alaaeddin Erdemci", roleKey: "team.role.whiteGoodsChef", branch: "", photo: "/team/alaaeddin-erdemci.png" },
+    { name: "Abed Azbaki", roleKey: "team.role.acTechnician", branch: "", photo: "/team/abed-azbaki.png" },
+    { name: "Suhrap Alimov", roleKey: "team.role.acChef", branch: "", photo: "/team/suhrap-alimov.png" },
+    { name: "Çakır Recepov", roleKey: "team.role.tvTechnician", branch: "", photo: "/team/cakir-recepov.png" },
+    { name: "Bilal Muhammed", roleKey: "team.role.tvTechnician", branch: "", photo: "/team/bilal-muhammed.png" },
+    { name: "Umit Rozyev", roleKey: "team.role.tvTechnician", branch: "", photo: "/team/umit-rozyev.png" },
+    { name: "Ramazan Koshayev", roleKey: "team.role.tvAvChief", branch: "", photo: "/team/ramazan-koshayev.png" },
+    { name: "Karetta", roleKey: "team.role.aiAssistant", branch: "", photo: "/team/karetta.jpg" },
   ];
 
   return (
@@ -612,7 +615,7 @@ export function EkibimizPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Ekibimiz
+          {t("team.title")}
         </motion.span>
       </motion.h1>
 
@@ -622,7 +625,7 @@ export function EkibimizPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.15 }}
       >
-        <strong className="text-foreground">Zorlu Digital Plaza</strong> ailesi, alanında uzman satış danışmanları ve teknik servis ekibinden oluşmaktadır. Müşteri memnuniyetini ön planda tutan ekibimiz, size en doğru ürünü seçmenizde yardımcı olur.
+        <strong className="text-foreground">Zorlu Digital Plaza</strong> {t("team.description").replace("Zorlu Digital Plaza ", "")}
       </motion.p>
 
       <motion.div
@@ -663,7 +666,7 @@ export function EkibimizPage() {
             >
               {m.name}
             </motion.p>
-            <p className="text-xs text-muted-foreground mt-1">{m.role}</p>
+            <p className="text-xs text-muted-foreground mt-1">{m.branch ? `${m.branch} – ` : ""}{t(m.roleKey)}</p>
           </motion.div>
         ))}
       </motion.div>
