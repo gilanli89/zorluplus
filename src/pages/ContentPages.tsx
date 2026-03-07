@@ -184,7 +184,7 @@ export function HakkimizdaPage() {
           >
             {t("about.intro.title")}
           </motion.h2>
-          <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
+          <div className="prose prose-lg max-w-none text-muted-foreground space-y-4 body-lg">
             <p>{t("about.intro.p1")}</p>
             <p>{t("about.intro.p2")}</p>
             <p>{t("about.intro.p3")}</p>
