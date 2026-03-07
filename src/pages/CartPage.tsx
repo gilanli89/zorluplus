@@ -46,7 +46,7 @@ export default function CartPage() {
     return (
       <div className="container max-w-3xl py-16 text-center">
         <ShoppingCart className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-        <h1 className="font-display text-2xl font-bold text-foreground mb-2">{t("cart.emptyTitle")}</h1>
+        <h1 className="heading-2 text-foreground mb-2">{t("cart.emptyTitle")}</h1>
         <p className="text-muted-foreground mb-6">{t("cart.emptyDesc")}</p>
         <Link to="/">
           <Button className="rounded-full gap-2"><ArrowLeft className="h-4 w-4" /> {t("cart.startShopping")}</Button>
