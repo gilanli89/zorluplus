@@ -260,7 +260,7 @@ export default function TVLandingPage() {
               <p className="text-muted-foreground mt-1">{display.length} {t("lp.tv.productsCount")}</p>
             </div>
             <Link to="/kategori/tv-goruntu" className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
-              Tümünü Gör <ArrowRight className="inline h-3.5 w-3.5" />
+              {t("lp.tv.viewAll")} <ArrowRight className="inline h-3.5 w-3.5" />
             </Link>
           </div>
 
