@@ -111,7 +111,7 @@ export function HakkimizdaPage() {
                       animate={{ color: ["hsl(0,0%,100%)", "hsl(210,100%,85%)", "hsl(0,0%,100%)"] }}
                       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
                     >
-                      {s.value}
+                      <CountUp target={s.value} suffix={s.suffix} />
                     </motion.p>
                     <p className="text-primary-foreground/70 text-sm">{s.label}</p>
                   </div>
