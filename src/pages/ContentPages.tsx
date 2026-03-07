@@ -596,7 +596,7 @@ export function EkibimizPage() {
     { name: "Çakır Recepov", role: "TV Technician", photo: "/team/cakir-recepov.png" },
     { name: "Bilal Muhammed", role: "TV Technician", photo: "/team/bilal-muhammed.png" },
     { name: "Umit Rozyev", role: "TV Technician", photo: "/team/umit-rozyev.png" },
-    { name: "Ramazan Koshayev", role: "Air Conditioning Technician", photo: "/team/ramazan-koshayev.png" },
+    { name: "Ramazan Koshayev", role: "TV/AV Service Chief", photo: "/team/ramazan-koshayev.png" },
     { name: "Karetta", role: "Yapay Zeka Asistan", photo: "/team/karetta.jpg" },
   ];
 
