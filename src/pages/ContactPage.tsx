@@ -9,7 +9,7 @@ export default function ContactPage() {
 
   return (
     <div className="container py-6">
-      <h1 className="font-display text-2xl font-bold mb-6 text-foreground">{t("contact.title")}</h1>
+      <h1 className="heading-2 mb-6 text-foreground pulse-heading">{t("contact.title")}</h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div>
           <div className="flex flex-col gap-4 mb-8">
