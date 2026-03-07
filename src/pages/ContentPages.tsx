@@ -138,7 +138,7 @@ export function HakkimizdaPage() {
             >
               {t("about.heroTitle2")}
             </motion.p>
-            <p className="text-primary-foreground/60 text-sm md:text-base mb-12">{t("about.heroSubtitle")}</p>
+            <p className="text-primary-foreground/60 body-sm mb-12">{t("about.heroSubtitle")}</p>
 
             <div className="flex flex-wrap justify-center gap-8 md:gap-16">
               {statsData.map((s, i) => (
