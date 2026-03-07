@@ -2023,7 +2023,7 @@ export function SiparisTakipPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Premium Sipariş Takibi
+          {t("content.orderTracking.title")}
         </motion.span>
       </motion.h1>
 
