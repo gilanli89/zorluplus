@@ -35,7 +35,7 @@ export default function HomePage() {
 
   const CATEGORY_WIDGETS = [
     { slug: "tv-goruntu", titleKey: "home.categoryWidgets.tv", subtitleKey: "home.categoryWidgets.tvSub", image: widgetTv },
-    { slug: "beyaz-esya", titleKey: "home.categoryWidgets.whiteGoods", subtitleKey: "home.categoryWidgets.whiteGoodsSub", image: widgetBeyazEsya },
+    { slug: "beyaz-esya", titleKey: "home.categoryWidgets.whiteGoods", subtitleKey: "home.categoryWidgets.whiteGoodsSub", badgeKey: "home.categoryWidgets.whiteGoodsBadge", ctaKey: "home.categoryWidgets.whiteGoodsCta", image: widgetBeyazEsya },
     { slug: "ankastre", titleKey: "home.categoryWidgets.builtin", subtitleKey: "home.categoryWidgets.builtinSub", image: widgetAnkastre },
     { slug: "klima-isitma", titleKey: "home.categoryWidgets.ac", subtitleKey: "home.categoryWidgets.acSub", image: widgetKlima },
   ];
@@ -75,9 +75,14 @@ export default function HomePage() {
                   <p className="text-white/80 body-sm mt-2">
                     {t(cat.subtitleKey)}
                   </p>
+                  {cat.badgeKey && (
+                    <p className="text-white/60 text-xs font-medium mt-2">
+                      {t(cat.badgeKey)}
+                    </p>
+                  )}
                   <div className="mt-4">
                     <span className="inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/30 rounded-full px-5 py-2 backdrop-blur-sm bg-white/10 group-hover:bg-white/20 transition-all duration-300">
-                      {t("home.explore")} <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      {cat.ctaKey ? t(cat.ctaKey) : t("home.explore")} <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
                 </div>
