@@ -11,6 +11,7 @@ import widgetTv from "@/assets/widget-tv.jpg";
 import widgetBeyazEsya from "@/assets/widget-beyaz-esya.jpg";
 import widgetAnkastre from "@/assets/widget-ankastre.jpg";
 import widgetKlima from "@/assets/widget-klima.jpg";
+import zorluBanner from "@/assets/zorlu-banner-footer.png";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -133,6 +134,16 @@ export default function HomePage() {
             ))}
           </motion.div>
         </div>
+      </section>
+
+      {/* Banner */}
+      <section className="w-full overflow-hidden">
+        <img
+          src={zorluBanner}
+          alt="Samsung & LG Yetkili Servis ve Satış Partneri"
+          className="w-full h-auto object-cover"
+          loading="lazy"
+        />
       </section>
 
     </>
