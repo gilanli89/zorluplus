@@ -18,7 +18,7 @@ export default function ContactPage() {
               <div><p className="text-sm text-muted-foreground">{t("contact.phone")}</p><p className="font-semibold">{BRAND.phoneDisplay}</p></div>
             </a>
             <a href={`mailto:${BRAND.email}`} className="flex items-center gap-3 text-foreground hover:text-primary transition-colors">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary"><Mail className="h-5 w-5" /></div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary pulse-icon" style={{ animationDelay: "0.5s" }}><Mail className="h-5 w-5" /></div>
               <div><p className="text-sm text-muted-foreground">{t("contact.email")}</p><p className="font-semibold">{BRAND.email}</p></div>
             </a>
             <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("contact_page")} className="flex items-center gap-3 text-foreground hover:text-success transition-colors">
