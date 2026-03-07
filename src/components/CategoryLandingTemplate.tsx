@@ -133,7 +133,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         <div className="container">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="heading-2 text-foreground">{config.productsTitle}</h2>
+              <h2 className="heading-2 text-foreground pulse-heading">{config.productsTitle}</h2>
               <p className="text-muted-foreground mt-1">{display.length} {t("landing.productsListing")}</p>
             </div>
             <Link to={config.productsCategoryLink} className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
