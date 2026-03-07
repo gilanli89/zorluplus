@@ -220,7 +220,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
       <section className="py-12 md:py-16 bg-muted/40">
         <div className="container max-w-3xl">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">{config.faqTitle}</h2>
+            <h2 className="heading-2 text-foreground mb-2">{config.faqTitle}</h2>
             <p className="text-muted-foreground">{config.faqDescription}</p>
           </motion.div>
           <div className="space-y-3">
