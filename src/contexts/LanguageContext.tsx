@@ -309,11 +309,11 @@ const translations: Record<string, Record<Lang, string>> = {
   "hero.subtitle3": { tr: "İdeal Sıcaklık.", en: "Ideal Temperature." },
   "hero.desc3": { tr: "Gelişmiş Inverter Klima Teknolojisi ile evinizde ve iş yerinizde maksimum konfor.", en: "Maximum comfort at home and work with advanced Inverter AC Technology." },
   "hero.cta3": { tr: "Yeni Nesil Klimaları İnceleyin", en: "Explore Next-Gen AC" },
-  "hero.badge4": { tr: "Yetkili Servis Merkezi", en: "Authorized Service Center" },
-  "hero.title4": { tr: "Samsung & LG", en: "Samsung & LG" },
-  "hero.subtitle4": { tr: "Yetkili Servis.", en: "Authorized Service." },
-  "hero.desc4": { tr: "Orijinal yedek parça, uzman teknisyen kadrosu ve garanti kapsamında profesyonel teknik servis hizmeti.", en: "Original spare parts, expert technicians and professional technical service under warranty." },
-  "hero.cta4": { tr: "Servis Talebi Oluştur", en: "Create Service Request" },
+  "hero.badge4": { tr: "Samsung & LG Yetkili Servis", en: "Samsung & LG Authorized Service" },
+  "hero.title4": { tr: "Elektronik cihazlarınız için", en: "Professional technical service" },
+  "hero.subtitle4": { tr: "profesyonel teknik servis.", en: "for your electronics." },
+  "hero.desc4": { tr: "Orijinal yedek parça, uzman teknik ekip ve garanti kapsamındaki servis hizmetleri Zorlu Digital Plaza güvencesiyle.", en: "Original spare parts, expert technical team and warranty service with Zorlu Digital Plaza assurance." },
+  "hero.cta4": { tr: "Teknik Servis Talebi Oluştur", en: "Create Service Request" },
 
   // About page
   "about.since": { tr: "1999'dan beri", en: "Since 1999" },
