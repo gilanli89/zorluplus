@@ -156,8 +156,8 @@ export const FOOTER_LINKS = {
     { label: "Künye", href: "/kunye" },
     { label: "Ekibimiz", href: "/ekibimiz" },
     { label: "Bize Ulaşın", href: "/iletisim" },
-    { label: "Şubelerimiz", href: "/subelerimiz" },
     { label: "B2B Kurumsal Satış", href: "/b2b" },
+    { label: "Şubelerimiz", href: "/subelerimiz" },
   ],
   destek: [
     { label: "Destek", href: "/destek" },
