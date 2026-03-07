@@ -2317,7 +2317,7 @@ export function SurdurulebilirlikPage() {
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
-            Sürdürülebilir Teknoloji Yaklaşımımız
+            {t("content.sustainability.title")}
           </motion.span>
         </motion.h1>
         <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">Zorlu Digital Plaza olarak teknolojinin geleceğini şekillendirirken çevresel sürdürülebilirliği iş modelimizin merkezine koyuyoruz.</p>
