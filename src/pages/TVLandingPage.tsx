@@ -197,7 +197,7 @@ export default function TVLandingPage() {
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold text-white mb-5 border border-white/20">
               <Shield className="h-3.5 w-3.5" /> {t("lp.tv.heroBadge")}
             </span>
-            <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.08] mb-4 text-white">
+            <h1 className="heading-1 mb-4 text-white">
               {t("lp.tv.heroTitle")}<br />
               <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
                 {t("lp.tv.heroHighlight")}
