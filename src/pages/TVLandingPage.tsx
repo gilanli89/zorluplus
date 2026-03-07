@@ -198,13 +198,13 @@ export default function TVLandingPage() {
               <Shield className="h-3.5 w-3.5" /> {t("lp.tv.heroBadge")}
             </span>
             <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.08] mb-4 text-white">
-              Sinema Deneyimini<br />
+              {t("lp.tv.heroTitle")}<br />
               <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                Evinize Getirin
+                {t("lp.tv.heroHighlight")}
               </span>
             </h1>
             <p className="text-white/80 text-lg md:text-xl mb-8 max-w-lg leading-relaxed">
-              OLED, QLED ve Smart TV'lerde yetkili bayi farkıyla. Ücretsiz duvar montajı ve 2 yıl garanti dahil.
+              {t("lp.tv.heroDesc")}
             </p>
             <div className="flex flex-wrap gap-3">
               <a href="#urunler">
