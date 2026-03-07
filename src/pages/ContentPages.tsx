@@ -252,7 +252,7 @@ export function HakkimizdaPage() {
           </motion.h2>
           <p className="text-muted-foreground body-lg mb-4">{t("about.brands.desc")}</p>
           <motion.h3
-            className="font-display text-xl font-bold mb-4"
+             className="heading-3 mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
