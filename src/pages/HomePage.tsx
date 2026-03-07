@@ -97,7 +97,7 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">{t("home.branches")}</h2>
+            <h2 className="heading-2 text-foreground">{t("home.branches")}</h2>
             <p className="text-muted-foreground mt-2">{t("home.branchesDesc")}</p>
           </motion.div>
           <motion.div
