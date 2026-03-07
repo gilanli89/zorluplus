@@ -2,10 +2,10 @@ import { Shield, Award, Wrench, Truck } from "lucide-react";
 import { motion } from "framer-motion";
 
 const items = [
-  { icon: Shield, label: "Yetkili Servis", desc: "Samsung & LG", hasBrandLogos: true },
-  { icon: Award, label: "2 Yıl Garanti", desc: "Resmi garanti", hasBrandLogos: false },
-  { icon: Wrench, label: "Ücretsiz Montaj", desc: "Uygun ürünlerde", hasBrandLogos: false },
-  { icon: Truck, label: "Hızlı Teslimat", desc: "Tüm KKTC'ye", hasBrandLogos: false },
+  { icon: Shield, label: "Yetkili Servis", desc: "Samsung & LG", hasBrandLogos: true, customIcon: null },
+  { icon: Award, label: "2 Yıl Garanti", desc: "Resmi garanti", hasBrandLogos: false, customIcon: null },
+  { icon: Wrench, label: "Ücretsiz Montaj", desc: "Uygun ürünlerde", hasBrandLogos: false, customIcon: null },
+  { icon: Truck, label: "Hızlı Teslimat", desc: "Tüm KKTC'ye", hasBrandLogos: false, customIcon: "/icons/delivery-truck.gif" },
 ];
 
 const containerVariants = {
