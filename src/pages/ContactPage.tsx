@@ -39,8 +39,8 @@ export default function ContactPage() {
           ))}
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-6">
-          <h2 className="font-display font-bold text-lg text-foreground mb-4">{t("contact.getQuote")}</h2>
+         <div className="rounded-xl border border-border bg-card p-6 pulse-card">
+           <h2 className="heading-4 text-foreground mb-4">{t("contact.getQuote")}</h2>
           <QuoteForm />
         </div>
       </div>
