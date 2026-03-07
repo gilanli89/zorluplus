@@ -2399,3 +2399,279 @@ export function SurdurulebilirlikPage() {
     </div>
   );
 }
+
+/* ───────── Havale ile Ödeme ───────── */
+export function HavaleOdemePage() {
+  const { t } = useLanguage();
+
+  const tips = [
+    t("content.havale.tip1"),
+    t("content.havale.tip2"),
+    t("content.havale.tip3"),
+    t("content.havale.tip4"),
+  ];
+
+  const banks = [
+    {
+      name: "Türkiye İş Bankası",
+      holder: "Zorlu Digital Trade & Services Ltd.",
+      iban: "TR75 0006 4000 0016 8180 8102 16",
+      uban: "—",
+      branch: "Hamitköy Lefkoşa Şubesi",
+    },
+    {
+      name: "İktisat Bankası (KKTC)",
+      holder: "Zorlu Digital Trade & Services Ltd.",
+      iban: "—",
+      uban: "Bilgi için iletişime geçiniz",
+      branch: "",
+    },
+  ];
+
+  return (
+    <div className="space-y-8">
+      {/* Hero */}
+      <motion.div
+        className="relative rounded-2xl border border-border bg-gradient-to-br from-primary/5 via-background to-primary/5 p-6 md:p-10 overflow-hidden"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          animate={{ boxShadow: ["inset 0 0 40px hsl(221,83%,53%,0.0)", "inset 0 0 40px hsl(221,83%,53%,0.15)", "inset 0 0 40px hsl(221,83%,53%,0.0)"] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.span
+          className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 mb-4"
+          animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 25px hsl(221,83%,53%,0.4)", "0 0 0px hsl(221,83%,53%,0)"] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Building2 className="h-7 w-7 text-primary" />
+        </motion.span>
+        <motion.h1
+          className="font-display text-2xl md:text-3xl font-bold mb-3 relative z-10"
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(var(--foreground))", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {t("content.havale.title")}
+        </motion.h1>
+        <p className="text-muted-foreground leading-relaxed max-w-2xl relative z-10">
+          {t("content.havale.desc")}
+        </p>
+      </motion.div>
+
+      {/* Important Notes */}
+      <motion.div
+        className="rounded-2xl border border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/20 p-5 md:p-6 space-y-3"
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        <div className="flex items-start gap-3">
+          <motion.span
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 dark:bg-amber-900/40 shrink-0"
+            animate={{ boxShadow: ["0 0 0px hsl(38,92%,50%,0)", "0 0 18px hsl(38,92%,50%,0.35)", "0 0 0px hsl(38,92%,50%,0)"] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <CheckCircle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+          </motion.span>
+          <div>
+            <p className="text-sm font-semibold text-foreground">{t("content.havale.orderNote")}</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("content.havale.cancelNote")}</p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Bank Accounts */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <h2 className="font-display text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+          <motion.span
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10"
+            animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 15px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Building2 className="h-4 w-4 text-primary" />
+          </motion.span>
+          {t("content.havale.bankAccounts")}
+        </h2>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {banks.map((bank, i) => (
+            <motion.div
+              key={bank.name}
+              className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden"
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.1 * i }}
+            >
+              <motion.div
+                className="absolute inset-0 rounded-2xl pointer-events-none"
+                animate={{ boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.1)", "inset 0 0 25px hsl(221,83%,53%,0.0)"] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+              />
+              <h3 className="font-display font-bold text-foreground text-lg mb-3 relative z-10">{bank.name}</h3>
+              <div className="space-y-2 text-sm relative z-10">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">{t("content.havale.accountHolder")}:</span>
+                  <span className="font-medium text-foreground text-right">{bank.holder}</span>
+                </div>
+                {bank.branch && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Şube:</span>
+                    <span className="font-medium text-foreground">{bank.branch}</span>
+                  </div>
+                )}
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">IBAN:</span>
+                  <span className="font-mono font-semibold text-foreground select-all text-right">{bank.iban}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">UBAN:</span>
+                  <span className="font-mono font-semibold text-foreground text-right">{bank.uban}</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* TR / KKTC Transfer Info */}
+      <motion.div
+        className="rounded-2xl border border-border bg-muted/30 p-5 md:p-6 space-y-2"
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.15 }}
+      >
+        <h3 className="font-display font-bold text-foreground flex items-center gap-2">
+          <Globe className="h-4 w-4 text-primary" />
+          {t("content.havale.trTransfers")}
+        </h3>
+        <p className="text-sm text-muted-foreground">{t("content.havale.trTransfersDesc")}</p>
+        <p className="text-sm text-muted-foreground">{t("content.havale.kktcTransfersDesc")}</p>
+      </motion.div>
+
+      {/* Important Tips */}
+      <motion.div
+        className="rounded-2xl border border-border bg-card p-5 md:p-6 relative overflow-hidden"
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.1)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <h3 className="font-display font-bold text-foreground mb-4 relative z-10">{t("content.havale.importantTitle")}</h3>
+        <div className="grid gap-3 sm:grid-cols-2 relative z-10">
+          {tips.map((tip, i) => (
+            <motion.div
+              key={i}
+              className="flex items-start gap-3 rounded-xl bg-primary/5 p-3"
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.1 * i }}
+            >
+              <motion.span
+                className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 shrink-0 mt-0.5"
+                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.35)", "0 0 0px hsl(221,83%,53%,0)"] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+              >
+                <CheckCircle className="h-3.5 w-3.5 text-primary" />
+              </motion.span>
+              <span className="text-sm text-foreground">{tip}</span>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Order Confirmation */}
+      <motion.div
+        className="rounded-2xl border border-border bg-card p-5 md:p-6 relative overflow-hidden"
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.25 }}
+      >
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          animate={{ boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.12)", "inset 0 0 25px hsl(221,83%,53%,0.0)"] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.span
+          className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 mb-3"
+          animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 18px hsl(221,83%,53%,0.35)", "0 0 0px hsl(221,83%,53%,0)"] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Truck className="h-5 w-5 text-primary" />
+        </motion.span>
+        <h3 className="font-display font-bold text-foreground mb-2 relative z-10">{t("content.havale.confirmTitle")}</h3>
+        <p className="text-sm text-muted-foreground mb-3 relative z-10">{t("content.havale.confirmDesc")}</p>
+        <p className="text-sm text-muted-foreground mb-2 relative z-10">{t("content.havale.deliveryOptions")}</p>
+        <div className="flex flex-wrap gap-3 relative z-10">
+          <motion.span
+            className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary"
+            animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <MapPin className="h-4 w-4" /> {t("content.havale.storePickup")}
+          </motion.span>
+          <motion.span
+            className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary"
+            animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          >
+            <Truck className="h-4 w-4" /> {t("content.havale.cargoDelivery")}
+          </motion.span>
+        </div>
+      </motion.div>
+
+      {/* Contact */}
+      <motion.div
+        className="rounded-2xl border border-border bg-card p-5 md:p-6 text-center relative overflow-hidden"
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.12)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <h3 className="font-display font-bold text-foreground text-lg mb-1 relative z-10">{t("content.havale.contactTitle")}</h3>
+        <p className="text-sm text-muted-foreground mb-4 relative z-10">{t("content.havale.contactDesc")}</p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
+          <motion.a
+            href="mailto:deniz@zorludigitalplaza.com"
+            className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-5 py-2.5 text-sm font-medium text-primary hover:bg-primary/20 transition-colors"
+            animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 15px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Mail className="h-4 w-4" /> deniz@zorludigitalplaza.com
+          </motion.a>
+          <motion.a
+            href="tel:+905428783131"
+            className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-5 py-2.5 text-sm font-medium text-primary hover:bg-primary/20 transition-colors"
+            animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 15px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+          >
+            <Phone className="h-4 w-4" /> +90 542 878 31 31
+          </motion.a>
+        </div>
+        <p className="text-xs text-muted-foreground mt-4 relative z-10">Zorlu Digital Plaza — Zorlu Digital Trade & Services Ltd.</p>
+      </motion.div>
+    </div>
+  );
+}

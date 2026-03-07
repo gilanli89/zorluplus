@@ -106,6 +106,7 @@ const App = () => (
               <Route path="/b2b" element={<B2BPage />} />
               <Route path="/siparis-takip" element={<SiparisTakipPage />} />
               <Route path="/odeme-yontemleri" element={<OdemeYontemleriPage />} />
+              <Route path="/havale-ile-odeme" element={<HavaleOdemePage />} />
               <Route path="/odeme" element={<CheckoutPage />} />
               <Route path="/odeme/sonuc" element={<PaymentResultPage />} />
               <Route path="/sepet" element={<CartPage />} />
