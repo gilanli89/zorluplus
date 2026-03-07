@@ -171,7 +171,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         <section className="py-12 md:py-16">
           <div className="container">
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">{t("landing.suitableProduct")}</h2>
+              <h2 className="heading-2 text-foreground mb-2">{t("landing.suitableProduct")}</h2>
             </motion.div>
             <div className={`grid grid-cols-2 ${config.subtypes.length >= 4 ? "md:grid-cols-4" : config.subtypes.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"} gap-3 md:gap-5`}>
               {config.subtypes.map((type, i) => (
