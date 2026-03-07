@@ -58,7 +58,7 @@ export default function Footer() {
         >
           {/* Yetkili Servis Badge */}
           <motion.div variants={fadeItem} className="flex items-center justify-center flex-1">
-            <img src="/brands/yetkili-servis-banner.gif" alt="Samsung & LG Yetkili Servis" className="h-20 md:h-28 w-auto object-contain" />
+            <img src="/brands/yetkili-servis-banner.png" alt="Samsung & LG Yetkili Servis" className="h-20 md:h-28 w-auto object-contain" />
           </motion.div>
 
           {/* 2 Yıl Garanti */}
