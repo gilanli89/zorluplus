@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import ContentPage from "@/components/ContentPage";
 import { motion } from "framer-motion";
 import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin } from "lucide-react";
