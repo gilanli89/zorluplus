@@ -33,7 +33,7 @@ import {
   HakkimizdaPage, KunyePage, EkibimizPage, DestekPage,
   KullanimKosullariPage, IadeKosullariPage, GizlilikPolitikasiPage,
   KvkkPage, CerezPolitikasiPage, MesafeliSatisSozlesmesiPage,
-  SiparisTakipPage, OdemeYontemleriPage,
+  SiparisTakipPage, OdemeYontemleriPage, SurdurulebilirlikPage,
 } from "@/pages/ContentPages";
 import CheckoutPage from "@/pages/CheckoutPage";
 import PaymentResultPage from "@/pages/PaymentResultPage";
