@@ -1742,7 +1742,7 @@ export function KvkkPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          KVKK / GDPR Uyum Metni
+          {t("content.kvkk.title")}
         </motion.span>
       </motion.h1>
       <p className="text-sm text-muted-foreground italic mb-6">Kişisel Verilerin Korunması ve Gizlilik Bildirimi</p>
