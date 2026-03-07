@@ -56,20 +56,9 @@ export default function Footer() {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {/* Yetkili Servis + Logolar */}
-          <motion.div variants={fadeItem} className="flex flex-col items-center text-center flex-1">
-            <motion.p
-              className="font-display font-bold text-lg md:text-2xl"
-              animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            >
-              {trustBadges[0].label}
-            </motion.p>
-            <div className="flex items-center justify-center gap-3 mt-2">
-              <img src="/brands/samsung-logo.png" alt="Samsung" className="h-10 md:h-12 w-auto object-contain dark:invert" />
-              <span className="text-lg text-muted-foreground">&</span>
-              <img src="/brands/lg-logo.png" alt="LG" className="h-16 md:h-20 w-auto object-contain" />
-            </div>
+          {/* Yetkili Servis Badge */}
+          <motion.div variants={fadeItem} className="flex items-center justify-center flex-1">
+            <img src="/brands/yetkili-servis-badge.png" alt="Samsung & LG Yetkili Servis" className="h-20 md:h-28 w-auto object-contain" />
           </motion.div>
 
           {/* 2 Yıl Garanti */}

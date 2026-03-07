@@ -40,18 +40,14 @@ export default function TrustSection() {
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary/15 transition-colors duration-300">
                 <item.icon className="h-5 w-5 icon-hover-rotate" />
               </div>
-              <div>
-                <p className="font-display font-bold text-sm text-foreground leading-tight">{item.label}</p>
-                {item.hasBrandLogos ? (
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <img src="/brands/samsung-logo.png" alt="Samsung" className="h-3.5 w-auto object-contain dark:invert" />
-                    <span className="text-xs text-muted-foreground">&</span>
-                    <img src="/brands/lg-logo.png" alt="LG" className="h-5 w-auto object-contain" />
-                  </div>
-                ) : (
+              {item.hasBrandLogos ? (
+                <img src="/brands/yetkili-servis-badge.png" alt="Samsung & LG Yetkili Servis" className="h-10 w-auto object-contain" />
+              ) : (
+                <div>
+                  <p className="font-display font-bold text-sm text-foreground leading-tight">{item.label}</p>
                   <p className="text-xs text-muted-foreground">{item.desc}</p>
-                )}
-              </div>
+                </div>
+              )}
             </motion.div>
           ))}
         </motion.div>
