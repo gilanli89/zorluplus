@@ -162,8 +162,11 @@ export default function Footer() {
           </div>
         </motion.div>
 
-        <div className="mt-8 pt-6 border-t border-border text-center text-xs text-muted-foreground">
-          {t("footer.rights")} 2026
+        <div className="mt-8 pt-6 border-t border-border flex flex-col items-center gap-4">
+          <img src={zorluDtasLogo} alt="Zorlu Digital Trade & Services Ltd." className="h-28 md:h-36 w-auto object-contain" />
+          <p className="text-xs text-muted-foreground text-center">
+            ZorluPlus bir Zorlu Digital Trade &amp; Services Ltd. kuruluşudur. Tüm hakları saklıdır. 2026©
+          </p>
         </div>
       </div>
     </footer>
