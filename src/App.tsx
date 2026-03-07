@@ -34,6 +34,7 @@ import {
   KullanimKosullariPage, IadeKosullariPage, GizlilikPolitikasiPage,
   KvkkPage, CerezPolitikasiPage, MesafeliSatisSozlesmesiPage,
   SiparisTakipPage, OdemeYontemleriPage, SurdurulebilirlikPage,
+  HavaleOdemePage,
 } from "@/pages/ContentPages";
 import CheckoutPage from "@/pages/CheckoutPage";
 import PaymentResultPage from "@/pages/PaymentResultPage";
