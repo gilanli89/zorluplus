@@ -217,7 +217,7 @@ export default function TVLandingPage() {
                   size="lg"
                   className="font-semibold gap-2 rounded-full px-6 shadow-lg bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white border-0"
                 >
-                  <MessageCircle className="h-4 w-4" /> Hemen Bilgi Al
+                  <MessageCircle className="h-4 w-4" /> {t("landing.getInfo")}
                 </Button>
               </a>
             </div>
