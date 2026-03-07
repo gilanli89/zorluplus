@@ -44,6 +44,44 @@ export const TRUST_BADGES = [
 
 export const CATEGORIES = [
   {
+    slug: "tv-goruntu",
+    name: "TV & Görüntü Sistemleri",
+    icon: "Tv",
+    children: [
+      { slug: "tv", name: "Televizyon" },
+      { slug: "soundbar", name: "Soundbar / Ses Sistemleri" },
+      { slug: "duvar-masaustu-aparatlari", name: "Duvar ve Masaüstü Aparatları" },
+    ],
+  },
+  {
+    slug: "aksesuar",
+    name: "Aksesuarlar",
+    icon: "Cable",
+    children: [
+      { slug: "temizlik-urunleri", name: "Temizlik Ürünleri" },
+      { slug: "tv-aski", name: "TV Askı Aparatları" },
+      { slug: "uydu-ekipman", name: "Uydu Ekipmanları" },
+    ],
+  },
+  {
+    slug: "ses-sistemleri",
+    name: "Ses Sistemleri",
+    icon: "Speaker",
+    children: [
+      { slug: "bluetooth-hoparlor", name: "Bluetooth Hoparlör" },
+      { slug: "kulaklik", name: "Kulaklık" },
+      { slug: "soundbar-ses", name: "Soundbar" },
+    ],
+  },
+  {
+    slug: "oyun",
+    name: "Oyun",
+    icon: "Gamepad2",
+    children: [
+      { slug: "oyun-aksesuar", name: "Aksesuar" },
+    ],
+  },
+  {
     slug: "beyaz-esya",
     name: "Beyaz Eşya",
     icon: "Refrigerator",
@@ -64,27 +102,6 @@ export const CATEGORIES = [
       { slug: "firin", name: "Fırın" },
       { slug: "ocak", name: "Ocak" },
       { slug: "davlumbaz", name: "Davlumbaz" },
-    ],
-  },
-  {
-    slug: "klima-isitma",
-    name: "İklimlendirme",
-    icon: "Snowflake",
-    children: [
-      { slug: "klima", name: "Klima" },
-      { slug: "split-klima", name: "Split Klima" },
-      { slug: "portatif-klima", name: "Portatif Klima" },
-      { slug: "isiticilar", name: "Isıtıcılar" },
-    ],
-  },
-  {
-    slug: "tv-goruntu",
-    name: "TV & Görüntü Sistemleri",
-    icon: "Tv",
-    children: [
-      { slug: "tv", name: "Televizyon" },
-      { slug: "soundbar", name: "Soundbar / Ses Sistemleri" },
-      { slug: "duvar-masaustu-aparatlari", name: "Duvar ve Masaüstü Aparatları" },
     ],
   },
   {
@@ -110,31 +127,14 @@ export const CATEGORIES = [
     ],
   },
   {
-    slug: "ses-sistemleri",
-    name: "Ses Sistemleri",
-    icon: "Speaker",
+    slug: "klima-isitma",
+    name: "İklimlendirme",
+    icon: "Snowflake",
     children: [
-      { slug: "bluetooth-hoparlor", name: "Bluetooth Hoparlör" },
-      { slug: "kulaklik", name: "Kulaklık" },
-      { slug: "soundbar-ses", name: "Soundbar" },
-    ],
-  },
-  {
-    slug: "aksesuar",
-    name: "Aksesuarlar",
-    icon: "Cable",
-    children: [
-      { slug: "temizlik-urunleri", name: "Temizlik Ürünleri" },
-      { slug: "tv-aski", name: "TV Askı Aparatları" },
-      { slug: "uydu-ekipman", name: "Uydu Ekipmanları" },
-    ],
-  },
-  {
-    slug: "oyun",
-    name: "Oyun",
-    icon: "Gamepad2",
-    children: [
-      { slug: "oyun-aksesuar", name: "Aksesuar" },
+      { slug: "klima", name: "Klima" },
+      { slug: "split-klima", name: "Split Klima" },
+      { slug: "portatif-klima", name: "Portatif Klima" },
+      { slug: "isiticilar", name: "Isıtıcılar" },
     ],
   },
   {
