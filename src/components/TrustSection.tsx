@@ -43,10 +43,10 @@ export default function TrustSection() {
               <div>
                 <p className="font-display font-bold text-sm text-foreground leading-tight">{item.label}</p>
                 {item.hasBrandLogos ? (
-                  <div className="flex items-center gap-2 text-muted-foreground mt-0.5">
-                    {samsungLogo}
-                    <span className="text-xs">&</span>
-                    {lgLogo}
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <img src="/brands/samsung.png" alt="Samsung" className="h-3.5 w-auto object-contain dark:brightness-0 dark:invert opacity-70" />
+                    <span className="text-xs text-muted-foreground">&</span>
+                    <img src="/brands/lg.png" alt="LG" className="h-3.5 w-auto object-contain dark:brightness-0 dark:invert opacity-70" />
                   </div>
                 ) : (
                   <p className="text-xs text-muted-foreground">{item.desc}</p>
