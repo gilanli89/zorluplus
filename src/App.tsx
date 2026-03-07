@@ -33,7 +33,7 @@ import {
   HakkimizdaPage, KunyePage, EkibimizPage, DestekPage,
   KullanimKosullariPage, IadeKosullariPage, GizlilikPolitikasiPage,
   KvkkPage, CerezPolitikasiPage, MesafeliSatisSozlesmesiPage,
-  SiparisTakipPage, OdemeYontemleriPage,
+  SiparisTakipPage, OdemeYontemleriPage, SurdurulebilirlikPage,
 } from "@/pages/ContentPages";
 import CheckoutPage from "@/pages/CheckoutPage";
 import PaymentResultPage from "@/pages/PaymentResultPage";
@@ -100,6 +100,7 @@ const App = () => (
               <Route path="/kvkk" element={<KvkkPage />} />
               <Route path="/cerez-politikasi" element={<CerezPolitikasiPage />} />
               <Route path="/mesafeli-satis-sozlesmesi" element={<MesafeliSatisSozlesmesiPage />} />
+              <Route path="/surdurulebilirlik" element={<SurdurulebilirlikPage />} />
               <Route path="/siparis-takip" element={<SiparisTakipPage />} />
               <Route path="/odeme-yontemleri" element={<OdemeYontemleriPage />} />
               <Route path="/odeme" element={<CheckoutPage />} />

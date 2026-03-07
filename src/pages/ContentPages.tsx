@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import ContentPage from "@/components/ContentPage";
 import { motion } from "framer-motion";
-import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, Mail } from "lucide-react";
+import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, Mail, Recycle, BatteryCharging, Zap, Globe, Lightbulb, Leaf } from "lucide-react";
 import { BRANCHES } from "@/lib/constants";
 
 const testimonials = [
@@ -2094,6 +2094,146 @@ export function OdemeYontemleriPage() {
           </div>
         </motion.div>
       </motion.div>
+    </div>
+  );
+}
+
+export function SurdurulebilirlikPage() {
+  const sections = [
+    {
+      icon: Recycle,
+      title: "Elektronik Atık Geri Dönüşümü",
+      text: "Elektronik ürünlerin kullanım ömrü sona erdiğinde doğru şekilde geri dönüştürülmesi büyük önem taşır.",
+      detail: "Zorlu Digital Plaza, elektronik atıkların doğaya zarar vermeden geri dönüşüm süreçlerine kazandırılması konusunda müşterilerini bilinçlendirmekte ve sürdürülebilir atık yönetimi uygulamalarını desteklemektedir.",
+    },
+    {
+      icon: BatteryCharging,
+      title: "Atık Pil Toplama Bilinci",
+      text: "Atık piller çevre ve insan sağlığı açısından önemli riskler oluşturabilir.",
+      detail: "Bu nedenle Zorlu Digital Plaza, pil geri dönüşümü konusunda farkındalık yaratmayı destekler ve müşterilerini atık pilleri yetkili toplama noktalarına teslim etmeleri konusunda bilgilendirir.",
+    },
+    {
+      icon: Zap,
+      title: "Enerji Verimli Teknoloji",
+      text: "Enerji verimli teknolojilerin tercih edilmesi hem çevreyi korur hem de enerji tüketimini azaltır.",
+      detail: "Zorlu Digital Plaza, mağaza ve servis operasyonlarında enerji tasarrufu sağlayan teknolojileri tercih eder ve müşterilerine enerji verimliliği yüksek ürünleri önerir.",
+    },
+    {
+      icon: Globe,
+      title: "Çevre Bilinci ve Sorumluluk",
+      text: "Sürdürülebilirlik yalnızca bir hedef değil, aynı zamanda bir sorumluluktur.",
+      detail: "Zorlu Digital Plaza ekibi, çevre bilinci konusunda farkındalık oluşturmayı ve doğaya saygılı bir teknoloji kültürünü desteklemeyi amaçlamaktadır.",
+    },
+  ];
+
+  return (
+    <div className="container py-12 md:py-16 max-w-4xl">
+      {/* Hero */}
+      <motion.div
+        className="text-center mb-12"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.div
+          className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4"
+          animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 24px hsl(221,83%,53%,0.35)", "0 0 0px hsl(221,83%,53%,0)"] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Leaf className="h-8 w-8 text-primary" />
+        </motion.div>
+        <motion.h1
+          className="font-display text-3xl md:text-5xl font-extrabold mb-4"
+        >
+          <motion.span
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            Sürdürülebilir Teknoloji Yaklaşımımız
+          </motion.span>
+        </motion.h1>
+        <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">Zorlu Digital Plaza olarak teknolojinin geleceğini şekillendirirken çevresel sürdürülebilirliği iş modelimizin merkezine koyuyoruz.</p>
+        <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto mt-2">Enerji verimliliği, doğal kaynakların korunması ve elektronik atıkların geri dönüşümü konularında bilinçli uygulamaları destekleyerek daha yaşanabilir bir gelecek için sorumluluk alıyoruz.</p>
+      </motion.div>
+
+      {/* Sections */}
+      <div className="space-y-6 mb-10">
+        {sections.map((s, i) => (
+          <motion.div
+            key={s.title}
+            className="rounded-2xl border border-border bg-card p-6 md:p-8 relative overflow-hidden"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.1 }}
+            whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.2)" }}
+          >
+            <motion.div
+              className="absolute inset-0 rounded-2xl pointer-events-none"
+              animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.1)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+            />
+            <div className="flex items-start gap-4 relative z-10">
+              <motion.span
+                className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10"
+                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
+              >
+                <s.icon className="h-6 w-6 text-primary" />
+              </motion.span>
+              <div>
+                <motion.h2
+                  className="font-display text-lg md:text-xl font-bold mb-2"
+                  animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+                >
+                  {s.title}
+                </motion.h2>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-2">{s.text}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{s.detail}</p>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Gelecek İçin Teknoloji */}
+      <motion.div
+        className="rounded-2xl border border-border bg-card p-6 md:p-8 relative overflow-hidden mb-8 text-center"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.12)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.span
+          className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-4"
+          animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 20px hsl(221,83%,53%,0.35)", "0 0 0px hsl(221,83%,53%,0)"] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Lightbulb className="h-6 w-6 text-primary" />
+        </motion.span>
+        <motion.h2
+          className="font-display text-xl md:text-2xl font-bold mb-3 relative z-10"
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Gelecek İçin Teknoloji
+        </motion.h2>
+        <p className="text-sm text-muted-foreground max-w-xl mx-auto relative z-10">Zorlu Digital Plaza, teknoloji sektöründe sürdürülebilir bir gelecek oluşturmak için çevre dostu uygulamaları desteklemeye ve müşterilerini bilinçli tüketim konusunda teşvik etmeye devam etmektedir.</p>
+      </motion.div>
+
+      <motion.p
+        className="text-center font-display font-bold text-lg md:text-xl italic"
+        animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      >
+        Zorlu Digital Plaza | Sürdürülebilir Teknoloji, Güvenilir Gelecek
+      </motion.p>
     </div>
   );
 }
