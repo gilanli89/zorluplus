@@ -48,7 +48,6 @@ export default function TrustSection() {
                   <p className="text-xs text-muted-foreground">{item.desc}</p>
                 </div>
               )}
-              </div>
             </motion.div>
           ))}
         </motion.div>
