@@ -352,7 +352,7 @@ export default function TVLandingPage() {
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-3">
+              <h2 className="heading-2 text-foreground mb-3">
                 {t("lp.tv.benTitle")}
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-6">
