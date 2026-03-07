@@ -53,7 +53,7 @@ const translations: Record<string, Record<Lang, string>> = {
   "nav.cart": { tr: "Sepet", en: "Cart" },
 
   // Footer
-  "footer.description": { tr: "Kuzey Kıbrıs'ın güvenilir elektronik mağazası. Samsung & LG yetkili servis.", en: "North Cyprus' trusted electronics store. Samsung & LG authorized service." },
+  "footer.description": { tr: "Teknoloji. Güven. 26 Yıllık Deneyim.", en: "Technology. Trust. 26 Years of Experience." },
   "footer.corporate": { tr: "Kurumsal", en: "Corporate" },
   "footer.support": { tr: "Destek", en: "Support" },
   "footer.contact": { tr: "İletişim", en: "Contact" },
