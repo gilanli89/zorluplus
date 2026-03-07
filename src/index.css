@@ -92,10 +92,40 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased text-base;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  /* ===== GLOBAL TYPOGRAPHY SCALE ===== */
+  /* H1 - Page hero titles */
+  .heading-1 {
+    @apply font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight;
+  }
+  /* H2 - Section titles */
+  .heading-2 {
+    @apply font-display text-xl sm:text-2xl md:text-3xl font-bold leading-snug;
+  }
+  /* H3 - Sub-section / card titles */
+  .heading-3 {
+    @apply font-display text-lg sm:text-xl md:text-2xl font-bold leading-snug;
+  }
+  /* H4 - Small titles */
+  .heading-4 {
+    @apply font-display text-base sm:text-lg font-bold;
+  }
+  /* Body large */
+  .body-lg {
+    @apply text-base sm:text-lg leading-relaxed;
+  }
+  /* Body default */
+  .body {
+    @apply text-sm sm:text-base leading-relaxed;
+  }
+  /* Body small */
+  .body-sm {
+    @apply text-xs sm:text-sm leading-relaxed;
   }
 }
 
