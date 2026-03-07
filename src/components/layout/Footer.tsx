@@ -26,11 +26,11 @@ export default function Footer() {
   ];
 
   const footerKurumsal = [
-    { label: t("footer.about"), href: "/hakkimizda" },
     { label: t("footer.imprint"), href: "/kunye" },
+    { label: t("footer.about"), href: "/hakkimizda" },
+    { label: t("footer.branchesLink"), href: "/subelerimiz" },
     { label: t("footer.team"), href: "/ekibimiz" },
     { label: t("footer.contactLink"), href: "/iletisim" },
-    { label: t("footer.branchesLink"), href: "/subelerimiz" },
   ];
 
   const footerDestek = [
