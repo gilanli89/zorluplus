@@ -209,7 +209,7 @@ export default function TVLandingPage() {
             <div className="flex flex-wrap gap-3">
               <a href="#urunler">
                 <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg">
-                  <Eye className="h-4 w-4" /> TV Modellerini Gör
+                  <Eye className="h-4 w-4" /> {t("lp.tv.ctaBtn")}
                 </Button>
               </a>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("tv_hero")}>
