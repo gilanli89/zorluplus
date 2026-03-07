@@ -8,6 +8,7 @@ import { FilterSidebar, MobileFilterTrigger, SortBar, applyFilters } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { icons } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -20,15 +21,18 @@ const fadeUp = {
 export default function ShopPage() {
   const { data: products = [], isLoading } = useProducts();
   const [filters, setFilters] = useState<FilterState>({ brands: [], inStock: false, attributes: {}, sort: "popular" });
+  const { t } = useLanguage();
 
   const filteredProducts = useMemo(() => applyFilters(products, filters), [products, filters]);
+
+  const getCatName = (slug: string) => t(`cat.${slug}`) || CATEGORIES.find(c => c.slug === slug)?.name || slug;
 
   return (
     <div className="container py-6 md:py-8">
       <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-5">
-        <Link to="/" className="hover:text-foreground transition-colors">Ana Sayfa</Link>
+        <Link to="/" className="hover:text-foreground transition-colors">{t("general.homePage")}</Link>
         <span className="text-border">/</span>
-        <span className="text-foreground font-medium">Mağaza</span>
+        <span className="text-foreground font-medium">{t("shop.title")}</span>
       </nav>
 
       {/* Category icons - sticky */}
@@ -48,7 +52,7 @@ export default function ShopPage() {
                 className="flex flex-col items-center gap-1.5 min-w-[72px] rounded-xl border border-border bg-card px-3 py-3 text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all tap-scale"
               >
                 {IconComp && <IconComp className="h-5 w-5" />}
-                <span className="text-[10px] font-semibold text-center leading-tight whitespace-nowrap">{cat.name}</span>
+                <span className="text-[10px] font-semibold text-center leading-tight whitespace-nowrap">{getCatName(cat.slug)}</span>
               </Link>
             </motion.div>
           );
@@ -64,7 +68,7 @@ export default function ShopPage() {
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <MobileFilterTrigger products={products} filters={filters} onFiltersChange={setFilters} />
             <SortBar filters={filters} onFiltersChange={setFilters} />
-            <span className="ml-auto text-sm text-muted-foreground">{filteredProducts.length} ürün</span>
+            <span className="ml-auto text-sm text-muted-foreground">{filteredProducts.length} {t("general.products")}</span>
           </div>
 
           {isLoading ? (
@@ -75,7 +79,7 @@ export default function ShopPage() {
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-lg text-muted-foreground">Bu kriterlere uygun ürün bulunamadı.</p>
+              <p className="text-lg text-muted-foreground">{t("general.noProducts")}</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">

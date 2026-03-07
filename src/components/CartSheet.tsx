@@ -6,10 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
 import { formatPrice } from "@/lib/products";
 import { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function CartSheet() {
   const { items, itemCount, removeItem, updateQuantity, subtotal, grandTotal } = useCart();
   const [open, setOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -26,16 +28,16 @@ export default function CartSheet() {
       <SheetContent className="w-full sm:w-96 flex flex-col">
         <SheetHeader>
           <SheetTitle className="font-display flex items-center gap-2">
-            <ShoppingCart className="h-5 w-5" /> Sepetim ({itemCount})
+            <ShoppingCart className="h-5 w-5" /> {t("cart.myCart")} ({itemCount})
           </SheetTitle>
         </SheetHeader>
 
         {items.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center gap-3">
             <ShoppingCart className="h-12 w-12 text-muted-foreground/30" />
-            <p className="text-muted-foreground text-sm">Sepetiniz boş</p>
+            <p className="text-muted-foreground text-sm">{t("cart.empty")}</p>
             <Button variant="outline" className="rounded-full" onClick={() => setOpen(false)}>
-              Alışverişe Başla
+              {t("cart.startShopping")}
             </Button>
           </div>
         ) : (
@@ -54,13 +56,11 @@ export default function CartSheet() {
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-semibold text-primary/70 uppercase">{item.product.brand}</p>
                         <p className="text-sm font-medium text-foreground line-clamp-2">{item.product.name}</p>
-                        {/* price hidden */}
                       </div>
                       <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => removeItem(item.product.id)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
-                    {/* Quantity */}
                     <div className="flex items-center gap-2 mt-2">
                       <Button variant="outline" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.product.id, item.quantity - 1)}>
                         <Minus className="h-3 w-3" />
@@ -69,19 +69,16 @@ export default function CartSheet() {
                       <Button variant="outline" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
                         <Plus className="h-3 w-3" />
                       </Button>
-                      {/* line total hidden */}
                     </div>
                   </div>
                 );
               })}
             </div>
 
-            {/* Summary & Checkout */}
             <div className="border-t border-border pt-4 space-y-3">
-              {/* prices hidden */}
               <Link to="/sepet" onClick={() => setOpen(false)}>
                 <Button className="w-full rounded-full font-semibold gap-2" size="lg">
-                  <ShoppingCart className="h-4 w-4" /> Sepete Git
+                  <ShoppingCart className="h-4 w-4" /> {t("cart.goToCart")}
                 </Button>
               </Link>
             </div>

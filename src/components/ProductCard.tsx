@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Product } from "@/lib/types";
 import { MessageCircle, Eye } from "lucide-react";
 import { getWhatsAppLink } from "@/lib/products";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ProductCardProps {
   product: Product;
@@ -11,6 +12,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const hasDiscount = false;
+  const { t } = useLanguage();
 
   return (
     <motion.div
@@ -41,12 +43,12 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
           <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
             {product.isNew && (
-              <Badge className="bg-primary text-primary-foreground text-[10px] rounded-full px-2.5 shadow-sm">Yeni</Badge>
+              <Badge className="bg-primary text-primary-foreground text-[10px] rounded-full px-2.5 shadow-sm">{t("product.new")}</Badge>
             )}
           </div>
           {!product.inStock && (
             <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center">
-              <span className="text-sm font-semibold text-muted-foreground">Stokta Yok</span>
+              <span className="text-sm font-semibold text-muted-foreground">{t("product.outOfStock")}</span>
             </div>
           )}
         </div>
@@ -68,7 +70,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-all duration-200 tap-scale"
         >
           <Eye size={14} />
-          İncele
+          {t("product.view")}
         </Link>
       </div>
     </motion.div>

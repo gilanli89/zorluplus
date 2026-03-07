@@ -5,38 +5,12 @@ import { Button } from "@/components/ui/button";
 import { BRANCHES } from "@/lib/constants";
 import TrustSection from "@/components/TrustSection";
 import HeroBanner from "@/components/HeroBanner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import widgetTv from "@/assets/widget-tv.jpg";
 import widgetBeyazEsya from "@/assets/widget-beyaz-esya.jpg";
 import widgetAnkastre from "@/assets/widget-ankastre.jpg";
 import widgetKlima from "@/assets/widget-klima.jpg";
-
-const CATEGORY_WIDGETS = [
-  {
-    slug: "tv-goruntu",
-    title: "TV & Görüntü Sistemleri",
-    subtitle: "Samsung & LG OLED, QLED, NanoCell",
-    image: widgetTv,
-  },
-  {
-    slug: "beyaz-esya",
-    title: "Beyaz Eşya",
-    subtitle: "Buzdolabı, Çamaşır & Bulaşık Makinesi",
-    image: widgetBeyazEsya,
-  },
-  {
-    slug: "ankastre",
-    title: "Ankastre Setler",
-    subtitle: "Fırın, Ocak & Davlumbaz",
-    image: widgetAnkastre,
-  },
-  {
-    slug: "klima-isitma",
-    title: "Klima & İklimlendirme",
-    subtitle: "Split Klima, Inverter Teknoloji",
-    image: widgetKlima,
-  },
-];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -57,6 +31,15 @@ const branchCard = {
 };
 
 export default function HomePage() {
+  const { t } = useLanguage();
+
+  const CATEGORY_WIDGETS = [
+    { slug: "tv-goruntu", titleKey: "home.categoryWidgets.tv", subtitleKey: "home.categoryWidgets.tvSub", image: widgetTv },
+    { slug: "beyaz-esya", titleKey: "home.categoryWidgets.whiteGoods", subtitleKey: "home.categoryWidgets.whiteGoodsSub", image: widgetBeyazEsya },
+    { slug: "ankastre", titleKey: "home.categoryWidgets.builtin", subtitleKey: "home.categoryWidgets.builtinSub", image: widgetAnkastre },
+    { slug: "klima-isitma", titleKey: "home.categoryWidgets.ac", subtitleKey: "home.categoryWidgets.acSub", image: widgetKlima },
+  ];
+
   return (
     <>
       <HeroBanner />
@@ -80,21 +63,21 @@ export default function HomePage() {
               >
                 <img
                   src={cat.image}
-                  alt={cat.title}
+                  alt={t(cat.titleKey)}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-foreground/70 via-foreground/40 to-transparent" />
                 <div className="relative z-10 flex flex-col justify-center h-full px-6 md:px-12 lg:px-16 max-w-xl">
                   <h2 className="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
-                    {cat.title}
+                    {t(cat.titleKey)}
                   </h2>
                   <p className="text-white/80 text-sm md:text-base mt-2">
-                    {cat.subtitle}
+                    {t(cat.subtitleKey)}
                   </p>
                   <div className="mt-4">
                     <span className="inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/30 rounded-full px-5 py-2 backdrop-blur-sm bg-white/10 group-hover:bg-white/20 transition-all duration-300">
-                      Ürünleri İncele <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      {t("home.explore")} <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
                 </div>
@@ -114,8 +97,8 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Mağazalarımız</h2>
-            <p className="text-muted-foreground mt-2">Ürünleri yerinde görün, uzman ekibimizle tanışın</p>
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">{t("home.branches")}</h2>
+            <p className="text-muted-foreground mt-2">{t("home.branchesDesc")}</p>
           </motion.div>
           <motion.div
             className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-2xl mx-auto"
@@ -135,10 +118,10 @@ export default function HomePage() {
                 <p className="text-sm text-muted-foreground mb-4">{b.hours}</p>
                 <div className="flex gap-2">
                   <a href={b.mapsLink} target="_blank" rel="noopener noreferrer">
-                    <Button size="sm" variant="outline" className="rounded-full gap-1.5 tap-scale"><MapPin className="h-3.5 w-3.5" /> Yol Tarifi</Button>
+                    <Button size="sm" variant="outline" className="rounded-full gap-1.5 tap-scale"><MapPin className="h-3.5 w-3.5" /> {t("home.getDirections")}</Button>
                   </a>
                   <a href={`tel:${b.phone}`}>
-                    <Button size="sm" variant="ghost" className="rounded-full gap-1.5 tap-scale"><Phone className="h-3.5 w-3.5" /> Ara</Button>
+                    <Button size="sm" variant="ghost" className="rounded-full gap-1.5 tap-scale"><Phone className="h-3.5 w-3.5" /> {t("home.call")}</Button>
                   </a>
                 </div>
               </motion.div>
@@ -157,14 +140,12 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            Yetkili Bayi & Servis Markalarımız
+            {t("home.authorizedBrands")}
           </motion.h3>
         </div>
         <div className="relative">
-          {/* Fade edges */}
           <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
           <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
-          {/* Scrolling track */}
           <div className="flex animate-marquee gap-8 w-max">
             {[...Array(2)].map((_, loop) => (
               <div key={loop} className="flex gap-8">
