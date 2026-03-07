@@ -113,7 +113,7 @@ export default function HomePage() {
                 variants={branchCard}
                 className="card-lift rounded-2xl border border-border bg-card p-6"
               >
-                <h3 className="font-display font-bold text-lg text-foreground mb-2">{b.name}</h3>
+                <h3 className="heading-4 text-foreground mb-2">{b.name}</h3>
                 <p className="text-sm text-muted-foreground mb-1">{b.address}</p>
                 <p className="text-sm text-muted-foreground mb-4">{b.hours}</p>
                 <div className="flex gap-2">

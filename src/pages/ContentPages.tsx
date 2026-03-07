@@ -447,7 +447,7 @@ export function HakkimizdaPage() {
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
         >
           <motion.h2
-            className="font-display text-2xl md:text-3xl font-bold mb-6"
+            className="heading-2 mb-6"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
