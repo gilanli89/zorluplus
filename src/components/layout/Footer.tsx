@@ -44,10 +44,10 @@ export default function Footer() {
     { label: t("footer.terms"), href: "/kullanim-kosullari" },
     { label: t("footer.privacy"), href: "/gizlilik-politikasi" },
     { label: "KVKK / GDPR", href: "/kvkk" },
-    { label: "Çerez Politikası", href: "/cerez-politikasi" },
-    { label: "Mesafeli Satış Sözleşmesi", href: "/mesafeli-satis-sozlesmesi" },
-    { label: "Sürdürülebilirlik", href: "/surdurulebilirlik" },
-    { label: "B2B Kurumsal Satış", href: "/b2b" },
+    { label: t("footer.cookiePolicy"), href: "/cerez-politikasi" },
+    { label: t("footer.distanceSales"), href: "/mesafeli-satis-sozlesmesi" },
+    { label: t("footer.sustainability"), href: "/surdurulebilirlik" },
+    { label: t("footer.b2b"), href: "/b2b" },
   ];
 
   return (
