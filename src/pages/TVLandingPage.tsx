@@ -230,10 +230,10 @@ export default function TVLandingPage() {
         <div className="container py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { icon: Shield, label: "Yetkili Bayi", desc: "Samsung & LG" },
-              { icon: Award, label: "2 Yıl Garanti", desc: "Tüm TV'lerde" },
-              { icon: Wrench, label: "Ücretsiz Montaj", desc: "Duvar montajı dahil" },
-              { icon: Star, label: "Uzman Danışmanlık", desc: "Doğru TV seçimi" },
+              { icon: Shield, label: t("lp.tv.trust1"), desc: "Samsung & LG" },
+              { icon: Award, label: t("lp.tv.trust2"), desc: t("lp.tv.trust2d") },
+              { icon: Wrench, label: t("lp.tv.trust3"), desc: t("lp.tv.trust3d") },
+              { icon: Star, label: t("lp.tv.trust4"), desc: t("lp.tv.trust4d") },
             ].map((item, i) => (
               <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
