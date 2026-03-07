@@ -158,15 +158,15 @@ export default function TVLandingPage() {
         </button>
       )}
 
-      <FilterSection title="Marka" items={filterOptions.brands} selected={selectedBrands} onToggle={(v) => toggleFilter(v, selectedBrands, setSelectedBrands)} />
+      <FilterSection title={t("lp.tv.brand")} items={filterOptions.brands} selected={selectedBrands} onToggle={(v) => toggleFilter(v, selectedBrands, setSelectedBrands)} />
       {filterOptions.inches.length > 0 && (
-        <FilterSection title="Ekran Boyutu" items={filterOptions.inches.map(i => i)} selected={selectedInches} onToggle={(v) => toggleFilter(v, selectedInches, setSelectedInches)} />
+        <FilterSection title={t("lp.tv.screenSize")} items={filterOptions.inches.map(i => i)} selected={selectedInches} onToggle={(v) => toggleFilter(v, selectedInches, setSelectedInches)} />
       )}
       {filterOptions.panels.length > 0 && (
-        <FilterSection title="Panel Tipi" items={filterOptions.panels} selected={selectedPanels} onToggle={(v) => toggleFilter(v, selectedPanels, setSelectedPanels)} />
+        <FilterSection title={t("lp.tv.panelType")} items={filterOptions.panels} selected={selectedPanels} onToggle={(v) => toggleFilter(v, selectedPanels, setSelectedPanels)} />
       )}
       {filterOptions.oses.length > 0 && (
-        <FilterSection title="İşletim Sistemi" items={filterOptions.oses} selected={selectedOS} onToggle={(v) => toggleFilter(v, selectedOS, setSelectedOS)} />
+        <FilterSection title={t("lp.tv.os")} items={filterOptions.oses} selected={selectedOS} onToggle={(v) => toggleFilter(v, selectedOS, setSelectedOS)} />
       )}
     </div>
   );
