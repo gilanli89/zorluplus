@@ -146,9 +146,9 @@ export default function HomePage() {
         <div className="relative">
           <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
           <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
-          <div className="flex animate-marquee gap-8 w-max">
+          <div className="flex animate-marquee gap-6 w-max">
             {[...Array(2)].map((_, loop) => (
-              <div key={loop} className="flex gap-8">
+              <div key={loop} className="flex gap-6">
                 {[
                   { name: "Samsung", src: "/brands/samsung.png" },
                   { name: "LG", src: "/brands/lg.png" },
@@ -156,15 +156,18 @@ export default function HomePage() {
                   { name: "Philips", src: "/brands/philips.png" },
                   { name: "Midea", src: "/brands/midea.png" },
                   { name: "Sharp", src: "/brands/sharp.png" },
+                  { name: "Toshiba", src: "/brands/toshiba.png" },
+                  { name: "Krups", src: "/brands/krups.png" },
+                  { name: "AUX", src: "/brands/aux.png" },
                 ].map(brand => (
                   <div
                     key={`${loop}-${brand.name}`}
-                    className="flex items-center justify-center rounded-xl border border-border bg-card w-[220px] h-[120px] md:w-[260px] md:h-[140px] p-[15px] hover:shadow-md hover:border-primary/30 transition-all duration-300"
+                    className="flex items-center justify-center rounded-xl border border-border bg-card w-[180px] h-[100px] md:w-[200px] md:h-[110px] p-4 hover:shadow-md hover:border-primary/30 transition-all duration-300"
                   >
                     <img
                       src={brand.src}
                       alt={`${brand.name} logo`}
-                      className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-500"
+                      className="w-[80%] h-[70%] object-contain grayscale hover:grayscale-0 transition-all duration-500"
                       loading="lazy"
                     />
                   </div>
