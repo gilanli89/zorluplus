@@ -131,7 +131,6 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const sku = (row["Stok kodu (SKU)"] || row["SKU"] || row["sku"] || row["Kimlik"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
   const price = parseFloat(row["Normal fiyat"] || row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
   const salePrice = parseFloat(row["İndirimli satış fiyatı"] || row["İndirimli Fiyat"] || row["Sale Price"] || "0") || undefined;
-  const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
   const fallback = getFallbackImage(category, subcategory);
   const rawImage = row["Görseller"] || row["Image"] || row["Görsel"] || row["image"] || "";
   const images = rawImage ? rawImage.split(",").map(s => s.trim()).filter(Boolean).map(u => cloudinaryFetch(u)) : [];
