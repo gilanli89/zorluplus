@@ -306,9 +306,9 @@ export default function TVLandingPage() {
                 </div>
               ) : (
                 <div className="text-center py-12 rounded-2xl border border-border bg-card">
-                  <p className="text-muted-foreground mb-4">Bu filtrelere uygun TV bulunamadı.</p>
+                  <p className="text-muted-foreground mb-4">{t("lp.tv.noResults")}</p>
                   <Button variant="outline" className="rounded-full gap-2" onClick={clearFilters}>
-                    <X className="h-4 w-4" /> Filtreleri Temizle
+                    <X className="h-4 w-4" /> {t("lp.tv.clearFilters")}
                   </Button>
                 </div>
               )}
