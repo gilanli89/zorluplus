@@ -72,7 +72,7 @@ export default function HomePage() {
                   <h2 className="heading-2 text-white leading-tight">
                     {t(cat.titleKey)}
                   </h2>
-                  <p className="text-white/80 text-sm md:text-base mt-2">
+                  <p className="text-white/80 body-sm mt-2">
                     {t(cat.subtitleKey)}
                   </p>
                   <div className="mt-4">
