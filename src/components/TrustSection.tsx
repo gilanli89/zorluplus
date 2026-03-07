@@ -24,8 +24,8 @@ export default function TrustSection() {
   return (
     <section className="border-b border-border bg-card">
       <div className="container py-5">
-        <motion.div
-          className="grid grid-cols-2 sm:grid-cols-4 gap-4"
+         <motion.div
+          className="grid grid-cols-3 gap-4"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
