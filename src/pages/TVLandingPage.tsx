@@ -322,10 +322,10 @@ export default function TVLandingPage() {
         <div className="container">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
             <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
-              İhtiyacınıza Uygun TV
+              {t("lp.tv.suitableTitle")}
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto">
-              Samsung ve LG'nin en son teknoloji televizyonlarını keşfedin
+              {t("lp.tv.suitableDesc")}
             </p>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
