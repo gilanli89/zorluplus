@@ -1863,7 +1863,7 @@ export function CerezPolitikasiPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Çerez Politikası
+          {t("content.cookie.title")}
         </motion.span>
       </motion.h1>
 
