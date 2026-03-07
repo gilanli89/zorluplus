@@ -1363,9 +1363,9 @@ export function KullanimKosullariPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          İletişim
+          {t("content.terms.contact")}
         </motion.h2>
-        <p className="relative z-10 text-muted-foreground">Kullanım koşulları ile ilgili her türlü soru için bizimle iletişime geçebilirsiniz.</p>
+        <p className="relative z-10 text-muted-foreground">{t("content.terms.contactDesc")}</p>
         <div className="flex flex-col gap-3 relative z-10">
           <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
             <motion.span
