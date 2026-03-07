@@ -2,54 +2,57 @@ import {
   Shield, Award, Wrench, Zap, Flame, Fan, CookingPot, Gauge,
 } from "lucide-react";
 import CategoryLandingTemplate, { CategoryLandingConfig } from "@/components/CategoryLandingTemplate";
-
-const config: CategoryLandingConfig = {
-  slug: "ankastre",
-  seoTitle: "Ankastre Fırın, Ocak, Davlumbaz Fiyatları | Samsung - Kıbrıs | Zorlu Digital Plaza",
-  seoDescription: "Kıbrıs'ta Samsung ankastre fırın, seramik ocak, davlumbaz modelleri. Yetkili bayi güvencesi, 2 yıl garanti, ücretsiz montaj. Zorlu Digital Plaza.",
-  heroBadge: "Samsung Yetkili Bayi",
-  heroTitle: "Mutfağınızı",
-  heroTitleHighlight: "Yeniden Tasarlayın",
-  heroDescription: "Samsung ankastre fırın, ocak ve davlumbaz modelleriyle modern mutfağınızı oluşturun. Ücretsiz montaj ve 2 yıl garanti dahil.",
-  heroGradient: "from-orange-400 via-red-400 to-rose-400",
-  ctaButtonText: "Ankastre Ürünleri Gör",
-  ctaButtonLink: "#urunler",
-  trustItems: [
-    { icon: Shield, label: "Yetkili Bayi", desc: "Samsung" },
-    { icon: Award, label: "2 Yıl Garanti", desc: "Tüm ankastrede" },
-    { icon: Wrench, label: "Ücretsiz Montaj", desc: "Profesyonel kurulum" },
-    { icon: Gauge, label: "Enerji Verimli", desc: "A+ sınıfı ürünler" },
-  ],
-  subtypes: [
-    { icon: Flame, name: "Ankastre Fırın", desc: "Elektrikli ve gazlı fırın modelleri", link: "/kategori/ankastre/firin" },
-    { icon: CookingPot, name: "Ankastre Ocak", desc: "Seramik ve indüksiyonlu ocaklar", link: "/kategori/ankastre/ocak" },
-    { icon: Fan, name: "Davlumbaz", desc: "Sessiz ve güçlü emişli davlumbazlar", link: "/kategori/ankastre/davlumbaz" },
-  ],
-  benefits: [
-    { icon: Wrench, title: "Ücretsiz Montaj", desc: "Ankastre ürünlerinizi profesyonel ekibimiz monte eder." },
-    { icon: Shield, title: "2 Yıl Resmi Garanti", desc: "Samsung yetkili bayi garantisiyle güvende olun." },
-    { icon: Zap, title: "Enerji Tasarrufu", desc: "A+ enerji sınıfı ürünlerle tasarruf edin." },
-    { icon: Flame, title: "Kombi Fırsatları", desc: "Fırın + ocak + davlumbaz alımlarında özel indirimler." },
-  ],
-  benefitsTitle: "Neden ZorluPlus'tan Ankastre Almalısınız?",
-  benefitsDescription: "Samsung yetkili bayisi olarak en yeni ankastre modellerini yetkili garanti ve profesyonel montaj hizmetiyle sunuyoruz.",
-  quoteTitle: "Ankastre Fiyat Teklifi",
-  quoteDescription: "Bilgilerinizi bırakın, size özel ankastre teklifimizi sunalım.",
-  productsTitle: "Ankastre Modelleri",
-  productsCategoryLink: "/kategori/ankastre",
-  productsCategoryLinkText: "Tümünü Gör",
-  filterProducts: (p) => p.category === "ankastre",
-  faq: [
-    { q: "Ankastre montajı dahil mi?", a: "Evet, tüm ankastre alımlarında ücretsiz montaj hizmetimiz mevcuttur." },
-    { q: "Fırın + ocak + davlumbaz seti alabilir miyim?", a: "Evet, set alımlarında özel indirim fırsatlarımız var. Detaylar için bizi arayın." },
-    { q: "Ankastre ölçüleri nasıl belirlenir?", a: "Standart ankastre ölçüler mevcuttur. Ekibimiz ölçü kontrolü yaparak size uygun modeli önerir." },
-    { q: "Taksit seçenekleri var mı?", a: "Evet, kredi kartına taksit ve havale/EFT ödeme seçeneklerimiz mevcuttur." },
-  ],
-  faqTitle: "Sık Sorulan Sorular",
-  faqDescription: "Ankastre seçimi ve hizmetlerimiz hakkında merak ettikleriniz",
-  jsonLdName: "Ankastre Modelleri - Zorlu Digital Plaza",
-};
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AnkastreLandingPage() {
+  const { t } = useLanguage();
+
+  const config: CategoryLandingConfig = {
+    slug: "ankastre",
+    seoTitle: t("lp.ankastre.seoTitle"),
+    seoDescription: t("lp.ankastre.seoDesc"),
+    heroBadge: t("lp.ankastre.heroBadge"),
+    heroTitle: t("lp.ankastre.heroTitle"),
+    heroTitleHighlight: t("lp.ankastre.heroHighlight"),
+    heroDescription: t("lp.ankastre.heroDesc"),
+    heroGradient: "from-orange-400 via-red-400 to-rose-400",
+    ctaButtonText: t("lp.ankastre.ctaBtn"),
+    ctaButtonLink: "#urunler",
+    trustItems: [
+      { icon: Shield, label: t("lp.ankastre.trust1"), desc: "Samsung" },
+      { icon: Award, label: t("lp.ankastre.trust2"), desc: t("lp.ankastre.trust2d") },
+      { icon: Wrench, label: t("lp.ankastre.trust3"), desc: t("lp.ankastre.trust3d") },
+      { icon: Gauge, label: t("lp.ankastre.trust4"), desc: t("lp.ankastre.trust4d") },
+    ],
+    subtypes: [
+      { icon: Flame, name: t("lp.ankastre.sub1"), desc: t("lp.ankastre.sub1d"), link: "/kategori/ankastre/firin" },
+      { icon: CookingPot, name: t("lp.ankastre.sub2"), desc: t("lp.ankastre.sub2d"), link: "/kategori/ankastre/ocak" },
+      { icon: Fan, name: t("lp.ankastre.sub3"), desc: t("lp.ankastre.sub3d"), link: "/kategori/ankastre/davlumbaz" },
+    ],
+    benefits: [
+      { icon: Wrench, title: t("lp.ankastre.ben1"), desc: t("lp.ankastre.ben1d") },
+      { icon: Shield, title: t("lp.ankastre.ben2"), desc: t("lp.ankastre.ben2d") },
+      { icon: Zap, title: t("lp.ankastre.ben3"), desc: t("lp.ankastre.ben3d") },
+      { icon: Flame, title: t("lp.ankastre.ben4"), desc: t("lp.ankastre.ben4d") },
+    ],
+    benefitsTitle: t("lp.ankastre.benTitle"),
+    benefitsDescription: t("lp.ankastre.benDesc"),
+    quoteTitle: t("lp.ankastre.quoteTitle"),
+    quoteDescription: t("lp.ankastre.quoteDesc"),
+    productsTitle: t("lp.ankastre.productsTitle"),
+    productsCategoryLink: "/kategori/ankastre",
+    productsCategoryLinkText: t("lp.ankastre.viewAll"),
+    filterProducts: (p) => p.category === "ankastre",
+    faq: [
+      { q: t("lp.ankastre.faq1q"), a: t("lp.ankastre.faq1a") },
+      { q: t("lp.ankastre.faq2q"), a: t("lp.ankastre.faq2a") },
+      { q: t("lp.ankastre.faq3q"), a: t("lp.ankastre.faq3a") },
+      { q: t("lp.ankastre.faq4q"), a: t("lp.ankastre.faq4a") },
+    ],
+    faqTitle: t("lp.ankastre.faqTitle"),
+    faqDescription: t("lp.ankastre.faqDesc"),
+    jsonLdName: "Ankastre Modelleri - Zorlu Digital Plaza",
+  };
+
   return <CategoryLandingTemplate config={config} />;
 }

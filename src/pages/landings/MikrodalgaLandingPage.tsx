@@ -2,49 +2,52 @@ import {
   Shield, Award, Wrench, Zap, Waves, Timer, Gauge, Sparkles,
 } from "lucide-react";
 import CategoryLandingTemplate, { CategoryLandingConfig } from "@/components/CategoryLandingTemplate";
-
-const config: CategoryLandingConfig = {
-  slug: "mikrodalga",
-  seoTitle: "Mikrodalga Fırın Fiyatları | Samsung - Kıbrıs | Zorlu Digital Plaza",
-  seoDescription: "Kıbrıs'ta Samsung mikrodalga fırın modelleri. Solo, grill ve ankastre mikrodalga seçenekleri. 2 yıl garanti. Zorlu Digital Plaza.",
-  heroBadge: "Samsung Yetkili Bayi",
-  heroTitle: "Hızlı ve",
-  heroTitleHighlight: "Pratik Pişirme",
-  heroDescription: "Samsung mikrodalga fırınlarla dakikalar içinde lezzetli yemekler hazırlayın. Yetkili bayi güvencesiyle.",
-  heroGradient: "from-rose-400 via-pink-400 to-fuchsia-400",
-  ctaButtonText: "Modelleri Gör",
-  ctaButtonLink: "#urunler",
-  trustItems: [
-    { icon: Shield, label: "Yetkili Bayi", desc: "Samsung" },
-    { icon: Award, label: "2 Yıl Garanti", desc: "Tüm modellerde" },
-    { icon: Zap, label: "Hızlı Pişirme", desc: "Gelişmiş teknoloji" },
-    { icon: Sparkles, label: "Kolay Temizlik", desc: "Seramik iç yüzey" },
-  ],
-  subtypes: [],
-  benefits: [
-    { icon: Shield, title: "2 Yıl Resmi Garanti", desc: "Samsung yetkili bayi garantisiyle güvende olun." },
-    { icon: Zap, title: "Hızlı Isıtma", desc: "Gelişmiş ısıtma teknolojisiyle yemekleriniz hızla hazır." },
-    { icon: Sparkles, title: "Kolay Temizlik", desc: "Seramik iç yüzey sayesinde temizlik çok kolay." },
-    { icon: Wrench, title: "Ankastre Seçenekler", desc: "Mutfak dolabınıza entegre ankastre modeller mevcut." },
-  ],
-  benefitsTitle: "Neden ZorluPlus'tan Mikrodalga Almalısınız?",
-  benefitsDescription: "Samsung yetkili bayisi olarak en yeni mikrodalga fırın modellerini yetkili garanti ile sunuyoruz.",
-  quoteTitle: "Mikrodalga Fiyat Teklifi",
-  quoteDescription: "Bilgilerinizi bırakın, size özel teklifimizi sunalım.",
-  productsTitle: "Mikrodalga Fırınlar",
-  productsCategoryLink: "/kategori/mutfak-aletleri/mikrodalga",
-  productsCategoryLinkText: "Tümünü Gör",
-  filterProducts: (p) => (p.category === "mutfak-aletleri" && p.subcategory === "mikrodalga") || (p.category === "ankastre" && p.subcategory === "firin"),
-  faq: [
-    { q: "Solo mu grill mi almalıyım?", a: "Solo mikrodalga ısıtma ve çözme için idealdir. Grill modelleri ise üst ısıtıcı ile kızartma da yapabilir." },
-    { q: "Ankastre mikrodalga var mı?", a: "Evet, Samsung ankastre mikrodalga modelleri mevcuttur. Mutfak dolabınıza entegre edilir." },
-    { q: "Taksit seçenekleri var mı?", a: "Evet, kredi kartına taksit ve havale/EFT ödeme seçeneklerimiz mevcuttur." },
-  ],
-  faqTitle: "Sık Sorulan Sorular",
-  faqDescription: "Mikrodalga seçimi hakkında merak ettikleriniz",
-  jsonLdName: "Mikrodalga Fırın Modelleri - Zorlu Digital Plaza",
-};
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function MikrodalgaLandingPage() {
+  const { t } = useLanguage();
+
+  const config: CategoryLandingConfig = {
+    slug: "mikrodalga",
+    seoTitle: t("lp.mikro.seoTitle"),
+    seoDescription: t("lp.mikro.seoDesc"),
+    heroBadge: t("lp.mikro.heroBadge"),
+    heroTitle: t("lp.mikro.heroTitle"),
+    heroTitleHighlight: t("lp.mikro.heroHighlight"),
+    heroDescription: t("lp.mikro.heroDesc"),
+    heroGradient: "from-rose-400 via-pink-400 to-fuchsia-400",
+    ctaButtonText: t("lp.mikro.ctaBtn"),
+    ctaButtonLink: "#urunler",
+    trustItems: [
+      { icon: Shield, label: t("lp.mikro.trust1"), desc: "Samsung" },
+      { icon: Award, label: t("lp.mikro.trust2"), desc: t("lp.mikro.trust2d") },
+      { icon: Zap, label: t("lp.mikro.trust3"), desc: t("lp.mikro.trust3d") },
+      { icon: Sparkles, label: t("lp.mikro.trust4"), desc: t("lp.mikro.trust4d") },
+    ],
+    subtypes: [],
+    benefits: [
+      { icon: Shield, title: t("lp.mikro.ben1"), desc: t("lp.mikro.ben1d") },
+      { icon: Zap, title: t("lp.mikro.ben2"), desc: t("lp.mikro.ben2d") },
+      { icon: Sparkles, title: t("lp.mikro.ben3"), desc: t("lp.mikro.ben3d") },
+      { icon: Wrench, title: t("lp.mikro.ben4"), desc: t("lp.mikro.ben4d") },
+    ],
+    benefitsTitle: t("lp.mikro.benTitle"),
+    benefitsDescription: t("lp.mikro.benDesc"),
+    quoteTitle: t("lp.mikro.quoteTitle"),
+    quoteDescription: t("lp.mikro.quoteDesc"),
+    productsTitle: t("lp.mikro.productsTitle"),
+    productsCategoryLink: "/kategori/mutfak-aletleri/mikrodalga",
+    productsCategoryLinkText: t("lp.mikro.viewAll"),
+    filterProducts: (p) => (p.category === "mutfak-aletleri" && p.subcategory === "mikrodalga") || (p.category === "ankastre" && p.subcategory === "firin"),
+    faq: [
+      { q: t("lp.mikro.faq1q"), a: t("lp.mikro.faq1a") },
+      { q: t("lp.mikro.faq2q"), a: t("lp.mikro.faq2a") },
+      { q: t("lp.mikro.faq3q"), a: t("lp.mikro.faq3a") },
+    ],
+    faqTitle: t("lp.mikro.faqTitle"),
+    faqDescription: t("lp.mikro.faqDesc"),
+    jsonLdName: "Mikrodalga Fırın Modelleri - Zorlu Digital Plaza",
+  };
+
   return <CategoryLandingTemplate config={config} />;
 }

@@ -2,55 +2,58 @@ import {
   Shield, Award, Wrench, Zap, Snowflake, Thermometer, Wind, Fan,
 } from "lucide-react";
 import CategoryLandingTemplate, { CategoryLandingConfig } from "@/components/CategoryLandingTemplate";
-
-const config: CategoryLandingConfig = {
-  slug: "klima",
-  seoTitle: "Klima Fiyatları | Samsung & LG Inverter Klima - Kıbrıs | Zorlu Digital Plaza",
-  seoDescription: "Kıbrıs'ta Samsung ve LG inverter klima modelleri. Split klima, portatif klima. Ücretsiz montaj, 2 yıl garanti. Yetkili bayi güvencesiyle klima alın.",
-  heroBadge: "Samsung & LG Yetkili Bayi",
-  heroTitle: "Serinliğin",
-  heroTitleHighlight: "En Verimli Hali",
-  heroDescription: "Samsung ve LG inverter klima modelleriyle enerji tasarrufu yaparak serinleyin. Ücretsiz montaj ve 2 yıl garanti dahil.",
-  heroGradient: "from-cyan-400 via-blue-400 to-indigo-400",
-  ctaButtonText: "Klima Modellerini Gör",
-  ctaButtonLink: "#urunler",
-  trustItems: [
-    { icon: Shield, label: "Yetkili Bayi", desc: "Samsung & LG" },
-    { icon: Award, label: "2 Yıl Garanti", desc: "Tüm klimalarda" },
-    { icon: Wrench, label: "Ücretsiz Montaj", desc: "Profesyonel kurulum" },
-    { icon: Zap, label: "Inverter Teknoloji", desc: "%60 enerji tasarrufu" },
-  ],
-  subtypes: [
-    { icon: Snowflake, name: "Split Klima", desc: "Duvar tipi inverter klimalar", link: "/kategori/klima-isitma/split-klima" },
-    { icon: Wind, name: "Portatif Klima", desc: "Taşınabilir, montajsız klimalar", link: "/kategori/klima-isitma/portatif-klima" },
-    { icon: Fan, name: "Salon Tipi", desc: "Geniş alanlar için yüksek kapasiteli", link: "/kategori/klima-isitma/klima" },
-    { icon: Thermometer, name: "Isıtıcılar", desc: "Kış ayları için ısıtma çözümleri", link: "/kategori/klima-isitma/isiticilar" },
-  ],
-  benefits: [
-    { icon: Wrench, title: "Ücretsiz Montaj", desc: "Profesyonel ekibimiz klimanızı monte eder, bakır boru dahil." },
-    { icon: Shield, title: "2 Yıl Resmi Garanti", desc: "Samsung & LG yetkili bayi garantisiyle güvende olun." },
-    { icon: Zap, title: "Inverter Teknoloji", desc: "A+++ enerji sınıfıyla %60'a varan enerji tasarrufu." },
-    { icon: Snowflake, title: "BTU Danışmanlığı", desc: "Odanıza uygun BTU hesaplaması yapıyoruz." },
-  ],
-  benefitsTitle: "Neden ZorluPlus'tan Klima Almalısınız?",
-  benefitsDescription: "Samsung & LG yetkili bayisi olarak en yeni inverter klima modellerini ücretsiz montaj ve yetkili garanti ile sunuyoruz.",
-  quoteTitle: "Klima Fiyat Teklifi",
-  quoteDescription: "Bilgilerinizi bırakın, odanıza uygun klima teklifimizi sunalım.",
-  productsTitle: "Klima Modelleri",
-  productsCategoryLink: "/kategori/klima-isitma",
-  productsCategoryLinkText: "Tümünü Gör",
-  filterProducts: (p) => p.category === "klima-isitma",
-  faq: [
-    { q: "Klima montajı ücretsiz mi?", a: "Evet, tüm klima alımlarında ücretsiz montaj hizmetimiz mevcuttur. Standart bakır boru dahildir." },
-    { q: "Hangi BTU klimayı almalıyım?", a: "Oda büyüklüğüne göre: 15-20 m² için 9000 BTU, 20-30 m² için 12000 BTU, 30-40 m² için 18000 BTU, 40+ m² için 24000 BTU önerilir." },
-    { q: "Inverter klima nedir?", a: "Inverter klimalar kompresör hızını ihtiyaca göre ayarlayarak %60'a varan enerji tasarrufu sağlar ve daha sessiz çalışır." },
-    { q: "Klima bakım hizmeti var mı?", a: "Evet, periyodik klima bakım ve temizlik hizmetimiz mevcuttur. Yetkili servis güvencesiyle." },
-  ],
-  faqTitle: "Sık Sorulan Sorular",
-  faqDescription: "Klima seçimi ve hizmetlerimiz hakkında merak ettikleriniz",
-  jsonLdName: "Klima Modelleri - Zorlu Digital Plaza",
-};
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function KlimaLandingPage() {
+  const { t } = useLanguage();
+
+  const config: CategoryLandingConfig = {
+    slug: "klima",
+    seoTitle: t("lp.klima.seoTitle"),
+    seoDescription: t("lp.klima.seoDesc"),
+    heroBadge: t("lp.klima.heroBadge"),
+    heroTitle: t("lp.klima.heroTitle"),
+    heroTitleHighlight: t("lp.klima.heroHighlight"),
+    heroDescription: t("lp.klima.heroDesc"),
+    heroGradient: "from-cyan-400 via-blue-400 to-indigo-400",
+    ctaButtonText: t("lp.klima.ctaBtn"),
+    ctaButtonLink: "#urunler",
+    trustItems: [
+      { icon: Shield, label: t("lp.klima.trust1"), desc: "Samsung & LG" },
+      { icon: Award, label: t("lp.klima.trust2"), desc: t("lp.klima.trust2d") },
+      { icon: Wrench, label: t("lp.klima.trust3"), desc: t("lp.klima.trust3d") },
+      { icon: Zap, label: t("lp.klima.trust4"), desc: t("lp.klima.trust4d") },
+    ],
+    subtypes: [
+      { icon: Snowflake, name: t("lp.klima.sub1"), desc: t("lp.klima.sub1d"), link: "/kategori/klima-isitma/split-klima" },
+      { icon: Wind, name: t("lp.klima.sub2"), desc: t("lp.klima.sub2d"), link: "/kategori/klima-isitma/portatif-klima" },
+      { icon: Fan, name: t("lp.klima.sub3"), desc: t("lp.klima.sub3d"), link: "/kategori/klima-isitma/klima" },
+      { icon: Thermometer, name: t("lp.klima.sub4"), desc: t("lp.klima.sub4d"), link: "/kategori/klima-isitma/isiticilar" },
+    ],
+    benefits: [
+      { icon: Wrench, title: t("lp.klima.ben1"), desc: t("lp.klima.ben1d") },
+      { icon: Shield, title: t("lp.klima.ben2"), desc: t("lp.klima.ben2d") },
+      { icon: Zap, title: t("lp.klima.ben3"), desc: t("lp.klima.ben3d") },
+      { icon: Snowflake, title: t("lp.klima.ben4"), desc: t("lp.klima.ben4d") },
+    ],
+    benefitsTitle: t("lp.klima.benTitle"),
+    benefitsDescription: t("lp.klima.benDesc"),
+    quoteTitle: t("lp.klima.quoteTitle"),
+    quoteDescription: t("lp.klima.quoteDesc"),
+    productsTitle: t("lp.klima.productsTitle"),
+    productsCategoryLink: "/kategori/klima-isitma",
+    productsCategoryLinkText: t("lp.klima.viewAll"),
+    filterProducts: (p) => p.category === "klima-isitma",
+    faq: [
+      { q: t("lp.klima.faq1q"), a: t("lp.klima.faq1a") },
+      { q: t("lp.klima.faq2q"), a: t("lp.klima.faq2a") },
+      { q: t("lp.klima.faq3q"), a: t("lp.klima.faq3a") },
+      { q: t("lp.klima.faq4q"), a: t("lp.klima.faq4a") },
+    ],
+    faqTitle: t("lp.klima.faqTitle"),
+    faqDescription: t("lp.klima.faqDesc"),
+    jsonLdName: "Klima Modelleri - Zorlu Digital Plaza",
+  };
+
   return <CategoryLandingTemplate config={config} />;
 }
