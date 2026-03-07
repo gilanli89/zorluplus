@@ -160,7 +160,7 @@ export function HakkimizdaPage() {
                     <s.icon className="h-8 w-8" />
                   </motion.div>
                   <motion.p
-                    className="font-display text-4xl md:text-5xl font-extrabold"
+                    className="font-display text-3xl md:text-4xl font-extrabold"
                     animate={{ color: ["hsl(0,0%,100%)", "hsl(210,100%,85%)", "hsl(0,0%,100%)"] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
                   >
