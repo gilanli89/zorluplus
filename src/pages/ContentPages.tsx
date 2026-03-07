@@ -601,18 +601,73 @@ export function EkibimizPage() {
   ];
 
   return (
-    <ContentPage title="Ekibimiz">
-      <p>Zorlu Digital Plaza ailesi, alanında uzman satış danışmanları ve teknik servis ekibinden oluşmaktadır. Müşteri memnuniyetini ön planda tutan ekibimiz, size en doğru ürünü seçmenizde yardımcı olur.</p>
-      <div className="not-prose mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {team.map((m) => (
-          <div key={m.name} className="flex flex-col items-center text-center p-4 rounded-xl border border-border bg-muted/30 hover:bg-muted/60 transition-colors">
-            <img src={m.photo} alt={m.name} className="w-24 h-28 object-cover rounded-lg mb-3" loading="lazy" />
-            <p className="font-display font-bold text-sm text-foreground leading-tight">{m.name}</p>
+    <div className="container py-12 md:py-16 max-w-4xl">
+      <motion.h1
+        className="font-display text-3xl md:text-4xl font-extrabold mb-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.span
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Ekibimiz
+        </motion.span>
+      </motion.h1>
+
+      <motion.p
+        className="text-muted-foreground leading-relaxed mb-10 max-w-2xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+      >
+        <strong className="text-foreground">Zorlu Digital Plaza</strong> ailesi, alanında uzman satış danışmanları ve teknik servis ekibinden oluşmaktadır. Müşteri memnuniyetini ön planda tutan ekibimiz, size en doğru ürünü seçmenizde yardımcı olur.
+      </motion.p>
+
+      <motion.div
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+        initial="hidden"
+        animate="visible"
+        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07 } } }}
+      >
+        {team.map((m, i) => (
+          <motion.div
+            key={m.name}
+            className="flex flex-col items-center text-center p-4 rounded-xl border border-border bg-card relative overflow-hidden group"
+            variants={{ hidden: { opacity: 0, y: 20, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1 } }}
+            whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.15)" }}
+            transition={{ duration: 0.4 }}
+          >
+            <motion.div
+              className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              style={{ background: "linear-gradient(135deg, hsl(221,83%,53%,0.05), transparent)" }}
+            />
+            <motion.div
+              className="relative mb-3"
+              animate={{
+                filter: [
+                  "drop-shadow(0 0 0px hsl(221,83%,53%,0))",
+                  "drop-shadow(0 0 8px hsl(221,83%,53%,0.2))",
+                  "drop-shadow(0 0 0px hsl(221,83%,53%,0))",
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
+            >
+              <img src={m.photo} alt={m.name} className="w-24 h-28 object-cover rounded-lg" loading="lazy" />
+            </motion.div>
+            <motion.p
+              className="font-display font-bold text-sm leading-tight"
+              animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+            >
+              {m.name}
+            </motion.p>
             <p className="text-xs text-muted-foreground mt-1">{m.role}</p>
-          </div>
+          </motion.div>
         ))}
-      </div>
-    </ContentPage>
+      </motion.div>
+    </div>
   );
 }
 
