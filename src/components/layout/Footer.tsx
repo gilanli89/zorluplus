@@ -175,13 +175,38 @@ export default function Footer() {
             <div className="blockchain-dot blockchain-dot-4" />
             <div className="blockchain-dot blockchain-dot-5" />
           </div>
-          <motion.img
-            src={zorluDigitalLogo}
-            alt="Zorlu Digital Trade & Services Ltd."
-            className="h-24 md:h-32 w-auto object-contain shrink-0 relative z-10 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]"
-            animate={{ filter: ["drop-shadow(0 0 8px rgba(59,130,246,0.3))", "drop-shadow(0 0 20px rgba(59,130,246,0.6))", "drop-shadow(0 0 8px rgba(59,130,246,0.3))"] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
+          <motion.div className="relative shrink-0 z-10">
+            {/* Outer pulse rings */}
+            <motion.div
+              className="absolute inset-[-12px] rounded-full border-2 border-primary/30"
+              animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute inset-[-24px] rounded-full border border-primary/15"
+              animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.4, 0.15] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            />
+            {/* Glow backdrop */}
+            <motion.div
+              className="absolute inset-[-8px] rounded-2xl bg-primary/5 blur-xl"
+              animate={{ opacity: [0.3, 0.7, 0.3], scale: [0.95, 1.05, 0.95] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.img
+              src={zorluDigitalLogo}
+              alt="Zorlu Digital Trade & Services Ltd."
+              className="h-24 md:h-32 w-auto object-contain relative"
+              animate={{
+                filter: [
+                  "drop-shadow(0 0 8px rgba(59,130,246,0.2)) drop-shadow(0 0 20px rgba(59,130,246,0.1))",
+                  "drop-shadow(0 0 16px rgba(59,130,246,0.5)) drop-shadow(0 0 40px rgba(59,130,246,0.3))",
+                  "drop-shadow(0 0 8px rgba(59,130,246,0.2)) drop-shadow(0 0 20px rgba(59,130,246,0.1))",
+                ],
+              }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
           <p className="text-sm md:text-base font-bold text-muted-foreground relative z-10">
             ZorluPlus bir Zorlu Digital Trade &amp; Services Ltd. kuruluşudur. Tüm hakları saklıdır. 2026©
           </p>
