@@ -54,7 +54,16 @@ function CountUp({ target, suffix, duration = 2 }: { target: number; suffix: str
 export function HakkimizdaPage() {
   const { t } = useLanguage();
 
-  const brands = ["Samsung", "LG", "Midea", "AUX", "Toshiba", "Philips", "Krups", "Sharp"];
+  const brands = [
+    { name: "Samsung", logo: "/brands/samsung-logo.png" },
+    { name: "LG", logo: "/brands/lg-logo.png" },
+    { name: "Midea", logo: "/brands/midea.png" },
+    { name: "AUX", logo: "/brands/aux.png" },
+    { name: "Toshiba", logo: "/brands/toshiba.png" },
+    { name: "Philips", logo: "/brands/philips.png" },
+    { name: "Krups", logo: "/brands/krups.png" },
+    { name: "Sharp", logo: "/brands/sharp.png" },
+  ];
 
   const whyFeatures = [
     t("about.why.f1"), t("about.why.f2"), t("about.why.f3"),
@@ -253,8 +262,8 @@ export function HakkimizdaPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
             {brands.map((brand, i) => (
               <motion.div
-                key={brand}
-                className="rounded-2xl border border-border bg-card p-4 text-center font-semibold text-foreground relative overflow-hidden group"
+                key={brand.name}
+                className="rounded-2xl border border-border bg-card p-6 flex flex-col items-center justify-center gap-3 relative overflow-hidden group"
                 variants={{ hidden: { opacity: 0, y: 20, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1 } }}
                 whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.2)" }}
               >
@@ -262,13 +271,8 @@ export function HakkimizdaPage() {
                   className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{ background: "linear-gradient(135deg, hsl(221,83%,53%,0.1), transparent, hsl(221,83%,53%,0.05))" }}
                 />
-                <motion.span
-                  className="relative z-10"
-                  animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-                >
-                  {brand}
-                </motion.span>
+                <img src={brand.logo} alt={brand.name} className="h-12 w-auto object-contain relative z-10" />
+                <span className="text-sm font-semibold text-muted-foreground relative z-10">{brand.name}</span>
               </motion.div>
             ))}
           </div>
