@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { BRAND, FOOTER_LINKS } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 import zorluLogo from "@/assets/zorlu-logo.png";
-import zorluDtasLogo from "@/assets/zorlu-dtas-logo.png";
+import zorluDigitalLogo from "@/assets/zorlu-digital-logo.png";
 
 const stagger = {
   hidden: {},
