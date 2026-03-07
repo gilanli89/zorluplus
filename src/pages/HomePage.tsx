@@ -35,7 +35,7 @@ export default function HomePage() {
 
   const CATEGORY_WIDGETS = [
     { slug: "tv-goruntu", titleKey: "home.categoryWidgets.tv", subtitleKey: "home.categoryWidgets.tvSub", image: widgetTv },
-    { slug: "beyaz-esya", titleKey: "home.categoryWidgets.whiteGoods", subtitleKey: "home.categoryWidgets.whiteGoodsSub", image: widgetBeyazEsya },
+    { slug: "beyaz-esya", titleKey: "home.categoryWidgets.whiteGoods", subtitleKey: "home.categoryWidgets.whiteGoodsSub", badgeKey: "home.categoryWidgets.whiteGoodsBadge", ctaKey: "home.categoryWidgets.whiteGoodsCta", image: widgetBeyazEsya },
     { slug: "ankastre", titleKey: "home.categoryWidgets.builtin", subtitleKey: "home.categoryWidgets.builtinSub", image: widgetAnkastre },
     { slug: "klima-isitma", titleKey: "home.categoryWidgets.ac", subtitleKey: "home.categoryWidgets.acSub", image: widgetKlima },
   ];
