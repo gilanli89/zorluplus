@@ -154,7 +154,7 @@ export default function TVLandingPage() {
     <div className="space-y-6">
       {activeFilterCount > 0 && (
         <button onClick={clearFilters} className="text-xs text-primary hover:underline flex items-center gap-1 font-semibold">
-          <X className="h-3 w-3" /> Filtreleri Temizle ({activeFilterCount})
+          <X className="h-3 w-3" /> {t("lp.tv.clearFilters")} ({activeFilterCount})
         </button>
       )}
 
