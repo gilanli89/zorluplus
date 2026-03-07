@@ -1925,7 +1925,7 @@ export function MesafeliSatisSozlesmesiPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Mesafeli Satış Sözleşmesi
+          {t("content.distance.title")}
         </motion.span>
       </motion.h1>
 
