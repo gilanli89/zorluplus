@@ -135,53 +135,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Brand Logos Carousel */}
-      <section className="py-10 md:py-14 overflow-hidden">
-        <div className="container">
-          <motion.h3
-            className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-8"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            {t("home.authorizedBrands")}
-          </motion.h3>
-        </div>
-        <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
-          <div className="flex animate-marquee gap-6 w-max">
-            {[...Array(2)].map((_, loop) => (
-              <div key={loop} className="flex gap-6">
-                {[
-                  { name: "Samsung", src: "/brands/samsung.png" },
-                  { name: "LG", src: "/brands/lg.png" },
-                  { name: "Bosch", src: "/brands/bosch.png" },
-                  { name: "Philips", src: "/brands/philips.png" },
-                  { name: "Midea", src: "/brands/midea.png" },
-                  { name: "Sharp", src: "/brands/sharp.png" },
-                  { name: "Toshiba", src: "/brands/toshiba.png" },
-                  { name: "Krups", src: "/brands/krups.png" },
-                  { name: "AUX", src: "/brands/aux.png" },
-                ].map(brand => (
-                  <div
-                    key={`${loop}-${brand.name}`}
-                    className="flex items-center justify-center rounded-xl border border-border bg-card w-[180px] h-[100px] md:w-[200px] md:h-[110px] p-4 hover:shadow-md hover:border-primary/30 transition-all duration-300"
-                  >
-                    <img
-                      src={brand.src}
-                      alt={`${brand.name} logo`}
-                      className="w-[80%] h-[70%] object-contain grayscale hover:grayscale-0 transition-all duration-500"
-                      loading="lazy"
-                    />
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
     </>
   );
 }
