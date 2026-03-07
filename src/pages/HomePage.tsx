@@ -147,14 +147,6 @@ export default function HomePage() {
           >
             {t("home.authorizedBrands")}
           </motion.h3>
-          <div className="flex justify-center mb-8">
-            <img
-              src="/brands/zorlu-digital-banner.gif"
-              alt="Samsung & LG Yetkili Servis ve Satış Partneri"
-              className="w-full max-w-3xl h-auto rounded-xl"
-              loading="lazy"
-            />
-          </div>
         </div>
         <div className="relative">
           <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
