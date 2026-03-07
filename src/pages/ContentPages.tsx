@@ -3,6 +3,7 @@ import ContentPage from "@/components/ContentPage";
 import { motion } from "framer-motion";
 import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, Mail, Recycle, BatteryCharging, Zap, Globe, Lightbulb, Leaf } from "lucide-react";
 import { BRANCHES } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const testimonials = [
   { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
