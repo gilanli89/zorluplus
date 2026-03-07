@@ -208,7 +208,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
               </div>
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="rounded-2xl border border-border bg-card p-6 shadow-lg">
-              <h3 className="font-display font-bold text-lg text-foreground mb-1">{config.quoteTitle}</h3>
+              <h3 className="heading-4 text-foreground mb-1">{config.quoteTitle}</h3>
               <p className="text-sm text-muted-foreground mb-5">{config.quoteDescription}</p>
               <QuoteForm />
             </motion.div>
