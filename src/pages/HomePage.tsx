@@ -136,6 +136,16 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Banner */}
+      <section className="w-full overflow-hidden">
+        <img
+          src={zorluBanner}
+          alt="Samsung & LG Yetkili Servis ve Satış Partneri"
+          className="w-full h-auto object-cover"
+          loading="lazy"
+        />
+      </section>
+
     </>
   );
 }
