@@ -74,7 +74,7 @@ export default function TVLandingPage() {
     if (text.includes("NANOCELL")) return "NanoCell";
     if (text.includes("CRYSTAL") || text.includes("UHD")) return "Crystal UHD";
     if (text.includes("LED")) return "LED";
-    return "Diğer";
+    return t("lp.tv.other");
   };
 
   // Extract OS from name/tags
