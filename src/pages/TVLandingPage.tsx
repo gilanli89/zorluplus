@@ -255,9 +255,9 @@ export default function TVLandingPage() {
           <div className="flex items-end justify-between mb-8">
             <div>
               <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                TV Modelleri
+                {t("lp.tv.productsTitle")}
               </h2>
-              <p className="text-muted-foreground mt-1">{display.length} ürün listeleniyor</p>
+              <p className="text-muted-foreground mt-1">{display.length} {t("lp.tv.productsCount")}</p>
             </div>
             <Link to="/kategori/tv-goruntu" className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
               Tümünü Gör <ArrowRight className="inline h-3.5 w-3.5" />
