@@ -2267,7 +2267,7 @@ export function OdemeYontemleriPage() {
 }
 
 export function SurdurulebilirlikPage() {
-  const sections = [
+  const { t } = useLanguage();
     {
       icon: Recycle,
       title: "Elektronik Atık Geri Dönüşümü",
