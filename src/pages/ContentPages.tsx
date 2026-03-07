@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import ContentPage from "@/components/ContentPage";
 import { motion } from "framer-motion";
-import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin } from "lucide-react";
+import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote } from "lucide-react";
+import { BRANCHES } from "@/lib/constants";
 
 const testimonials = [
   { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
@@ -261,21 +262,131 @@ export function HakkimizdaPage() {
         </motion.section>
 
         {/* Testimonials */}
-        <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-6">Müşterilerimiz Ne Diyor?</h2>
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
+        >
+          <motion.h2
+            className="font-display text-2xl md:text-3xl font-bold mb-6"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+          >
+            Müşterilerimiz Ne Diyor?
+          </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {testimonials.map((t, i) => (
-              <div key={i} className="rounded-2xl border border-border bg-card p-5">
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4">"{t.text}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+              <motion.div
+                key={i}
+                className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden group"
+                variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1 } }}
+                whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.15)" }}
+                transition={{ duration: 0.4 }}
+              >
+                <motion.div
+                  className="absolute top-3 right-3 text-primary/10"
+                  animate={{ opacity: [0.1, 0.25, 0.1], rotate: [0, 5, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+                >
+                  <Quote className="h-8 w-8" />
+                </motion.div>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4 relative z-10">"{t.text}"</p>
+                <div className="flex items-center gap-3 relative z-10">
+                  <motion.div
+                    className="h-9 w-9 rounded-full flex items-center justify-center font-bold text-sm text-primary-foreground"
+                    animate={{
+                      backgroundColor: ["hsl(221,83%,53%)", "hsl(221,83%,63%)", "hsl(221,83%,53%)"],
+                      boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"],
+                    }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
+                  >
                     {t.name.charAt(0)}
-                  </div>
-                  <p className="font-semibold text-sm text-foreground">{t.name}</p>
+                  </motion.div>
+                  <motion.p
+                    className="font-semibold text-sm"
+                    animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+                  >
+                    {t.name}
+                  </motion.p>
                 </div>
-              </div>
+                {/* Google Maps rating stars */}
+                <div className="flex items-center gap-1 mt-3 pt-3 border-t border-border">
+                  {[...Array(5)].map((_, si) => (
+                    <motion.div
+                      key={si}
+                      animate={{ color: ["hsl(45,93%,47%)", "hsl(45,93%,57%)", "hsl(45,93%,47%)"] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: si * 0.1 }}
+                    >
+                      <Star className="h-3.5 w-3.5 fill-current" />
+                    </motion.div>
+                  ))}
+                  <span className="text-xs text-muted-foreground ml-1">Google Maps</span>
+                </div>
+              </motion.div>
             ))}
           </div>
+
+          {/* Google Maps Review Summary */}
+          <motion.div
+            className="mt-6 rounded-2xl border border-border bg-card p-6 flex flex-col md:flex-row items-center gap-6"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <div className="flex items-center gap-4 shrink-0">
+              <motion.div
+                className="h-14 w-14 rounded-xl flex items-center justify-center"
+                animate={{
+                  backgroundColor: ["hsl(221,83%,53%,0.1)", "hsl(221,83%,53%,0.2)", "hsl(221,83%,53%,0.1)"],
+                  boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 20px hsl(221,83%,53%,0.15)", "0 0 0px hsl(221,83%,53%,0)"],
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <MapPin className="h-7 w-7 text-primary" />
+              </motion.div>
+              <div>
+                <motion.p
+                  className="font-display text-2xl font-extrabold"
+                  animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  4.8 / 5.0
+                </motion.p>
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, si) => (
+                    <Star key={si} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                  <span className="text-xs text-muted-foreground ml-1">Google Maps üzerinde</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
+              {BRANCHES.map((b, i) => (
+                <motion.a
+                  key={b.id}
+                  href={b.mapsLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 rounded-xl border border-border p-3 hover:border-primary/30 transition-colors"
+                  whileHover={{ scale: 1.02, boxShadow: "0 4px 15px hsl(221 83% 53% / 0.1)" }}
+                  animate={{ borderColor: ["hsl(221,83%,53%,0)", "hsl(221,83%,53%,0.2)", "hsl(221,83%,53%,0)"] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+                >
+                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <MapPin className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-foreground">{b.name}</p>
+                    <p className="text-xs text-muted-foreground">Google Maps'te görüntüle</p>
+                  </div>
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
         </motion.section>
       </div>
     </>
