@@ -117,7 +117,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {config.trustItems.map((item, i) => (
               <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><item.icon className="h-5 w-5" /></div>
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary pulse-icon" style={{ animationDelay: `${i * 0.5}s` }}><item.icon className="h-5 w-5" /></div>
                 <div>
                   <p className="text-sm font-bold text-foreground">{item.label}</p>
                   <p className="text-xs text-muted-foreground">{item.desc}</p>
