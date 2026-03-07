@@ -915,7 +915,7 @@ export function DestekPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Samsung & LG Yetkili Servis KKTC
+          {t("content.destek.title")}
         </motion.span>
       </motion.h1>
       <motion.p
@@ -924,7 +924,7 @@ export function DestekPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.15 }}
       >
-        Profesyonel Teknik Servis – Zorlu Digital Plaza
+        {t("content.destek.subtitle")}
       </motion.p>
 
       {/* Trust Cards */}
