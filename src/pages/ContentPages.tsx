@@ -2120,7 +2120,7 @@ export function SiparisTakipPage() {
 }
 
 export function OdemeYontemleriPage() {
-  const paymentMethods = [
+  const { t } = useLanguage();
     { icon: "banknote", title: "Nakit Ödeme", desc: "Mağazamızda gerçekleştireceğiniz alışverişlerde nakit ödeme kolaylığı." },
     { icon: "card", title: "Kredi / Banka Kartı", desc: "Tüm banka ve kredi kartları ile hızlı, güvenli ve Premium işlem altyapısı." },
     { icon: "building", title: "Havale / EFT", desc: "Banka hesaplarımıza anında transfer seçeneği ile dijital ödeme konforu." },
