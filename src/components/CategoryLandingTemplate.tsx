@@ -90,7 +90,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold text-white mb-5 border border-white/20">
               <Shield className="h-3.5 w-3.5" /> {config.heroBadge}
             </span>
-            <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.08] mb-4 text-white">
+            <h1 className="heading-1 mb-4 text-white">
               {config.heroTitle}<br />
               <span className={`bg-gradient-to-r ${heroGradient} bg-clip-text text-transparent`}>{config.heroTitleHighlight}</span>
             </h1>
