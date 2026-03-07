@@ -178,7 +178,7 @@ export function HakkimizdaPage() {
         {/* Hakkımızda */}
         <motion.section initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <motion.h2
-            className="font-display text-2xl md:text-3xl font-bold mb-4"
+             className="heading-2 mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           >
