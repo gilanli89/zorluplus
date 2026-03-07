@@ -117,7 +117,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {config.trustItems.map((item, i) => (
               <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><item.icon className="h-5 w-5" /></div>
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary pulse-icon" style={{ animationDelay: `${i * 0.5}s` }}><item.icon className="h-5 w-5" /></div>
                 <div>
                   <p className="text-sm font-bold text-foreground">{item.label}</p>
                   <p className="text-xs text-muted-foreground">{item.desc}</p>
@@ -133,7 +133,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         <div className="container">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="heading-2 text-foreground">{config.productsTitle}</h2>
+              <h2 className="heading-2 text-foreground pulse-heading">{config.productsTitle}</h2>
               <p className="text-muted-foreground mt-1">{display.length} {t("landing.productsListing")}</p>
             </div>
             <Link to={config.productsCategoryLink} className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
@@ -171,7 +171,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         <section className="py-12 md:py-16">
           <div className="container">
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-              <h2 className="heading-2 text-foreground mb-2">{t("landing.suitableProduct")}</h2>
+              <h2 className="heading-2 text-foreground mb-2 pulse-heading">{t("landing.suitableProduct")}</h2>
             </motion.div>
             <div className={`grid grid-cols-2 ${config.subtypes.length >= 4 ? "md:grid-cols-4" : config.subtypes.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"} gap-3 md:gap-5`}>
               {config.subtypes.map((type, i) => (
@@ -193,12 +193,12 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-              <h2 className="heading-2 text-foreground mb-3">{config.benefitsTitle}</h2>
+              <h2 className="heading-2 text-foreground mb-3 pulse-heading">{config.benefitsTitle}</h2>
               <p className="text-muted-foreground leading-relaxed mb-6">{config.benefitsDescription}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {config.benefits.map((b, i) => (
-                  <motion.div key={b.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex gap-3 rounded-xl border border-border bg-card p-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary"><b.icon className="h-5 w-5" /></div>
+                  <motion.div key={b.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex gap-3 rounded-xl border border-border bg-card p-4 pulse-card" style={{ animationDelay: `${i * 0.6}s` }}>
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary pulse-icon" style={{ animationDelay: `${i * 0.4}s` }}><b.icon className="h-5 w-5" /></div>
                     <div>
                       <p className="text-sm font-bold text-foreground">{b.title}</p>
                       <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{b.desc}</p>
@@ -220,7 +220,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
       <section className="py-12 md:py-16 bg-muted/40">
         <div className="container max-w-3xl">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-            <h2 className="heading-2 text-foreground mb-2">{config.faqTitle}</h2>
+            <h2 className="heading-2 text-foreground mb-2 pulse-heading">{config.faqTitle}</h2>
             <p className="text-muted-foreground">{config.faqDescription}</p>
           </motion.div>
           <div className="space-y-3">
@@ -248,7 +248,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
               <h3 className="heading-3 text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
               <p className="text-sm text-muted-foreground mb-5">{t("landing.whatsappOrderDesc")}</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_cta")}>
-                <Button size="lg" className="rounded-full gap-2 font-semibold bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
+                <Button size="lg" className="rounded-full gap-2 font-semibold bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white pulse-btn">
                   <MessageCircle className="h-4 w-4" /> {t("landing.writeWhatsapp")}
                 </Button>
               </a>

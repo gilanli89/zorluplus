@@ -158,7 +158,7 @@ export default function B2BPage() {
           <Building2 className="h-8 w-8 text-primary" />
         </motion.span>
         <motion.h1
-          className="font-display text-3xl md:text-4xl font-bold mb-4"
+          className="heading-1 mb-4"
           animate={colorCycle}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >

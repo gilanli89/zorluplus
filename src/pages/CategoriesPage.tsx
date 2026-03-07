@@ -17,7 +17,7 @@ export default function CategoriesPage() {
 
   return (
     <div className="container py-6 md:py-8">
-      <h1 className="font-display text-2xl md:text-3xl font-bold mb-6 text-foreground">{t("shop.title")}</h1>
+      <h1 className="heading-2 mb-6 text-foreground pulse-heading">{t("shop.title")}</h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
         {CATEGORIES.map((cat, i) => {
           const IconComp = icons[cat.icon as keyof typeof icons];

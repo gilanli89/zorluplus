@@ -97,7 +97,7 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="heading-2 text-foreground">{t("home.branches")}</h2>
+            <h2 className="heading-2 text-foreground pulse-heading">{t("home.branches")}</h2>
             <p className="text-muted-foreground mt-2">{t("home.branchesDesc")}</p>
           </motion.div>
           <motion.div
@@ -111,7 +111,7 @@ export default function HomePage() {
               <motion.div
                 key={b.id}
                 variants={branchCard}
-                className="card-lift rounded-2xl border border-border bg-card p-6"
+                className="card-lift rounded-2xl border border-border bg-card p-6 pulse-card"
               >
                 <h3 className="heading-4 text-foreground mb-2">{b.name}</h3>
                 <p className="text-sm text-muted-foreground mb-1">{b.address}</p>

@@ -65,7 +65,7 @@ export default function SearchPage() {
 
   return (
     <div className="container py-6">
-      <h1 className="font-display text-2xl font-bold mb-4 text-foreground">{t("search.title")}</h1>
+      <h1 className="heading-2 mb-4 text-foreground pulse-heading">{t("search.title")}</h1>
       <div className="relative mb-6 flex items-center gap-2">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

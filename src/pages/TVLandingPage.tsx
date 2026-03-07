@@ -254,7 +254,7 @@ export default function TVLandingPage() {
         <div className="container">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="heading-2 text-foreground">
+              <h2 className="heading-2 text-foreground pulse-heading">
                 {t("lp.tv.productsTitle")}
               </h2>
               <p className="text-muted-foreground mt-1">{display.length} {t("lp.tv.productsCount")}</p>
@@ -321,7 +321,7 @@ export default function TVLandingPage() {
       <section className="py-12 md:py-16">
         <div className="container">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-            <h2 className="heading-2 text-foreground mb-2">
+            <h2 className="heading-2 text-foreground mb-2 pulse-heading">
               {t("lp.tv.suitableTitle")}
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto">
@@ -352,7 +352,7 @@ export default function TVLandingPage() {
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-              <h2 className="heading-2 text-foreground mb-3">
+              <h2 className="heading-2 text-foreground mb-3 pulse-heading">
                 {t("lp.tv.benTitle")}
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-6">
@@ -395,7 +395,7 @@ export default function TVLandingPage() {
       <section className="py-12 md:py-16 bg-muted/40">
         <div className="container max-w-3xl">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-            <h2 className="heading-2 text-foreground mb-2">
+            <h2 className="heading-2 text-foreground mb-2 pulse-heading">
               {t("lp.tv.faqTitle")}
             </h2>
             <p className="text-muted-foreground">{t("lp.tv.faqDesc")}</p>
