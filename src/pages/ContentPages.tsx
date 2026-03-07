@@ -1545,7 +1545,7 @@ export function GizlilikPolitikasiPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Premium Gizlilik ve Veri Güvenliği Politikası
+          {t("content.privacy.title")}
         </motion.span>
       </motion.h1>
 
