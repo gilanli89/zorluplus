@@ -111,7 +111,7 @@ export default function HomePage() {
               <motion.div
                 key={b.id}
                 variants={branchCard}
-                className="card-lift rounded-2xl border border-border bg-card p-6"
+                className="card-lift rounded-2xl border border-border bg-card p-6 pulse-card"
               >
                 <h3 className="heading-4 text-foreground mb-2">{b.name}</h3>
                 <p className="text-sm text-muted-foreground mb-1">{b.address}</p>
