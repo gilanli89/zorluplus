@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const items = [
 { icon: null, label: "Yetkili Servis", desc: "Samsung & LG", hasBrandLogos: true, customIcon: null },
-{ icon: Award, label: "2 Yıl Garanti", desc: "Resmi garanti", hasBrandLogos: false, customIcon: null },
+{ icon: null, label: "2 Yıl Garanti", desc: "Resmi garanti", hasBrandLogos: false, customIcon: null },
 { icon: Wrench, label: "Ücretsiz Montaj", desc: "Uygun ürünlerde", hasBrandLogos: false, customIcon: "/icons/montaj.gif" },
 { icon: Truck, label: "Hızlı Teslimat", desc: "Tüm KKTC'ye", hasBrandLogos: false, customIcon: "/icons/delivery-truck.gif" }];
 
