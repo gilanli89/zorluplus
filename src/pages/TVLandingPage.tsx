@@ -433,8 +433,8 @@ export default function TVLandingPage() {
               className="rounded-2xl border border-border bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center"
             >
               <MessageCircle className="h-10 w-10 text-[hsl(142,70%,40%)] mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">WhatsApp ile Sipariş</h3>
-              <p className="text-sm text-muted-foreground mb-5">Hızlı sipariş ve bilgi almak için WhatsApp'tan yazın.</p>
+              <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
+              <p className="text-sm text-muted-foreground mb-5">{t("landing.whatsappOrderDesc")}</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("tv_cta")}>
                 <Button size="lg" className="rounded-full gap-2 font-semibold bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
                   <MessageCircle className="h-4 w-4" /> WhatsApp'a Yaz
