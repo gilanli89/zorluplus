@@ -321,7 +321,7 @@ export default function TVLandingPage() {
       <section className="py-12 md:py-16">
         <div className="container">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-            <h2 className="heading-2 text-foreground mb-2">
+            <h2 className="heading-2 text-foreground mb-2 pulse-heading">
               {t("lp.tv.suitableTitle")}
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto">
