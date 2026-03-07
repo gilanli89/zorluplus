@@ -200,7 +200,7 @@ export function HakkimizdaPage() {
           >
             {t("about.why.title")}
           </motion.h2>
-          <p className="text-muted-foreground text-lg mb-6">{t("about.why.desc")}</p>
+          <p className="text-muted-foreground body-lg mb-6">{t("about.why.desc")}</p>
           <motion.h3
             className="font-display text-xl font-bold mb-4"
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
