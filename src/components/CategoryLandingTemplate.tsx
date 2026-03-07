@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useProducts } from "@/hooks/useProducts";
 import { BRAND, BRANCHES } from "@/lib/constants";
 import { trackWhatsAppClick } from "@/lib/tracking";
+import { useLanguage } from "@/contexts/LanguageContext";
 import ProductCard from "@/components/ProductCard";
 import QuoteForm from "@/components/QuoteForm";
 
@@ -20,23 +21,9 @@ const fadeUp = {
   }),
 };
 
-export interface LandingSubtype {
-  icon: LucideIcon;
-  name: string;
-  desc: string;
-  link: string;
-}
-
-export interface LandingBenefit {
-  icon: LucideIcon;
-  title: string;
-  desc: string;
-}
-
-export interface LandingFAQ {
-  q: string;
-  a: string;
-}
+export interface LandingSubtype { icon: LucideIcon; name: string; desc: string; link: string; }
+export interface LandingBenefit { icon: LucideIcon; title: string; desc: string; }
+export interface LandingFAQ { q: string; a: string; }
 
 export interface CategoryLandingConfig {
   slug: string;
@@ -63,18 +50,17 @@ export interface CategoryLandingConfig {
   faq: LandingFAQ[];
   faqTitle: string;
   faqDescription: string;
-  /** Filter function to select products */
   filterProducts: (p: { category: string; subcategory: string }) => boolean;
   jsonLdName: string;
 }
 
 export default function CategoryLandingTemplate({ config }: { config: CategoryLandingConfig }) {
+  const { t } = useLanguage();
   const { data: products = [] } = useProducts();
   const filtered = useMemo(() => products.filter(config.filterProducts), [products, config.filterProducts]);
   const featured = filtered.filter(p => p.isFeatured).slice(0, 8);
   const display = featured.length >= 4 ? featured : filtered.slice(0, 8);
 
-  // SEO
   if (typeof document !== "undefined") {
     document.title = config.seoTitle;
     const meta = document.querySelector('meta[name="description"]');
@@ -106,13 +92,9 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
             </span>
             <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.08] mb-4 text-white">
               {config.heroTitle}<br />
-              <span className={`bg-gradient-to-r ${heroGradient} bg-clip-text text-transparent`}>
-                {config.heroTitleHighlight}
-              </span>
+              <span className={`bg-gradient-to-r ${heroGradient} bg-clip-text text-transparent`}>{config.heroTitleHighlight}</span>
             </h1>
-            <p className="text-white/80 text-lg md:text-xl mb-8 max-w-lg leading-relaxed">
-              {config.heroDescription}
-            </p>
+            <p className="text-white/80 text-lg md:text-xl mb-8 max-w-lg leading-relaxed">{config.heroDescription}</p>
             <div className="flex flex-wrap gap-3">
               <a href="#urunler">
                 <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg">
@@ -121,7 +103,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
               </a>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_hero")}>
                 <Button size="lg" className="font-semibold gap-2 rounded-full px-6 shadow-lg bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white border-0">
-                  <MessageCircle className="h-4 w-4" /> Hemen Bilgi Al
+                  <MessageCircle className="h-4 w-4" /> {t("landing.getInfo")}
                 </Button>
               </a>
             </div>
@@ -135,9 +117,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {config.trustItems.map((item, i) => (
               <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <item.icon className="h-5 w-5" />
-                </div>
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><item.icon className="h-5 w-5" /></div>
                 <div>
                   <p className="text-sm font-bold text-foreground">{item.label}</p>
                   <p className="text-xs text-muted-foreground">{item.desc}</p>
@@ -148,15 +128,13 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         </div>
       </section>
 
-      {/* Products Grid - right after trust bar */}
+      {/* Products */}
       <section id="urunler" className="py-12 md:py-16">
         <div className="container">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                {config.productsTitle}
-              </h2>
-              <p className="text-muted-foreground mt-1">{display.length} ürün listeleniyor</p>
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">{config.productsTitle}</h2>
+              <p className="text-muted-foreground mt-1">{display.length} {t("landing.productsListing")}</p>
             </div>
             <Link to={config.productsCategoryLink} className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
               {config.productsCategoryLinkText} <ArrowRight className="inline h-3.5 w-3.5" />
@@ -172,10 +150,10 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
             </div>
           ) : (
             <div className="text-center py-12 rounded-2xl border border-border bg-card">
-              <p className="text-muted-foreground mb-4">Ürünler yükleniyor...</p>
+              <p className="text-muted-foreground mb-4">{t("landing.productsLoading")}</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_fallback")}>
                 <Button className="rounded-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
-                  <MessageCircle className="h-4 w-4" /> WhatsApp ile Sorun
+                  <MessageCircle className="h-4 w-4" /> {t("landing.askWhatsapp")}
                 </Button>
               </a>
             </div>
@@ -193,19 +171,13 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         <section className="py-12 md:py-16">
           <div className="container">
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
-                İhtiyacınıza Uygun Ürün
-              </h2>
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">{t("landing.suitableProduct")}</h2>
             </motion.div>
             <div className={`grid grid-cols-2 ${config.subtypes.length >= 4 ? "md:grid-cols-4" : config.subtypes.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"} gap-3 md:gap-5`}>
               {config.subtypes.map((type, i) => (
                 <motion.div key={type.name} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-                  <Link to={type.link}
-                    className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-6 text-center hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
-                  >
-                    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
-                      <type.icon className="h-7 w-7" />
-                    </div>
+                  <Link to={type.link} className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-6 text-center hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors"><type.icon className="h-7 w-7" /></div>
                     <h3 className="font-display font-bold text-foreground">{type.name}</h3>
                     <p className="text-xs text-muted-foreground leading-relaxed">{type.desc}</p>
                   </Link>
@@ -216,25 +188,17 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         </section>
       )}
 
-      {/* Benefits + Quote Form */}
+      {/* Benefits + Quote */}
       <section className="py-12 md:py-16 bg-muted/40">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-3">
-                {config.benefitsTitle}
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                {config.benefitsDescription}
-              </p>
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-3">{config.benefitsTitle}</h2>
+              <p className="text-muted-foreground leading-relaxed mb-6">{config.benefitsDescription}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {config.benefits.map((b, i) => (
-                  <motion.div key={b.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                    className="flex gap-3 rounded-xl border border-border bg-card p-4"
-                  >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <b.icon className="h-5 w-5" />
-                    </div>
+                  <motion.div key={b.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex gap-3 rounded-xl border border-border bg-card p-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary"><b.icon className="h-5 w-5" /></div>
                     <div>
                       <p className="text-sm font-bold text-foreground">{b.title}</p>
                       <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{b.desc}</p>
@@ -243,16 +207,9 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
                 ))}
               </div>
             </motion.div>
-
-            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-              className="rounded-2xl border border-border bg-card p-6 shadow-lg"
-            >
-              <h3 className="font-display font-bold text-lg text-foreground mb-1">
-                {config.quoteTitle}
-              </h3>
-              <p className="text-sm text-muted-foreground mb-5">
-                {config.quoteDescription}
-              </p>
+            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="rounded-2xl border border-border bg-card p-6 shadow-lg">
+              <h3 className="font-display font-bold text-lg text-foreground mb-1">{config.quoteTitle}</h3>
+              <p className="text-sm text-muted-foreground mb-5">{config.quoteDescription}</p>
               <QuoteForm />
             </motion.div>
           </div>
@@ -263,16 +220,12 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
       <section className="py-12 md:py-16 bg-muted/40">
         <div className="container max-w-3xl">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
-              {config.faqTitle}
-            </h2>
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">{config.faqTitle}</h2>
             <p className="text-muted-foreground">{config.faqDescription}</p>
           </motion.div>
           <div className="space-y-3">
             {config.faq.map((item, i) => (
-              <motion.details key={i} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                className="group rounded-xl border border-border bg-card overflow-hidden"
-              >
+              <motion.details key={i} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="group rounded-xl border border-border bg-card overflow-hidden">
                 <summary className="flex items-center justify-between cursor-pointer p-4 md:p-5 font-semibold text-sm text-foreground hover:text-primary transition-colors list-none [&::-webkit-details-marker]:hidden">
                   {item.q}
                   <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90" />
@@ -290,24 +243,20 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
       <section className="py-12 md:py-16">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-              className="rounded-2xl border border-border bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center"
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="rounded-2xl border border-border bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center">
               <MessageCircle className="h-10 w-10 text-[hsl(142,70%,40%)] mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">WhatsApp ile Sipariş</h3>
-              <p className="text-sm text-muted-foreground mb-5">Hızlı sipariş ve bilgi almak için WhatsApp'tan yazın.</p>
+              <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
+              <p className="text-sm text-muted-foreground mb-5">{t("landing.whatsappOrderDesc")}</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_cta")}>
                 <Button size="lg" className="rounded-full gap-2 font-semibold bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
-                  <MessageCircle className="h-4 w-4" /> WhatsApp'a Yaz
+                  <MessageCircle className="h-4 w-4" /> {t("landing.writeWhatsapp")}
                 </Button>
               </a>
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
-              className="rounded-2xl border border-border bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 text-center"
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="rounded-2xl border border-border bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 text-center">
               <Phone className="h-10 w-10 text-primary mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">Telefonla Arayın</h3>
-              <p className="text-sm text-muted-foreground mb-5">Uzman danışmanlarımız size yardımcı olsun.</p>
+              <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.callUs")}</h3>
+              <p className="text-sm text-muted-foreground mb-5">{t("landing.callUsDesc")}</p>
               <a href={`tel:${BRAND.phone.replace(/\s/g, "")}`}>
                 <Button size="lg" variant="outline" className="rounded-full gap-2 font-semibold">
                   <Phone className="h-4 w-4" /> {BRAND.phoneDisplay}
@@ -318,13 +267,8 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
             {BRANCHES.map((branch, i) => (
-              <motion.a key={branch.id} href={branch.mapsLink} target="_blank" rel="noopener noreferrer"
-                custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/50 transition-colors"
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Star className="h-5 w-5" />
-                </div>
+              <motion.a key={branch.id} href={branch.mapsLink} target="_blank" rel="noopener noreferrer" custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/50 transition-colors">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Star className="h-5 w-5" /></div>
                 <div>
                   <p className="text-sm font-bold text-foreground">{branch.name}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{branch.address}</p>
@@ -343,11 +287,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         name: config.jsonLdName,
         description: config.seoDescription,
         url: `https://zorluplus.com/${config.slug}`,
-        provider: {
-          "@type": "LocalBusiness",
-          name: BRAND.name,
-          telephone: BRAND.phone,
-        },
+        provider: { "@type": "LocalBusiness", name: BRAND.name, telephone: BRAND.phone },
       }) }} />
     </>
   );

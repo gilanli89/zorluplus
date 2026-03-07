@@ -265,6 +265,34 @@ const translations: Record<string, Record<Lang, string>> = {
   "payment.transId": { tr: "İşlem No:", en: "Transaction No:" },
   "payment.backToStore": { tr: "Mağazaya Dön", en: "Back to Store" },
 
+  // Filter
+  "filter.title": { tr: "Ürün Filtrele", en: "Filter Products" },
+  "filter.brand": { tr: "Marka", en: "Brand" },
+  "filter.stock": { tr: "Stok Durumu", en: "Stock Status" },
+  "filter.inStockOnly": { tr: "Sadece stokta olanlar", en: "In stock only" },
+  "filter.clear": { tr: "Temizle", en: "Clear" },
+  "filter.apply": { tr: "Uygula", en: "Apply" },
+  "filter.filters": { tr: "Filtreler", en: "Filters" },
+  "filter.filterBtn": { tr: "Filtrele", en: "Filter" },
+  "filter.screenSize": { tr: "Ekran Boyutu", en: "Screen Size" },
+  "filter.panelType": { tr: "Panel Tipi", en: "Panel Type" },
+  "filter.btu": { tr: "BTU", en: "BTU" },
+  "filter.capacity": { tr: "Kapasite", en: "Capacity" },
+  "sort.popular": { tr: "En Popüler", en: "Most Popular" },
+  "sort.newest": { tr: "Yeni Gelenler", en: "New Arrivals" },
+
+  // Category landing template
+  "landing.productsListing": { tr: "ürün listeleniyor", en: "products listed" },
+  "landing.productsLoading": { tr: "Ürünler yükleniyor...", en: "Products loading..." },
+  "landing.getInfo": { tr: "Hemen Bilgi Al", en: "Get Info Now" },
+  "landing.whatsappOrder": { tr: "WhatsApp ile Sipariş", en: "Order via WhatsApp" },
+  "landing.whatsappOrderDesc": { tr: "Hızlı sipariş ve bilgi almak için WhatsApp'tan yazın.", en: "Write on WhatsApp for quick orders and info." },
+  "landing.writeWhatsapp": { tr: "WhatsApp'a Yaz", en: "Write on WhatsApp" },
+  "landing.callUs": { tr: "Telefonla Arayın", en: "Call Us" },
+  "landing.callUsDesc": { tr: "Uzman danışmanlarımız size yardımcı olsun.", en: "Let our expert consultants help you." },
+  "landing.askWhatsapp": { tr: "WhatsApp ile Sorun", en: "Ask via WhatsApp" },
+  "landing.suitableProduct": { tr: "İhtiyacınıza Uygun Ürün", en: "Product for Your Needs" },
+
   // Hero banner
   "hero.badge1": { tr: "Samsung & LG Yetkili Bayi", en: "Samsung & LG Authorized Dealer" },
   "hero.title1": { tr: "Evinize Teknoloji,", en: "Technology for Your Home," },
