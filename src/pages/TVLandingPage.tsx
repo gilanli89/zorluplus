@@ -25,30 +25,31 @@ const fadeUp = {
   }),
 };
 
-const TV_TYPES = [
-  { icon: Monitor, name: "OLED TV", desc: "Sonsuz kontrast, mükemmel siyahlar", slug: "tv" },
-  { icon: Tv, name: "QLED TV", desc: "Canlı renkler, yüksek parlaklık", slug: "tv" },
-  { icon: Maximize2, name: "4K & 8K UHD", desc: "Ultra yüksek çözünürlük", slug: "tv" },
-  { icon: Volume2, name: "Soundbar", desc: "Sinema ses deneyimi", slug: "soundbar" },
-];
-
-const BENEFITS = [
-  { icon: Wrench, title: "Ücretsiz Duvar Montajı", desc: "Profesyonel ekibimiz TV'nizi istediğiniz duvara monte eder." },
-  { icon: Shield, title: "2 Yıl Resmi Garanti", desc: "Samsung & LG yetkili bayi garantisiyle güvende olun." },
-  { icon: Volume2, title: "Soundbar Kombo Fırsatları", desc: "TV alımlarında özel soundbar indirimleri." },
-  { icon: Zap, title: "Aynı Gün Teslimat", desc: "Stokta olan ürünlerde aynı gün kurulum imkanı." },
-];
-
-const FAQ = [
-  { q: "OLED mi QLED mi almalıyım?", a: "OLED TV'ler sonsuz kontrast ve mükemmel siyah tonları sunar, film izlemek için idealdir. QLED TV'ler ise daha parlak ekranla aydınlık odalarda üstün performans gösterir. İhtiyacınıza göre mağazamızda karşılaştırabilirsiniz." },
-  { q: "Ücretsiz montaj dahil mi?", a: "Evet, tüm televizyon alımlarında ücretsiz duvar montajı hizmetimiz mevcuttur. Profesyonel ekibimiz televizyonunuzu güvenle monte eder." },
-  { q: "Hangi markalar mevcut?", a: "Samsung ve LG yetkili bayisi olarak her iki markanın da en güncel OLED, QLED, NanoCell ve Crystal UHD modellerini stoklarımızda bulunduruyoruz." },
-  { q: "Taksit imkanı var mı?", a: "Evet, kredi kartına taksit seçeneklerimiz mevcuttur. Ayrıca havale/EFT ile ödeme yapabilirsiniz. Detaylı bilgi için bizi arayabilirsiniz." },
-];
-
 export default function TVLandingPage() {
+  const { t } = useLanguage();
   const { data: products = [] } = useProducts();
   const tvProducts = useMemo(() => products.filter(p => p.category === "tv-goruntu" && p.subcategory === "tv"), [products]);
+
+  const TV_TYPES = [
+    { icon: Monitor, name: t("lp.tv.type1"), desc: t("lp.tv.type1d"), slug: "tv" },
+    { icon: Tv, name: t("lp.tv.type2"), desc: t("lp.tv.type2d"), slug: "tv" },
+    { icon: Maximize2, name: t("lp.tv.type3"), desc: t("lp.tv.type3d"), slug: "tv" },
+    { icon: Volume2, name: t("lp.tv.type4"), desc: t("lp.tv.type4d"), slug: "soundbar" },
+  ];
+
+  const BENEFITS = [
+    { icon: Wrench, title: t("lp.tv.ben1"), desc: t("lp.tv.ben1d") },
+    { icon: Shield, title: t("lp.tv.ben2"), desc: t("lp.tv.ben2d") },
+    { icon: Volume2, title: t("lp.tv.ben3"), desc: t("lp.tv.ben3d") },
+    { icon: Zap, title: t("lp.tv.ben4"), desc: t("lp.tv.ben4d") },
+  ];
+
+  const FAQ = [
+    { q: t("lp.tv.faq1q"), a: t("lp.tv.faq1a") },
+    { q: t("lp.tv.faq2q"), a: t("lp.tv.faq2a") },
+    { q: t("lp.tv.faq3q"), a: t("lp.tv.faq3a") },
+    { q: t("lp.tv.faq4q"), a: t("lp.tv.faq4a") },
+  ];
 
   // TV-specific filters
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
