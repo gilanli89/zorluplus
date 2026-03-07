@@ -245,7 +245,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="rounded-2xl border border-border bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center">
               <MessageCircle className="h-10 w-10 text-[hsl(142,70%,40%)] mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
+              <h3 className="heading-3 text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
               <p className="text-sm text-muted-foreground mb-5">{t("landing.whatsappOrderDesc")}</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_cta")}>
                 <Button size="lg" className="rounded-full gap-2 font-semibold bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
