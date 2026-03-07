@@ -1103,87 +1103,121 @@ export function IadeKosullariPage() {
 
 export function GizlilikPolitikasiPage() {
   return (
-    <ContentPage title="Gizlilik Politikası">
-      <p>Bu Gizlilik Politikası, Zorlu Digital Plaza ("Şirket", "biz", "bize", "bizim") tarafından işletilen <strong>www.zorluplus.com</strong> ("Site") üzerinden elde edilen kişisel verilerin hangi amaçlarla, nasıl işlendiğini ve korunduğunu açıklamaktadır.</p>
-      <p>Siteyi kullanarak bu politikada belirtilen şartları kabul etmiş sayılırsınız.</p>
+    <div className="container py-12 md:py-16 max-w-3xl">
+      <motion.h1
+        className="font-display text-3xl md:text-4xl font-extrabold mb-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.span
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          Premium Gizlilik ve Veri Güvenliği Politikası
+        </motion.span>
+      </motion.h1>
 
-      <h2>1. Kapsam ve Amaç</h2>
-      <p>Bu politika; web sitemizi ziyaret eden tüm kullanıcıları, online ve offline kanallar üzerinden bizimle iletişime geçen potansiyel ve mevcut müşterileri, kampanyalarımıza, bültenlerimize veya formlarımıza kayıt olan kişileri kapsar.</p>
-      <p>Amaç; kişisel verilerinizi nasıl topladığımız, hangi amaçlarla kullandığımız, kimlerle paylaşabileceğimiz ve haklarınız hakkında sizi açık ve anlaşılır şekilde bilgilendirmektir.</p>
+      <motion.div
+        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+      >
+        <p><strong className="text-foreground">Zorlu Digital Trade and Services Ltd.</strong> ("Şirket") olarak, müşterilerimizin gizliliğini ve veri güvenliğini en üst düzey Premium standartlarda korumayı taahhüt ediyoruz. Bu politika, <strong className="text-foreground">www.zorluplus.com</strong> ("Site") üzerinden paylaştığınız verilerin işlenme süreçlerini ve haklarınızı şeffaf bir şekilde açıklar.</p>
 
-      <h2>2. Topladığımız Veriler</h2>
-      <p>Sitemizi ziyaret ettiğinizde veya bizimle iletişime geçtiğinizde aşağıdaki türde kişisel verileri toplayabiliriz:</p>
-      <ul>
-        <li><strong>Kimlik Bilgileri:</strong> Ad, soyad, kullanıcı adı vb.</li>
-        <li><strong>İletişim Bilgileri:</strong> E-posta adresi, telefon numarası, adres bilgisi vb.</li>
-        <li><strong>İşlem ve Sipariş Bilgileri:</strong> Satın aldığınız ürünler, fatura, teslimat ve ödeme bilgileri (kart numarası gibi hassas bilgiler doğrudan ödeme sağlayıcısı üzerinden işlenir, tarafımızca saklanmaz).</li>
-        <li><strong>Teknik Veriler:</strong> IP adresi, tarayıcı türü, işletim sistemi, ziyaret süresi, görüntülenen sayfalar, yönlendiren URL vb.</li>
-        <li><strong>Çerez ve Benzeri Teknolojiler:</strong> Site deneyiminizi iyileştirmek ve istatistiksel analiz yapmak için kullanılan çerezler aracılığıyla elde edilen kullanım verileri.</li>
-        <li><strong>İletişim İçerikleri:</strong> Bize e-posta, iletişim formu, sosyal medya veya çağrı merkezi üzerinden ilettiğiniz talep, şikâyet ve geri bildirimler.</li>
-      </ul>
+        <h2>1. Kapsam ve Premium Hizmet Amacı</h2>
+        <p>Bu politika; dijital ve fiziksel kanallarımız üzerinden bizimle etkileşime geçen tüm Premium üyelerimizi ve ziyaretçilerimizi kapsar. Temel amacımız, verilerinizi yüksek güvenlik protokolleriyle işleyerek size kusursuz bir alışveriş deneyimi sunmaktır.</p>
 
-      <h2>3. Verilerinizi Hangi Amaçlarla Kullanıyoruz?</h2>
-      <p>Toplanan kişisel verileriniz aşağıdaki amaçlarla işlenebilir:</p>
-      <ul>
-        <li>Siparişlerinizi oluşturmak, takip etmek ve teslimat süreçlerini yönetmek</li>
-        <li>Müşteri hesabınızı oluşturmak ve erişiminizi sağlamak</li>
-        <li>Satış sonrası destek, garanti ve teknik servis hizmetlerini yürütmek</li>
-        <li>Talep ve şikâyetlerinizi değerlendirmek ve sonuçlandırmak</li>
-        <li>Ürün ve hizmetlerimizi geliştirmek, iyileştirmek ve kişiselleştirmek</li>
-        <li>Kampanyalar, indirimler, yeni ürünler ve duyurular hakkında bilgilendirme yapmak (ticari elektronik ileti izni vermeniz hâlinde)</li>
-        <li>Güvenlik, dolandırıcılığın önlenmesi ve yasal yükümlülüklerin yerine getirilmesi</li>
-        <li>Ziyaretçi trafiğini analiz etmek, site performansını ölçmek ve iyileştirmek</li>
-      </ul>
+        <h2>2. İşlenen Veri Kategorileri</h2>
+        <p>Deneyiminizi kişiselleştirmek adına aşağıdaki verileri topluyoruz:</p>
+        <ul>
+          <li><strong className="text-foreground">Kimlik ve İletişim:</strong> Ad, soyad, e-posta adresi, 00905488783131 numaralı hattımızla eşleşen iletişim verileri ve teslimat adresi.</li>
+          <li><strong className="text-foreground">İşlem Güvenliği:</strong> Sipariş geçmişi ve fatura detayları. (Ödeme bilgileriniz doğrudan lisanslı ödeme sağlayıcıları tarafından işlenir; tarafımızca saklanmaz.)</li>
+          <li><strong className="text-foreground">Teknik ve Davranışsal Veriler:</strong> IP adresi, çerezler (cookies) ve site içi gezinme tercihleri.</li>
+        </ul>
 
-      <h2>4. Çerezler (Cookies) Kullanımı</h2>
-      <p>Sitemizde kullanıcı deneyimini geliştirmek, tercihlerinizi hatırlamak ve istatistiksel veri toplamak için çerezler kullanmaktayız.</p>
-      <p>Tarayıcınızın ayarlarından çerezleri kabul etmeme veya silme hakkına sahipsiniz. Çerezleri devre dışı bırakmanız hâlinde, sitemizin bazı işlevleri tam olarak çalışmayabilir.</p>
+        <h2>3. Veri İşleme Amaçlarımız</h2>
+        <p>Verileriniz, yalnızca aşağıdaki Premium hizmet süreçleri için kullanılır:</p>
+        <ul>
+          <li>Siparişlerin yönetimi, lojistik süreçlerin takibi ve hızlı teslimat.</li>
+          <li>Satış sonrası 2 yıl garanti ve ücretsiz montaj gibi teknik servis süreçlerinin yürütülmesi.</li>
+          <li>Ayrıcalıklı kampanyalar ve kişiye özel indirim duyuruları (onayınız dahilinde).</li>
+          <li>Yasal yükümlülüklerin yerine getirilmesi ve platform güvenliğinin sağlanması.</li>
+        </ul>
 
-      <h2>5. Verilerin Paylaşılması</h2>
-      <p>Kişisel verileriniz, aşağıdaki durumlarda ve ölçülü olmak kaydıyla üçüncü kişilerle paylaşılabilir:</p>
-      <ul>
-        <li><strong>Hizmet Sağlayıcılar:</strong> Kargo şirketleri, ödeme kuruluşları, teknik altyapı sağlayıcıları, çağrı merkezi, SMS/E-posta servisleri vb.</li>
-        <li><strong>İş Ortakları ve Tedarikçiler:</strong> Kampanyalar, ürün tedariki, garanti ve teknik servis süreçlerinin yürütülmesi kapsamında gerekli olduğunda.</li>
-        <li><strong>Resmi Kurumlar:</strong> Yasal yükümlülüklerimizi yerine getirmek veya hukuki taleplere cevap vermek amacıyla, yetkili kurum ve kuruluşlarla mevzuat çerçevesinde.</li>
-      </ul>
-      <p>Kişisel verileriniz, yasal zorunluluklar veya açık rızanız dışında hiçbir şekilde üçüncü taraflara satılmaz.</p>
+        <h2>4. Premium Veri Paylaşımı ve Aktarım</h2>
+        <p>Verileriniz, ticari amaçlarla asla üçüncü taraflara satılmaz. Sadece hizmetin tamamlanması için gerekli olan iş ortaklarımızla (Kargo firmaları, Samsung/LG yetkili servisleri, yasal merciler) minimum düzeyde paylaşılır.</p>
 
-      <h2>6. Verilerin Saklanma Süresi</h2>
-      <p>Kişisel verileriniz; ilgili mevzuatta öngörülen süreler, sözleşme ilişkimiz devam ettiği süre ve hukuki yükümlülüklerimizi yerine getirmek için gerekli saklama süreleri boyunca saklanır. Bu süreler dolduğunda verileriniz mevzuata uygun şekilde silinir, anonim hale getirilir veya imha edilir.</p>
+        <h2>5. Veri Güvenliği ve Saklama</h2>
+        <p>Kişisel verileriniz, yetkisiz erişime karşı endüstri standardı şifreleme yöntemleriyle korunur. Veriler, yasal saklama süreleri dolduğunda güvenli bir şekilde imha edilir veya anonim hale getirilir.</p>
 
-      <h2>7. Kişisel Verilerinizin Güvenliği</h2>
-      <p>Kişisel verilerinizi yetkisiz erişim, kayıp, kötüye kullanım, değişiklik veya ifşaya karşı korumak için uygun teknik ve idari güvenlik önlemleri uygulamaktayız.</p>
-      <p>Buna rağmen, internet üzerinden yapılan hiçbir veri aktarımının %100 güvenli olduğunu garanti etmek mümkün değildir. Bu nedenle, bize sağladığınız bilgilerin güvenliğini en üst düzeyde sağlamak için tüm makul önlemleri almaktayız.</p>
+        <h2>6. Premium Kullanıcı Haklarınız</h2>
+        <p>Veri sahibi olarak; verilerinizin işlenip işlenmediğini öğrenme, yanlış verilerin düzeltilmesini isteme, verilerin silinmesini talep etme ve işleme süreçlerine itiraz etme haklarına sahipsiniz.</p>
+      </motion.div>
 
-      <h2>8. Haklarınız</h2>
-      <p>İlgili mevzuat uyarınca kişisel verilerinizle ilgili olarak:</p>
-      <ul>
-        <li>Hakkınızda kişisel veri işlenip işlenmediğini öğrenme,</li>
-        <li>İşlenmişse buna ilişkin bilgi talep etme,</li>
-        <li>İşleme amacını ve bu amaçlara uygun kullanılıp kullanılmadığını öğrenme,</li>
-        <li>Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme,</li>
-        <li>Eksik veya yanlış işlenmişse düzeltilmesini isteme,</li>
-        <li>İşlenmesini gerektiren sebeplerin ortadan kalkması hâlinde silinmesini veya yok edilmesini talep etme,</li>
-        <li>Bu işlemlerin, verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme,</li>
-        <li>İşlenen verilerin münhasıran otomatik sistemler vasıtasıyla analiz edilmesi suretiyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme,</li>
-        <li>Mevzuata aykırı olarak işlenmesi sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme</li>
-      </ul>
-      <p>haklarına sahipsiniz.</p>
+      {/* İletişim */}
+      <motion.div
+        className="rounded-2xl border border-border bg-card p-6 md:p-8 space-y-4 relative overflow-hidden mt-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+      >
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          animate={{
+            boxShadow: [
+              "inset 0 0 30px hsl(221,83%,53%,0.0)",
+              "inset 0 0 30px hsl(221,83%,53%,0.08)",
+              "inset 0 0 30px hsl(221,83%,53%,0.0)",
+            ],
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.h2
+          className="font-display text-xl md:text-2xl font-bold relative z-10"
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          7. İletişim ve Destek
+        </motion.h2>
+        <p className="relative z-10">Gizlilik süreçlerimizle ilgili her türlü soru ve talebiniz için Premium destek ekibimize ulaşabilirsiniz:</p>
+        <div className="relative z-10 space-y-2 text-sm">
+          <p><strong className="text-foreground">Şirket Ünvanı:</strong> Zorlu Digital Trade and Services Ltd.</p>
+          <p><strong className="text-foreground">Adres:</strong> Belediye Bulvarı, Kent Plaza, A Blok No:1, Yenikent, Lefkoşa</p>
+        </div>
+        <div className="flex flex-col gap-3 relative z-10">
+          <a href="tel:+905488783131" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
+            <motion.span
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
+              animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </motion.span>
+            Premium Destek Hattı: 00905488783131
+          </a>
+          <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
+            <motion.span
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
+              animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+            >
+              <Mail className="h-5 w-5 text-primary" />
+            </motion.span>
+            Kurumsal E-posta: deniz@zorludigitalplaza.com
+          </a>
+        </div>
+      </motion.div>
 
-      <h2>9. Bize Nasıl Ulaşabilirsiniz?</h2>
-      <p>Kişisel verilerinizle ilgili her türlü soru, talep ve başvuru için aşağıdaki iletişim kanallarından bize ulaşabilirsiniz:</p>
-      <ul>
-        <li><strong>Şirket:</strong> Zorlu Digital Plaza</li>
-        <li><strong>Adres:</strong> Belediye Bulvarı, Kent Plaza, A Blok No:1, Yenikent, Lefkoşa</li>
-        <li><strong>Telefon:</strong> +90 (548) 878 31 31</li>
-        <li><strong>E-posta:</strong> info@zorluplus.com</li>
-      </ul>
-      <p>Başvurularınız, yasal süreler içinde değerlendirilerek sizlere geri dönüş sağlanacaktır.</p>
-
-      <h2>10. Gizlilik Politikasında Değişiklikler</h2>
-      <p>Bu Gizlilik Politikası'nı gerekli gördüğümüz zamanlarda güncelleyebiliriz. Güncellenmiş versiyon, yürürlük tarihiyle birlikte sitemizde yayınlandığı andan itibaren geçerli olacaktır.</p>
-      <p>Siteyi kullanmaya devam ederek, güncellenmiş politikayı kabul etmiş sayılırsınız.</p>
-    </ContentPage>
+      <motion.p
+        className="text-center font-display font-bold text-lg md:text-xl mt-10 italic"
+        animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      >
+        Zorlu Digital Plaza | Teknolojiye Güvenli ve Premium Dokunuş
+      </motion.p>
+    </div>
   );
 }
 
