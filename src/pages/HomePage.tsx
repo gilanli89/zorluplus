@@ -11,6 +11,7 @@ import widgetTv from "@/assets/widget-tv.jpg";
 import widgetBeyazEsya from "@/assets/widget-beyaz-esya.jpg";
 import widgetAnkastre from "@/assets/widget-ankastre.jpg";
 import widgetKlima from "@/assets/widget-klima.jpg";
+import zorluBanner from "@/assets/zorlu-banner-footer.png";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
