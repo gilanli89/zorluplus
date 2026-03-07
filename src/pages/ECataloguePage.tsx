@@ -13,7 +13,7 @@ export default function ECataloguePage() {
     <div className={fullscreen ? "fixed inset-0 z-[100] bg-background" : ""}>
       <div className={fullscreen ? "h-full flex flex-col" : "container py-6"}>
         {!fullscreen && (
-          <h1 className="font-display text-2xl font-bold mb-4 text-foreground">{t("ecatalogue.title")}</h1>
+          <h1 className="heading-2 mb-4 text-foreground pulse-heading">{t("ecatalogue.title")}</h1>
         )}
         <div className={`relative ${fullscreen ? "flex-1" : "aspect-[3/4] md:aspect-video"} rounded-xl overflow-hidden border border-border bg-card`}>
           <iframe src={CATALOGUE_URL} className="w-full h-full" allowFullScreen title="Zorlu Digital Plaza E-Katalog" />

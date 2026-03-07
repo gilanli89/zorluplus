@@ -114,7 +114,7 @@ export default function CartPage() {
         <ArrowLeft className="h-4 w-4" /> {t("cart.continueShopping")}
       </Link>
 
-      <h1 className="font-display text-2xl font-bold text-foreground mb-6">
+      <h1 className="heading-2 text-foreground mb-6 pulse-heading">
         {t("cart.myCart")} <span className="text-muted-foreground font-normal text-lg">({itemCount} {t("cart.items")})</span>
       </h1>
 

@@ -48,7 +48,7 @@ export default function PaymentResultPage() {
           ) : (
             <>
               <XCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
-              <h1 className="font-display text-2xl font-bold text-foreground mb-2">{t("payment.failed")}</h1>
+              <h1 className="heading-2 text-foreground mb-2">{t("payment.failed")}</h1>
               <p className="text-muted-foreground mb-4">{errorMessage || t("payment.failedDesc")}</p>
               <p className="text-sm text-muted-foreground mb-6">{t("payment.retryDesc")}</p>
             </>
