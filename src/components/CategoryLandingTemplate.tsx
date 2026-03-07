@@ -248,7 +248,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
               <h3 className="heading-3 text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
               <p className="text-sm text-muted-foreground mb-5">{t("landing.whatsappOrderDesc")}</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_cta")}>
-                <Button size="lg" className="rounded-full gap-2 font-semibold bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
+                <Button size="lg" className="rounded-full gap-2 font-semibold bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white pulse-btn">
                   <MessageCircle className="h-4 w-4" /> {t("landing.writeWhatsapp")}
                 </Button>
               </a>
