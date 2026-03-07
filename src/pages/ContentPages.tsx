@@ -427,7 +427,7 @@ export function HakkimizdaPage() {
                   <cat.icon className="h-6 w-6 text-primary" />
                 </motion.div>
                 <motion.h3
-                  className="font-display font-bold mb-1"
+                  className="heading-4 mb-1"
                   animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
                 >
