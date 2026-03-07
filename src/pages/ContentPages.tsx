@@ -2275,31 +2275,17 @@ export function OdemeYontemleriPage() {
 }
 
 export function SurdurulebilirlikPage() {
-  const { t } = useLanguage();
-    {
-      icon: Recycle,
-      title: "Elektronik Atık Geri Dönüşümü",
-      text: "Elektronik ürünlerin kullanım ömrü sona erdiğinde doğru şekilde geri dönüştürülmesi büyük önem taşır.",
-      detail: "Zorlu Digital Plaza, elektronik atıkların doğaya zarar vermeden geri dönüşüm süreçlerine kazandırılması konusunda müşterilerini bilinçlendirmekte ve sürdürülebilir atık yönetimi uygulamalarını desteklemektedir.",
-    },
-    {
-      icon: BatteryCharging,
-      title: "Atık Pil Toplama Bilinci",
-      text: "Atık piller çevre ve insan sağlığı açısından önemli riskler oluşturabilir.",
-      detail: "Bu nedenle Zorlu Digital Plaza, pil geri dönüşümü konusunda farkındalık yaratmayı destekler ve müşterilerini atık pilleri yetkili toplama noktalarına teslim etmeleri konusunda bilgilendirir.",
-    },
-    {
-      icon: Zap,
-      title: "Enerji Verimli Teknoloji",
-      text: "Enerji verimli teknolojilerin tercih edilmesi hem çevreyi korur hem de enerji tüketimini azaltır.",
-      detail: "Zorlu Digital Plaza, mağaza ve servis operasyonlarında enerji tasarrufu sağlayan teknolojileri tercih eder ve müşterilerine enerji verimliliği yüksek ürünleri önerir.",
-    },
-    {
-      icon: Globe,
-      title: "Çevre Bilinci ve Sorumluluk",
-      text: "Sürdürülebilirlik yalnızca bir hedef değil, aynı zamanda bir sorumluluktur.",
-      detail: "Zorlu Digital Plaza ekibi, çevre bilinci konusunda farkındalık oluşturmayı ve doğaya saygılı bir teknoloji kültürünü desteklemeyi amaçlamaktadır.",
-    },
+  const { t, lang } = useLanguage();
+  const sections = lang === "tr" ? [
+    { icon: Recycle, title: "Elektronik Atık Geri Dönüşümü", text: "Elektronik ürünlerin kullanım ömrü sona erdiğinde doğru şekilde geri dönüştürülmesi büyük önem taşır.", detail: "Zorlu Digital Plaza, elektronik atıkların doğaya zarar vermeden geri dönüşüm süreçlerine kazandırılması konusunda müşterilerini bilinçlendirmekte ve sürdürülebilir atık yönetimi uygulamalarını desteklemektedir." },
+    { icon: BatteryCharging, title: "Atık Pil Toplama Bilinci", text: "Atık piller çevre ve insan sağlığı açısından önemli riskler oluşturabilir.", detail: "Bu nedenle Zorlu Digital Plaza, pil geri dönüşümü konusunda farkındalık yaratmayı destekler ve müşterilerini atık pilleri yetkili toplama noktalarına teslim etmeleri konusunda bilgilendirir." },
+    { icon: Zap, title: "Enerji Verimli Teknoloji", text: "Enerji verimli teknolojilerin tercih edilmesi hem çevreyi korur hem de enerji tüketimini azaltır.", detail: "Zorlu Digital Plaza, mağaza ve servis operasyonlarında enerji tasarrufu sağlayan teknolojileri tercih eder ve müşterilerine enerji verimliliği yüksek ürünleri önerir." },
+    { icon: Globe, title: "Çevre Bilinci ve Sorumluluk", text: "Sürdürülebilirlik yalnızca bir hedef değil, aynı zamanda bir sorumluluktur.", detail: "Zorlu Digital Plaza ekibi, çevre bilinci konusunda farkındalık oluşturmayı ve doğaya saygılı bir teknoloji kültürünü desteklemeyi amaçlamaktadır." },
+  ] : [
+    { icon: Recycle, title: "Electronic Waste Recycling", text: "Proper recycling of electronic products at the end of their lifespan is of great importance.", detail: "Zorlu Digital Plaza raises awareness among its customers about integrating electronic waste into recycling processes without harming nature and supports sustainable waste management practices." },
+    { icon: BatteryCharging, title: "Waste Battery Collection Awareness", text: "Waste batteries can pose significant risks to the environment and human health.", detail: "Therefore, Zorlu Digital Plaza supports raising awareness about battery recycling and informs its customers about delivering waste batteries to authorized collection points." },
+    { icon: Zap, title: "Energy Efficient Technology", text: "Preferring energy-efficient technologies both protects the environment and reduces energy consumption.", detail: "Zorlu Digital Plaza prefers energy-saving technologies in its store and service operations and recommends products with high energy efficiency to its customers." },
+    { icon: Globe, title: "Environmental Awareness and Responsibility", text: "Sustainability is not just a goal, but also a responsibility.", detail: "The Zorlu Digital Plaza team aims to raise awareness about environmental consciousness and support an eco-friendly technology culture." },
   ];
 
   return (
