@@ -175,11 +175,12 @@ export default function B2BPage() {
 
       <SectionCard title={t("b2b.brands")} delay={0.1}>
         <p className="text-sm text-muted-foreground mb-4">{t("b2b.brandsDesc")}</p>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-3">
           {brands.map((b) => (
-            <motion.span key={b} className="px-4 py-2 rounded-full border border-border bg-muted/50 text-sm font-medium text-foreground" whileHover={{ scale: 1.05, borderColor: "hsl(221,83%,53%)" }}>
-              {b}
-            </motion.span>
+            <motion.div key={b.name} className="flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-muted/50" whileHover={{ scale: 1.05, borderColor: "hsl(221,83%,53%)" }}>
+              <img src={b.logo} alt={b.name} className="h-6 w-auto object-contain" />
+              <span className="text-sm font-medium text-foreground">{b.name}</span>
+            </motion.div>
           ))}
         </div>
         <p className="text-xs text-muted-foreground mt-3">{t("b2b.brandsNote")}</p>
