@@ -32,6 +32,7 @@ import ShopPage from "@/pages/ShopPage";
 import {
   HakkimizdaPage, KunyePage, EkibimizPage, DestekPage,
   KullanimKosullariPage, IadeKosullariPage, GizlilikPolitikasiPage,
+  KvkkPage, CerezPolitikasiPage, MesafeliSatisSozlesmesiPage,
   SiparisTakipPage, OdemeYontemleriPage,
 } from "@/pages/ContentPages";
 import CheckoutPage from "@/pages/CheckoutPage";
