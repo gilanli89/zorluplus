@@ -251,19 +251,6 @@ export default function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden lg:flex items-center gap-0.5">
-          {["tv-goruntu", "beyaz-esya", "ankastre", "klima-isitma"].map(slug => {
-            const cat = CATEGORIES.find(c => c.slug === slug);
-            if (!cat) return null;
-            return (
-              <Link
-                key={cat.slug}
-                to={`/kategori/${cat.slug}`}
-                className="link-underline rounded-full px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {getCatName(cat.slug)}
-              </Link>
-            );
-          })}
           <Link
             to="/e-katalog"
             className="link-underline rounded-full px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
