@@ -137,8 +137,10 @@ const translations: Record<string, Record<Lang, string>> = {
   // Home page
   "home.categoryWidgets.tv": { tr: "TV & Görüntü Sistemleri", en: "TV & Display Systems" },
   "home.categoryWidgets.tvSub": { tr: "Samsung & LG OLED, QLED, NanoCell", en: "Samsung & LG OLED, QLED, NanoCell" },
-  "home.categoryWidgets.whiteGoods": { tr: "Beyaz Eşya", en: "White Goods" },
-  "home.categoryWidgets.whiteGoodsSub": { tr: "Buzdolabı, Çamaşır & Bulaşık Makinesi", en: "Refrigerator, Washing & Dishwasher" },
+  "home.categoryWidgets.whiteGoods": { tr: "Eviniz İçin Yeni Nesil Beyaz Eşya", en: "Next-Gen White Goods for Your Home" },
+  "home.categoryWidgets.whiteGoodsSub": { tr: "Buzdolabı, çamaşır makinesi ve bulaşık makinesi modelleri modern teknoloji ve enerji tasarrufu ile bir arada.", en: "Refrigerator, washing machine and dishwasher models combined with modern technology and energy savings." },
+  "home.categoryWidgets.whiteGoodsBadge": { tr: "Özel fiyatlar • 2 yıl garanti • profesyonel kurulum", en: "Special prices • 2 year warranty • professional installation" },
+  "home.categoryWidgets.whiteGoodsCta": { tr: "Tüm Beyaz Eşyaları Keşfedin", en: "Explore All White Goods" },
   "home.categoryWidgets.builtin": { tr: "Ankastre Setler", en: "Built-in Sets" },
   "home.categoryWidgets.builtinSub": { tr: "Fırın, Ocak & Davlumbaz", en: "Oven, Cooktop & Hood" },
   "home.categoryWidgets.ac": { tr: "Klima & İklimlendirme", en: "AC & Climate Control" },
