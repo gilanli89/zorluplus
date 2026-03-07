@@ -2127,7 +2127,7 @@ export function SiparisTakipPage() {
 }
 
 export function OdemeYontemleriPage() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const paymentMethods = [
     { icon: "banknote", title: lang === "tr" ? "Nakit Ödeme" : "Cash Payment", desc: lang === "tr" ? "Mağazamızda gerçekleştireceğiniz alışverişlerde nakit ödeme kolaylığı." : "Cash payment convenience for in-store purchases." },
     { icon: "card", title: lang === "tr" ? "Kredi / Banka Kartı" : "Credit / Debit Card", desc: lang === "tr" ? "Tüm banka ve kredi kartları ile hızlı, güvenli ve Premium işlem altyapısı." : "Fast, secure and Premium transaction infrastructure with all bank and credit cards." },
