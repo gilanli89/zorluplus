@@ -198,22 +198,64 @@ export function HakkimizdaPage() {
         </motion.section>
 
         {/* Değerler */}
-        <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-6">Kaliteli Ürünlere Olan İnancımız</h2>
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.15 } } }}
+        >
+          <motion.h2
+            className="font-display text-2xl md:text-3xl font-bold mb-6"
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+          >
+            Kaliteli Ürünlere Olan İnancımız
+          </motion.h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { icon: Truck, title: "Ücretsiz Teslimat", desc: "5000 TL ve üzeri alışverişlerde" },
               { icon: Star, title: "100% Memnuniyet", desc: "Para iade garantisi" },
               { icon: HeartHandshake, title: "7/24 Destek", desc: "Kesintisiz hizmet" },
               { icon: ShieldCheck, title: "Güvenli Ödeme", desc: "100% güvenli ödeme seçenekleri" },
-            ].map(item => (
-              <div key={item.title} className="card-lift rounded-2xl border border-border bg-card p-6 text-center">
-                <div className="h-12 w-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-3">
-                  <item.icon className="h-6 w-6" />
-                </div>
-                <h3 className="font-display font-bold text-foreground mb-1">{item.title}</h3>
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                className="card-lift rounded-2xl border border-border bg-card p-6 text-center relative overflow-hidden group"
+                variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1 } }}
+                whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.2)" }}
+                transition={{ duration: 0.4 }}
+              >
+                {/* Animated gradient border glow */}
+                <motion.div
+                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: "linear-gradient(135deg, hsl(221,83%,53%,0.1), transparent, hsl(221,83%,53%,0.05))" }}
+                />
+                <motion.div
+                  className="h-12 w-12 mx-auto rounded-xl flex items-center justify-center mb-3 relative"
+                  animate={{
+                    backgroundColor: ["hsl(221,83%,53%,0.1)", "hsl(221,83%,53%,0.2)", "hsl(221,83%,53%,0.1)"],
+                    boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 15px hsl(221,83%,53%,0.15)", "0 0 0px hsl(221,83%,53%,0)"],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+                >
+                  <motion.div
+                    animate={{ rotate: [0, 5, -5, 0], scale: [1, 1.1, 1] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
+                    className="text-primary"
+                  >
+                    <item.icon className="h-6 w-6" />
+                  </motion.div>
+                </motion.div>
+                <motion.h3
+                  className="font-display font-bold mb-1"
+                  animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.6 }}
+                >
+                  {item.title}
+                </motion.h3>
                 <p className="text-sm text-muted-foreground">{item.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.section>
