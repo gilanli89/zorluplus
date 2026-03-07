@@ -2128,10 +2128,11 @@ export function SiparisTakipPage() {
 
 export function OdemeYontemleriPage() {
   const { t } = useLanguage();
-    { icon: "banknote", title: "Nakit Ödeme", desc: "Mağazamızda gerçekleştireceğiniz alışverişlerde nakit ödeme kolaylığı." },
-    { icon: "card", title: "Kredi / Banka Kartı", desc: "Tüm banka ve kredi kartları ile hızlı, güvenli ve Premium işlem altyapısı." },
-    { icon: "building", title: "Havale / EFT", desc: "Banka hesaplarımıza anında transfer seçeneği ile dijital ödeme konforu." },
-    { icon: "chart", title: "Ayrıcalıklı Taksit İmkanları", desc: "Anlaşmalı bankalar aracılığıyla bütçenize uygun, avantajlı taksit seçenekleri." },
+  const paymentMethods = [
+    { icon: "banknote", title: lang === "tr" ? "Nakit Ödeme" : "Cash Payment", desc: lang === "tr" ? "Mağazamızda gerçekleştireceğiniz alışverişlerde nakit ödeme kolaylığı." : "Cash payment convenience for in-store purchases." },
+    { icon: "card", title: lang === "tr" ? "Kredi / Banka Kartı" : "Credit / Debit Card", desc: lang === "tr" ? "Tüm banka ve kredi kartları ile hızlı, güvenli ve Premium işlem altyapısı." : "Fast, secure and Premium transaction infrastructure with all bank and credit cards." },
+    { icon: "building", title: lang === "tr" ? "Havale / EFT" : "Bank Transfer", desc: lang === "tr" ? "Banka hesaplarımıza anında transfer seçeneği ile dijital ödeme konforu." : "Digital payment comfort with instant transfer option to our bank accounts." },
+    { icon: "chart", title: lang === "tr" ? "Ayrıcalıklı Taksit İmkanları" : "Installment Plans", desc: lang === "tr" ? "Anlaşmalı bankalar aracılığıyla bütçenize uygun, avantajlı taksit seçenekleri." : "Advantageous installment options through partner banks suitable for your budget." },
   ];
 
   const iconMap: Record<string, React.ReactNode> = {
