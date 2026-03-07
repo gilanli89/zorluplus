@@ -22,7 +22,7 @@ export default function PaymentResultPage() {
           {isSuccess ? (
             <>
               <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
-              <h1 className="font-display text-2xl font-bold text-foreground mb-2">{t("payment.success")}</h1>
+              <h1 className="heading-2 text-foreground mb-2">{t("payment.success")}</h1>
               <p className="text-muted-foreground mb-6">{t("payment.successDesc")}</p>
               <div className="bg-muted/50 rounded-xl p-4 text-left space-y-2 mb-6">
                 {orderId && (
