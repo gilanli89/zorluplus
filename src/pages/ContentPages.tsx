@@ -615,6 +615,7 @@ export function HakkimizdaPage() {
 }
 
 export function KunyePage() {
+  const { t, lang } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
       <motion.h1
@@ -627,7 +628,7 @@ export function KunyePage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Künye & Kurumsal Bilgiler
+          {t("content.kunye.title")}
         </motion.span>
       </motion.h1>
 
@@ -638,7 +639,7 @@ export function KunyePage() {
         transition={{ duration: 0.6, delay: 0.15 }}
       >
         <p>
-          <strong className="text-foreground">Zorlu Digital Plaza</strong>, teknoloji dünyasında güven ve kaliteyi bir araya getiren <strong className="text-foreground">Zorlu Digital Trade and Services Ltd.</strong> markasıdır.
+          <strong className="text-foreground">Zorlu Digital Plaza</strong>{lang === "tr" ? ", teknoloji dünyasında güven ve kaliteyi bir araya getiren " : " is a brand of "}<strong className="text-foreground">Zorlu Digital Trade and Services Ltd.</strong>{lang === "tr" ? " markasıdır." : " that brings together trust and quality in the technology world."}
         </p>
 
         {/* Resmi Şirket Bilgileri */}
@@ -648,30 +649,16 @@ export function KunyePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <motion.div
-            className="absolute inset-0 rounded-2xl pointer-events-none"
-            animate={{
-              boxShadow: [
-                "inset 0 0 30px hsl(221,83%,53%,0.0)",
-                "inset 0 0 30px hsl(221,83%,53%,0.08)",
-                "inset 0 0 30px hsl(221,83%,53%,0.0)",
-              ],
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.h2
-            className="font-display text-xl md:text-2xl font-bold relative z-10"
-            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            Resmi Şirket Bilgileri
+          <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.08)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
+          <motion.h2 className="font-display text-xl md:text-2xl font-bold relative z-10" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
+            {t("content.kunye.officialInfo")}
           </motion.h2>
           <div className="relative z-10 space-y-2">
-            <p><strong className="text-foreground">Ticari Ünvan:</strong> Zorlu Digital Trade and Services Ltd.</p>
-            <p><strong className="text-foreground">Merkez Adresi:</strong> Lefkoşa, KKTC</p>
-            <p><strong className="text-foreground">Vergi Dairesi:</strong> Lefkoşa Vergi Dairesi</p>
-            <p><strong className="text-foreground">Vergi Numarası:</strong> MS 16664</p>
-            <p><strong className="text-foreground">Vergi Kimlik No:</strong> 99003199</p>
+            <p><strong className="text-foreground">{t("content.kunye.tradeName")}:</strong> Zorlu Digital Trade and Services Ltd.</p>
+            <p><strong className="text-foreground">{t("content.kunye.hq")}:</strong> {lang === "tr" ? "Lefkoşa, KKTC" : "Nicosia, N.Cyprus"}</p>
+            <p><strong className="text-foreground">{t("content.kunye.taxOffice")}:</strong> {lang === "tr" ? "Lefkoşa Vergi Dairesi" : "Nicosia Tax Office"}</p>
+            <p><strong className="text-foreground">{t("content.kunye.taxNo")}:</strong> MS 16664</p>
+            <p><strong className="text-foreground">{t("content.kunye.taxId")}:</strong> 99003199</p>
           </div>
         </motion.div>
 
@@ -682,54 +669,28 @@ export function KunyePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.45 }}
         >
-          <motion.div
-            className="absolute inset-0 rounded-2xl pointer-events-none"
-            animate={{
-              boxShadow: [
-                "inset 0 0 30px hsl(221,83%,53%,0.0)",
-                "inset 0 0 30px hsl(221,83%,53%,0.08)",
-                "inset 0 0 30px hsl(221,83%,53%,0.0)",
-              ],
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-          />
-          <motion.h2
-            className="font-display text-xl md:text-2xl font-bold relative z-10"
-            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-          >
-            Premium İletişim Kanalları
+          <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.08)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} />
+          <motion.h2 className="font-display text-xl md:text-2xl font-bold relative z-10" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}>
+            {t("content.kunye.channels")}
           </motion.h2>
           <div className="flex flex-col gap-3 relative z-10">
             <a href="tel:+905488783131" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
-              <motion.span
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-              >
+              <motion.span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}>
                 <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               </motion.span>
-              Müşteri Destek Hattı: +90 548 878 31 31
+              {t("content.kunye.customerLine")}: +90 548 878 31 31
             </a>
             <a href="https://wa.me/905488783131" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
-              <motion.span
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-              >
+              <motion.span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}>
                 <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               </motion.span>
-              WhatsApp Sipariş & Takip: +90 548 878 31 31
+              {t("content.kunye.whatsappLine")}: +90 548 878 31 31
             </a>
             <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
-              <motion.span
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-              >
+              <motion.span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}>
                 <Mail className="h-5 w-5 text-primary" />
               </motion.span>
-              Kurumsal E-posta: deniz@zorludigitalplaza.com
+              {t("content.kunye.corporateEmail")}: deniz@zorludigitalplaza.com
             </a>
           </div>
         </motion.div>
@@ -741,55 +702,23 @@ export function KunyePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          <motion.div
-            className="absolute inset-0 rounded-2xl pointer-events-none"
-            animate={{
-              boxShadow: [
-                "inset 0 0 30px hsl(221,83%,53%,0.0)",
-                "inset 0 0 30px hsl(221,83%,53%,0.08)",
-                "inset 0 0 30px hsl(221,83%,53%,0.0)",
-              ],
-            }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          />
-          <motion.h2
-            className="font-display text-xl md:text-2xl font-bold relative z-10"
-            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          >
-            Hizmet Standartlarımız
+          <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.08)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
+          <motion.h2 className="font-display text-xl md:text-2xl font-bold relative z-10" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}>
+            {t("content.kunye.standards")}
           </motion.h2>
           <div className="relative z-10 space-y-3">
-            <div className="flex items-start gap-3">
-              <motion.span
-                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 mt-0.5"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.25)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <ShieldCheck className="h-4 w-4 text-primary" />
-              </motion.span>
-              <p><strong className="text-foreground">Yetkili Servis:</strong> Samsung ve LG Profesyonel Hizmet Noktası.</p>
-            </div>
-            <div className="flex items-start gap-3">
-              <motion.span
-                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 mt-0.5"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.25)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
-              >
-                <Star className="h-4 w-4 text-primary" />
-              </motion.span>
-              <p><strong className="text-foreground">Garanti:</strong> Tüm ürünlerde 2 Yıl Premium Garanti.</p>
-            </div>
-            <div className="flex items-start gap-3">
-              <motion.span
-                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 mt-0.5"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.25)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-              >
-                <Truck className="h-4 w-4 text-primary" />
-              </motion.span>
-              <p><strong className="text-foreground">Montaj:</strong> Beyaz eşya ve klima gruplarında Ücretsiz Kurulum.</p>
-            </div>
+            {[
+              { icon: ShieldCheck, label: t("content.kunye.authorizedService") },
+              { icon: Star, label: t("content.kunye.warranty") },
+              { icon: Truck, label: t("content.kunye.installation") },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-3">
+                <motion.span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 mt-0.5" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.25)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}>
+                  <item.icon className="h-4 w-4 text-primary" />
+                </motion.span>
+                <p>{item.label}</p>
+              </div>
+            ))}
           </div>
         </motion.div>
 
@@ -798,7 +727,7 @@ export function KunyePage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >
-          Zorlu Digital Plaza | Teknolojiye Güvenli ve Premium Dokunuş
+          {t("content.kunye.motto")}
         </motion.p>
       </motion.div>
     </div>
@@ -897,46 +826,60 @@ export function EkibimizPage() {
 }
 
 export function DestekPage() {
-  const samsungServices = [
-    "Samsung televizyon arıza tamiri",
-    "Samsung LED / QLED TV servis hizmeti",
-    "Samsung klima bakım ve onarım",
-    "Samsung beyaz eşya servis desteği",
+  const { t, lang } = useLanguage();
+
+  const samsungServices = lang === "tr" ? [
+    "Samsung televizyon arıza tamiri", "Samsung LED / QLED TV servis hizmeti",
+    "Samsung klima bakım ve onarım", "Samsung beyaz eşya servis desteği",
     "Samsung yazılım güncelleme ve sistem kontrolü",
+  ] : [
+    "Samsung TV fault repair", "Samsung LED / QLED TV service",
+    "Samsung AC maintenance and repair", "Samsung white goods service support",
+    "Samsung software update and system check",
   ];
 
-  const lgServices = [
-    "LG televizyon arıza tespiti",
-    "LG OLED / Smart TV servis hizmeti",
-    "LG klima bakım ve onarım",
-    "LG beyaz eşya teknik servis",
+  const lgServices = lang === "tr" ? [
+    "LG televizyon arıza tespiti", "LG OLED / Smart TV servis hizmeti",
+    "LG klima bakım ve onarım", "LG beyaz eşya teknik servis",
     "LG yazılım güncelleme ve sistem bakımı",
+  ] : [
+    "LG TV fault detection", "LG OLED / Smart TV service",
+    "LG AC maintenance and repair", "LG white goods technical service",
+    "LG software update and system maintenance",
   ];
 
-  const servisBolgeleri = ["Lefkoşa", "Girne", "Gazimağusa", "Güzelyurt", "İskele"];
+  const servisBolgeleri = lang === "tr" ? ["Lefkoşa", "Girne", "Gazimağusa", "Güzelyurt", "İskele"]
+    : ["Nicosia", "Kyrenia", "Famagusta", "Guzelyurt", "Iskele"];
 
-  const garantiItems = [
-    "Arıza tespiti",
-    "Garanti kontrolü",
-    "Parça değişimi",
-    "Bakım ve onarım işlemleri",
-    "Servis raporu oluşturulması",
+  const garantiItems = lang === "tr" ? [
+    "Arıza tespiti", "Garanti kontrolü", "Parça değişimi",
+    "Bakım ve onarım işlemleri", "Servis raporu oluşturulması",
+  ] : [
+    "Fault detection", "Warranty check", "Parts replacement",
+    "Maintenance and repair", "Service report creation",
   ];
 
-  const nedenBiz = [
-    "Uzman teknik servis ekibi",
-    "Samsung ve LG cihazlarında deneyim",
-    "Orijinal yedek parça kullanımı",
-    "Hızlı servis ve arıza tespiti",
-    "Profesyonel müşteri destek hizmeti",
-    "KKTC genelinde servis ağı",
+  const nedenBiz = lang === "tr" ? [
+    "Uzman teknik servis ekibi", "Samsung ve LG cihazlarında deneyim",
+    "Orijinal yedek parça kullanımı", "Hızlı servis ve arıza tespiti",
+    "Profesyonel müşteri destek hizmeti", "KKTC genelinde servis ağı",
+  ] : [
+    "Expert technical service team", "Experience with Samsung and LG devices",
+    "Original spare parts usage", "Fast service and fault detection",
+    "Professional customer support service", "Service network across N.Cyprus",
   ];
 
-  const sikAranan = [
+  const sikAranan = lang === "tr" ? [
     "Samsung TV Servisi", "LG TV Servisi", "Samsung Klima Servisi",
     "LG Klima Servisi", "KKTC Elektronik Teknik Servis", "Lefkoşa Televizyon Servisi",
     "Girne TV Servisi", "Samsung Yetkili Servis KKTC", "LG Yetkili Servis KKTC",
+  ] : [
+    "Samsung TV Service", "LG TV Service", "Samsung AC Service",
+    "LG AC Service", "N.Cyprus Electronics Service", "Nicosia TV Service",
+    "Kyrenia TV Service", "Samsung Authorized Service N.Cyprus", "LG Authorized Service N.Cyprus",
   ];
+
+
 
   return (
     <div className="container py-12 md:py-16 max-w-4xl">
@@ -951,7 +894,7 @@ export function DestekPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Samsung & LG Yetkili Servis KKTC
+          {t("content.destek.title")}
         </motion.span>
       </motion.h1>
       <motion.p
@@ -960,7 +903,7 @@ export function DestekPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.15 }}
       >
-        Profesyonel Teknik Servis – Zorlu Digital Plaza
+        {t("content.destek.subtitle")}
       </motion.p>
 
       {/* Trust Cards */}
@@ -1301,6 +1244,7 @@ export function DestekPage() {
 }
 
 export function KullanimKosullariPage() {
+  const { t } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
       <motion.h1
@@ -1313,7 +1257,7 @@ export function KullanimKosullariPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Kullanım Koşulları
+          {t("content.terms.title")}
         </motion.span>
       </motion.h1>
 
@@ -1420,9 +1364,9 @@ export function KullanimKosullariPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          İletişim
+          {t("content.terms.contact")}
         </motion.h2>
-        <p className="relative z-10 text-muted-foreground">Kullanım koşulları ile ilgili her türlü soru için bizimle iletişime geçebilirsiniz.</p>
+        <p className="relative z-10 text-muted-foreground">{t("content.terms.contactDesc")}</p>
         <div className="flex flex-col gap-3 relative z-10">
           <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
             <motion.span
@@ -1451,6 +1395,7 @@ export function KullanimKosullariPage() {
 }
 
 export function IadeKosullariPage() {
+  const { t } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
       <motion.h1
@@ -1463,7 +1408,7 @@ export function IadeKosullariPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Premium İade ve Değişim Politikası
+          {t("content.returns.title")}
         </motion.span>
       </motion.h1>
       <p className="text-sm text-muted-foreground mb-8">Son Güncelleme Tarihi: 23.12.2025</p>
@@ -1590,6 +1535,7 @@ export function IadeKosullariPage() {
 }
 
 export function GizlilikPolitikasiPage() {
+  const { t } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
       <motion.h1
@@ -1602,7 +1548,7 @@ export function GizlilikPolitikasiPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Premium Gizlilik ve Veri Güvenliği Politikası
+          {t("content.privacy.title")}
         </motion.span>
       </motion.h1>
 
@@ -1711,7 +1657,7 @@ export function GizlilikPolitikasiPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Çerez Politikası
+          {t("content.cookie.title")}
         </motion.h2>
 
         <div className="prose prose-sm max-w-none text-muted-foreground [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-lg [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4">
@@ -1787,6 +1733,7 @@ export function GizlilikPolitikasiPage() {
 }
 
 export function KvkkPage() {
+  const { t } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
       <motion.h1
@@ -1799,7 +1746,7 @@ export function KvkkPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          KVKK / GDPR Uyum Metni
+          {t("content.kvkk.title")}
         </motion.span>
       </motion.h1>
       <p className="text-sm text-muted-foreground italic mb-6">Kişisel Verilerin Korunması ve Gizlilik Bildirimi</p>
@@ -1908,6 +1855,7 @@ export function KvkkPage() {
 }
 
 export function CerezPolitikasiPage() {
+  const { t } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
       <motion.h1
@@ -1920,7 +1868,7 @@ export function CerezPolitikasiPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Çerez Politikası
+          {t("content.cookie.title")}
         </motion.span>
       </motion.h1>
 
@@ -1970,6 +1918,7 @@ export function CerezPolitikasiPage() {
 }
 
 export function MesafeliSatisSozlesmesiPage() {
+  const { t } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
       <motion.h1
@@ -1982,7 +1931,7 @@ export function MesafeliSatisSozlesmesiPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Mesafeli Satış Sözleşmesi
+          {t("content.distance.title")}
         </motion.span>
       </motion.h1>
 
@@ -2068,6 +2017,7 @@ export function MesafeliSatisSozlesmesiPage() {
 }
 
 export function SiparisTakipPage() {
+  const { t } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
       <motion.h1
@@ -2080,7 +2030,7 @@ export function SiparisTakipPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Premium Sipariş Takibi
+          {t("content.orderTracking.title")}
         </motion.span>
       </motion.h1>
 
@@ -2177,11 +2127,12 @@ export function SiparisTakipPage() {
 }
 
 export function OdemeYontemleriPage() {
+  const { t, lang } = useLanguage();
   const paymentMethods = [
-    { icon: "banknote", title: "Nakit Ödeme", desc: "Mağazamızda gerçekleştireceğiniz alışverişlerde nakit ödeme kolaylığı." },
-    { icon: "card", title: "Kredi / Banka Kartı", desc: "Tüm banka ve kredi kartları ile hızlı, güvenli ve Premium işlem altyapısı." },
-    { icon: "building", title: "Havale / EFT", desc: "Banka hesaplarımıza anında transfer seçeneği ile dijital ödeme konforu." },
-    { icon: "chart", title: "Ayrıcalıklı Taksit İmkanları", desc: "Anlaşmalı bankalar aracılığıyla bütçenize uygun, avantajlı taksit seçenekleri." },
+    { icon: "banknote", title: lang === "tr" ? "Nakit Ödeme" : "Cash Payment", desc: lang === "tr" ? "Mağazamızda gerçekleştireceğiniz alışverişlerde nakit ödeme kolaylığı." : "Cash payment convenience for in-store purchases." },
+    { icon: "card", title: lang === "tr" ? "Kredi / Banka Kartı" : "Credit / Debit Card", desc: lang === "tr" ? "Tüm banka ve kredi kartları ile hızlı, güvenli ve Premium işlem altyapısı." : "Fast, secure and Premium transaction infrastructure with all bank and credit cards." },
+    { icon: "building", title: lang === "tr" ? "Havale / EFT" : "Bank Transfer", desc: lang === "tr" ? "Banka hesaplarımıza anında transfer seçeneği ile dijital ödeme konforu." : "Digital payment comfort with instant transfer option to our bank accounts." },
+    { icon: "chart", title: lang === "tr" ? "Ayrıcalıklı Taksit İmkanları" : "Installment Plans", desc: lang === "tr" ? "Anlaşmalı bankalar aracılığıyla bütçenize uygun, avantajlı taksit seçenekleri." : "Advantageous installment options through partner banks suitable for your budget." },
   ];
 
   const iconMap: Record<string, React.ReactNode> = {
@@ -2203,7 +2154,7 @@ export function OdemeYontemleriPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Premium Ödeme Seçenekleri
+          {t("content.payment.title")}
         </motion.span>
       </motion.h1>
 
@@ -2324,31 +2275,17 @@ export function OdemeYontemleriPage() {
 }
 
 export function SurdurulebilirlikPage() {
-  const sections = [
-    {
-      icon: Recycle,
-      title: "Elektronik Atık Geri Dönüşümü",
-      text: "Elektronik ürünlerin kullanım ömrü sona erdiğinde doğru şekilde geri dönüştürülmesi büyük önem taşır.",
-      detail: "Zorlu Digital Plaza, elektronik atıkların doğaya zarar vermeden geri dönüşüm süreçlerine kazandırılması konusunda müşterilerini bilinçlendirmekte ve sürdürülebilir atık yönetimi uygulamalarını desteklemektedir.",
-    },
-    {
-      icon: BatteryCharging,
-      title: "Atık Pil Toplama Bilinci",
-      text: "Atık piller çevre ve insan sağlığı açısından önemli riskler oluşturabilir.",
-      detail: "Bu nedenle Zorlu Digital Plaza, pil geri dönüşümü konusunda farkındalık yaratmayı destekler ve müşterilerini atık pilleri yetkili toplama noktalarına teslim etmeleri konusunda bilgilendirir.",
-    },
-    {
-      icon: Zap,
-      title: "Enerji Verimli Teknoloji",
-      text: "Enerji verimli teknolojilerin tercih edilmesi hem çevreyi korur hem de enerji tüketimini azaltır.",
-      detail: "Zorlu Digital Plaza, mağaza ve servis operasyonlarında enerji tasarrufu sağlayan teknolojileri tercih eder ve müşterilerine enerji verimliliği yüksek ürünleri önerir.",
-    },
-    {
-      icon: Globe,
-      title: "Çevre Bilinci ve Sorumluluk",
-      text: "Sürdürülebilirlik yalnızca bir hedef değil, aynı zamanda bir sorumluluktur.",
-      detail: "Zorlu Digital Plaza ekibi, çevre bilinci konusunda farkındalık oluşturmayı ve doğaya saygılı bir teknoloji kültürünü desteklemeyi amaçlamaktadır.",
-    },
+  const { t, lang } = useLanguage();
+  const sections = lang === "tr" ? [
+    { icon: Recycle, title: "Elektronik Atık Geri Dönüşümü", text: "Elektronik ürünlerin kullanım ömrü sona erdiğinde doğru şekilde geri dönüştürülmesi büyük önem taşır.", detail: "Zorlu Digital Plaza, elektronik atıkların doğaya zarar vermeden geri dönüşüm süreçlerine kazandırılması konusunda müşterilerini bilinçlendirmekte ve sürdürülebilir atık yönetimi uygulamalarını desteklemektedir." },
+    { icon: BatteryCharging, title: "Atık Pil Toplama Bilinci", text: "Atık piller çevre ve insan sağlığı açısından önemli riskler oluşturabilir.", detail: "Bu nedenle Zorlu Digital Plaza, pil geri dönüşümü konusunda farkındalık yaratmayı destekler ve müşterilerini atık pilleri yetkili toplama noktalarına teslim etmeleri konusunda bilgilendirir." },
+    { icon: Zap, title: "Enerji Verimli Teknoloji", text: "Enerji verimli teknolojilerin tercih edilmesi hem çevreyi korur hem de enerji tüketimini azaltır.", detail: "Zorlu Digital Plaza, mağaza ve servis operasyonlarında enerji tasarrufu sağlayan teknolojileri tercih eder ve müşterilerine enerji verimliliği yüksek ürünleri önerir." },
+    { icon: Globe, title: "Çevre Bilinci ve Sorumluluk", text: "Sürdürülebilirlik yalnızca bir hedef değil, aynı zamanda bir sorumluluktur.", detail: "Zorlu Digital Plaza ekibi, çevre bilinci konusunda farkındalık oluşturmayı ve doğaya saygılı bir teknoloji kültürünü desteklemeyi amaçlamaktadır." },
+  ] : [
+    { icon: Recycle, title: "Electronic Waste Recycling", text: "Proper recycling of electronic products at the end of their lifespan is of great importance.", detail: "Zorlu Digital Plaza raises awareness among its customers about integrating electronic waste into recycling processes without harming nature and supports sustainable waste management practices." },
+    { icon: BatteryCharging, title: "Waste Battery Collection Awareness", text: "Waste batteries can pose significant risks to the environment and human health.", detail: "Therefore, Zorlu Digital Plaza supports raising awareness about battery recycling and informs its customers about delivering waste batteries to authorized collection points." },
+    { icon: Zap, title: "Energy Efficient Technology", text: "Preferring energy-efficient technologies both protects the environment and reduces energy consumption.", detail: "Zorlu Digital Plaza prefers energy-saving technologies in its store and service operations and recommends products with high energy efficiency to its customers." },
+    { icon: Globe, title: "Environmental Awareness and Responsibility", text: "Sustainability is not just a goal, but also a responsibility.", detail: "The Zorlu Digital Plaza team aims to raise awareness about environmental consciousness and support an eco-friendly technology culture." },
   ];
 
   return (
@@ -2374,7 +2311,7 @@ export function SurdurulebilirlikPage() {
             animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
-            Sürdürülebilir Teknoloji Yaklaşımımız
+            {t("content.sustainability.title")}
           </motion.span>
         </motion.h1>
         <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">Zorlu Digital Plaza olarak teknolojinin geleceğini şekillendirirken çevresel sürdürülebilirliği iş modelimizin merkezine koyuyoruz.</p>
