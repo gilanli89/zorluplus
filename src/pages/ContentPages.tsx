@@ -666,7 +666,7 @@ export function EkibimizPage() {
             >
               {m.name}
             </motion.p>
-            <p className="text-xs text-muted-foreground mt-1">{m.role}</p>
+            <p className="text-xs text-muted-foreground mt-1">{m.branch ? `${m.branch} – ` : ""}{t(m.roleKey)}</p>
           </motion.div>
         ))}
       </motion.div>
