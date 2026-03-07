@@ -37,14 +37,6 @@ export default function TrustSection() {
             variants={itemVariants}
             className="flex items-center gap-3 group">
             
-              {(item.customIcon || item.icon) && (
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary/15 transition-colors duration-300 overflow-hidden">
-                {item.customIcon ?
-              <img src={item.customIcon} alt={item.label} className="h-12 w-12 object-contain" /> :
-              item.icon && <item.icon className="h-5 w-5 icon-hover-rotate" />
-              }
-              </div>
-              )}
               {item.hasBrandLogos ?
             <img src="/brands/yetkili-servis-badge.png" alt="Samsung & LG Yetkili Servis" className="h-56 w-auto object-contain mx-auto" /> :
 
