@@ -1256,7 +1256,7 @@ export function KullanimKosullariPage() {
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          Kullanım Koşulları
+          {t("content.terms.title")}
         </motion.span>
       </motion.h1>
 
