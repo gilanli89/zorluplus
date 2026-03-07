@@ -1,4 +1,4 @@
-import { Shield, Award, Wrench, Truck } from "lucide-react";
+import { Wrench, Truck } from "lucide-react";
 import { motion } from "framer-motion";
 
 const items = [
