@@ -2,49 +2,52 @@ import {
   Shield, Award, Coffee, Zap, Timer, Sparkles, Gauge, Wrench,
 } from "lucide-react";
 import CategoryLandingTemplate, { CategoryLandingConfig } from "@/components/CategoryLandingTemplate";
-
-const config: CategoryLandingConfig = {
-  slug: "kahve-makinesi",
-  seoTitle: "Kahve Makinesi Fiyatları | Krups & Philips - Kıbrıs | Zorlu Digital Plaza",
-  seoDescription: "Kıbrıs'ta Krups ve Philips kahve makinesi modelleri. Filtre kahve, espresso, otomatik kahve makineleri. Zorlu Digital Plaza güvencesiyle.",
-  heroBadge: "Yetkili Satış Noktası",
-  heroTitle: "Evinizde",
-  heroTitleHighlight: "Barista Kalitesinde Kahve",
-  heroDescription: "Krups ve Philips kahve makineleriyle her sabah mükemmel bir kahve deneyimi yaşayın.",
-  heroGradient: "from-amber-600 via-yellow-700 to-orange-600",
-  ctaButtonText: "Modelleri Gör",
-  ctaButtonLink: "#urunler",
-  trustItems: [
-    { icon: Shield, label: "Güvenli Alışveriş", desc: "Yetkili satış" },
-    { icon: Award, label: "2 Yıl Garanti", desc: "Tüm modellerde" },
-    { icon: Coffee, label: "Uzman Tavsiyesi", desc: "Doğru makine seçimi" },
-    { icon: Zap, label: "Hızlı Teslimat", desc: "Aynı gün kargo" },
-  ],
-  subtypes: [],
-  benefits: [
-    { icon: Shield, title: "Garanti Güvencesi", desc: "Tüm kahve makinelerinde 2 yıl garanti." },
-    { icon: Coffee, title: "Uzman Danışmanlık", desc: "İhtiyacınıza uygun kahve makinesi seçiminde yardımcı oluyoruz." },
-    { icon: Sparkles, title: "Premium Markalar", desc: "Krups ve Philips'in en yeni modellerini stoklarımızda bulunduruyoruz." },
-    { icon: Zap, title: "Hızlı Teslimat", desc: "Stokta olan ürünlerde aynı gün kargo imkanı." },
-  ],
-  benefitsTitle: "Neden ZorluPlus'tan Kahve Makinesi Almalısınız?",
-  benefitsDescription: "En iyi markların kahve makinelerini güvenli alışveriş ve garanti ile sunuyoruz.",
-  quoteTitle: "Kahve Makinesi Teklifi",
-  quoteDescription: "Bilgilerinizi bırakın, size özel teklifimizi sunalım.",
-  productsTitle: "Kahve Makineleri",
-  productsCategoryLink: "/kategori/mutfak-aletleri/kahve-makinesi",
-  productsCategoryLinkText: "Tümünü Gör",
-  filterProducts: (p) => p.category === "mutfak-aletleri" && p.subcategory === "kahve-makinesi",
-  faq: [
-    { q: "Filtre mi espresso mu almalıyım?", a: "Filtre kahve makinesi sade kahve sevenler için, espresso makinesi ise yoğun latte/cappuccino sevenler için idealdir." },
-    { q: "Otomatik kahve makinesi nedir?", a: "Çekirdekten fincana kadar tüm işlemi tek tuşla yapan makinelerdir. Hem filtre hem espresso yapabilir." },
-    { q: "Taksit var mı?", a: "Evet, kredi kartına taksit ve havale/EFT ödeme seçeneklerimiz mevcuttur." },
-  ],
-  faqTitle: "Sık Sorulan Sorular",
-  faqDescription: "Kahve makinesi seçimi hakkında merak ettikleriniz",
-  jsonLdName: "Kahve Makinesi Modelleri - Zorlu Digital Plaza",
-};
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function KahveMakinesiLandingPage() {
+  const { t } = useLanguage();
+
+  const config: CategoryLandingConfig = {
+    slug: "kahve-makinesi",
+    seoTitle: t("lp.kahve.seoTitle"),
+    seoDescription: t("lp.kahve.seoDesc"),
+    heroBadge: t("lp.kahve.heroBadge"),
+    heroTitle: t("lp.kahve.heroTitle"),
+    heroTitleHighlight: t("lp.kahve.heroHighlight"),
+    heroDescription: t("lp.kahve.heroDesc"),
+    heroGradient: "from-amber-600 via-yellow-700 to-orange-600",
+    ctaButtonText: t("lp.kahve.ctaBtn"),
+    ctaButtonLink: "#urunler",
+    trustItems: [
+      { icon: Shield, label: t("lp.kahve.trust1"), desc: t("lp.kahve.trust1d") },
+      { icon: Award, label: t("lp.kahve.trust2"), desc: t("lp.kahve.trust2d") },
+      { icon: Coffee, label: t("lp.kahve.trust3"), desc: t("lp.kahve.trust3d") },
+      { icon: Zap, label: t("lp.kahve.trust4"), desc: t("lp.kahve.trust4d") },
+    ],
+    subtypes: [],
+    benefits: [
+      { icon: Shield, title: t("lp.kahve.ben1"), desc: t("lp.kahve.ben1d") },
+      { icon: Coffee, title: t("lp.kahve.ben2"), desc: t("lp.kahve.ben2d") },
+      { icon: Sparkles, title: t("lp.kahve.ben3"), desc: t("lp.kahve.ben3d") },
+      { icon: Zap, title: t("lp.kahve.ben4"), desc: t("lp.kahve.ben4d") },
+    ],
+    benefitsTitle: t("lp.kahve.benTitle"),
+    benefitsDescription: t("lp.kahve.benDesc"),
+    quoteTitle: t("lp.kahve.quoteTitle"),
+    quoteDescription: t("lp.kahve.quoteDesc"),
+    productsTitle: t("lp.kahve.productsTitle"),
+    productsCategoryLink: "/kategori/mutfak-aletleri/kahve-makinesi",
+    productsCategoryLinkText: t("lp.kahve.viewAll"),
+    filterProducts: (p) => p.category === "mutfak-aletleri" && p.subcategory === "kahve-makinesi",
+    faq: [
+      { q: t("lp.kahve.faq1q"), a: t("lp.kahve.faq1a") },
+      { q: t("lp.kahve.faq2q"), a: t("lp.kahve.faq2a") },
+      { q: t("lp.kahve.faq3q"), a: t("lp.kahve.faq3a") },
+    ],
+    faqTitle: t("lp.kahve.faqTitle"),
+    faqDescription: t("lp.kahve.faqDesc"),
+    jsonLdName: "Kahve Makinesi Modelleri - Zorlu Digital Plaza",
+  };
+
   return <CategoryLandingTemplate config={config} />;
 }

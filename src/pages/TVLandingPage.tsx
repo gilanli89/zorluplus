@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
 import {
   Shield, Award, Wrench, MessageCircle, Phone, CheckCircle2,
@@ -24,30 +25,31 @@ const fadeUp = {
   }),
 };
 
-const TV_TYPES = [
-  { icon: Monitor, name: "OLED TV", desc: "Sonsuz kontrast, mükemmel siyahlar", slug: "tv" },
-  { icon: Tv, name: "QLED TV", desc: "Canlı renkler, yüksek parlaklık", slug: "tv" },
-  { icon: Maximize2, name: "4K & 8K UHD", desc: "Ultra yüksek çözünürlük", slug: "tv" },
-  { icon: Volume2, name: "Soundbar", desc: "Sinema ses deneyimi", slug: "soundbar" },
-];
-
-const BENEFITS = [
-  { icon: Wrench, title: "Ücretsiz Duvar Montajı", desc: "Profesyonel ekibimiz TV'nizi istediğiniz duvara monte eder." },
-  { icon: Shield, title: "2 Yıl Resmi Garanti", desc: "Samsung & LG yetkili bayi garantisiyle güvende olun." },
-  { icon: Volume2, title: "Soundbar Kombo Fırsatları", desc: "TV alımlarında özel soundbar indirimleri." },
-  { icon: Zap, title: "Aynı Gün Teslimat", desc: "Stokta olan ürünlerde aynı gün kurulum imkanı." },
-];
-
-const FAQ = [
-  { q: "OLED mi QLED mi almalıyım?", a: "OLED TV'ler sonsuz kontrast ve mükemmel siyah tonları sunar, film izlemek için idealdir. QLED TV'ler ise daha parlak ekranla aydınlık odalarda üstün performans gösterir. İhtiyacınıza göre mağazamızda karşılaştırabilirsiniz." },
-  { q: "Ücretsiz montaj dahil mi?", a: "Evet, tüm televizyon alımlarında ücretsiz duvar montajı hizmetimiz mevcuttur. Profesyonel ekibimiz televizyonunuzu güvenle monte eder." },
-  { q: "Hangi markalar mevcut?", a: "Samsung ve LG yetkili bayisi olarak her iki markanın da en güncel OLED, QLED, NanoCell ve Crystal UHD modellerini stoklarımızda bulunduruyoruz." },
-  { q: "Taksit imkanı var mı?", a: "Evet, kredi kartına taksit seçeneklerimiz mevcuttur. Ayrıca havale/EFT ile ödeme yapabilirsiniz. Detaylı bilgi için bizi arayabilirsiniz." },
-];
-
 export default function TVLandingPage() {
+  const { t } = useLanguage();
   const { data: products = [] } = useProducts();
   const tvProducts = useMemo(() => products.filter(p => p.category === "tv-goruntu" && p.subcategory === "tv"), [products]);
+
+  const TV_TYPES = [
+    { icon: Monitor, name: t("lp.tv.type1"), desc: t("lp.tv.type1d"), slug: "tv" },
+    { icon: Tv, name: t("lp.tv.type2"), desc: t("lp.tv.type2d"), slug: "tv" },
+    { icon: Maximize2, name: t("lp.tv.type3"), desc: t("lp.tv.type3d"), slug: "tv" },
+    { icon: Volume2, name: t("lp.tv.type4"), desc: t("lp.tv.type4d"), slug: "soundbar" },
+  ];
+
+  const BENEFITS = [
+    { icon: Wrench, title: t("lp.tv.ben1"), desc: t("lp.tv.ben1d") },
+    { icon: Shield, title: t("lp.tv.ben2"), desc: t("lp.tv.ben2d") },
+    { icon: Volume2, title: t("lp.tv.ben3"), desc: t("lp.tv.ben3d") },
+    { icon: Zap, title: t("lp.tv.ben4"), desc: t("lp.tv.ben4d") },
+  ];
+
+  const FAQ = [
+    { q: t("lp.tv.faq1q"), a: t("lp.tv.faq1a") },
+    { q: t("lp.tv.faq2q"), a: t("lp.tv.faq2a") },
+    { q: t("lp.tv.faq3q"), a: t("lp.tv.faq3a") },
+    { q: t("lp.tv.faq4q"), a: t("lp.tv.faq4a") },
+  ];
 
   // TV-specific filters
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -72,7 +74,7 @@ export default function TVLandingPage() {
     if (text.includes("NANOCELL")) return "NanoCell";
     if (text.includes("CRYSTAL") || text.includes("UHD")) return "Crystal UHD";
     if (text.includes("LED")) return "LED";
-    return "Diğer";
+    return t("lp.tv.other");
   };
 
   // Extract OS from name/tags
@@ -80,7 +82,7 @@ export default function TVLandingPage() {
     const text = (p.name + " " + p.tags.join(" ")).toUpperCase();
     if (text.includes("TIZEN") || text.includes("SAMSUNG")) return "Tizen (Samsung)";
     if (text.includes("WEBOS") || text.includes("LG")) return "webOS (LG)";
-    return "Diğer";
+    return t("lp.tv.other");
   };
 
   // Available filter options from products
@@ -152,28 +154,28 @@ export default function TVLandingPage() {
     <div className="space-y-6">
       {activeFilterCount > 0 && (
         <button onClick={clearFilters} className="text-xs text-primary hover:underline flex items-center gap-1 font-semibold">
-          <X className="h-3 w-3" /> Filtreleri Temizle ({activeFilterCount})
+          <X className="h-3 w-3" /> {t("lp.tv.clearFilters")} ({activeFilterCount})
         </button>
       )}
 
-      <FilterSection title="Marka" items={filterOptions.brands} selected={selectedBrands} onToggle={(v) => toggleFilter(v, selectedBrands, setSelectedBrands)} />
+      <FilterSection title={t("lp.tv.brand")} items={filterOptions.brands} selected={selectedBrands} onToggle={(v) => toggleFilter(v, selectedBrands, setSelectedBrands)} />
       {filterOptions.inches.length > 0 && (
-        <FilterSection title="Ekran Boyutu" items={filterOptions.inches.map(i => i)} selected={selectedInches} onToggle={(v) => toggleFilter(v, selectedInches, setSelectedInches)} />
+        <FilterSection title={t("lp.tv.screenSize")} items={filterOptions.inches.map(i => i)} selected={selectedInches} onToggle={(v) => toggleFilter(v, selectedInches, setSelectedInches)} />
       )}
       {filterOptions.panels.length > 0 && (
-        <FilterSection title="Panel Tipi" items={filterOptions.panels} selected={selectedPanels} onToggle={(v) => toggleFilter(v, selectedPanels, setSelectedPanels)} />
+        <FilterSection title={t("lp.tv.panelType")} items={filterOptions.panels} selected={selectedPanels} onToggle={(v) => toggleFilter(v, selectedPanels, setSelectedPanels)} />
       )}
       {filterOptions.oses.length > 0 && (
-        <FilterSection title="İşletim Sistemi" items={filterOptions.oses} selected={selectedOS} onToggle={(v) => toggleFilter(v, selectedOS, setSelectedOS)} />
+        <FilterSection title={t("lp.tv.os")} items={filterOptions.oses} selected={selectedOS} onToggle={(v) => toggleFilter(v, selectedOS, setSelectedOS)} />
       )}
     </div>
   );
 
   // SEO
   if (typeof document !== "undefined") {
-    document.title = "Televizyon Fiyatları | Samsung & LG OLED TV QLED TV - Kıbrıs | Zorlu Digital Plaza";
+    document.title = t("lp.tv.seoTitle") !== "lp.tv.seoTitle" ? t("lp.tv.seoTitle") : "Televizyon Fiyatları | Samsung & LG OLED TV QLED TV - Kıbrıs | Zorlu Digital Plaza";
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Kıbrıs'ta Samsung ve LG OLED TV, QLED TV, 4K ve 8K televizyon modelleri. Ücretsiz duvar montajı, 2 yıl garanti. Yetkili bayi güvencesiyle TV alın. Zorlu Digital Plaza.");
+    if (meta) meta.setAttribute("content", t("lp.tv.seoDesc") !== "lp.tv.seoDesc" ? t("lp.tv.seoDesc") : "Kıbrıs'ta Samsung ve LG OLED TV, QLED TV, 4K ve 8K televizyon modelleri.");
   }
 
   return (
@@ -193,21 +195,21 @@ export default function TVLandingPage() {
             className="max-w-2xl"
           >
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold text-white mb-5 border border-white/20">
-              <Shield className="h-3.5 w-3.5" /> Samsung & LG Yetkili Bayi
+              <Shield className="h-3.5 w-3.5" /> {t("lp.tv.heroBadge")}
             </span>
             <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.08] mb-4 text-white">
-              Sinema Deneyimini<br />
+              {t("lp.tv.heroTitle")}<br />
               <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                Evinize Getirin
+                {t("lp.tv.heroHighlight")}
               </span>
             </h1>
             <p className="text-white/80 text-lg md:text-xl mb-8 max-w-lg leading-relaxed">
-              OLED, QLED ve Smart TV'lerde yetkili bayi farkıyla. Ücretsiz duvar montajı ve 2 yıl garanti dahil.
+              {t("lp.tv.heroDesc")}
             </p>
             <div className="flex flex-wrap gap-3">
               <a href="#urunler">
                 <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg">
-                  <Eye className="h-4 w-4" /> TV Modellerini Gör
+                  <Eye className="h-4 w-4" /> {t("lp.tv.ctaBtn")}
                 </Button>
               </a>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("tv_hero")}>
@@ -215,7 +217,7 @@ export default function TVLandingPage() {
                   size="lg"
                   className="font-semibold gap-2 rounded-full px-6 shadow-lg bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white border-0"
                 >
-                  <MessageCircle className="h-4 w-4" /> Hemen Bilgi Al
+                  <MessageCircle className="h-4 w-4" /> {t("landing.getInfo")}
                 </Button>
               </a>
             </div>
@@ -228,10 +230,10 @@ export default function TVLandingPage() {
         <div className="container py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { icon: Shield, label: "Yetkili Bayi", desc: "Samsung & LG" },
-              { icon: Award, label: "2 Yıl Garanti", desc: "Tüm TV'lerde" },
-              { icon: Wrench, label: "Ücretsiz Montaj", desc: "Duvar montajı dahil" },
-              { icon: Star, label: "Uzman Danışmanlık", desc: "Doğru TV seçimi" },
+              { icon: Shield, label: t("lp.tv.trust1"), desc: "Samsung & LG" },
+              { icon: Award, label: t("lp.tv.trust2"), desc: t("lp.tv.trust2d") },
+              { icon: Wrench, label: t("lp.tv.trust3"), desc: t("lp.tv.trust3d") },
+              { icon: Star, label: t("lp.tv.trust4"), desc: t("lp.tv.trust4d") },
             ].map((item, i) => (
               <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -253,12 +255,12 @@ export default function TVLandingPage() {
           <div className="flex items-end justify-between mb-8">
             <div>
               <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                TV Modelleri
+                {t("lp.tv.productsTitle")}
               </h2>
-              <p className="text-muted-foreground mt-1">{display.length} ürün listeleniyor</p>
+              <p className="text-muted-foreground mt-1">{display.length} {t("lp.tv.productsCount")}</p>
             </div>
             <Link to="/kategori/tv-goruntu" className="text-sm font-semibold text-primary hover:underline underline-offset-4 hidden sm:block">
-              Tümünü Gör <ArrowRight className="inline h-3.5 w-3.5" />
+              {t("lp.tv.viewAll")} <ArrowRight className="inline h-3.5 w-3.5" />
             </Link>
           </div>
 
@@ -267,7 +269,7 @@ export default function TVLandingPage() {
             <aside className="hidden lg:block w-56 shrink-0">
               <div className="sticky top-28 rounded-2xl border border-border bg-card p-5">
                 <h3 className="text-sm font-bold text-foreground mb-4 flex items-center gap-2">
-                  <SlidersHorizontal className="h-4 w-4" /> Filtrele
+                  <SlidersHorizontal className="h-4 w-4" /> {t("lp.tv.filter")}
                 </h3>
                 <FilterContent />
               </div>
@@ -286,7 +288,7 @@ export default function TVLandingPage() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto rounded-t-2xl">
-                  <SheetTitle className="text-lg font-bold mb-4">Filtrele</SheetTitle>
+                  <SheetTitle className="text-lg font-bold mb-4">{t("lp.tv.filter")}</SheetTitle>
                   <FilterContent />
                 </SheetContent>
               </Sheet>
@@ -304,9 +306,9 @@ export default function TVLandingPage() {
                 </div>
               ) : (
                 <div className="text-center py-12 rounded-2xl border border-border bg-card">
-                  <p className="text-muted-foreground mb-4">Bu filtrelere uygun TV bulunamadı.</p>
+                  <p className="text-muted-foreground mb-4">{t("lp.tv.noResults")}</p>
                   <Button variant="outline" className="rounded-full gap-2" onClick={clearFilters}>
-                    <X className="h-4 w-4" /> Filtreleri Temizle
+                    <X className="h-4 w-4" /> {t("lp.tv.clearFilters")}
                   </Button>
                 </div>
               )}
@@ -320,10 +322,10 @@ export default function TVLandingPage() {
         <div className="container">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
             <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
-              İhtiyacınıza Uygun TV
+              {t("lp.tv.suitableTitle")}
             </h2>
             <p className="text-muted-foreground max-w-lg mx-auto">
-              Samsung ve LG'nin en son teknoloji televizyonlarını keşfedin
+              {t("lp.tv.suitableDesc")}
             </p>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
@@ -351,10 +353,10 @@ export default function TVLandingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
               <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-3">
-                Neden ZorluPlus'tan TV Almalısınız?
+                {t("lp.tv.benTitle")}
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                Kuzey Kıbrıs'ın en güvenilir Samsung & LG yetkili bayisi olarak, en yeni OLED, QLED ve NanoCell televizyonları yetkili garanti ve profesyonel montaj hizmetiyle sunuyoruz.
+                {t("lp.tv.benDesc")}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {BENEFITS.map((b, i) => (
@@ -378,10 +380,10 @@ export default function TVLandingPage() {
               className="rounded-2xl border border-border bg-card p-6 shadow-lg"
             >
               <h3 className="font-display font-bold text-lg text-foreground mb-1">
-                TV Fiyat Teklifi Alın
+                {t("lp.tv.quoteTitle")}
               </h3>
               <p className="text-sm text-muted-foreground mb-5">
-                Bilgilerinizi bırakın, size özel TV teklifimizi sunalım.
+                {t("lp.tv.quoteDesc")}
               </p>
               <QuoteForm />
             </motion.div>
@@ -394,9 +396,9 @@ export default function TVLandingPage() {
         <div className="container max-w-3xl">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-10">
             <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
-              Sık Sorulan Sorular
+              {t("lp.tv.faqTitle")}
             </h2>
-            <p className="text-muted-foreground">TV seçimi ve hizmetlerimiz hakkında merak ettikleriniz</p>
+            <p className="text-muted-foreground">{t("lp.tv.faqDesc")}</p>
           </motion.div>
           <div className="space-y-3">
             {FAQ.map((item, i) => (
@@ -431,11 +433,11 @@ export default function TVLandingPage() {
               className="rounded-2xl border border-border bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center"
             >
               <MessageCircle className="h-10 w-10 text-[hsl(142,70%,40%)] mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">WhatsApp ile Sipariş</h3>
-              <p className="text-sm text-muted-foreground mb-5">Hızlı sipariş ve bilgi almak için WhatsApp'tan yazın.</p>
+              <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
+              <p className="text-sm text-muted-foreground mb-5">{t("landing.whatsappOrderDesc")}</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("tv_cta")}>
                 <Button size="lg" className="rounded-full gap-2 font-semibold bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
-                  <MessageCircle className="h-4 w-4" /> WhatsApp'a Yaz
+                  <MessageCircle className="h-4 w-4" /> {t("landing.writeWhatsapp")}
                 </Button>
               </a>
             </motion.div>
@@ -445,8 +447,8 @@ export default function TVLandingPage() {
               className="rounded-2xl border border-border bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 text-center"
             >
               <Phone className="h-10 w-10 text-primary mx-auto mb-4" />
-              <h3 className="font-display text-xl font-bold text-foreground mb-2">Telefonla Arayın</h3>
-              <p className="text-sm text-muted-foreground mb-5">Uzman danışmanlarımız TV seçiminde size yardımcı olsun.</p>
+              <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.callUs")}</h3>
+              <p className="text-sm text-muted-foreground mb-5">{t("landing.callUsDesc")}</p>
               <a href={`tel:${BRAND.phone.replace(/\s/g, "")}`}>
                 <Button size="lg" variant="outline" className="rounded-full gap-2 font-semibold">
                   <Phone className="h-4 w-4" /> {BRAND.phoneDisplay}
