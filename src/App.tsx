@@ -97,6 +97,9 @@ const App = () => (
               <Route path="/kullanim-kosullari" element={<KullanimKosullariPage />} />
               <Route path="/iade-kosullari" element={<IadeKosullariPage />} />
               <Route path="/gizlilik-politikasi" element={<GizlilikPolitikasiPage />} />
+              <Route path="/kvkk" element={<KvkkPage />} />
+              <Route path="/cerez-politikasi" element={<CerezPolitikasiPage />} />
+              <Route path="/mesafeli-satis-sozlesmesi" element={<MesafeliSatisSozlesmesiPage />} />
               <Route path="/siparis-takip" element={<SiparisTakipPage />} />
               <Route path="/odeme-yontemleri" element={<OdemeYontemleriPage />} />
               <Route path="/odeme" element={<CheckoutPage />} />

@@ -43,6 +43,9 @@ export default function Footer() {
   const footerYasal = [
     { label: t("footer.terms"), href: "/kullanim-kosullari" },
     { label: t("footer.privacy"), href: "/gizlilik-politikasi" },
+    { label: "KVKK / GDPR", href: "/kvkk" },
+    { label: "Çerez Politikası", href: "/cerez-politikasi" },
+    { label: "Mesafeli Satış Sözleşmesi", href: "/mesafeli-satis-sozlesmesi" },
   ];
 
   return (
