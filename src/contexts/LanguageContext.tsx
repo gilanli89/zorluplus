@@ -295,9 +295,9 @@ const translations: Record<string, Record<Lang, string>> = {
 
   // Hero banner
   "hero.badge1": { tr: "Samsung & LG Yetkili Bayi", en: "Samsung & LG Authorized Dealer" },
-  "hero.title1": { tr: "Evinize Teknoloji,", en: "Technology for Your Home," },
-  "hero.subtitle1": { tr: "Hayatınıza Konfor.", en: "Comfort for Your Life." },
-  "hero.desc1": { tr: "OLED TV, Soundbar ve daha fazlası — yetkili garantiyle evinize gelsin.", en: "OLED TV, Soundbar and more — delivered with authorized warranty." },
+  "hero.title1": { tr: "Zorlu Digital Plaza", en: "Zorlu Digital Plaza" },
+  "hero.subtitle1": { tr: "Samsung & LG Yetkili Bayi", en: "Samsung & LG Authorized Dealer" },
+  "hero.desc1": { tr: "Samsung ve LG'nin en yeni nesil görüntü ve ses teknolojilerini yetkili satış ve garanti güvencesiyle müşterileriyle buluşturur. Crystal UHD, QLED, QNED, NanoCell ve OLED TV modelleri ile birlikte Soundbar ve gelişmiş ev sinema sistemleri, yüksek görüntü kalitesi ve üstün ses performansı ile yaşam alanlarınıza teknoloji ve konfor katıyor.", en: "Bringing Samsung and LG's latest display and audio technologies with authorized sales and warranty assurance. Crystal UHD, QLED, QNED, NanoCell and OLED TV models along with Soundbar and advanced home cinema systems deliver high picture quality and superior sound performance to your living spaces." },
   "hero.cta1": { tr: "TV & Görüntü Keşfet", en: "Explore TV & Display" },
   "hero.badge2": { tr: "Mutfağınızı Yenileyin", en: "Upgrade Your Kitchen" },
   "hero.title2": { tr: "Beyaz Eşyada", en: "White Goods" },
