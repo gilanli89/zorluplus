@@ -879,28 +879,7 @@ export function DestekPage() {
     "Kyrenia TV Service", "Samsung Authorized Service N.Cyprus", "LG Authorized Service N.Cyprus",
   ];
 
-  const garantiItems = [
-    "Arıza tespiti",
-    "Garanti kontrolü",
-    "Parça değişimi",
-    "Bakım ve onarım işlemleri",
-    "Servis raporu oluşturulması",
-  ];
 
-  const nedenBiz = [
-    "Uzman teknik servis ekibi",
-    "Samsung ve LG cihazlarında deneyim",
-    "Orijinal yedek parça kullanımı",
-    "Hızlı servis ve arıza tespiti",
-    "Profesyonel müşteri destek hizmeti",
-    "KKTC genelinde servis ağı",
-  ];
-
-  const sikAranan = [
-    "Samsung TV Servisi", "LG TV Servisi", "Samsung Klima Servisi",
-    "LG Klima Servisi", "KKTC Elektronik Teknik Servis", "Lefkoşa Televizyon Servisi",
-    "Girne TV Servisi", "Samsung Yetkili Servis KKTC", "LG Yetkili Servis KKTC",
-  ];
 
   return (
     <div className="container py-12 md:py-16 max-w-4xl">
