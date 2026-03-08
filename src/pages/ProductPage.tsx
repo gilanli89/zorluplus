@@ -129,7 +129,7 @@ export default function ProductPage() {
             {product.description && (
               <div className="mt-4">
                 <h3 className="font-display font-bold text-foreground mb-2">{t("product.description")}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{product.description}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{translateProduct(product.description)}</p>
               </div>
             )}
 
