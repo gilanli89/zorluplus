@@ -13,6 +13,7 @@ import ProductRecommendations from "@/components/ProductRecommendations";
 import QuoteForm from "@/components/QuoteForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProductTranslation } from "@/hooks/useProductTranslation";
 
 
 export default function ProductPage() {
