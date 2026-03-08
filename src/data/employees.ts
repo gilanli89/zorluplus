@@ -24,7 +24,7 @@ export const employees: Employee[] = [
   { id: 7938, fullName: "Suhrap Alimov",        isAdmin: false, annualLeave: 14 },
   { id: 7939, fullName: "Çakır Recepov",        isAdmin: false, annualLeave: 14, title: "TV Technician" },
   { id: 7940, fullName: "Bilal Muhammed",       isAdmin: false, annualLeave: 14, title: "TV Technician" },
-  { id: 7941, fullName: "Abed Azbaki",          isAdmin: false, annualLeave: 14, title: "Air Conditioning Technician" },
+  { id: 7941, fullName: "Abed Azbaki",          isAdmin: false, annualLeave: 14, title: "TV/AV Service Chief" },
   { id: 7942, fullName: "Umit Rozyev",          isAdmin: false, annualLeave: 14, title: "TV Technician" },
   { id: 9174, fullName: "Karetta",              isAdmin: false, annualLeave: 999 },
 ];
