@@ -5,6 +5,7 @@ import { Product } from "@/lib/types";
 import { MessageCircle, Eye } from "lucide-react";
 import { getWhatsAppLink } from "@/lib/products";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProductTranslation } from "@/hooks/useProductTranslation";
 
 interface ProductCardProps {
   product: Product;
