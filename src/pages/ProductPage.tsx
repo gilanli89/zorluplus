@@ -143,6 +143,9 @@ export default function ProductPage() {
           </div>
         </div>
 
+        {/* AI Recommendations */}
+        <ProductRecommendations currentProduct={product} allProducts={products} maxItems={4} />
+
         {recentlyViewed.length > 0 && (
           <section className="mt-12">
             <h2 className="font-display text-xl font-bold mb-4 text-foreground">{t("product.recentlyViewed")}</h2>
