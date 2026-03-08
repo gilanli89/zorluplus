@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, X, Send, Loader2, Sparkles } from "lucide-react";
+import { X, Send, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getSmartGreeting, getTodaySpecialDay } from "@/lib/specialDays";
+import carettaIcon from "@/assets/caretta-icon.png";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -133,7 +134,7 @@ export default function AIChatbot() {
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5" />
+                <img src={carettaIcon} alt="Caretta AI" className="h-8 w-8 rounded-full" />
             {/* Chat header subtitle with smart greeting */}
               <div>
                   <p className="text-sm font-bold">Caretta AI</p>
@@ -231,7 +232,7 @@ export default function AIChatbot() {
             </motion.div>
           ) : (
             <motion.div key="bot" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-              <Bot className="h-6 w-6" />
+              <img src={carettaIcon} alt="Caretta AI" className="h-8 w-8" />
             </motion.div>
           )}
         </AnimatePresence>
