@@ -222,7 +222,7 @@ export default function AIChatbot() {
         whileTap={{ scale: 0.95 }}
         onClick={() => setOpen(prev => !prev)}
         className="h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl flex items-center justify-center transition-shadow"
-        aria-label="AI Asistan"
+        aria-label="Caretta AI"
       >
         <AnimatePresence mode="wait">
           {open ? (
