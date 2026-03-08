@@ -62,7 +62,7 @@ export default function ProductPage() {
                     <img src={p.image} alt={p.name} className="h-full w-full object-contain p-3 group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                   </div>
                   <p className="text-[10px] font-semibold text-primary/70 uppercase tracking-wider">{p.brand}</p>
-                  <p className="text-xs font-medium text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">{p.name}</p>
+                  <p className="text-xs font-medium text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">{translateProduct(p.name)}</p>
                 </Link>
               ))}
             </div>
