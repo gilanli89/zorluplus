@@ -187,7 +187,7 @@ export default function AIChatbot() {
 
             {/* Input */}
             <form
-              onSubmit={(e) => { e.preventDefault(); send(); }}
+              onSubmit={(e) => { e.preventDefault(); sendMessage(input); }}
               className="flex items-center gap-2 px-3 py-3 border-t border-border bg-background"
             >
               <input
