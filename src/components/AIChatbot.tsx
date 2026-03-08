@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Bot, X, Send, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getSmartGreeting, getTodaySpecialDay } from "@/lib/specialDays";
 
 type Message = { role: "user" | "assistant"; content: string };
 
