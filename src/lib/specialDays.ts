@@ -147,10 +147,10 @@ const FIXED_SPECIAL_DAYS: Record<string, SpecialDay> = {
   },
 };
 
-function isInRange(mmdd: string, year: number, start: string, end: string): boolean {
-  const toDate = (md: string) => new Date(`${year}-${md}`);
-  const current = toDate(mmdd);
-  return current >= toDate(start) && current <= toDate(end);
+function isInRange(now: Date, start: string, end: string): boolean {
+  const startDate = new Date(start + "T00:00:00");
+  const endDate = new Date(end + "T23:59:59");
+  return now >= startDate && now <= endDate;
 }
 
 export function getTodaySpecialDay(): SpecialDay | null {
