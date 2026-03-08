@@ -3,6 +3,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import MobileBottomBar from "./MobileBottomBar";
 import FloatingLinktree from "@/components/FloatingLinktree";
+import AIChatbot from "@/components/AIChatbot";
 
 export default function Layout() {
   return (
