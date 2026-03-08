@@ -136,7 +136,7 @@ export default function AIChatbot() {
                 <Sparkles className="h-5 w-5" />
             {/* Chat header subtitle with smart greeting */}
               <div>
-                  <p className="text-sm font-bold">Zorlu AI Asistan</p>
+                  <p className="text-sm font-bold">Caretta AI</p>
                   <p className="text-[10px] opacity-80">{getSmartGreeting(lang)}</p>
                 </div>
               </div>
