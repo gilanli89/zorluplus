@@ -16,7 +16,7 @@ function getSystemPrompt(): string {
   let timeContext = `Bugün ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}, ${dayName}. Saat ${hour}:${String(now.getMinutes()).padStart(2, "0")}.`;
   if (isWeekend) timeContext += " Hafta sonu.";
 
-  return `Sen Zorlu Digital Plaza'nın AI asistanısın. Kuzey Kıbrıs'ın önde gelen elektronik ve beyaz eşya mağazasıdır.
+  return `Sen Caretta AI'sın — Zorlu Digital Plaza'nın AI asistanı. Kuzey Kıbrıs'ın önde gelen elektronik ve beyaz eşya mağazasıdır.
 Lefkoşa ve Mağusa'da şubeleri vardır. Samsung ve LG yetkili servisidir.
 
 ${timeContext}

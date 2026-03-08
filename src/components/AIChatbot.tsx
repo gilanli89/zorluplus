@@ -136,7 +136,7 @@ export default function AIChatbot() {
                 <Sparkles className="h-5 w-5" />
             {/* Chat header subtitle with smart greeting */}
               <div>
-                  <p className="text-sm font-bold">Zorlu AI Asistan</p>
+                  <p className="text-sm font-bold">Caretta AI</p>
                   <p className="text-[10px] opacity-80">{getSmartGreeting(lang)}</p>
                 </div>
               </div>
@@ -222,7 +222,7 @@ export default function AIChatbot() {
         whileTap={{ scale: 0.95 }}
         onClick={() => setOpen(prev => !prev)}
         className="h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl flex items-center justify-center transition-shadow"
-        aria-label="AI Asistan"
+        aria-label="Caretta AI"
       >
         <AnimatePresence mode="wait">
           {open ? (
