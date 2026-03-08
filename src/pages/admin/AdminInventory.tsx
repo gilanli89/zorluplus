@@ -13,6 +13,85 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 
+const CONTENT_GEN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-content-gen`;
+
+function AIContentDialog({ productName, brand, category }: { productName: string; brand?: string | null; category?: string | null }) {
+  const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [type, setType] = useState<"description" | "seo" | "campaign">("description");
+
+  const generate = async () => {
+    setLoading(true);
+    setContent("");
+    try {
+      const resp = await fetch(CONTENT_GEN_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ productName, brand, category, type }),
+      });
+      const data = await resp.json();
+      if (data.error) { toast.error(data.error); return; }
+      setContent(data.content || "");
+    } catch { toast.error("AI içerik oluşturulamadı"); }
+    setLoading(false);
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size="sm" variant="ghost" className="gap-1 text-primary" title="AI İçerik Üret">
+          <Sparkles className="h-3 w-3" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-lg">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-primary" /> AI İçerik Üretici
+          </DialogTitle>
+        </DialogHeader>
+        <p className="text-sm text-muted-foreground font-medium">{productName}</p>
+        <div className="flex gap-2 mt-2">
+          {([
+            ["description", "Ürün Açıklaması"],
+            ["seo", "SEO Meta"],
+            ["campaign", "Kampanya Yazısı"],
+          ] as const).map(([key, label]) => (
+            <Button
+              key={key}
+              size="sm"
+              variant={type === key ? "default" : "outline"}
+              onClick={() => setType(key)}
+              className="text-xs"
+            >
+              {label}
+            </Button>
+          ))}
+        </div>
+        <Button onClick={generate} disabled={loading} className="gap-2 mt-2">
+          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileText className="h-4 w-4" />}
+          {loading ? "Oluşturuluyor..." : "Oluştur"}
+        </Button>
+        {content && (
+          <div className="mt-3">
+            <Textarea value={content} onChange={e => setContent(e.target.value)} rows={5} className="text-sm" />
+            <Button
+              size="sm"
+              variant="outline"
+              className="gap-1 mt-2"
+              onClick={() => { navigator.clipboard.writeText(content); toast.success("Kopyalandı!"); }}
+            >
+              <Copy className="h-3 w-3" /> Kopyala
+            </Button>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export default function AdminInventory() {
   const qc = useQueryClient();
   const [editingId, setEditingId] = useState<string | null>(null);
