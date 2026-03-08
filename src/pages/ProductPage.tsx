@@ -9,6 +9,7 @@ import { CATEGORIES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/ProductCard";
+import ProductRecommendations from "@/components/ProductRecommendations";
 import QuoteForm from "@/components/QuoteForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -141,6 +142,9 @@ export default function ProductPage() {
             </div>
           </div>
         </div>
+
+        {/* AI Recommendations */}
+        <ProductRecommendations currentProduct={product} allProducts={products} maxItems={4} />
 
         {recentlyViewed.length > 0 && (
           <section className="mt-12">
