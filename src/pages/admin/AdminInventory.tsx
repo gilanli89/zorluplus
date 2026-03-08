@@ -277,10 +277,6 @@ export default function AdminInventory() {
                         <AIContentDialog productName={item.product_name} brand={item.brand} category={item.category} />
                       </div>
                     )}
-                      </div>
-                    ) : (
-                      <Button size="sm" variant="ghost" onClick={() => startEdit(item)}>Düzenle</Button>
-                    )}
                   </td>
                 </tr>
               ))}
