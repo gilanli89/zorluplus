@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { getSmartGreeting } from "@/lib/specialDays";
 
 export type Lang = "tr" | "en";
 
