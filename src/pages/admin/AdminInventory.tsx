@@ -272,6 +272,13 @@ export default function AdminInventory() {
                         <Button size="sm" variant="ghost" onClick={() => setEditingId(null)}><X className="h-3 w-3" /></Button>
                       </div>
                     ) : (
+                      <div className="flex gap-1">
+                        <Button size="sm" variant="ghost" onClick={() => startEdit(item)}>Düzenle</Button>
+                        <AIContentDialog productName={item.product_name} brand={item.brand} category={item.category} />
+                      </div>
+                    )}
+                      </div>
+                    ) : (
                       <Button size="sm" variant="ghost" onClick={() => startEdit(item)}>Düzenle</Button>
                     )}
                   </td>
