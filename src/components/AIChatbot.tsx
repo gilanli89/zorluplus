@@ -232,7 +232,7 @@ export default function AIChatbot() {
             </motion.div>
           ) : (
             <motion.div key="bot" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-              <Bot className="h-6 w-6" />
+              <img src={carettaIcon} alt="Caretta AI" className="h-8 w-8" />
             </motion.div>
           )}
         </AnimatePresence>
