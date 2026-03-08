@@ -811,7 +811,7 @@ export function EkibimizPage() {
               }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
             >
-              <img src={m.photo} alt={m.name} className="w-24 h-28 object-cover rounded-lg" loading="lazy" />
+              <img src={m.photo} alt={m.name} className="w-24 h-28 object-cover object-top rounded-lg" loading="lazy" />
             </motion.div>
             <motion.p
               className="font-display font-bold text-sm leading-tight"
