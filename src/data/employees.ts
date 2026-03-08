@@ -20,11 +20,11 @@ export const employees: Employee[] = [
   { id: 7931, fullName: "Dilfuza Jumakova",     isAdmin: false, annualLeave: 14, title: "Sales Representative", branch: "Lefkoşa" },
   { id: 7932, fullName: "Serkan Taras",         isAdmin: false, annualLeave: 14, title: "Store Manager", branch: "Mağusa" },
   { id: 7936, fullName: "Alaaeddin Erdemci",    isAdmin: false, annualLeave: 14, title: "White Goods Chef" },
-  { id: 7937, fullName: "Ramazan Koshayev",     isAdmin: false, annualLeave: 14, title: "TV/AV Service Chief" },
+  { id: 7937, fullName: "Ramazan Koshayev",     isAdmin: false, annualLeave: 14, title: "Air Conditioning Technician" },
   { id: 7938, fullName: "Suhrap Alimov",        isAdmin: false, annualLeave: 14 },
   { id: 7939, fullName: "Çakır Recepov",        isAdmin: false, annualLeave: 14, title: "TV Technician" },
   { id: 7940, fullName: "Bilal Muhammed",       isAdmin: false, annualLeave: 14, title: "TV Technician" },
-  { id: 7941, fullName: "Abed Azbaki",          isAdmin: false, annualLeave: 14, title: "Air Conditioning Technician" },
+  { id: 7941, fullName: "Abed Azbaki",          isAdmin: false, annualLeave: 14, title: "TV/AV Service Chief" },
   { id: 7942, fullName: "Umit Rozyev",          isAdmin: false, annualLeave: 14, title: "TV Technician" },
   { id: 9174, fullName: "Karetta",              isAdmin: false, annualLeave: 999 },
 ];
