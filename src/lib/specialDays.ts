@@ -158,16 +158,10 @@ export function getTodaySpecialDay(): SpecialDay | null {
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
   const mmdd = `${month}-${day}`;
-  const year = now.getFullYear();
 
-  // Check fixed days first
-  if (FIXED_SPECIAL_DAYS[mmdd]) {
-    return FIXED_SPECIAL_DAYS[mmdd];
-  }
-
-  // Check Islamic holidays
+  // Check Islamic holidays FIRST (they move each year, take priority)
   for (const h of ISLAMIC_HOLIDAYS) {
-    if (isInRange(mmdd, year, h.start, h.end)) {
+    if (isInRange(now, h.start, h.end)) {
       if (h.type === "ramazan") {
         return {
           name: "Ramazan Bayramı",
