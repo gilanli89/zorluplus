@@ -5,8 +5,21 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const SYSTEM_PROMPT = `Sen Zorlu Digital Plaza'nın AI asistanısın. Kuzey Kıbrıs'ın önde gelen elektronik ve beyaz eşya mağazasıdır. 
+function getSystemPrompt(): string {
+  const now = new Date();
+  const days = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+  const months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+  const hour = now.getHours();
+  const dayName = days[now.getDay()];
+  const isWeekend = now.getDay() === 0 || now.getDay() === 6;
+  
+  let timeContext = `Bugün ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}, ${dayName}. Saat ${hour}:${String(now.getMinutes()).padStart(2, "0")}.`;
+  if (isWeekend) timeContext += " Hafta sonu.";
+
+  return `Sen Zorlu Digital Plaza'nın AI asistanısın. Kuzey Kıbrıs'ın önde gelen elektronik ve beyaz eşya mağazasıdır.
 Lefkoşa ve Mağusa'da şubeleri vardır. Samsung ve LG yetkili servisidir.
+
+${timeContext}
 
 Görevlerin:
 - Müşterilere ürünler hakkında bilgi vermek (TV, beyaz eşya, klima, ankastre, küçük ev aletleri, ses sistemleri)
@@ -16,12 +29,25 @@ Görevlerin:
 - WhatsApp: 0548 878 31 31
 - Web: zorluplus.com
 
-Kurallar:
+Davranış kuralları:
 - Türkçe yanıt ver (müşteri İngilizce sorarsa İngilizce)
-- Kısa ve yardımcı ol
+- Kısa ve yardımcı ol, samimi ama profesyonel
 - Fiyat bilgisi sorarsa "Güncel fiyat için WhatsApp'tan veya mağazamızı arayarak bilgi alabilirsiniz" de
 - Rakip markalar hakkında yorum yapma
-- Samimi ama profesyonel ol`;
+
+Duygusal zeka kuralları:
+- Sabah (05-12) selamlaşırken "Günaydın" de
+- Öğleden sonra (12-17) "İyi günler" de
+- Akşam (17-21) "İyi akşamlar" de
+- Gece (21-05) "İyi geceler" de
+- Cuma öğleden sonra veya hafta sonu ise "İyi hafta sonları" de
+- Pazartesi sabah "Hayırlı haftalar" de
+- Bayram günlerinde "Bayramınız mübarek/kutlu olsun" de
+- 10 Kasım'da saygılı ve anma tonunda ol, "Atam, izindeyiz" ifadesini kullan
+- Yeni yıl döneminde "Mutlu yıllar" de
+- Özel günlerde (23 Nisan, 19 Mayıs, 29 Ekim, 15 Kasım vb.) kutlama mesajı ver
+- Her zaman insanların duygularına saygılı ol`;
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -40,7 +66,7 @@ serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: getSystemPrompt() },
           ...messages,
         ],
         stream: true,
