@@ -13,6 +13,7 @@ import ProductRecommendations from "@/components/ProductRecommendations";
 import QuoteForm from "@/components/QuoteForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProductTranslation } from "@/hooks/useProductTranslation";
 
 
 export default function ProductPage() {
@@ -21,6 +22,7 @@ export default function ProductPage() {
   const { recentIds, addViewed } = useRecentlyViewed();
   const stripRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
+  const { translateProduct } = useProductTranslation();
   
   const product = getProductBySlug(products, slug || "");
 
@@ -60,7 +62,7 @@ export default function ProductPage() {
                     <img src={p.image} alt={p.name} className="h-full w-full object-contain p-3 group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                   </div>
                   <p className="text-[10px] font-semibold text-primary/70 uppercase tracking-wider">{p.brand}</p>
-                  <p className="text-xs font-medium text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">{p.name}</p>
+                  <p className="text-xs font-medium text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">{translateProduct(p.name)}</p>
                 </Link>
               ))}
             </div>
@@ -75,7 +77,7 @@ export default function ProductPage() {
           <span>/</span>
           {category && <><Link to={`/kategori/${category.slug}`} className="hover:text-foreground">{t(`cat.${category.slug}`) || category.name}</Link><span>/</span></>}
           {subcategory && <><Link to={`/kategori/${category!.slug}/${subcategory.slug}`} className="hover:text-foreground">{subcategory.name}</Link><span>/</span></>}
-          <span className="text-foreground line-clamp-1">{product.name}</span>
+          <span className="text-foreground line-clamp-1">{translateProduct(product.name)}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -87,7 +89,7 @@ export default function ProductPage() {
           {/* Info */}
           <div className="flex flex-col gap-4">
             <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{product.brand}</p>
-            <h1 className="heading-2 text-foreground">{product.name}</h1>
+            <h1 className="heading-2 text-foreground">{translateProduct(product.name)}</h1>
             <p className="text-sm font-medium text-primary">{t("product.callForPrice")}</p>
 
             <Badge variant={product.inStock ? "default" : "secondary"} className="w-fit">
@@ -127,7 +129,7 @@ export default function ProductPage() {
             {product.description && (
               <div className="mt-4">
                 <h3 className="font-display font-bold text-foreground mb-2">{t("product.description")}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{product.description}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{translateProduct(product.description)}</p>
               </div>
             )}
 

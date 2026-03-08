@@ -5,6 +5,7 @@ import { Product } from "@/lib/types";
 import { MessageCircle, Eye } from "lucide-react";
 import { getWhatsAppLink } from "@/lib/products";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProductTranslation } from "@/hooks/useProductTranslation";
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +14,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const hasDiscount = false;
   const { t } = useLanguage();
+  const { translateProduct } = useProductTranslation();
 
   return (
     <motion.div
@@ -57,7 +59,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex flex-col gap-1.5 p-3.5 flex-1">
           <p className="text-[11px] font-semibold text-primary/70 uppercase tracking-wider">{product.brand}</p>
           <h3 className="text-sm font-semibold text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors duration-200">
-            {product.name}
+            {translateProduct(product.name)}
           </h3>
         </div>
       </Link>
