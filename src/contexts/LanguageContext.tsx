@@ -13,8 +13,6 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 function getGreeting(lang: Lang): string {
-  // Use smart greeting from specialDays module (imported dynamically to avoid circular deps)
-  const { getSmartGreeting } = require("@/lib/specialDays");
   return getSmartGreeting(lang);
 }
 
