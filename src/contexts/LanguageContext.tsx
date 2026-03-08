@@ -12,17 +12,9 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 function getGreeting(lang: Lang): string {
-  const hour = new Date().getHours();
-  if (lang === "tr") {
-    if (hour >= 5 && hour < 12) return "Günaydın ☀️";
-    if (hour >= 12 && hour < 17) return "İyi Günler 🌤️";
-    if (hour >= 17 && hour < 21) return "İyi Akşamlar 🌆";
-    return "İyi Geceler 🌙";
-  }
-  if (hour >= 5 && hour < 12) return "Good Morning ☀️";
-  if (hour >= 12 && hour < 17) return "Good Afternoon 🌤️";
-  if (hour >= 17 && hour < 21) return "Good Evening 🌆";
-  return "Good Night 🌙";
+  // Use smart greeting from specialDays module (imported dynamically to avoid circular deps)
+  const { getSmartGreeting } = require("@/lib/specialDays");
+  return getSmartGreeting(lang);
 }
 
 function detectLang(): Lang {
