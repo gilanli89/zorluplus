@@ -83,11 +83,10 @@ export default function AIChatbot() {
   useEffect(() => { scrollToBottom(); }, [messages, scrollToBottom]);
   useEffect(() => { if (open) inputRef.current?.focus(); }, [open]);
 
-  const send = async () => {
-    const text = input.trim();
-    if (!text || isLoading) return;
+  const sendMessage = async (text: string) => {
+    if (!text.trim() || isLoading) return;
 
-    const userMsg: Message = { role: "user", content: text };
+    const userMsg: Message = { role: "user", content: text.trim() };
     setMessages(prev => [...prev, userMsg]);
     setInput("");
     setIsLoading(true);
