@@ -185,6 +185,11 @@ export function getTodaySpecialDay(): SpecialDay | null {
     }
   }
 
+  // Check fixed days
+  if (FIXED_SPECIAL_DAYS[mmdd]) {
+    return FIXED_SPECIAL_DAYS[mmdd];
+  }
+
   return null;
 }
 
