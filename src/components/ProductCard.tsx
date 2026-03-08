@@ -14,6 +14,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const hasDiscount = false;
   const { t } = useLanguage();
+  const { translateProduct } = useProductTranslation();
 
   return (
     <motion.div
