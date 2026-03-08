@@ -77,7 +77,7 @@ export default function ProductPage() {
           <span>/</span>
           {category && <><Link to={`/kategori/${category.slug}`} className="hover:text-foreground">{t(`cat.${category.slug}`) || category.name}</Link><span>/</span></>}
           {subcategory && <><Link to={`/kategori/${category!.slug}/${subcategory.slug}`} className="hover:text-foreground">{subcategory.name}</Link><span>/</span></>}
-          <span className="text-foreground line-clamp-1">{product.name}</span>
+          <span className="text-foreground line-clamp-1">{translateProduct(product.name)}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
