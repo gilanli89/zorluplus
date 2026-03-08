@@ -154,7 +154,7 @@ export default function AIChatbot() {
                     {quickQuestions.map((q) => (
                       <button
                         key={q}
-                        onClick={() => { setInput(q); setTimeout(() => { setInput(q); send(); }, 0); }}
+                        onClick={() => sendMessage(q)}
                         className="text-xs text-left p-2 rounded-xl border border-border hover:bg-muted transition-colors"
                       >
                         {q}
