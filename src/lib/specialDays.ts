@@ -12,18 +12,18 @@ export interface SpecialDay {
   bannerClass: string;
 }
 
-// Islamic holidays shift ~10-11 days each year. These are approximate for 2025-2027.
-// Ramazan Bayramı & Kurban Bayramı dates
+// Islamic holidays shift ~10-11 days each year. These are approximate.
+// Ramazan Bayramı & Kurban Bayramı dates (YYYY-MM-DD)
 const ISLAMIC_HOLIDAYS: { start: string; end: string; type: "ramazan" | "kurban" }[] = [
   // 2025
-  { start: "03-30", end: "04-01", type: "ramazan" },  // Ramazan Bayramı 2025
-  { start: "06-06", end: "06-09", type: "kurban" },    // Kurban Bayramı 2025
+  { start: "2025-03-30", end: "2025-04-01", type: "ramazan" },
+  { start: "2025-06-06", end: "2025-06-09", type: "kurban" },
   // 2026
-  { start: "03-20", end: "03-22", type: "ramazan" },
-  { start: "05-27", end: "05-30", type: "kurban" },
+  { start: "2026-03-20", end: "2026-03-22", type: "ramazan" },
+  { start: "2026-05-27", end: "2026-05-30", type: "kurban" },
   // 2027
-  { start: "03-09", end: "03-11", type: "ramazan" },
-  { start: "05-16", end: "05-19", type: "kurban" },
+  { start: "2027-03-09", end: "2027-03-11", type: "ramazan" },
+  { start: "2027-05-16", end: "2027-05-19", type: "kurban" },
 ];
 
 // Fixed special days (MM-DD format)
