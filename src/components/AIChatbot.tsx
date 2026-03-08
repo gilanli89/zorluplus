@@ -134,9 +134,10 @@ export default function AIChatbot() {
             <div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5" />
-                <div>
+            {/* Chat header subtitle with smart greeting */}
+              <div>
                   <p className="text-sm font-bold">Zorlu AI Asistan</p>
-                  <p className="text-[10px] opacity-80">{lang === "tr" ? "Size nasıl yardımcı olabilirim?" : "How can I help you?"}</p>
+                  <p className="text-[10px] opacity-80">{getSmartGreeting(lang)}</p>
                 </div>
               </div>
               <button onClick={() => setOpen(false)} className="hover:opacity-70 transition-opacity">
@@ -148,9 +149,17 @@ export default function AIChatbot() {
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
               {messages.length === 0 && (
                 <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground text-center mb-3">
-                    {lang === "tr" ? "Merhaba! 👋 Sormak istediğiniz bir şey var mı?" : "Hello! 👋 Have a question?"}
-                  </p>
+                  {(() => {
+                    const specialDay = getTodaySpecialDay();
+                    const welcomeMsg = specialDay
+                      ? (lang === "tr" ? `${specialDay.emoji} ${specialDay.message}\n\nSize nasıl yardımcı olabilirim?` : `${specialDay.emoji} ${specialDay.messageEn}\n\nHow can I help you?`)
+                      : (lang === "tr" ? `${getSmartGreeting(lang)} Sormak istediğiniz bir şey var mı?` : `${getSmartGreeting(lang)} Have a question?`);
+                    return (
+                      <p className="text-sm text-muted-foreground text-center mb-3 whitespace-pre-line">
+                        {welcomeMsg}
+                      </p>
+                    );
+                  })()}
                   <div className="grid grid-cols-2 gap-2">
                     {quickQuestions.map((q) => (
                       <button
