@@ -89,7 +89,7 @@ export default function ProductPage() {
           {/* Info */}
           <div className="flex flex-col gap-4">
             <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{product.brand}</p>
-            <h1 className="heading-2 text-foreground">{product.name}</h1>
+            <h1 className="heading-2 text-foreground">{translateProduct(product.name)}</h1>
             <p className="text-sm font-medium text-primary">{t("product.callForPrice")}</p>
 
             <Badge variant={product.inStock ? "default" : "secondary"} className="w-fit">
