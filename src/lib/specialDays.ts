@@ -12,18 +12,18 @@ export interface SpecialDay {
   bannerClass: string;
 }
 
-// Islamic holidays shift ~10-11 days each year. These are approximate for 2025-2027.
-// Ramazan Bayramı & Kurban Bayramı dates
+// Islamic holidays shift ~10-11 days each year. These are approximate.
+// Ramazan Bayramı & Kurban Bayramı dates (YYYY-MM-DD)
 const ISLAMIC_HOLIDAYS: { start: string; end: string; type: "ramazan" | "kurban" }[] = [
   // 2025
-  { start: "03-30", end: "04-01", type: "ramazan" },  // Ramazan Bayramı 2025
-  { start: "06-06", end: "06-09", type: "kurban" },    // Kurban Bayramı 2025
+  { start: "2025-03-30", end: "2025-04-01", type: "ramazan" },
+  { start: "2025-06-06", end: "2025-06-09", type: "kurban" },
   // 2026
-  { start: "03-20", end: "03-22", type: "ramazan" },
-  { start: "05-27", end: "05-30", type: "kurban" },
+  { start: "2026-03-20", end: "2026-03-22", type: "ramazan" },
+  { start: "2026-05-27", end: "2026-05-30", type: "kurban" },
   // 2027
-  { start: "03-09", end: "03-11", type: "ramazan" },
-  { start: "05-16", end: "05-19", type: "kurban" },
+  { start: "2027-03-09", end: "2027-03-11", type: "ramazan" },
+  { start: "2027-05-16", end: "2027-05-19", type: "kurban" },
 ];
 
 // Fixed special days (MM-DD format)
@@ -147,10 +147,10 @@ const FIXED_SPECIAL_DAYS: Record<string, SpecialDay> = {
   },
 };
 
-function isInRange(mmdd: string, year: number, start: string, end: string): boolean {
-  const toDate = (md: string) => new Date(`${year}-${md}`);
-  const current = toDate(mmdd);
-  return current >= toDate(start) && current <= toDate(end);
+function isInRange(now: Date, start: string, end: string): boolean {
+  const startDate = new Date(start + "T00:00:00");
+  const endDate = new Date(end + "T23:59:59");
+  return now >= startDate && now <= endDate;
 }
 
 export function getTodaySpecialDay(): SpecialDay | null {
@@ -158,16 +158,10 @@ export function getTodaySpecialDay(): SpecialDay | null {
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
   const mmdd = `${month}-${day}`;
-  const year = now.getFullYear();
 
-  // Check fixed days first
-  if (FIXED_SPECIAL_DAYS[mmdd]) {
-    return FIXED_SPECIAL_DAYS[mmdd];
-  }
-
-  // Check Islamic holidays
+  // Check Islamic holidays FIRST (they move each year, take priority)
   for (const h of ISLAMIC_HOLIDAYS) {
-    if (isInRange(mmdd, year, h.start, h.end)) {
+    if (isInRange(now, h.start, h.end)) {
       if (h.type === "ramazan") {
         return {
           name: "Ramazan Bayramı",
@@ -189,6 +183,11 @@ export function getTodaySpecialDay(): SpecialDay | null {
         bannerClass: "bg-gradient-to-r from-emerald-700 to-teal-600",
       };
     }
+  }
+
+  // Check fixed days
+  if (FIXED_SPECIAL_DAYS[mmdd]) {
+    return FIXED_SPECIAL_DAYS[mmdd];
   }
 
   return null;
