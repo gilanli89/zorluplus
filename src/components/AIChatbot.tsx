@@ -134,7 +134,7 @@ export default function AIChatbot() {
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5" />
+                <img src={carettaIcon} alt="Caretta AI" className="h-8 w-8 rounded-full" />
             {/* Chat header subtitle with smart greeting */}
               <div>
                   <p className="text-sm font-bold">Caretta AI</p>
