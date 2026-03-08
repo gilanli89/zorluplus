@@ -22,6 +22,7 @@ export default function ProductPage() {
   const { recentIds, addViewed } = useRecentlyViewed();
   const stripRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
+  const { translateProduct } = useProductTranslation();
   
   const product = getProductBySlug(products, slug || "");
 
