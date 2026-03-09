@@ -42,6 +42,9 @@ import CartPage from "@/pages/CartPage";
 import NotFound from "@/pages/NotFound";
 import KktcTelevizyon2026 from "@/pages/blog/KktcTelevizyon2026";
 import B2BPage from "@/pages/B2BPage";
+import BlogPage from "@/pages/BlogPage";
+import BlogPostPage from "@/pages/BlogPostPage";
+import WPPageDetail from "@/pages/WPPageDetail";
 import ScrollToTop from "@/components/ScrollToTop";
 
 // Admin
