@@ -7,6 +7,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
+// Local fallback images for posts without WP featured media
+const FALLBACK_IMAGES: Record<string, string> = {
+  "kktc-televizyon-fiyatlari-2026-boyuta-ve-ozellige-gore-rehber": "/blog/kktc-televizyon-rehber-2026.jpg",
+};
+
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
   const { data: post, isLoading, error } = useWPPostBySlug(slug || "");
