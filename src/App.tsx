@@ -23,6 +23,7 @@ import KahveMakinesiLandingPage from "@/pages/landings/KahveMakinesiLandingPage"
 import EvAletleriLandingPage from "@/pages/landings/EvAletleriLandingPage";
 import AirfryerLandingPage from "@/pages/landings/AirfryerLandingPage";
 import FirinLandingPage from "@/pages/landings/FirinLandingPage";
+import TVKanalAyarlamaPage from "@/pages/landings/TVKanalAyarlamaPage";
 import SearchPage from "@/pages/SearchPage";
 import ECataloguePage from "@/pages/ECataloguePage";
 import BranchesPage from "@/pages/BranchesPage";
