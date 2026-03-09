@@ -42,6 +42,9 @@ import CartPage from "@/pages/CartPage";
 import NotFound from "@/pages/NotFound";
 import KktcTelevizyon2026 from "@/pages/blog/KktcTelevizyon2026";
 import B2BPage from "@/pages/B2BPage";
+import BlogPage from "@/pages/BlogPage";
+import BlogPostPage from "@/pages/BlogPostPage";
+import WPPageDetail from "@/pages/WPPageDetail";
 import ScrollToTop from "@/components/ScrollToTop";
 
 // Admin
@@ -110,6 +113,9 @@ const App = () => (
               <Route path="/odeme" element={<CheckoutPage />} />
               <Route path="/odeme/sonuc" element={<PaymentResultPage />} />
               <Route path="/sepet" element={<CartPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:slug" element={<BlogPostPage />} />
+              <Route path="/sayfa/:slug" element={<WPPageDetail />} />
               <Route path="/blog/kktc-televizyon-fiyatlari-2026" element={<KktcTelevizyon2026 />} />
               <Route path="*" element={<NotFound />} />
             </Route>
