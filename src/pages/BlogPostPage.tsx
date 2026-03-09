@@ -44,7 +44,7 @@ export default function BlogPostPage() {
     );
   }
 
-  const image = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
+  const image = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || FALLBACK_IMAGES[slug || ""] || null;
   const cats = post._embedded?.["wp:term"]?.[0] || [];
 
   return (
