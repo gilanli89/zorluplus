@@ -90,6 +90,7 @@ const App = () => (
               <Route path="/ev-aletleri" element={<EvAletleriLandingPage />} />
               <Route path="/airfryer" element={<AirfryerLandingPage />} />
               <Route path="/firin" element={<FirinLandingPage />} />
+              <Route path="/televizyon-kanal-ayarlama" element={<TVKanalAyarlamaPage />} />
               <Route path="/arama" element={<SearchPage />} />
               <Route path="/e-katalog" element={<ECataloguePage />} />
               <Route path="/subelerimiz" element={<BranchesPage />} />
