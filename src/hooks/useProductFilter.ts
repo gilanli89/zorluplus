@@ -120,9 +120,13 @@ export function useProductFilter(
     setActiveFilters((prev) => ({ ...prev, [key]: enabled || null }));
   }, []);
 
-  const setPriceRange = useCallback((min: number, max: number) => {
-    setActiveFilters((prev) => ({ ...prev, price: [min, max] }));
+  const setRangeFilter = useCallback((key: string, min: number, max: number) => {
+    setActiveFilters((prev) => ({ ...prev, [key]: [min, max] }));
   }, []);
+
+  const setPriceRange = useCallback((min: number, max: number) => {
+    setRangeFilter("price", min, max);
+  }, [setRangeFilter]);
 
   const clearFilters = useCallback(() => {
     setActiveFilters({});
