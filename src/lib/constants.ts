@@ -49,6 +49,7 @@ export const CATEGORIES = [
     icon: "Tv",
     children: [
       { slug: "tv", name: "Televizyon" },
+      { slug: "projeksiyon", name: "Projeksiyon Makinesi" },
     ],
   },
   {

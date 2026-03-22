@@ -117,7 +117,7 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const name = row["İsim"] || row["Ürün Adı"] || row["Name"] || row["name"] || `Ürün ${index + 1}`;
   const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
 
-  // Override: route mount/bracket products to duvar-masaustu-aparatlari
+  // Override: route mount/bracket products to aksesuar category
   const nameLower = name.toLowerCase();
   const brandLower = brand.toLowerCase().trim();
   if (
@@ -126,7 +126,7 @@ function parseRow(row: Record<string, string>, index: number): Product {
     nameLower.includes("duvar aparat") || nameLower.includes("masaüstü aparat") ||
     nameLower.includes("wall mount") || nameLower.includes("desk mount")
   ) {
-    category = "tv-goruntu";
+    category = "aksesuar";
     subcategory = "duvar-masaustu-aparatlari";
   }
   const sku = (row["Stok kodu (SKU)"] || row["SKU"] || row["sku"] || row["Kimlik"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
