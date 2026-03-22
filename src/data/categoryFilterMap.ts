@@ -2,13 +2,14 @@
 // This bridges the CSV-based product system with the enriched filter tree
 
 export const SUBCATEGORY_TO_FILTER_ID: Record<string, string> = {
-  // TV
+  // TV & Görüntü (only TV + Projeksiyon)
   "tv": "televizyonlar",
   "tv-goruntu": "televizyonlar",
-  // Accessories
+  "projeksiyon": "projeksiyon",
+  // Aksesuarlar
   "duvar-masaustu-aparatlari": "tv-askisi",
+  // Ses Sistemleri
   "kulaklik": "ses-sistemleri",
-  // Audio
   "soundbar": "ses-sistemleri",
   "soundbar-ses": "ses-sistemleri",
   "soundbar-ses-sistemleri": "ses-sistemleri",
@@ -32,7 +33,7 @@ export const SUBCATEGORY_TO_FILTER_ID: Record<string, string> = {
   "su-sebili": "su-sebili",
   // Küçük Ev Aletleri
   "supurge": "supurge",
-  "utu": "supurge", // fallback
+  "utu": "supurge",
   "ventilator": "vantilatör",
   // İklimlendirme
   "klima": "klima",
