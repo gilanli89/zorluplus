@@ -313,7 +313,7 @@ export function MobileFilterTrigger({
   activeCount,
   onToggle,
   onToggleSwitch,
-  onPriceRange,
+  onRangeChange,
   onClear,
 }: {
   config?: CategoryFilterConfig;
@@ -322,7 +322,7 @@ export function MobileFilterTrigger({
   activeCount: number;
   onToggle: (key: string, value: string) => void;
   onToggleSwitch: (key: string, enabled: boolean) => void;
-  onPriceRange: (min: number, max: number) => void;
+  onRangeChange: (key: string, min: number, max: number) => void;
   onClear: () => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -352,7 +352,7 @@ export function MobileFilterTrigger({
               activeFilters={activeFilters}
               onToggle={onToggle}
               onToggleSwitch={onToggleSwitch}
-              onPriceRange={onPriceRange}
+              onRangeChange={onRangeChange}
             />
           ) : (
             <FallbackFilterBody
