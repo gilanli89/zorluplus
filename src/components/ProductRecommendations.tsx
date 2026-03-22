@@ -18,17 +18,6 @@ export default function ProductRecommendations({ currentProduct, allProducts, ma
   const { lang } = useLanguage();
 
   const recommendations = useMemo(() => {
-    // Define complementary category pairs
-    const complementary: Record<string, string[]> = {
-      "tv-goruntu": ["ses-sistemleri", "aksesuar"],
-      "ses-sistemleri": ["tv-goruntu"],
-      "aksesuar": ["tv-goruntu"],
-      "beyaz-esya": ["ankastre", "mutfak-aletleri"],
-      "ankastre": ["beyaz-esya", "mutfak-aletleri"],
-      "mutfak-aletleri": ["beyaz-esya", "ankastre"],
-      "klima-isitma": ["kucuk-ev-aletleri"],
-    };
-
     const scored = allProducts
       .filter(p => p.id !== currentProduct.id)
       .map(p => {
@@ -38,8 +27,6 @@ export default function ProductRecommendations({ currentProduct, allProducts, ma
         if (p.subcategory === currentProduct.subcategory) score += 20;
         // Same category
         else if (p.category === currentProduct.category) score += 10;
-        // Complementary category (e.g. soundbar for TV)
-        else if (complementary[currentProduct.category]?.includes(p.category)) score += 7;
 
         // Same brand
         if (p.brand === currentProduct.brand) score += 8;
@@ -48,7 +35,7 @@ export default function ProductRecommendations({ currentProduct, allProducts, ma
         if (currentProduct.price > 0 && p.price > 0) {
           const ratio = p.price / currentProduct.price;
           if (ratio >= 0.7 && ratio <= 1.3) score += 5;
-          if (ratio >= 0.9 && ratio <= 1.1) score += 3;
+          if (ratio >= 0.9 && ratio <= 1.1) score += 3; // extra bonus for very close
         }
 
         // In stock bonus
@@ -59,7 +46,7 @@ export default function ProductRecommendations({ currentProduct, allProducts, ma
 
         return { product: p, score };
       })
-      .filter(s => s.score >= 5)
+      .filter(s => s.score >= 5) // minimum relevance
       .sort((a, b) => b.score - a.score)
       .slice(0, maxItems)
       .map(s => s.product);

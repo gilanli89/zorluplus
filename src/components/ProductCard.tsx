@@ -2,32 +2,19 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@/lib/types";
-import { MessageCircle, Eye, GitCompareArrows } from "lucide-react";
+import { MessageCircle, Eye } from "lucide-react";
 import { getWhatsAppLink } from "@/lib/products";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
-import { useCompare } from "@/contexts/CompareContext";
-import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const hasDiscount = false;
   const { t } = useLanguage();
   const { translateProduct } = useProductTranslation();
-  const { addItem, removeItem, isInCompare } = useCompare();
-  const inCompare = isInCompare(product.id);
-
-  const handleCompareToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (inCompare) {
-      removeItem(product.id);
-    } else {
-      addItem(product);
-    }
-  };
 
   return (
     <motion.div
@@ -37,20 +24,6 @@ export default function ProductCard({ product }: ProductCardProps) {
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
       className="card-lift group flex flex-col rounded-2xl border border-border bg-card overflow-hidden relative"
     >
-      {/* Compare button */}
-      <button
-        onClick={handleCompareToggle}
-        className={cn(
-          "absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200",
-          inCompare
-            ? "bg-primary text-primary-foreground shadow-md scale-110"
-            : "bg-background/80 text-muted-foreground hover:bg-primary/10 hover:text-primary opacity-0 group-hover:opacity-100"
-        )}
-        title={inCompare ? "Karşılaştırmadan çıkar" : "Karşılaştır"}
-      >
-        <GitCompareArrows className="h-4 w-4" />
-      </button>
-
       <Link to={`/urun/${product.slug}`} className="flex flex-col flex-1">
         {/* Image */}
         <div className="relative aspect-square bg-muted/50 overflow-hidden">

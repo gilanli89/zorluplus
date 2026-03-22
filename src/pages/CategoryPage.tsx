@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useProducts } from "@/hooks/useProducts";
 import { CATEGORIES } from "@/lib/constants";
 import { getProductsByCategory } from "@/lib/products";
-import { useProductFilter } from "@/hooks/useProductFilter";
+import { FilterState } from "@/lib/types";
 import ProductCard from "@/components/ProductCard";
-import { FilterSidebar, MobileFilterTrigger, SortBar } from "@/components/FilterSheet";
+import { FilterSidebar, MobileFilterTrigger, SortBar, applyFilters } from "@/components/FilterSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -23,23 +23,12 @@ export default function CategoryPage() {
   const { t } = useLanguage();
   const { categorySlug, subSlug } = useParams();
   const { data: products = [], isLoading } = useProducts();
+  const [filters, setFilters] = useState<FilterState>({ brands: [], inStock: false, attributes: {}, sort: "popular" });
 
   const category = CATEGORIES.find(c => c.slug === categorySlug);
   const subcategory = category?.children.find(s => s.slug === subSlug);
   const categoryProducts = useMemo(() => getProductsByCategory(products, categorySlug || "", subSlug), [products, categorySlug, subSlug]);
-
-  const {
-    config,
-    filteredProducts,
-    activeFilters,
-    activeCount,
-    sortBy,
-    setSortBy,
-    toggleFilter,
-    setToggleFilter,
-    setRangeFilter,
-    clearFilters,
-  } = useProductFilter(categoryProducts, categorySlug, subSlug);
+  const filteredProducts = useMemo(() => applyFilters(categoryProducts, filters, categorySlug, subSlug), [categoryProducts, filters, categorySlug, subSlug]);
 
   const catName = category ? (t(`cat.${category.slug}`) !== `cat.${category.slug}` ? t(`cat.${category.slug}`) : category.name) : "";
   const title = subcategory?.name || catName || t("general.products");
@@ -70,38 +59,12 @@ export default function CategoryPage() {
       )}
 
       <div className="flex gap-6">
-        <FilterSidebar
-          config={config}
-          products={categoryProducts}
-          activeFilters={activeFilters}
-          activeCount={activeCount}
-          onToggle={toggleFilter}
-          onToggleSwitch={setToggleFilter}
-          onRangeChange={setRangeFilter}
-          onClear={clearFilters}
-        />
+        <FilterSidebar products={categoryProducts} filters={filters} onFiltersChange={setFilters} categorySlug={categorySlug} subSlug={subSlug} />
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-4">
-            <MobileFilterTrigger
-              config={config}
-              products={categoryProducts}
-              activeFilters={activeFilters}
-              activeCount={activeCount}
-              onToggle={toggleFilter}
-              onToggleSwitch={setToggleFilter}
-              onRangeChange={setRangeFilter}
-              onClear={clearFilters}
-            />
-            <SortBar
-              sortBy={sortBy}
-              onSortChange={setSortBy}
-              activeFilters={activeFilters}
-              onToggle={toggleFilter}
-            />
-            <span className="ml-auto text-sm text-muted-foreground">
-              {filteredProducts.length} {t("general.products")}
-              {activeCount > 0 && ` / ${categoryProducts.length}`}
-            </span>
+            <MobileFilterTrigger products={categoryProducts} filters={filters} onFiltersChange={setFilters} categorySlug={categorySlug} subSlug={subSlug} />
+            <SortBar filters={filters} onFiltersChange={setFilters} />
+            <span className="ml-auto text-sm text-muted-foreground">{filteredProducts.length} {t("general.products")}</span>
           </div>
 
           {isLoading ? (
@@ -111,11 +74,6 @@ export default function CategoryPage() {
           ) : filteredProducts.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-lg text-muted-foreground">{t("general.noProducts")}</p>
-              {activeCount > 0 && (
-                <button onClick={clearFilters} className="mt-3 text-sm text-primary hover:underline">
-                  Filtreleri Temizle
-                </button>
-              )}
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">

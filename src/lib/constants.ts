@@ -49,7 +49,6 @@ export const CATEGORIES = [
     icon: "Tv",
     children: [
       { slug: "tv", name: "Televizyon" },
-      { slug: "projeksiyon", name: "Projeksiyon Makinesi" },
     ],
   },
   {
@@ -57,12 +56,9 @@ export const CATEGORIES = [
     name: "Aksesuarlar",
     icon: "Cable",
     children: [
-      { slug: "duvar-masaustu-aparatlari", name: "TV Aparatları & Ayakları" },
-      { slug: "hdmi-kablo", name: "HDMI Kablolar" },
-      { slug: "temizlik-urunleri", name: "Ekran Temizleme Kitleri" },
-      { slug: "kumanda", name: "Kumandalar" },
+      { slug: "duvar-masaustu-aparatlari", name: "Duvar ve Masaüstü Aparatları" },
       { slug: "uydu-ekipman", name: "Uydu Ekipmanları" },
-      { slug: "regulatorler", name: "Voltaj Regülatörleri" },
+      { slug: "temizlik-urunleri", name: "Temizlik Ürünleri" },
     ],
   },
   {
@@ -70,7 +66,8 @@ export const CATEGORIES = [
     name: "Ses Sistemleri",
     icon: "Speaker",
     children: [
-      { slug: "soundbar-ses-sistemleri", name: "Soundbar" },
+      { slug: "soundbar-ses-sistemleri", name: "Soundbar / Ses Sistemleri" },
+      { slug: "soundbar-ses", name: "Soundbar" },
       { slug: "bluetooth-hoparlor", name: "Bluetooth Hoparlör" },
       { slug: "kulaklik", name: "Kulaklık" },
     ],
@@ -125,6 +122,7 @@ export const CATEGORIES = [
     children: [
       { slug: "utu", name: "Ütü" },
       { slug: "supurge", name: "Süpürge" },
+      { slug: "ventilator", name: "Vantilatör" },
     ],
   },
   {
@@ -132,7 +130,6 @@ export const CATEGORIES = [
     name: "İklimlendirme",
     icon: "Snowflake",
     children: [
-      { slug: "ventilator", name: "Vantilatör" },
       { slug: "split-klima", name: "Split Klimalar" },
       { slug: "portatif-klima", name: "Portatif Klimalar" },
       { slug: "isiticilar", name: "Konvektör Isıtıcılar" },

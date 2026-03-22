@@ -5,8 +5,6 @@ import MobileBottomBar from "./MobileBottomBar";
 import FloatingLinktree from "@/components/FloatingLinktree";
 import AIChatbot from "@/components/AIChatbot";
 import SpecialDayBanner from "@/components/SpecialDayBanner";
-import CompareBar from "@/components/CompareBar";
-import CompareModal from "@/components/CompareModal";
 
 export default function Layout() {
   return (
@@ -20,8 +18,6 @@ export default function Layout() {
       <MobileBottomBar />
       <FloatingLinktree />
       <AIChatbot />
-      <CompareBar />
-      <CompareModal />
     </div>
   );
 }
