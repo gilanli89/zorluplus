@@ -132,6 +132,7 @@ export const CATEGORIES = [
     name: "İklimlendirme",
     icon: "Snowflake",
     children: [
+      { slug: "ventilator", name: "Vantilatör" },
       { slug: "split-klima", name: "Split Klimalar" },
       { slug: "portatif-klima", name: "Portatif Klimalar" },
       { slug: "isiticilar", name: "Konvektör Isıtıcılar" },
