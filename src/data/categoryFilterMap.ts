@@ -43,17 +43,10 @@ export const SUBCATEGORY_TO_FILTER_ID: Record<string, string> = {
   "oyun-aksesuar": "hdmi-kablo",
 };
 
-// For parent categories, map to the broadest filter config
+// Parent categories with mixed subcategories use fallback (brand + stock only)
 export const CATEGORY_TO_FILTER_ID: Record<string, string> = {
   "tv-goruntu": "televizyonlar",
   "ses-sistemleri": "ses-sistemleri",
-  "beyaz-esya": "buzdolabi",
-  "ankastre": "ankastre-firin",
-  "mutfak-aletleri": "kahve-makinesi",
-  "kucuk-ev-aletleri": "supurge",
-  "klima-isitma": "klima",
-  "aksesuar": "tv-askisi",
-  "oyun": "hdmi-kablo",
 };
 
 export function getFilterConfigId(categorySlug?: string, subSlug?: string): string | undefined {
