@@ -70,8 +70,7 @@ export const CATEGORIES = [
     name: "Ses Sistemleri",
     icon: "Speaker",
     children: [
-      { slug: "soundbar-ses-sistemleri", name: "Soundbar / Ses Sistemleri" },
-      { slug: "soundbar-ses", name: "Soundbar" },
+      { slug: "soundbar-ses-sistemleri", name: "Soundbar" },
       { slug: "bluetooth-hoparlor", name: "Bluetooth Hoparlör" },
       { slug: "kulaklik", name: "Kulaklık" },
     ],
