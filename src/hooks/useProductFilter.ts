@@ -127,7 +127,7 @@ export function useProductFilter(
     }
 
     return result;
-  }, [products, activeFilters, sortBy]);
+  }, [products, activeFilters, sortBy, config]);
 
   const toggleFilter = useCallback((key: string, value: string) => {
     setActiveFilters((prev) => {
