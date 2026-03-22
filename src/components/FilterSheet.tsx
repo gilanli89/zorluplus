@@ -94,14 +94,24 @@ function FilterGroup({
   }
 
   if (filter.type === "checkbox" && filter.values && filter.values.length > 0) {
-    // Filter out values with 0 count for non-brand filters
-    const valuesWithCounts = filter.values.map((v) => ({
+    // For brand filter, dynamically build values from actual products
+    let displayValues: string[];
+    if (filter.key === "brand") {
+      const dynamicBrands = [...new Set(products.map(p => p.brand).filter(Boolean))].sort();
+      displayValues = dynamicBrands.length > 0 ? dynamicBrands : filter.values;
+    } else {
+      displayValues = filter.values;
+    }
+
+    const valuesWithCounts = displayValues.map((v) => ({
       value: v,
       count: getValueCount(v),
-    }));
+    })).filter(({ count }) => filter.key === "brand" ? true : count > 0);
+
+    if (valuesWithCounts.length === 0) return null;
 
     return (
-      <Collapsible defaultOpen={filter.values.length <= 8}>
+      <Collapsible defaultOpen={valuesWithCounts.length <= 8}>
         <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-1 border-b border-border text-sm font-semibold text-foreground hover:text-primary transition-colors">
           {filter.label_tr}
           <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
@@ -114,7 +124,7 @@ function FilterGroup({
                 onCheckedChange={() => onToggle(filter.key, value)}
               />
               <span className="text-sm text-foreground group-hover:text-primary transition-colors flex-1">
-                {value}
+                {filter.key === "brand" ? value.toUpperCase() : value}
               </span>
               {count > 0 && <span className="text-xs text-muted-foreground">({count})</span>}
             </label>
