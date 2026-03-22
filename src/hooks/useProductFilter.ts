@@ -43,14 +43,37 @@ export function useProductFilter(
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
+    // Determine which keys are range filters (from config)
+    const rangeKeys = new Set<string>();
+    if (config) {
+      config.filters.forEach(f => {
+        if (f.type === "price_range" || f.type === "size_range") {
+          rangeKeys.add(f.key);
+        }
+      });
+    }
+    rangeKeys.add("price"); // always treat price as range
+
     Object.entries(activeFilters).forEach(([key, value]) => {
       if (!value || (Array.isArray(value) && value.length === 0)) return;
 
-      if (key === "price" && Array.isArray(value) && value.length === 2) {
+      if (rangeKeys.has(key) && Array.isArray(value) && value.length === 2) {
         const [min, max] = value as [number, number];
-        result = result.filter(
-          (p) => (p.salePrice || p.price) >= min && (p.salePrice || p.price) <= max
-        );
+        if (key === "price") {
+          result = result.filter(
+            (p) => (p.salePrice || p.price) >= min && (p.salePrice || p.price) <= max
+          );
+        } else {
+          // Generic range filter on enriched attrs
+          result = result.filter((p) => {
+            const attrs = getProductAttrs(p);
+            const attrVal = attrs[key];
+            if (attrVal === undefined) return true; // don't exclude if attr missing
+            const numVal = typeof attrVal === "number" ? attrVal : parseFloat(String(attrVal));
+            if (isNaN(numVal)) return true;
+            return numVal >= min && numVal <= max;
+          });
+        }
       } else if (key === "brand" && Array.isArray(value)) {
         result = result.filter((p) => {
           const brandUpper = p.brand.toUpperCase();
