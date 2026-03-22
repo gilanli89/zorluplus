@@ -57,9 +57,12 @@ export const CATEGORIES = [
     name: "Aksesuarlar",
     icon: "Cable",
     children: [
-      { slug: "duvar-masaustu-aparatlari", name: "Duvar ve Masaüstü Aparatları" },
+      { slug: "duvar-masaustu-aparatlari", name: "TV Aparatları & Ayakları" },
+      { slug: "hdmi-kablo", name: "HDMI Kablolar" },
+      { slug: "temizlik-urunleri", name: "Ekran Temizleme Kitleri" },
+      { slug: "kumanda", name: "Kumandalar" },
       { slug: "uydu-ekipman", name: "Uydu Ekipmanları" },
-      { slug: "temizlik-urunleri", name: "Temizlik Ürünleri" },
+      { slug: "regulatorler", name: "Voltaj Regülatörleri" },
     ],
   },
   {
