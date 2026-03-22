@@ -31,7 +31,7 @@ export default function ShopPage() {
     setSortBy,
     toggleFilter,
     setToggleFilter,
-    setPriceRange,
+    setRangeFilter,
     clearFilters,
   } = useProductFilter(products);
 
