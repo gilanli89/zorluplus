@@ -45,11 +45,15 @@ function FilterGroup({
     }).length;
   };
 
-  if (filter.type === "price_range") {
+  if (filter.type === "price_range" || filter.type === "size_range") {
     const min = filter.min ?? 0;
     const max = filter.max ?? 500000;
-    const currentRange = (activeFilters["price"] as [number, number]) || [min, max];
+    const currentRange = (activeFilters[filter.key] as [number, number]) || [min, max];
     if (min >= max) return null;
+
+    const isPrice = filter.key === "price";
+    const unit = filter.unit || (isPrice ? "₺" : "");
+    const step = isPrice ? 500 : Math.max(1, Math.floor((max - min) / 50));
 
     return (
       <Collapsible defaultOpen>
@@ -61,14 +65,14 @@ function FilterGroup({
           <Slider
             min={min}
             max={max}
-            step={500}
+            step={step}
             value={currentRange}
-            onValueChange={([lo, hi]) => onPriceRange(lo, hi)}
+            onValueChange={([lo, hi]) => onRangeChange(filter.key, lo, hi)}
             className="mb-3"
           />
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>₺{currentRange[0].toLocaleString("tr-TR")}</span>
-            <span>₺{currentRange[1].toLocaleString("tr-TR")}</span>
+            <span>{isPrice ? "₺" : ""}{currentRange[0].toLocaleString("tr-TR")}{!isPrice && unit ? ` ${unit}` : ""}</span>
+            <span>{isPrice ? "₺" : ""}{currentRange[1].toLocaleString("tr-TR")}{!isPrice && unit ? ` ${unit}` : ""}</span>
           </div>
         </CollapsibleContent>
       </Collapsible>
