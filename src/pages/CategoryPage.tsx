@@ -37,7 +37,7 @@ export default function CategoryPage() {
     setSortBy,
     toggleFilter,
     setToggleFilter,
-    setPriceRange,
+    setRangeFilter,
     clearFilters,
   } = useProductFilter(categoryProducts, categorySlug, subSlug);
 
