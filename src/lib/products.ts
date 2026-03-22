@@ -148,14 +148,34 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const name = row["İsim"] || row["Ürün Adı"] || row["Name"] || row["name"] || `Ürün ${index + 1}`;
   const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
 
-  // Override: route mount/bracket products to aksesuar category
+  // Name-based overrides for accurate subcategory routing
   const nameLower = name.toLowerCase();
   const brandLower = brand.toLowerCase().trim();
+  
+  // Route accessories by product name
+  if (category === "aksesuar" && subcategory === "kumanda") {
+    // Default aksesuar from "Video / Audio > Aksesuar" — refine by name
+    if (nameLower.includes("hdmi") || nameLower.includes("kablo")) {
+      subcategory = "hdmi-kablo";
+    } else if (nameLower.includes("askı") || nameLower.includes("aparat") || nameLower.includes("mount")) {
+      subcategory = "duvar-masaustu-aparatlari";
+    } else if (nameLower.includes("temizl") || nameLower.includes("cleaning")) {
+      subcategory = "temizlik-urunleri";
+    } else if (nameLower.includes("regülatör") || nameLower.includes("voltaj")) {
+      subcategory = "regulatorler";
+    } else if (nameLower.includes("klavye") || nameLower.includes("keyboard")) {
+      subcategory = "kumanda";
+    }
+    // else stays as "kumanda"
+  }
+  
+  // Override: route mount/bracket products to aksesuar category
   if (
     brandLower === "brateck" || brandLower === "aksesuar" ||
     nameLower.includes("askı aparat") || nameLower.includes("tv askı") ||
     nameLower.includes("duvar aparat") || nameLower.includes("masaüstü aparat") ||
-    nameLower.includes("wall mount") || nameLower.includes("desk mount")
+    nameLower.includes("wall mount") || nameLower.includes("desk mount") ||
+    nameLower.includes("soundbar askı")
   ) {
     category = "aksesuar";
     subcategory = "duvar-masaustu-aparatlari";
