@@ -78,7 +78,7 @@ export default function ShopPage() {
           activeCount={activeCount}
           onToggle={toggleFilter}
           onToggleSwitch={setToggleFilter}
-          onPriceRange={setPriceRange}
+          onRangeChange={setRangeFilter}
           onClear={clearFilters}
         />
 
@@ -91,7 +91,7 @@ export default function ShopPage() {
               activeCount={activeCount}
               onToggle={toggleFilter}
               onToggleSwitch={setToggleFilter}
-              onPriceRange={setPriceRange}
+              onRangeChange={setRangeFilter}
               onClear={clearFilters}
             />
             <SortBar

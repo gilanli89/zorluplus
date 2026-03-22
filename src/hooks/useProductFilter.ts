@@ -173,6 +173,7 @@ export function useProductFilter(
     setSortBy,
     toggleFilter,
     setToggleFilter,
+    setRangeFilter,
     setPriceRange,
     clearFilters,
     totalInCategory: products.length,
