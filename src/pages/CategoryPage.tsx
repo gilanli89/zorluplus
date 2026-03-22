@@ -37,7 +37,7 @@ export default function CategoryPage() {
     setSortBy,
     toggleFilter,
     setToggleFilter,
-    setPriceRange,
+    setRangeFilter,
     clearFilters,
   } = useProductFilter(categoryProducts, categorySlug, subSlug);
 
@@ -77,7 +77,7 @@ export default function CategoryPage() {
           activeCount={activeCount}
           onToggle={toggleFilter}
           onToggleSwitch={setToggleFilter}
-          onPriceRange={setPriceRange}
+          onRangeChange={setRangeFilter}
           onClear={clearFilters}
         />
         <div className="flex-1 min-w-0">
@@ -89,7 +89,7 @@ export default function CategoryPage() {
               activeCount={activeCount}
               onToggle={toggleFilter}
               onToggleSwitch={setToggleFilter}
-              onPriceRange={setPriceRange}
+              onRangeChange={setRangeFilter}
               onClear={clearFilters}
             />
             <SortBar
