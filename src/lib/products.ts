@@ -90,7 +90,8 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
     // Küçük Ev Aletleri
     { match: "süpürge", category: "kucuk-ev-aletleri", subcategory: "supurge" },
     { match: "ütü", category: "kucuk-ev-aletleri", subcategory: "utu" },
-    { match: "vantilatör", category: "kucuk-ev-aletleri", subcategory: "ventilator" },
+    { match: "vantilatör", category: "klima-isitma", subcategory: "ventilator" },
+    { match: "ventilator", category: "klima-isitma", subcategory: "ventilator" },
     { match: "ev alet", category: "kucuk-ev-aletleri", subcategory: "" },
     // Ses Sistemleri
     { match: "hoparlör", category: "ses-sistemleri", subcategory: "bluetooth-hoparlor" },
