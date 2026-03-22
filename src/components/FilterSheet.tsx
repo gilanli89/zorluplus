@@ -148,14 +148,14 @@ function DynamicFilterBody({
   activeFilters,
   onToggle,
   onToggleSwitch,
-  onPriceRange,
+  onRangeChange,
 }: {
   config: CategoryFilterConfig;
   products: Product[];
   activeFilters: ActiveFilters;
   onToggle: (key: string, value: string) => void;
   onToggleSwitch: (key: string, enabled: boolean) => void;
-  onPriceRange: (min: number, max: number) => void;
+  onRangeChange: (key: string, min: number, max: number) => void;
 }) {
   return (
     <div className="space-y-1">
@@ -166,7 +166,7 @@ function DynamicFilterBody({
           activeFilters={activeFilters}
           onToggle={onToggle}
           onToggleSwitch={onToggleSwitch}
-          onPriceRange={onPriceRange}
+          onRangeChange={onRangeChange}
           products={products}
         />
       ))}
