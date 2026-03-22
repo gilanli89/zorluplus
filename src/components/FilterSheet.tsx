@@ -260,7 +260,7 @@ export function FilterSidebar({
   activeCount,
   onToggle,
   onToggleSwitch,
-  onPriceRange,
+  onRangeChange,
   onClear,
 }: {
   config?: CategoryFilterConfig;
@@ -269,7 +269,7 @@ export function FilterSidebar({
   activeCount: number;
   onToggle: (key: string, value: string) => void;
   onToggleSwitch: (key: string, enabled: boolean) => void;
-  onPriceRange: (min: number, max: number) => void;
+  onRangeChange: (key: string, min: number, max: number) => void;
   onClear: () => void;
 }) {
   return (
@@ -290,7 +290,7 @@ export function FilterSidebar({
             activeFilters={activeFilters}
             onToggle={onToggle}
             onToggleSwitch={onToggleSwitch}
-            onPriceRange={onPriceRange}
+            onRangeChange={onRangeChange}
           />
         ) : (
           <FallbackFilterBody
