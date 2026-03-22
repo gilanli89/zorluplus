@@ -125,7 +125,6 @@ export const CATEGORIES = [
     children: [
       { slug: "utu", name: "Ütü" },
       { slug: "supurge", name: "Süpürge" },
-      { slug: "ventilator", name: "Vantilatör" },
     ],
   },
   {
