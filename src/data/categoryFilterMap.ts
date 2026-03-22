@@ -8,6 +8,9 @@ export const SUBCATEGORY_TO_FILTER_ID: Record<string, string> = {
   "projeksiyon": "projeksiyon",
   // Aksesuarlar
   "duvar-masaustu-aparatlari": "tv-askisi",
+  "hdmi-kablo": "hdmi-kablo",
+  "kumanda": "kumanda",
+  "regulatorler": "voltaj-regulatoru",
   // Ses Sistemleri
   "kulaklik": "ses-sistemleri",
   "soundbar": "ses-sistemleri",

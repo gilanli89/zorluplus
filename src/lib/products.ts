@@ -97,10 +97,16 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
     { match: "kulaklık", category: "ses-sistemleri", subcategory: "kulaklik" },
     // Aksesuarlar
     { match: "temizlik", category: "aksesuar", subcategory: "temizlik-urunleri" },
-    { match: "tv askı", category: "aksesuar", subcategory: "tv-aski" },
+    { match: "ekran temizl", category: "aksesuar", subcategory: "temizlik-urunleri" },
+    { match: "tv askı", category: "aksesuar", subcategory: "duvar-masaustu-aparatlari" },
+    { match: "tv ayak", category: "aksesuar", subcategory: "duvar-masaustu-aparatlari" },
     { match: "uydu", category: "aksesuar", subcategory: "uydu-ekipman" },
-    { match: "kumanda", category: "aksesuar", subcategory: "" },
-    { match: "kablo", category: "aksesuar", subcategory: "" },
+    { match: "kumanda", category: "aksesuar", subcategory: "kumanda" },
+    { match: "hdmi", category: "aksesuar", subcategory: "hdmi-kablo" },
+    { match: "kablo", category: "aksesuar", subcategory: "hdmi-kablo" },
+    { match: "regülatör", category: "aksesuar", subcategory: "regulatorler" },
+    { match: "regulat", category: "aksesuar", subcategory: "regulatorler" },
+    { match: "voltaj", category: "aksesuar", subcategory: "regulatorler" },
     // Oyun
     { match: "oyun", category: "oyun", subcategory: "oyun-aksesuar" },
   ];
