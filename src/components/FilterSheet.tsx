@@ -19,14 +19,14 @@ function FilterGroup({
   activeFilters,
   onToggle,
   onToggleSwitch,
-  onPriceRange,
+  onRangeChange,
   products,
 }: {
   filter: FilterOption;
   activeFilters: ActiveFilters;
   onToggle: (key: string, value: string) => void;
   onToggleSwitch: (key: string, enabled: boolean) => void;
-  onPriceRange: (min: number, max: number) => void;
+  onRangeChange: (key: string, min: number, max: number) => void;
   products: Product[];
 }) {
   const activeValues = (activeFilters[filter.key] as string[]) || [];
