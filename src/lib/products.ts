@@ -43,8 +43,10 @@ function slugify(text: string): string {
 }
 
 function normalizeCategorySlug(raw: string): { category: string; subcategory: string } {
-  const lower = raw.toLowerCase().trim();
-  
+  // Normalize Turkish chars for reliable matching
+  const lower = raw.toLowerCase().trim()
+    .replace(/İ/gi, "i").replace(/i̇/g, "i")
+    .replace(/ı/g, "i");
   // WooCommerce hierarchical category matches (most specific first)
   const map: Array<{ match: string; category: string; subcategory: string }> = [
     // Exact WooCommerce hierarchical paths first
