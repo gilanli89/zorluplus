@@ -43,71 +43,103 @@ function slugify(text: string): string {
 }
 
 function normalizeCategorySlug(raw: string): { category: string; subcategory: string } {
-  const lower = raw.toLowerCase().trim();
-  
-  // Handle hierarchical categories like "Video / Audio > Televizyonlar"
-  const map: Array<{ match: string; category: string; subcategory: string }> = [
+  // Handle multi-category strings like "Video / Audio > Aksesuar, Aksesuarlar > TV Askı Aparatları"
+  // Take the most specific (last) category
+  const parts = raw.split(",").map(s => s.trim()).filter(Boolean);
+  const primary = parts[parts.length - 1] || raw;
+  const lower = primary.toLowerCase().trim();
+
+  // Exact hierarchical WooCommerce category matches (checked first)
+  const exactMap: Array<{ match: string; category: string; subcategory: string }> = [
     // Beyaz Eşya
+    { match: "beyaz eşya > buz dolapları", category: "beyaz-esya", subcategory: "buzdolabi" },
+    { match: "beyaz eşya > mini buzdolapları", category: "beyaz-esya", subcategory: "mini-buzdolabi" },
+    { match: "beyaz eşya > çamaşır makineleri", category: "beyaz-esya", subcategory: "camasir-makinesi" },
+    { match: "beyaz eşya > bulaşık makineleri", category: "beyaz-esya", subcategory: "bulasik-makinesi" },
+    { match: "beyaz eşya > kurutma makineleri", category: "beyaz-esya", subcategory: "kurutma-makinesi" },
+    { match: "beyaz eşya > derin dondurucular", category: "beyaz-esya", subcategory: "derin-dondurucu" },
+    { match: "beyaz eşya > su sebilleri", category: "beyaz-esya", subcategory: "su-sebili" },
+    // Ankastre
+    { match: "ankastre > fırınlar", category: "ankastre", subcategory: "firin" },
+    { match: "ankastre > ocaklar", category: "ankastre", subcategory: "ocak" },
+    { match: "ankastre > davlumbazlar", category: "ankastre", subcategory: "davlumbaz" },
+    // İklimlendirme
+    { match: "i̇klimlendirme > klimalar > split klima", category: "klima-isitma", subcategory: "split-klima" },
+    { match: "iklimlendirme > klimalar > split klima", category: "klima-isitma", subcategory: "split-klima" },
+    { match: "i̇klimlendirme > klimalar > portatif klima", category: "klima-isitma", subcategory: "portatif-klima" },
+    { match: "iklimlendirme > klimalar > portatif klima", category: "klima-isitma", subcategory: "portatif-klima" },
+    { match: "i̇klimlendirme > klimalar", category: "klima-isitma", subcategory: "klima" },
+    { match: "iklimlendirme > klimalar", category: "klima-isitma", subcategory: "klima" },
+    { match: "i̇klimlendirme > ısıtıcılar", category: "klima-isitma", subcategory: "isiticilar" },
+    { match: "iklimlendirme > ısıtıcılar", category: "klima-isitma", subcategory: "isiticilar" },
+    { match: "i̇klimlendirme", category: "klima-isitma", subcategory: "klima" },
+    { match: "iklimlendirme", category: "klima-isitma", subcategory: "klima" },
+    // Video / Audio
+    { match: "video / audio > televizyonlar", category: "tv-goruntu", subcategory: "tv" },
+    { match: "video / audio > soundbarlar", category: "tv-goruntu", subcategory: "soundbar" },
+    { match: "video / audio > kulaklıklar", category: "ses-sistemleri", subcategory: "kulaklik" },
+    { match: "aksesuarlar > tv askı aparatları", category: "tv-goruntu", subcategory: "duvar-masaustu-aparatlari" },
+    { match: "video / audio > aksesuar", category: "tv-goruntu", subcategory: "tv-aksesuar" },
+    // Ses Sistemleri
+    { match: "ses sistemleri > bluetooth hoparlörler", category: "ses-sistemleri", subcategory: "bluetooth-hoparlor" },
+    { match: "ses sistemleri > kulaklıklar", category: "ses-sistemleri", subcategory: "kulaklik" },
+    { match: "ses sistemleri > soundbar", category: "ses-sistemleri", subcategory: "soundbar" },
+    // Mutfak Aletleri
+    { match: "mutfak aletleri > air fryer", category: "mutfak-aletleri", subcategory: "air-fryer" },
+    { match: "mutfak aletleri > mikrodalga", category: "mutfak-aletleri", subcategory: "mikrodalga" },
+    { match: "mutfak aletleri > kahve makineleri", category: "mutfak-aletleri", subcategory: "kahve-makinesi" },
+    { match: "mutfak aletleri > pişiriciler", category: "mutfak-aletleri", subcategory: "pisirici" },
+    { match: "mutfak aletleri > su sebilleri", category: "mutfak-aletleri", subcategory: "su-sebili" },
+    // Ev Aletleri / Küçük Ev Aletleri
+    { match: "ev aletleri > süpürgeler", category: "kucuk-ev-aletleri", subcategory: "supurge" },
+    { match: "ev aletleri > ütüler", category: "kucuk-ev-aletleri", subcategory: "utu" },
+    { match: "küçük ev aletleri > vantilatör", category: "kucuk-ev-aletleri", subcategory: "ventilator" },
+    // Aksesuarlar
+    { match: "aksesuarlar > temizlik ürünleri", category: "aksesuar", subcategory: "temizlik-urunleri" },
+    { match: "aksesuarlar > uydu ekipmanları", category: "aksesuar", subcategory: "uydu-ekipman" },
+    // Oyun
+    { match: "oyun > aksesuar", category: "oyun", subcategory: "oyun-aksesuar" },
+    // Diğer
+    { match: "diğer ürünler", category: "diger", subcategory: "" },
+  ];
+
+  for (const entry of exactMap) {
+    if (lower.includes(entry.match)) return { category: entry.category, subcategory: entry.subcategory };
+  }
+
+  // Fallback: keyword-based matching
+  const keywordMap: Array<{ match: string; category: string; subcategory: string }> = [
     { match: "buzdolap", category: "beyaz-esya", subcategory: "buzdolabi" },
-    { match: "buz dolap", category: "beyaz-esya", subcategory: "buzdolabi" },
-    { match: "mini buzd", category: "beyaz-esya", subcategory: "mini-buzdolabi" },
     { match: "çamaşır", category: "beyaz-esya", subcategory: "camasir-makinesi" },
     { match: "camasir", category: "beyaz-esya", subcategory: "camasir-makinesi" },
     { match: "bulaşık", category: "beyaz-esya", subcategory: "bulasik-makinesi" },
-    { match: "bulasik", category: "beyaz-esya", subcategory: "bulasik-makinesi" },
     { match: "kurutma", category: "beyaz-esya", subcategory: "kurutma-makinesi" },
     { match: "derin dondurucu", category: "beyaz-esya", subcategory: "derin-dondurucu" },
-    // Ankastre
     { match: "fırın", category: "ankastre", subcategory: "firin" },
-    { match: "firin", category: "ankastre", subcategory: "firin" },
     { match: "ocak", category: "ankastre", subcategory: "ocak" },
     { match: "davlumbaz", category: "ankastre", subcategory: "davlumbaz" },
-    // İklimlendirme
     { match: "split klima", category: "klima-isitma", subcategory: "split-klima" },
     { match: "portatif klima", category: "klima-isitma", subcategory: "portatif-klima" },
     { match: "klima", category: "klima-isitma", subcategory: "klima" },
     { match: "ısıtıcı", category: "klima-isitma", subcategory: "isiticilar" },
-    { match: "isitici", category: "klima-isitma", subcategory: "isiticilar" },
-    // TV
     { match: "televizyon", category: "tv-goruntu", subcategory: "tv" },
     { match: "kulaklık", category: "ses-sistemleri", subcategory: "kulaklik" },
-    { match: "kulaklik", category: "ses-sistemleri", subcategory: "kulaklik" },
-    { match: "askı aparat", category: "tv-goruntu", subcategory: "duvar-masaustu-aparatlari" },
-    { match: "tv askı", category: "tv-goruntu", subcategory: "duvar-masaustu-aparatlari" },
-    { match: "duvar aparat", category: "tv-goruntu", subcategory: "duvar-masaustu-aparatlari" },
-    { match: "masaüstü aparat", category: "tv-goruntu", subcategory: "duvar-masaustu-aparatlari" },
     { match: "tv", category: "tv-goruntu", subcategory: "tv" },
     { match: "soundbar", category: "tv-goruntu", subcategory: "soundbar" },
-    { match: "ses sistem", category: "tv-goruntu", subcategory: "soundbar" },
-    { match: "video", category: "tv-goruntu", subcategory: "tv" },
-    // Mutfak Aletleri
     { match: "air fryer", category: "mutfak-aletleri", subcategory: "air-fryer" },
     { match: "mikrodalga", category: "mutfak-aletleri", subcategory: "mikrodalga" },
     { match: "kahve", category: "mutfak-aletleri", subcategory: "kahve-makinesi" },
-    { match: "pişirici", category: "mutfak-aletleri", subcategory: "pisirici" },
-    { match: "su sebil", category: "mutfak-aletleri", subcategory: "su-sebili" },
-    // Küçük Ev Aletleri
     { match: "süpürge", category: "kucuk-ev-aletleri", subcategory: "supurge" },
     { match: "ütü", category: "kucuk-ev-aletleri", subcategory: "utu" },
-    { match: "vantilatör", category: "kucuk-ev-aletleri", subcategory: "ventilator" },
-    { match: "ev alet", category: "kucuk-ev-aletleri", subcategory: "" },
-    // Ses Sistemleri
     { match: "hoparlör", category: "ses-sistemleri", subcategory: "bluetooth-hoparlor" },
-    { match: "kulaklık", category: "ses-sistemleri", subcategory: "kulaklik" },
-    // Aksesuarlar
-    { match: "temizlik", category: "aksesuar", subcategory: "temizlik-urunleri" },
-    { match: "tv askı", category: "aksesuar", subcategory: "tv-aski" },
-    { match: "uydu", category: "aksesuar", subcategory: "uydu-ekipman" },
-    { match: "kumanda", category: "aksesuar", subcategory: "" },
-    { match: "kablo", category: "aksesuar", subcategory: "" },
-    // Oyun
     { match: "oyun", category: "oyun", subcategory: "oyun-aksesuar" },
   ];
 
-  for (const entry of map) {
+  for (const entry of keywordMap) {
     if (lower.includes(entry.match)) return { category: entry.category, subcategory: entry.subcategory };
   }
-  return { category: "elektronik-aksesuar", subcategory: slugify(raw) };
+
+  return { category: "diger", subcategory: slugify(raw) };
 }
 
 function parseRow(row: Record<string, string>, index: number): Product {
