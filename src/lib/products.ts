@@ -256,7 +256,7 @@ export async function fetchProducts(): Promise<Product[]> {
     }
   }
   
-  return generateDemoProducts();
+  return [];
 }
 
 function generateDemoProducts(): Product[] {
