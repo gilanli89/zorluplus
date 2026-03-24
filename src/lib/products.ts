@@ -249,7 +249,7 @@ export async function fetchProducts(): Promise<Product[]> {
           return published !== "0" && published.toLowerCase() !== "hayır";
         })
         .map((row, i) => parseRow(row, i))
-        .filter(p => p.name && p.price > 0);
+        .filter(p => p.name && p.price > 0 && p.brand && p.image && p.image !== "/placeholder.svg");
       if (products.length > 0) return products;
     } catch {
       continue;
