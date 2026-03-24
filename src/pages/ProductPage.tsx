@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { trackWhatsAppClick } from "@/lib/tracking";
 import { useEffect, useRef } from "react";
-import { Shield, Award, Wrench, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Shield, Award, Wrench, MessageCircle, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { getProductBySlug, formatPrice, getWhatsAppLink } from "@/lib/products";
@@ -14,6 +14,8 @@ import QuoteForm from "@/components/QuoteForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
 
 
 export default function ProductPage() {
