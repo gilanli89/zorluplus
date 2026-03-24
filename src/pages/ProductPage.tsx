@@ -25,6 +25,7 @@ export default function ProductPage() {
   const stripRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
   const { translateProduct } = useProductTranslation();
+  const { addItem } = useCart();
   
   const product = getProductBySlug(products, slug || "");
 
