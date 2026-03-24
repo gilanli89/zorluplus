@@ -81,6 +81,9 @@ export default function CartSheet() {
               })}
             </div>
 
+            {/* Cart Upsell for TV accessories */}
+            <CartUpsell allProducts={allProducts} maxItems={2} />
+
             <div className="border-t border-border pt-4 space-y-3">
               <div className="flex justify-between text-sm font-bold">
                 <span>{t("cart.orderSummary")}</span>

@@ -174,6 +174,9 @@ export default function ProductPage() {
           </div>
         </div>
 
+        {/* Cross-sell: Frequently Bought Together (TV only) */}
+        <FrequentlyBoughtTogether currentProduct={product} allProducts={products} maxItems={6} />
+
         {/* AI Recommendations */}
         <ProductRecommendations currentProduct={product} allProducts={products} maxItems={4} />
 
