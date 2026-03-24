@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useProducts } from "@/hooks/useProducts";
 import { FilterState } from "@/lib/types";
 import ProductCard from "@/components/ProductCard";
-import { FilterSidebar, MobileFilterTrigger, SortBar, FilterDebugPanel, useNormalizedFiltering } from "@/components/FilterSheet";
+import { FilterSidebar, MobileFilterTrigger, SortBar, useNormalizedFiltering } from "@/components/FilterSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -26,7 +26,7 @@ export default function ShopPage() {
 
   const categorySlug = "tv-goruntu";
   const categoryProducts = useMemo(() => getProductsByCategory(products, categorySlug), [products]);
-  const { filtered: filteredProducts, debugInfo } = useNormalizedFiltering(categoryProducts, filters, categorySlug);
+  const { filtered: filteredProducts } = useNormalizedFiltering(categoryProducts, filters, categorySlug);
 
   return (
     <div className="container py-6 md:py-8">
@@ -78,8 +78,6 @@ export default function ShopPage() {
         </div>
       </div>
 
-      {/* Debug toggle - remove in production */}
-      <FilterDebugPanel debugInfo={debugInfo} />
     </div>
   );
 }

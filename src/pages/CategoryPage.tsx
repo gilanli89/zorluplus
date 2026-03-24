@@ -6,7 +6,7 @@ import { CATEGORIES } from "@/lib/constants";
 import { getProductsByCategory } from "@/lib/products";
 import { FilterState } from "@/lib/types";
 import ProductCard from "@/components/ProductCard";
-import { FilterSidebar, MobileFilterTrigger, SortBar, FilterDebugPanel, useNormalizedFiltering } from "@/components/FilterSheet";
+import { FilterSidebar, MobileFilterTrigger, SortBar, useNormalizedFiltering } from "@/components/FilterSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -29,7 +29,7 @@ export default function CategoryPage() {
   const category = CATEGORIES.find(c => c.slug === categorySlug);
   const subcategory = category?.children.find(s => s.slug === subSlug);
   const categoryProducts = useMemo(() => getProductsByCategory(products, categorySlug || "", subSlug), [products, categorySlug, subSlug]);
-  const { filtered: filteredProducts, debugInfo } = useNormalizedFiltering(categoryProducts, filters, categorySlug, subSlug);
+  const { filtered: filteredProducts } = useNormalizedFiltering(categoryProducts, filters, categorySlug, subSlug);
 
   const catName = category ? (t(`cat.${category.slug}`) !== `cat.${category.slug}` ? t(`cat.${category.slug}`) : category.name) : "";
   const title = subcategory?.name || catName || t("general.products");
@@ -96,7 +96,7 @@ export default function CategoryPage() {
         </div>
       </div>
 
-      <FilterDebugPanel debugInfo={debugInfo} />
+      
     </div>
   );
 }
