@@ -26,7 +26,7 @@ export default function ShopPage() {
 
   const categorySlug = "tv-goruntu";
   const categoryProducts = useMemo(() => getProductsByCategory(products, categorySlug), [products]);
-  const { filtered: filteredProducts, debugInfo } = useNormalizedFiltering(categoryProducts, filters, categorySlug);
+  const { filtered: filteredProducts } = useNormalizedFiltering(categoryProducts, filters, categorySlug);
 
   return (
     <div className="container py-6 md:py-8">
