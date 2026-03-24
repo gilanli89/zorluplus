@@ -1,20 +1,30 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/types";
-import { MessageCircle, Eye } from "lucide-react";
-import { getWhatsAppLink, formatPrice } from "@/lib/products";
+import { ShoppingCart, Eye } from "lucide-react";
+import { formatPrice } from "@/lib/products";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const hasDiscount = false;
   const { t } = useLanguage();
   const { translateProduct } = useProductTranslation();
+  const { addItem } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem(product);
+    toast.success(`${product.name} ${t("cart.addedToCart")}`);
+  };
 
   return (
     <motion.div
@@ -77,15 +87,25 @@ export default function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       {/* Action Buttons */}
-      <div className="mx-3.5 mb-3.5">
+      <div className="mx-3.5 mb-3.5 flex gap-2">
         <Link
           to={`/urun/${product.slug}`}
           onClick={(e) => e.stopPropagation()}
-          className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-all duration-200 tap-scale"
+          className="flex items-center justify-center gap-1.5 flex-1 py-2.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-all duration-200 tap-scale"
         >
           <Eye size={14} />
           {t("product.view")}
         </Link>
+        {product.inStock && product.price > 0 && (
+          <Button
+            size="sm"
+            className="flex-1 rounded-xl text-xs font-bold gap-1.5 tap-scale"
+            onClick={handleAddToCart}
+          >
+            <ShoppingCart size={14} />
+            {t("cart.addToCart")}
+          </Button>
+        )}
       </div>
     </motion.div>
   );

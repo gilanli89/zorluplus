@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { trackWhatsAppClick } from "@/lib/tracking";
 import { useEffect, useRef } from "react";
-import { Shield, Award, Wrench, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { Shield, Award, Wrench, MessageCircle, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { getProductBySlug, formatPrice, getWhatsAppLink } from "@/lib/products";
@@ -14,6 +14,8 @@ import QuoteForm from "@/components/QuoteForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
 
 
 export default function ProductPage() {
@@ -23,6 +25,7 @@ export default function ProductPage() {
   const stripRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
   const { translateProduct } = useProductTranslation();
+  const { addItem } = useCart();
   
   const product = getProductBySlug(products, slug || "");
 
@@ -116,8 +119,20 @@ export default function ProductPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
+              {product.inStock && product.price > 0 && (
+                <Button
+                  size="lg"
+                  className="flex-1 gap-2 font-semibold"
+                  onClick={() => {
+                    addItem(product);
+                    toast.success(`${product.name} sepete eklendi!`);
+                  }}
+                >
+                  <ShoppingCart className="h-5 w-5" /> {t("cart.addToCart")}
+                </Button>
+              )}
               <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer" className="flex-1" onClick={() => trackWhatsAppClick("product_page")}>
-                <Button size="lg" className="w-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white font-semibold">
+                <Button size="lg" variant="outline" className="w-full gap-2 border-[hsl(142,70%,40%)] text-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] hover:text-white font-semibold">
                   <MessageCircle className="h-5 w-5" /> {t("product.orderWhatsApp")}
                 </Button>
               </a>
