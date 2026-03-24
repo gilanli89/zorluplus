@@ -249,54 +249,16 @@ export async function fetchProducts(): Promise<Product[]> {
           return published !== "0" && published.toLowerCase() !== "hayır";
         })
         .map((row, i) => parseRow(row, i))
-        .filter(p => p.name && p.price > 0);
+        .filter(p => p.name && p.price > 0 && p.brand && p.image && p.image !== "/placeholder.svg");
       if (products.length > 0) return products;
     } catch {
       continue;
     }
   }
   
-  return generateDemoProducts();
+  return [];
 }
 
-function generateDemoProducts(): Product[] {
-  const demos: Partial<Product>[] = [
-    { name: "Samsung RS68A8842S9 Gardırop Tipi Buzdolabı", brand: "Samsung", category: "beyaz-esya", subcategory: "buzdolabi", price: 42999, salePrice: 38999, specs: { Litre: "634", "No-Frost": "Evet", "Enerji Sınıfı": "A++" }, isFeatured: true, isNew: true },
-    { name: "LG F4WV710S2T Çamaşır Makinesi 10.5 Kg", brand: "LG", category: "beyaz-esya", subcategory: "camasir-makinesi", price: 24999, specs: { Kapasite: "10.5 Kg", Devir: "1400", "Enerji Sınıfı": "A" }, isFeatured: true },
-    { name: "Samsung DW60M5050BB Bulaşık Makinesi", brand: "Samsung", category: "beyaz-esya", subcategory: "bulasik-makinesi", price: 16999, salePrice: 14999, specs: { Kapasite: "13 Kişilik", "Enerji Sınıfı": "A+" } },
-    { name: "Samsung 65\" QN85C Neo QLED 4K TV", brand: "Samsung", category: "tv-goruntu", subcategory: "tv", price: 54999, salePrice: 49999, specs: { Ekran: "65\"", Panel: "Neo QLED", Çözünürlük: "4K", Smart: "Evet" }, isFeatured: true, isNew: true },
-    { name: "LG 55\" OLED C3 4K TV", brand: "LG", category: "tv-goruntu", subcategory: "tv", price: 45999, specs: { Ekran: "55\"", Panel: "OLED", Çözünürlük: "4K", Smart: "Evet" }, isFeatured: true },
-    { name: "Samsung AR12TXHQASINEU Klima 12000 BTU", brand: "Samsung", category: "klima-isitma", subcategory: "klima", price: 22999, specs: { BTU: "12000", İnverter: "Evet", "Enerji Sınıfı": "A++" }, isNew: true },
-    { name: "LG Dual Inverter Klima 18000 BTU", brand: "LG", category: "klima-isitma", subcategory: "klima", price: 29999, salePrice: 27499, specs: { BTU: "18000", İnverter: "Evet", "Enerji Sınıfı": "A+++" }, isFeatured: true },
-    { name: "Samsung NV75N5671RS Ankastre Fırın", brand: "Samsung", category: "ankastre", subcategory: "firin", price: 18999, specs: { Kapasite: "75L" } },
-    { name: "LG RC90V9AV2W Kurutma Makinesi 9 Kg", brand: "LG", category: "beyaz-esya", subcategory: "kurutma-makinesi", price: 28999, specs: { Kapasite: "9 Kg", "Enerji Sınıfı": "A+++" } },
-    { name: "Samsung HW-Q990C Soundbar", brand: "Samsung", category: "tv-goruntu", subcategory: "soundbar", price: 34999, salePrice: 31999, specs: {}, isFeatured: true },
-    { name: "Samsung Derin Dondurucu RZ32M7120WW", brand: "Samsung", category: "beyaz-esya", subcategory: "derin-dondurucu", price: 19999, specs: { Litre: "315", "No-Frost": "Evet" } },
-    { name: "LG NanoCell 75\" 4K TV", brand: "LG", category: "tv-goruntu", subcategory: "tv", price: 62999, specs: { Ekran: "75\"", Panel: "NanoCell", Çözünürlük: "4K", Smart: "Evet" }, isNew: true },
-  ];
-
-  return demos.map((d, i) => ({
-    id: `DEMO-${i + 1}`,
-    sku: `DEMO-${i + 1}`,
-    slug: slugify(`DEMO-${i + 1}-${d.name || ""}`),
-    name: d.name || "",
-    brand: d.brand || "",
-    category: d.category || "",
-    subcategory: d.subcategory || "",
-    price: d.price || 0,
-    salePrice: d.salePrice,
-    currency: "TL",
-    image: "/placeholder.svg",
-    images: ["/placeholder.svg"],
-    description: `${d.brand} ${d.name} - Zorlu Digital Plaza güvencesiyle.`,
-    specs: d.specs || {},
-    inStock: true,
-    isNew: d.isNew || false,
-    isFeatured: d.isFeatured || false,
-    tags: [],
-    createdAt: new Date().toISOString(),
-  }));
-}
 
 export function getProductsByCategory(products: Product[], categorySlug: string, subSlug?: string): Product[] {
   return products.filter(p => {
