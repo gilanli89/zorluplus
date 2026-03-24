@@ -16,25 +16,34 @@ interface AccessoryType {
 
 const TV_ACCESSORY_TYPES: AccessoryType[] = [
   {
-    id: "hdmi",
-    label: "HDMI Kablo",
-    keywords: ["hdmi"],
-    categories: ["tv-goruntu", "aksesuar"],
-    subcategories: ["tv-aksesuar"],
-    priority: 1,
-    compatibilityLabel: () => "Yüksek Hızlı HDMI 2.1",
-  },
-  {
     id: "wall-mount",
     label: "TV Askı Aparatı",
     keywords: ["askı", "aparat", "mount", "brateck"],
-    categories: ["tv-goruntu"],
-    subcategories: ["duvar-masaustu-aparatlari"],
-    priority: 2,
+    categories: ["tv-goruntu", "aksesuar"],
+    subcategories: ["duvar-masaustu-aparatlari", "tv-aski-aparatlari"],
+    priority: 1,
     compatibilityLabel: (tv) => {
       const size = extractScreenSize(tv);
       return size ? `${size} inç uyumlu` : "Uyumlu TV Askısı";
     },
+  },
+  {
+    id: "hdmi",
+    label: "HDMI Kablo",
+    keywords: ["hdmi"],
+    categories: ["tv-goruntu", "aksesuar", "oyun"],
+    subcategories: ["tv-aksesuar", "oyun-aksesuar"],
+    priority: 2,
+    compatibilityLabel: () => "Yüksek Hızlı HDMI 2.1",
+  },
+  {
+    id: "voltage-regulator",
+    label: "Voltaj Regülatörü",
+    keywords: ["voltaj", "regülatör", "regulator"],
+    categories: ["diger", "aksesuar"],
+    subcategories: [],
+    priority: 3,
+    compatibilityLabel: () => "TV koruma için önerilir",
   },
   {
     id: "soundbar",
@@ -116,15 +125,12 @@ export function getTVCrossSellItems(
   maxItems = 6
 ): CrossSellItem[] {
   // Only for TV products
-  if (currentProduct.subcategory !== "tv" && currentProduct.category !== "tv-goruntu") {
-    // Check if it's actually a TV by name
-    const nameLower = currentProduct.name.toLowerCase();
-    if (!nameLower.includes("televizyon") && !nameLower.includes(" tv ") && !nameLower.endsWith(" tv")) {
-      return [];
-    }
-  }
-  // Skip if current product IS an accessory
-  if (currentProduct.subcategory !== "tv") return [];
+  const nameLower = currentProduct.name.toLowerCase();
+  const isTV = currentProduct.subcategory === "tv" ||
+    (currentProduct.category === "tv-goruntu" && (
+      nameLower.includes("televizyon") || nameLower.includes(" tv") || nameLower.includes("led tv") || nameLower.includes("oled tv")
+    ));
+  if (!isTV) return [];
 
   const tvSize = extractScreenSize(currentProduct);
   const results: CrossSellItem[] = [];
@@ -145,8 +151,6 @@ export function getTVCrossSellItems(
         accType.subcategories.includes(p.subcategory) ||
         accType.categories.includes(p.category);
 
-      if (!keywordMatch && !categoryMatch) return false;
-      // At least one must match
       if (!keywordMatch && !categoryMatch) return false;
 
       // For wall mounts, check size compatibility
@@ -169,8 +173,8 @@ export function getTVCrossSellItems(
       return a.price - b.price;
     });
 
-    // Pick top 1-2 per type
-    const maxPerType = accType.id === "hdmi" ? 1 : accType.id === "wall-mount" ? 2 : 1;
+    // Pick top items per type - more wall mounts and HDMI cables
+    const maxPerType = accType.id === "wall-mount" ? 3 : accType.id === "hdmi" ? 2 : 1;
     const picked = candidates.slice(0, maxPerType);
 
     for (const p of picked) {
