@@ -149,7 +149,6 @@ serve(async (req) => {
     );
   } catch (error: unknown) {
     console.error("CardPlus initiate error:", error);
-    const corsHeaders = getCorsHeaders(req);
     return new Response(JSON.stringify({ error: "Ödeme başlatılamadı." }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
