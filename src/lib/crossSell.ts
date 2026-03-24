@@ -152,8 +152,6 @@ export function getTVCrossSellItems(
         accType.categories.includes(p.category);
 
       if (!keywordMatch && !categoryMatch) return false;
-      // At least one must match
-      if (!keywordMatch && !categoryMatch) return false;
 
       // For wall mounts, check size compatibility
       if (accType.id === "wall-mount" && !isWallMountCompatible(p, tvSize)) return false;
