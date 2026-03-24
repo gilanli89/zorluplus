@@ -79,8 +79,12 @@ export default function CartSheet() {
             </div>
 
             <div className="border-t border-border pt-4 space-y-3">
+              <div className="flex justify-between text-sm font-bold">
+                <span>{t("cart.orderSummary")}</span>
+                <span className="text-primary">{formatPrice(grandTotal)}</span>
+              </div>
               <Link to="/sepet" onClick={() => setOpen(false)}>
-                <Button className="w-full rounded-full font-semibold gap-2" size="lg">
+                <Button className="w-full rounded-full font-semibold gap-2 mt-2" size="lg">
                   <ShoppingCart className="h-4 w-4" /> {t("cart.goToCart")}
                 </Button>
               </Link>
