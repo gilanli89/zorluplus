@@ -24,7 +24,8 @@ function extractScreenSize(name: string, specs: Record<string, string>): number 
   const text = name;
   
   // Pattern: 43" or 43" or 43″ or 43' 
-  const m1 = text.match(/(\d{2,3})\s*[""″′'']/);
+  // Match: 43" 43" 43″ 43′ 43' 43\u201C 43\u201D 43\u2033 43\u2032
+  const m1 = text.match(/(\d{2,3})\s*[\u0022\u201C\u201D\u201E\u2033\u2032\u0027\u2018\u2019\u0060\u00B4″′''""]/);
   if (m1) return Math.round(parseFloat(m1[1]));
 
   // Pattern: 43 inch, 43-inch, 43inç
