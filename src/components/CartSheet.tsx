@@ -7,9 +7,12 @@ import { useCart } from "@/contexts/CartContext";
 import { formatPrice } from "@/lib/products";
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProducts } from "@/hooks/useProducts";
+import CartUpsell from "@/components/CartUpsell";
 
 export default function CartSheet() {
   const { items, itemCount, removeItem, updateQuantity, subtotal, grandTotal } = useCart();
+  const { data: allProducts = [] } = useProducts();
   const [open, setOpen] = useState(false);
   const { t } = useLanguage();
 
