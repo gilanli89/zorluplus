@@ -90,7 +90,20 @@ export default function ProductPage() {
           <div className="flex flex-col gap-4">
             <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{product.brand}</p>
             <h1 className="heading-2 text-foreground">{translateProduct(product.name)}</h1>
-            <p className="text-sm font-medium text-primary">{t("product.callForPrice")}</p>
+            {product.price > 0 ? (
+              <div className="flex items-center gap-3">
+                {product.salePrice && product.salePrice > 0 ? (
+                  <>
+                    <span className="text-2xl font-bold text-primary">{formatPrice(product.salePrice)}</span>
+                    <span className="text-lg text-muted-foreground line-through">{formatPrice(product.price)}</span>
+                  </>
+                ) : (
+                  <span className="text-2xl font-bold text-foreground">{formatPrice(product.price)}</span>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm font-medium text-primary">{t("product.callForPrice")}</p>
+            )}
 
             <Badge variant={product.inStock ? "default" : "secondary"} className="w-fit">
               {product.inStock ? t("product.inStock") : t("product.outOfStock")}

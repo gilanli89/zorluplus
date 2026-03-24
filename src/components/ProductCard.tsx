@@ -61,6 +61,18 @@ export default function ProductCard({ product }: ProductCardProps) {
           <h3 className="text-sm font-semibold text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors duration-200">
             {translateProduct(product.name)}
           </h3>
+          {product.price > 0 && (
+            <div className="flex items-center gap-2 mt-1">
+              {product.salePrice && product.salePrice > 0 ? (
+                <>
+                  <span className="text-sm font-bold text-primary">{formatPrice(product.salePrice)}</span>
+                  <span className="text-xs text-muted-foreground line-through">{formatPrice(product.price)}</span>
+                </>
+              ) : (
+                <span className="text-sm font-bold text-foreground">{formatPrice(product.price)}</span>
+              )}
+            </div>
+          )}
         </div>
       </Link>
 
