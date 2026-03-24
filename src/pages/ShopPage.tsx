@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useProducts } from "@/hooks/useProducts";
 import { FilterState } from "@/lib/types";
 import ProductCard from "@/components/ProductCard";
-import { FilterSidebar, MobileFilterTrigger, SortBar, applyFilters } from "@/components/FilterSheet";
+import { FilterSidebar, MobileFilterTrigger, SortBar, FilterDebugPanel, useNormalizedFiltering } from "@/components/FilterSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -21,12 +21,12 @@ const fadeUp = {
 export default function ShopPage() {
   const { data: products = [], isLoading } = useProducts();
   const [filters, setFilters] = useState<FilterState>({ brands: [], inStock: false, attributes: {}, sort: "popular" });
+  const [showDebug, setShowDebug] = useState(false);
   const { t } = useLanguage();
 
-  // Default to TV category products
   const categorySlug = "tv-goruntu";
   const categoryProducts = useMemo(() => getProductsByCategory(products, categorySlug), [products]);
-  const filteredProducts = useMemo(() => applyFilters(categoryProducts, filters, categorySlug), [categoryProducts, filters]);
+  const { filtered: filteredProducts, debugInfo } = useNormalizedFiltering(categoryProducts, filters, categorySlug);
 
   return (
     <div className="container py-6 md:py-8">
@@ -58,18 +58,18 @@ export default function ShopPage() {
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-lg text-muted-foreground">{t("general.noProducts")}</p>
+              <p className="text-lg text-muted-foreground">Bu filtrelere uygun ürün bulunamadı</p>
+              <button
+                onClick={() => setFilters({ brands: [], inStock: false, attributes: {}, sort: "popular" })}
+                className="mt-3 text-sm text-primary hover:underline"
+              >
+                Filtreleri temizle
+              </button>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
               {filteredProducts.map((p, i) => (
-                <motion.div
-                  key={p.id}
-                  custom={i}
-                  initial="hidden"
-                  animate="visible"
-                  variants={fadeUp}
-                >
+                <motion.div key={p.id} custom={i} initial="hidden" animate="visible" variants={fadeUp}>
                   <ProductCard product={p} />
                 </motion.div>
               ))}
@@ -77,6 +77,9 @@ export default function ShopPage() {
           )}
         </div>
       </div>
+
+      {/* Debug toggle - remove in production */}
+      <FilterDebugPanel debugInfo={debugInfo} />
     </div>
   );
 }
