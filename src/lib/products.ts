@@ -243,6 +243,11 @@ export async function fetchProducts(): Promise<Product[]> {
       const text = await res.text();
       const parsed = Papa.parse<Record<string, string>>(text, { header: true, skipEmptyLines: true });
       const products = parsed.data
+        .filter(row => {
+          // Skip unpublished products
+          const published = (row["Yayımlanmış"] || row["Published"] || "1").toString().trim();
+          return published !== "0" && published.toLowerCase() !== "hayır";
+        })
         .map((row, i) => parseRow(row, i))
         .filter(p => p.name && p.price > 0);
       if (products.length > 0) return products;
