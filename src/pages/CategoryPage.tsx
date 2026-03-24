@@ -6,7 +6,7 @@ import { CATEGORIES } from "@/lib/constants";
 import { getProductsByCategory } from "@/lib/products";
 import { FilterState } from "@/lib/types";
 import ProductCard from "@/components/ProductCard";
-import { FilterSidebar, MobileFilterTrigger, SortBar, applyFilters } from "@/components/FilterSheet";
+import { FilterSidebar, MobileFilterTrigger, SortBar, FilterDebugPanel, useNormalizedFiltering } from "@/components/FilterSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -29,7 +29,7 @@ export default function CategoryPage() {
   const category = CATEGORIES.find(c => c.slug === categorySlug);
   const subcategory = category?.children.find(s => s.slug === subSlug);
   const categoryProducts = useMemo(() => getProductsByCategory(products, categorySlug || "", subSlug), [products, categorySlug, subSlug]);
-  const filteredProducts = useMemo(() => applyFilters(categoryProducts, filters, categorySlug, subSlug), [categoryProducts, filters, categorySlug, subSlug]);
+  const { filtered: filteredProducts, debugInfo } = useNormalizedFiltering(categoryProducts, filters, categorySlug, subSlug);
 
   const catName = category ? (t(`cat.${category.slug}`) !== `cat.${category.slug}` ? t(`cat.${category.slug}`) : category.name) : "";
   const title = subcategory?.name || catName || t("general.products");
@@ -76,7 +76,13 @@ export default function CategoryPage() {
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-lg text-muted-foreground">{t("general.noProducts")}</p>
+              <p className="text-lg text-muted-foreground">Bu filtrelere uygun ürün bulunamadı</p>
+              <button
+                onClick={() => setFilters({ brands: [], inStock: false, attributes: {}, sort: "popular" })}
+                className="mt-3 text-sm text-primary hover:underline"
+              >
+                Filtreleri temizle
+              </button>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
@@ -89,6 +95,8 @@ export default function CategoryPage() {
           )}
         </div>
       </div>
+
+      <FilterDebugPanel debugInfo={debugInfo} />
     </div>
   );
 }

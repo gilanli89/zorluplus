@@ -1,165 +1,57 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { SlidersHorizontal, X, Minus } from "lucide-react";
+import { SlidersHorizontal, X, Minus, Bug } from "lucide-react";
 import { FilterState, SortOption, Product } from "@/lib/types";
-import { getBrands } from "@/lib/products";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-/* ─── Category-specific attribute extraction ─── */
-interface DynamicAttribute {
-  key: string;
-  label: string;
-  values: { value: string; count: number }[];
-}
-
-function extractScreenSize(name: string): string | null {
-  const m = name.match(/(\d{2,3})[""′']\s*/i) || name.match(/(\d{2,3})\s*(?:inch|inç)/i);
-  if (m) return `${m[1]}"`;
-  const m2 = name.match(/(\d{2,3})-inch/i);
-  if (m2) return `${m2[1]}"`;
-  return null;
-}
-
-function extractPanelType(name: string, desc: string): string | null {
-  const text = `${name} ${desc}`.toUpperCase();
-  if (text.includes("NEO QLED")) return "Neo QLED";
-  if (text.includes("QLED")) return "QLED";
-  if (text.includes("OLED")) return "OLED";
-  if (text.includes("NANOCELL")) return "NanoCell";
-  if (text.includes("CRYSTAL") || text.includes("KRİSTAL")) return "Crystal UHD";
-  if (text.includes("LED")) return "LED";
-  return null;
-}
-
-function extractBTU(name: string, desc: string): string | null {
-  const text = `${name} ${desc}`;
-  const m = text.match(/(\d{4,5})\s*BTU/i);
-  return m ? `${m[1]} BTU` : null;
-}
-
-function extractCapacity(name: string, desc: string): string | null {
-  const text = `${name} ${desc}`;
-  const mKg = text.match(/(\d+(?:[.,]\d+)?)\s*(?:KG|kg|Kg)/);
-  if (mKg) return `${mKg[1]} KG`;
-  const mKisilik = text.match(/(\d+)\s*(?:Kişilik|kişilik)/i);
-  if (mKisilik) return `${mKisilik[1]} Kişilik`;
-  const mLt = text.match(/(\d+(?:[.,]\d+)?)\s*(?:LT|lt|L)\b/i);
-  if (mLt) return `${mLt[1]} LT`;
-  return null;
-}
-
-function getCategoryAttributes(products: Product[], categorySlug?: string): DynamicAttribute[] {
-  if (!categorySlug) return [];
-  const attrs: DynamicAttribute[] = [];
-
-  if (categorySlug === "tv-goruntu" || categorySlug === "tv") {
-    const sizeCounts: Record<string, number> = {};
-    const panelCounts: Record<string, number> = {};
-    products.forEach(p => {
-      const size = extractScreenSize(p.name);
-      if (size) sizeCounts[size] = (sizeCounts[size] || 0) + 1;
-      const panel = extractPanelType(p.name, p.description);
-      if (panel) panelCounts[panel] = (panelCounts[panel] || 0) + 1;
-    });
-    if (Object.keys(sizeCounts).length > 0) {
-      attrs.push({ key: "screenSize", label: "filter.screenSize", values: Object.entries(sizeCounts).map(([value, count]) => ({ value, count })).sort((a, b) => parseInt(a.value) - parseInt(b.value)) });
-    }
-    if (Object.keys(panelCounts).length > 0) {
-      attrs.push({ key: "panelType", label: "filter.panelType", values: Object.entries(panelCounts).map(([value, count]) => ({ value, count })).sort((a, b) => b.count - a.count) });
-    }
-  }
-
-  if (["klima-isitma", "klima", "split-klima", "portatif-klima"].includes(categorySlug)) {
-    const btuCounts: Record<string, number> = {};
-    products.forEach(p => {
-      const btu = extractBTU(p.name, p.description);
-      if (btu) btuCounts[btu] = (btuCounts[btu] || 0) + 1;
-    });
-    if (Object.keys(btuCounts).length > 0) {
-      attrs.push({ key: "btu", label: "filter.btu", values: Object.entries(btuCounts).map(([value, count]) => ({ value, count })).sort((a, b) => parseInt(a.value) - parseInt(b.value)) });
-    }
-  }
-
-  if (["beyaz-esya", "camasir-makinesi", "bulasik-makinesi", "kurutma-makinesi", "buzdolabi", "derin-dondurucu", "mini-buzdolabi"].includes(categorySlug)) {
-    const capCounts: Record<string, number> = {};
-    products.forEach(p => {
-      const cap = extractCapacity(p.name, p.description);
-      if (cap) capCounts[cap] = (capCounts[cap] || 0) + 1;
-    });
-    if (Object.keys(capCounts).length > 0) {
-      attrs.push({ key: "capacity", label: "filter.capacity", values: Object.entries(capCounts).map(([value, count]) => ({ value, count })).sort((a, b) => parseFloat(a.value) - parseFloat(b.value)) });
-    }
-  }
-
-  return attrs;
-}
-
-interface FilterSheetProps {
-  products: Product[];
-  filters: FilterState;
-  onFiltersChange: (f: FilterState) => void;
-  categorySlug?: string;
-  subSlug?: string;
-}
+import {
+  NormalizedProduct,
+  DynamicFilterGroup,
+  normalizeProducts,
+  getDynamicFilters,
+  applyNormalizedFilters,
+  getDebugInfo,
+  DebugInfo,
+} from "@/lib/normalizeProducts";
 
 /* ─── Shared filter body ─── */
-function FilterBody({ products, filters, onFiltersChange, categorySlug, subSlug }: FilterSheetProps) {
+interface FilterBodyProps {
+  filterGroups: DynamicFilterGroup[];
+  filters: FilterState;
+  onFiltersChange: (f: FilterState) => void;
+}
+
+function FilterBody({ filterGroups, filters, onFiltersChange }: FilterBodyProps) {
   const { t } = useLanguage();
-  const brands = getBrands(products);
-  const dynamicAttrs = getCategoryAttributes(products, subSlug || categorySlug);
 
-  const brandCounts: Record<string, number> = {};
-  products.forEach(p => { if (p.brand) brandCounts[p.brand] = (brandCounts[p.brand] || 0) + 1; });
-
-  const toggleBrand = (brand: string) => {
-    const next = filters.brands.includes(brand) ? filters.brands.filter(b => b !== brand) : [...filters.brands, brand];
-    onFiltersChange({ ...filters, brands: next });
+  const toggleValue = (groupKey: string, value: string) => {
+    const current = filters.attributes[groupKey] || [];
+    const next = current.includes(value) ? current.filter(v => v !== value) : [...current, value];
+    onFiltersChange({ ...filters, attributes: { ...filters.attributes, [groupKey]: next } });
   };
 
   return (
     <div className="space-y-1">
-      {brands.length > 0 && (
-        <Collapsible defaultOpen>
+      {filterGroups.map(group => (
+        <Collapsible key={group.key} defaultOpen>
           <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-1 border-b border-border text-sm font-semibold text-foreground hover:text-primary transition-colors">
-            {t("filter.brand")}
+            {group.key === "brand" ? t("filter.brand") : group.label}
             <Minus className="h-3.5 w-3.5 text-muted-foreground" />
           </CollapsibleTrigger>
           <CollapsibleContent className="py-3 px-1 space-y-2 max-h-[280px] overflow-y-auto">
-            {brands.map(b => (
-              <label key={b} className="flex items-center gap-2.5 cursor-pointer group">
-                <Checkbox checked={filters.brands.includes(b)} onCheckedChange={() => toggleBrand(b)} />
-                <span className="text-sm text-foreground group-hover:text-primary transition-colors flex-1">{b.toUpperCase()}</span>
-                <span className="text-xs text-muted-foreground">({brandCounts[b] || 0})</span>
-              </label>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
-      )}
-
-      {dynamicAttrs.map(attr => (
-        <Collapsible key={attr.key} defaultOpen>
-          <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-1 border-b border-border text-sm font-semibold text-foreground hover:text-primary transition-colors">
-            {t(attr.label)}
-            <Minus className="h-3.5 w-3.5 text-muted-foreground" />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="py-3 px-1 space-y-2 max-h-[280px] overflow-y-auto">
-            {attr.values.map(v => {
-              const selected = (filters.attributes[attr.key] || []).includes(v.value);
-              const toggleAttr = () => {
-                const current = filters.attributes[attr.key] || [];
-                const next = selected ? current.filter(x => x !== v.value) : [...current, v.value];
-                onFiltersChange({ ...filters, attributes: { ...filters.attributes, [attr.key]: next } });
-              };
+            {group.options.map(opt => {
+              const selected = (filters.attributes[group.key] || []).includes(opt.value);
               return (
-                <label key={v.value} className="flex items-center gap-2.5 cursor-pointer group">
-                  <Checkbox checked={selected} onCheckedChange={toggleAttr} />
-                  <span className="text-sm text-foreground group-hover:text-primary transition-colors flex-1">{v.value}</span>
-                  <span className="text-xs text-muted-foreground">({v.count})</span>
+                <label key={opt.value} className="flex items-center gap-2.5 cursor-pointer group">
+                  <Checkbox checked={selected} onCheckedChange={() => toggleValue(group.key, opt.value)} />
+                  <span className="text-sm text-foreground group-hover:text-primary transition-colors flex-1">
+                    {group.key === "brand" ? opt.value.toUpperCase() : opt.value}
+                  </span>
+                  <span className="text-xs text-muted-foreground">({opt.count})</span>
                 </label>
               );
             })}
@@ -183,12 +75,50 @@ function FilterBody({ products, filters, onFiltersChange, categorySlug, subSlug 
   );
 }
 
+/* ─── Props ─── */
+interface FilterSheetProps {
+  products: Product[];
+  filters: FilterState;
+  onFiltersChange: (f: FilterState) => void;
+  categorySlug?: string;
+  subSlug?: string;
+}
+
+const EMPTY_FILTER: FilterState = { brands: [], inStock: false, attributes: {}, sort: "popular" };
+
+/* ─── Hook: normalize + compute filter groups ─── */
+export function useNormalizedFiltering(products: Product[], filters: FilterState, categorySlug?: string, subSlug?: string) {
+  const normalized = useMemo(() => normalizeProducts(products), [products]);
+  const filterGroups = useMemo(() => getDynamicFilters(normalized, categorySlug, subSlug), [normalized, categorySlug, subSlug]);
+
+  // Merge old-style "brands" into attributes for unified handling
+  const unifiedAttrs = useMemo(() => {
+    const attrs = { ...filters.attributes };
+    if (filters.brands.length > 0) {
+      attrs["brand"] = filters.brands;
+    }
+    return attrs;
+  }, [filters]);
+
+  const filtered = useMemo(
+    () => applyNormalizedFilters(normalized, unifiedAttrs, filters.inStock, filters.sort),
+    [normalized, unifiedAttrs, filters.inStock, filters.sort]
+  );
+
+  const debugInfo = useMemo(
+    () => getDebugInfo(normalized, unifiedAttrs, filters.inStock),
+    [normalized, unifiedAttrs, filters.inStock]
+  );
+
+  return { normalized, filterGroups, filtered, debugInfo };
+}
+
 /* ─── Desktop Sidebar Filter ─── */
-export function FilterSidebar(props: FilterSheetProps) {
+export function FilterSidebar({ products, filters, onFiltersChange, categorySlug, subSlug }: FilterSheetProps) {
   const { t } = useLanguage();
-  const clearFilters = () => { props.onFiltersChange({ brands: [], inStock: false, attributes: {}, sort: "popular" }); };
-  const attrCount = Object.values(props.filters.attributes).reduce((sum, arr) => sum + arr.length, 0);
-  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + attrCount;
+  const { filterGroups } = useNormalizedFiltering(products, filters, categorySlug, subSlug);
+  
+  const activeCount = Object.values(filters.attributes).reduce((s, a) => s + a.length, 0) + (filters.inStock ? 1 : 0);
 
   return (
     <aside className="hidden md:block w-[260px] flex-shrink-0">
@@ -196,22 +126,22 @@ export function FilterSidebar(props: FilterSheetProps) {
         <div className="flex items-center justify-between mb-1">
           <h3 className="text-sm font-bold text-foreground">{t("filter.title")}</h3>
           {activeCount > 0 && (
-            <button onClick={clearFilters} className="text-xs text-primary hover:underline">{t("filter.clear")}</button>
+            <button onClick={() => onFiltersChange(EMPTY_FILTER)} className="text-xs text-primary hover:underline">{t("filter.clear")}</button>
           )}
         </div>
-        <FilterBody {...props} />
+        <FilterBody filterGroups={filterGroups} filters={filters} onFiltersChange={onFiltersChange} />
       </div>
     </aside>
   );
 }
 
 /* ─── Mobile Filter Sheet ─── */
-export function MobileFilterTrigger(props: FilterSheetProps) {
+export function MobileFilterTrigger({ products, filters, onFiltersChange, categorySlug, subSlug }: FilterSheetProps) {
   const { t } = useLanguage();
   const [open, setOpen] = useState(false);
-  const attrCount = Object.values(props.filters.attributes).reduce((sum, arr) => sum + arr.length, 0);
-  const activeCount = props.filters.brands.length + (props.filters.inStock ? 1 : 0) + attrCount;
-  const clearFilters = () => { props.onFiltersChange({ brands: [], inStock: false, attributes: {}, sort: "popular" }); };
+  const { filterGroups } = useNormalizedFiltering(products, filters, categorySlug, subSlug);
+
+  const activeCount = Object.values(filters.attributes).reduce((s, a) => s + a.length, 0) + (filters.inStock ? 1 : 0);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -229,9 +159,9 @@ export function MobileFilterTrigger(props: FilterSheetProps) {
           <SheetTitle className="font-display">{t("filter.filters")}</SheetTitle>
         </SheetHeader>
         <div className="mt-4 pb-8">
-          <FilterBody {...props} />
+          <FilterBody filterGroups={filterGroups} filters={filters} onFiltersChange={onFiltersChange} />
           <div className="flex gap-3 mt-6">
-            <Button variant="outline" className="flex-1" onClick={clearFilters}>{t("filter.clear")}</Button>
+            <Button variant="outline" className="flex-1" onClick={() => onFiltersChange(EMPTY_FILTER)}>{t("filter.clear")}</Button>
             <Button className="flex-1" onClick={() => setOpen(false)}>{t("filter.apply")}</Button>
           </div>
         </div>
@@ -248,9 +178,9 @@ export function SortBar({ filters, onFiltersChange }: { filters: FilterState; on
     { value: "newest", label: t("sort.newest") },
   ];
 
-  const toggleBrand = (brand: string) => {
-    const next = filters.brands.filter(b => b !== brand);
-    onFiltersChange({ ...filters, brands: next });
+  const removeChip = (groupKey: string, value: string) => {
+    const next = (filters.attributes[groupKey] || []).filter(v => v !== value);
+    onFiltersChange({ ...filters, attributes: { ...filters.attributes, [groupKey]: next } });
   };
 
   return (
@@ -262,17 +192,10 @@ export function SortBar({ filters, onFiltersChange }: { filters: FilterState; on
         </SelectContent>
       </Select>
 
-      {filters.brands.map(b => (
-        <Badge key={b} variant="secondary" className="gap-1 cursor-pointer" onClick={() => toggleBrand(b)}>{b} <X className="h-3 w-3" /></Badge>
-      ))}
-
       {Object.entries(filters.attributes).flatMap(([key, vals]) =>
         vals.map(v => (
-          <Badge key={`${key}-${v}`} variant="secondary" className="gap-1 cursor-pointer" onClick={() => {
-            const next = vals.filter(x => x !== v);
-            onFiltersChange({ ...filters, attributes: { ...filters.attributes, [key]: next } });
-          }}>
-            {v} <X className="h-3 w-3" />
+          <Badge key={`${key}-${v}`} variant="secondary" className="gap-1 cursor-pointer" onClick={() => removeChip(key, v)}>
+            {key === "brand" ? v.toUpperCase() : v} <X className="h-3 w-3" />
           </Badge>
         ))
       )}
@@ -280,35 +203,68 @@ export function SortBar({ filters, onFiltersChange }: { filters: FilterState; on
   );
 }
 
-/* ─── applyFilters with attribute support ─── */
+/* ─── Debug Panel ─── */
+export function FilterDebugPanel({ debugInfo }: { debugInfo: DebugInfo[] }) {
+  const [open, setOpen] = useState(false);
+  const excluded = debugInfo.filter(d => d.excluded);
+  const included = debugInfo.filter(d => !d.excluded);
+
+  if (!open) {
+    return (
+      <button
+        onClick={() => setOpen(true)}
+        className="fixed bottom-20 right-4 z-50 bg-destructive text-destructive-foreground p-2 rounded-full shadow-lg"
+        title="Debug Filters"
+      >
+        <Bug className="h-5 w-5" />
+      </button>
+    );
+  }
+
+  return (
+    <div className="fixed bottom-0 right-0 z-50 w-[500px] max-h-[70vh] overflow-y-auto bg-card border border-border rounded-tl-xl shadow-2xl p-4 text-xs">
+      <div className="flex justify-between items-center mb-3">
+        <h4 className="font-bold text-sm">🐛 Filter Debug ({included.length} gösteriliyor, {excluded.length} hariç)</h4>
+        <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
+      </div>
+
+      {excluded.length > 0 && (
+        <div className="mb-4">
+          <h5 className="font-semibold text-destructive mb-1">Hariç tutulan ürünler:</h5>
+          {excluded.slice(0, 20).map(d => (
+            <div key={d.sku} className="border-b border-border py-1.5">
+              <div className="font-medium">{d.productName} <span className="text-muted-foreground">({d.sku})</span></div>
+              <div className="text-muted-foreground">
+                Norm: Ekran={d.normalized.screenSize ?? "yok"}, Panel={d.normalized.panelType ?? "yok"}, Çöz={d.normalized.resolution ?? "yok"}
+              </div>
+              {d.excludeReasons.map((r, i) => (
+                <div key={i} className="text-destructive">↳ {r}</div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div>
+        <h5 className="font-semibold text-primary mb-1">Gösterilen ürünler ({included.length}):</h5>
+        {included.slice(0, 10).map(d => (
+          <div key={d.sku} className="border-b border-border py-1">
+            <span className="font-medium">{d.productName}</span>
+            <span className="text-muted-foreground ml-2">
+              Ekran={d.normalized.screenSize ?? "-"} Panel={d.normalized.panelType ?? "-"}
+            </span>
+          </div>
+        ))}
+        {included.length > 10 && <div className="text-muted-foreground mt-1">...ve {included.length - 10} ürün daha</div>}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Legacy compatibility: applyFilters wrapper ─── */
 export function applyFilters(products: Product[], filters: FilterState, categorySlug?: string, subSlug?: string): Product[] {
-  let result = [...products];
-
-  if (filters.brands.length > 0) result = result.filter(p => filters.brands.includes(p.brand));
-  if (filters.inStock) result = result.filter(p => p.inStock);
-  if (filters.priceMin != null) result = result.filter(p => (p.salePrice || p.price) >= filters.priceMin!);
-  if (filters.priceMax != null) result = result.filter(p => (p.salePrice || p.price) <= filters.priceMax!);
-
-  const activeAttrs = Object.entries(filters.attributes).filter(([, vals]) => vals.length > 0);
-  if (activeAttrs.length > 0) {
-    result = result.filter(p => {
-      return activeAttrs.every(([key, vals]) => {
-        let extracted: string | null = null;
-        if (key === "screenSize") extracted = extractScreenSize(p.name);
-        else if (key === "panelType") extracted = extractPanelType(p.name, p.description);
-        else if (key === "btu") extracted = extractBTU(p.name, p.description);
-        else if (key === "capacity") extracted = extractCapacity(p.name, p.description);
-        return extracted && vals.includes(extracted);
-      });
-    });
-  }
-
-  switch (filters.sort) {
-    case "price-asc": result.sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price)); break;
-    case "price-desc": result.sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price)); break;
-    case "newest": result.sort((a, b) => (a.isNew ? -1 : 1)); break;
-    case "sale": result = result.filter(p => p.salePrice && p.salePrice < p.price); break;
-  }
-
-  return result;
+  const normalized = normalizeProducts(products);
+  const attrs = { ...filters.attributes };
+  if (filters.brands.length > 0) attrs["brand"] = filters.brands;
+  return applyNormalizedFilters(normalized, attrs, filters.inStock, filters.sort);
 }
