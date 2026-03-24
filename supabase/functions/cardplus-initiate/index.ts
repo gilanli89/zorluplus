@@ -1,26 +1,15 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const ALLOWED_ORIGINS = [
-  "https://zorluplus.lovable.app",
-  "https://id-preview--38e5c4a6-7669-4c9a-b2c6-395649c2f475.lovable.app",
-];
-
-function getCorsHeaders(req: Request) {
-  const origin = req.headers.get("origin") || "";
-  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
-  return {
-    "Access-Control-Allow-Origin": allowedOrigin,
-    "Access-Control-Allow-Headers":
-      "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-  };
-}
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
 
 const GATEWAY_3D = "https://sanalpos.card-plus.net/fim/est3Dgate";
 
 serve(async (req) => {
-  const corsHeaders = getCorsHeaders(req);
-
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -160,7 +149,6 @@ serve(async (req) => {
     );
   } catch (error: unknown) {
     console.error("CardPlus initiate error:", error);
-    const corsHeaders = getCorsHeaders(req);
     return new Response(JSON.stringify({ error: "Ödeme başlatılamadı." }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
