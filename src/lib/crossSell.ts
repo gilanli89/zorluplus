@@ -200,9 +200,11 @@ export function getCartUpsellItems(
   maxItems = 3
 ): CrossSellItem[] {
   const cartProducts = allProducts.filter(p => cartProductIds.includes(p.id));
-  const tvProducts = cartProducts.filter(
-    p => p.subcategory === "tv"
-  );
+  const tvProducts = cartProducts.filter(p => {
+    const nl = p.name.toLowerCase();
+    return p.subcategory === "tv" ||
+      (p.category === "tv-goruntu" && (nl.includes("televizyon") || nl.includes(" tv") || nl.includes("led tv") || nl.includes("oled tv")));
+  });
 
   if (tvProducts.length === 0) return [];
 
