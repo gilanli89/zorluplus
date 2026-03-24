@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@/lib/types";
 import { MessageCircle, Eye } from "lucide-react";
-import { getWhatsAppLink } from "@/lib/products";
+import { getWhatsAppLink, formatPrice } from "@/lib/products";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
 
