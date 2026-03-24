@@ -44,10 +44,16 @@ function slugify(text: string): string {
 
 function normalizeCategorySlug(raw: string): { category: string; subcategory: string } {
   // Handle multi-category strings like "Video / Audio > Aksesuar, Aksesuarlar > TV Askı Aparatları"
-  // Take the most specific (last) category
+  // Try each part and return the first match (most specific usually listed last, but "Diğer Ürünler" is generic)
   const parts = raw.split(",").map(s => s.trim()).filter(Boolean);
-  const primary = parts[parts.length - 1] || raw;
-  const lower = primary.toLowerCase().trim();
+  // Sort: prefer specific categories over generic "Diğer Ürünler"
+  const sorted = [...parts].sort((a, b) => {
+    const aGeneric = a.toLowerCase().includes("diğer");
+    const bGeneric = b.toLowerCase().includes("diğer");
+    if (aGeneric && !bGeneric) return 1;
+    if (!aGeneric && bGeneric) return -1;
+    return 0;
+  });
 
   // Exact hierarchical WooCommerce category matches (checked first)
   const exactMap: Array<{ match: string; category: string; subcategory: string }> = [
