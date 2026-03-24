@@ -143,15 +143,14 @@ export function getTVCrossSellItems(
       if (!p.inStock) return false;
       if (p.price <= 0) return false;
 
-      const nameLower = p.name.toLowerCase();
+      const pNameLower = p.name.toLowerCase();
 
       // Check if product matches this accessory type
-      const keywordMatch = accType.keywords.some(kw => nameLower.includes(kw));
-      const categoryMatch =
-        accType.subcategories.includes(p.subcategory) ||
-        accType.categories.includes(p.category);
+      const keywordMatch = accType.keywords.some(kw => pNameLower.includes(kw));
+      const subcategoryMatch = accType.subcategories.length > 0 && accType.subcategories.includes(p.subcategory);
 
-      if (!keywordMatch && !categoryMatch) return false;
+      // Require keyword match OR specific subcategory match (not broad category alone)
+      if (!keywordMatch && !subcategoryMatch) return false;
 
       // For wall mounts, check size compatibility
       if (accType.id === "wall-mount" && !isWallMountCompatible(p, tvSize)) return false;
@@ -201,9 +200,11 @@ export function getCartUpsellItems(
   maxItems = 3
 ): CrossSellItem[] {
   const cartProducts = allProducts.filter(p => cartProductIds.includes(p.id));
-  const tvProducts = cartProducts.filter(
-    p => p.subcategory === "tv"
-  );
+  const tvProducts = cartProducts.filter(p => {
+    const nl = p.name.toLowerCase();
+    return p.subcategory === "tv" ||
+      (p.category === "tv-goruntu" && (nl.includes("televizyon") || nl.includes(" tv") || nl.includes("led tv") || nl.includes("oled tv")));
+  });
 
   if (tvProducts.length === 0) return [];
 
