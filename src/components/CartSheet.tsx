@@ -61,14 +61,17 @@ export default function CartSheet() {
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
-                    <div className="flex items-center gap-2 mt-2">
-                      <Button variant="outline" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.product.id, item.quantity - 1)}>
-                        <Minus className="h-3 w-3" />
-                      </Button>
-                      <span className="text-sm font-semibold w-6 text-center">{item.quantity}</span>
-                      <Button variant="outline" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
-                        <Plus className="h-3 w-3" />
-                      </Button>
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.product.id, item.quantity - 1)}>
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <span className="text-sm font-semibold w-6 text-center">{item.quantity}</span>
+                        <Button variant="outline" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      <span className="text-sm font-bold text-foreground">{formatPrice(price * item.quantity)}</span>
                     </div>
                   </div>
                 );
