@@ -175,8 +175,8 @@ export function getTVCrossSellItems(
       return a.price - b.price;
     });
 
-    // Pick top 1-2 per type
-    const maxPerType = accType.id === "hdmi" ? 1 : accType.id === "wall-mount" ? 2 : 1;
+    // Pick top items per type - more wall mounts and HDMI cables
+    const maxPerType = accType.id === "wall-mount" ? 3 : accType.id === "hdmi" ? 2 : 1;
     const picked = candidates.slice(0, maxPerType);
 
     for (const p of picked) {
