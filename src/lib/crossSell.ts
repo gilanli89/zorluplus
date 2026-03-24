@@ -16,25 +16,34 @@ interface AccessoryType {
 
 const TV_ACCESSORY_TYPES: AccessoryType[] = [
   {
-    id: "hdmi",
-    label: "HDMI Kablo",
-    keywords: ["hdmi"],
-    categories: ["tv-goruntu", "aksesuar"],
-    subcategories: ["tv-aksesuar"],
-    priority: 1,
-    compatibilityLabel: () => "Yüksek Hızlı HDMI 2.1",
-  },
-  {
     id: "wall-mount",
     label: "TV Askı Aparatı",
     keywords: ["askı", "aparat", "mount", "brateck"],
-    categories: ["tv-goruntu"],
-    subcategories: ["duvar-masaustu-aparatlari"],
-    priority: 2,
+    categories: ["tv-goruntu", "aksesuar"],
+    subcategories: ["duvar-masaustu-aparatlari", "tv-aski-aparatlari"],
+    priority: 1,
     compatibilityLabel: (tv) => {
       const size = extractScreenSize(tv);
       return size ? `${size} inç uyumlu` : "Uyumlu TV Askısı";
     },
+  },
+  {
+    id: "hdmi",
+    label: "HDMI Kablo",
+    keywords: ["hdmi"],
+    categories: ["tv-goruntu", "aksesuar", "oyun"],
+    subcategories: ["tv-aksesuar", "oyun-aksesuar"],
+    priority: 2,
+    compatibilityLabel: () => "Yüksek Hızlı HDMI 2.1",
+  },
+  {
+    id: "voltage-regulator",
+    label: "Voltaj Regülatörü",
+    keywords: ["voltaj", "regülatör", "regulator"],
+    categories: ["diger", "aksesuar"],
+    subcategories: [],
+    priority: 3,
+    compatibilityLabel: () => "TV koruma için önerilir",
   },
   {
     id: "soundbar",
