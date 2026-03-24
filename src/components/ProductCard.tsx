@@ -15,9 +15,16 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const hasDiscount = false;
   const { t } = useLanguage();
   const { translateProduct } = useProductTranslation();
+  const { addItem } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem(product);
+    toast.success(`${product.name} ${t("cart.addedToCart")}`);
+  };
 
   return (
     <motion.div
