@@ -109,11 +109,15 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
     { match: "diğer ürünler", category: "diger", subcategory: "" },
   ];
 
-  for (const entry of exactMap) {
-    if (lower.includes(entry.match)) return { category: entry.category, subcategory: entry.subcategory };
+  for (const part of sorted) {
+    const partLower = part.toLowerCase().trim();
+    for (const entry of exactMap) {
+      if (partLower.includes(entry.match)) return { category: entry.category, subcategory: entry.subcategory };
+    }
   }
 
-  // Fallback: keyword-based matching
+  // Fallback: keyword-based matching against full string
+  const fullLower = raw.toLowerCase();
   const keywordMap: Array<{ match: string; category: string; subcategory: string }> = [
     { match: "buzdolap", category: "beyaz-esya", subcategory: "buzdolabi" },
     { match: "çamaşır", category: "beyaz-esya", subcategory: "camasir-makinesi" },
@@ -142,7 +146,7 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
   ];
 
   for (const entry of keywordMap) {
-    if (lower.includes(entry.match)) return { category: entry.category, subcategory: entry.subcategory };
+    if (fullLower.includes(entry.match)) return { category: entry.category, subcategory: entry.subcategory };
   }
 
   return { category: "diger", subcategory: slugify(raw) };
