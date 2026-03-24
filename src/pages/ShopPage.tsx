@@ -2,13 +2,12 @@ import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useProducts } from "@/hooks/useProducts";
 import { FilterState } from "@/lib/types";
-import { CATEGORIES } from "@/lib/constants";
 import ProductCard from "@/components/ProductCard";
 import { FilterSidebar, MobileFilterTrigger, SortBar, applyFilters } from "@/components/FilterSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
-import { icons } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import CategoryIconBar from "@/components/CategoryIconBar";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -25,8 +24,6 @@ export default function ShopPage() {
 
   const filteredProducts = useMemo(() => applyFilters(products, filters), [products, filters]);
 
-  const getCatName = (slug: string) => t(`cat.${slug}`) || CATEGORIES.find(c => c.slug === slug)?.name || slug;
-
   return (
     <div className="container py-6 md:py-8">
       <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-5">
@@ -35,30 +32,7 @@ export default function ShopPage() {
         <span className="text-foreground font-medium">{t("shop.title")}</span>
       </nav>
 
-      {/* Category icons - sticky */}
-      <div className="sticky top-[88px] z-30 bg-background/95 backdrop-blur-sm -mx-4 px-4 py-2 mb-3">
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        {CATEGORIES.map((cat, i) => {
-          const IconComp = icons[cat.icon as keyof typeof icons];
-          return (
-            <motion.div
-              key={cat.slug}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.04, duration: 0.3 }}
-            >
-              <Link
-                to={`/kategori/${cat.slug}`}
-                className="flex flex-col items-center gap-1.5 min-w-[72px] rounded-xl border border-border bg-card px-3 py-3 text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all tap-scale"
-              >
-                {IconComp && <IconComp className="h-5 w-5" />}
-                <span className="text-[10px] font-semibold text-center leading-tight whitespace-nowrap">{getCatName(cat.slug)}</span>
-              </Link>
-            </motion.div>
-          );
-        })}
-      </div>
-      </div>
+      <CategoryIconBar />
 
 
       <div className="flex gap-6">
