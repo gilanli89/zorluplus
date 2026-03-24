@@ -143,15 +143,14 @@ export function getTVCrossSellItems(
       if (!p.inStock) return false;
       if (p.price <= 0) return false;
 
-      const nameLower = p.name.toLowerCase();
+      const pNameLower = p.name.toLowerCase();
 
       // Check if product matches this accessory type
-      const keywordMatch = accType.keywords.some(kw => nameLower.includes(kw));
-      const categoryMatch =
-        accType.subcategories.includes(p.subcategory) ||
-        accType.categories.includes(p.category);
+      const keywordMatch = accType.keywords.some(kw => pNameLower.includes(kw));
+      const subcategoryMatch = accType.subcategories.length > 0 && accType.subcategories.includes(p.subcategory);
 
-      if (!keywordMatch && !categoryMatch) return false;
+      // Require keyword match OR specific subcategory match (not broad category alone)
+      if (!keywordMatch && !subcategoryMatch) return false;
 
       // For wall mounts, check size compatibility
       if (accType.id === "wall-mount" && !isWallMountCompatible(p, tvSize)) return false;
