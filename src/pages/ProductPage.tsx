@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/ProductCard";
 import ProductRecommendations from "@/components/ProductRecommendations";
+import FrequentlyBoughtTogether from "@/components/FrequentlyBoughtTogether";
 import QuoteForm from "@/components/QuoteForm";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -172,6 +173,9 @@ export default function ProductPage() {
             </div>
           </div>
         </div>
+
+        {/* Cross-sell: Frequently Bought Together (TV only) */}
+        <FrequentlyBoughtTogether currentProduct={product} allProducts={products} maxItems={6} />
 
         {/* AI Recommendations */}
         <ProductRecommendations currentProduct={product} allProducts={products} maxItems={4} />
