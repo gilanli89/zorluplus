@@ -6,7 +6,7 @@ import { CATEGORIES } from "@/lib/constants";
 import { getProductsByCategory } from "@/lib/products";
 import { FilterState } from "@/lib/types";
 import ProductCard from "@/components/ProductCard";
-import { FilterSidebar, MobileFilterTrigger, SortBar, FilterDebugPanel, useNormalizedFiltering } from "@/components/FilterSheet";
+import { FilterSidebar, MobileFilterTrigger, SortBar, useNormalizedFiltering } from "@/components/FilterSheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
