@@ -277,9 +277,25 @@ export default function CartPage() {
               <h3 className="font-display font-bold text-foreground mb-3">{t("cart.orderSummary")}</h3>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">{t("cart.products")} ({itemCount})</span>
+                <span className="font-semibold">{formatPrice(subtotal)}</span>
               </div>
+              {warrantyTotal > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">{t("cart.extendedWarranty")}</span>
+                  <span className="font-semibold">{formatPrice(warrantyTotal)}</span>
+                </div>
+              )}
+              {expressTotal > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">{t("cart.expressInstall")}</span>
+                  <span className="font-semibold">{formatPrice(expressTotal)}</span>
+                </div>
+              )}
               <hr className="border-border" />
-              <p className="text-sm text-primary font-medium">{t("cart.callForPrice")}</p>
+              <div className="flex justify-between text-lg font-bold">
+                <span>{t("cart.orderSummary")}</span>
+                <span className="text-primary">{formatPrice(grandTotal)}</span>
+              </div>
 
               <Button className="w-full rounded-full font-semibold gap-2 mt-2" size="lg" onClick={handleCheckout}>
                 {paymentMethod === "card" ? (

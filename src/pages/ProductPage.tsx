@@ -119,8 +119,20 @@ export default function ProductPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
+              {product.inStock && product.price > 0 && (
+                <Button
+                  size="lg"
+                  className="flex-1 gap-2 font-semibold"
+                  onClick={() => {
+                    addItem(product);
+                    toast.success(`${product.name} sepete eklendi!`);
+                  }}
+                >
+                  <ShoppingCart className="h-5 w-5" /> {t("cart.addToCart")}
+                </Button>
+              )}
               <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer" className="flex-1" onClick={() => trackWhatsAppClick("product_page")}>
-                <Button size="lg" className="w-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white font-semibold">
+                <Button size="lg" variant="outline" className="w-full gap-2 border-[hsl(142,70%,40%)] text-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] hover:text-white font-semibold">
                   <MessageCircle className="h-5 w-5" /> {t("product.orderWhatsApp")}
                 </Button>
               </a>
