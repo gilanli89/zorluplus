@@ -14,6 +14,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { BRAND } from "@/lib/constants";
+import { formatPrice } from "@/lib/products";
 
 const EXPRESS_FEE = 2000;
 
