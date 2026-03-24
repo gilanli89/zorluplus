@@ -47,6 +47,8 @@ export default function CategoryPage() {
         )}
       </nav>
 
+      <CategoryIconBar />
+
       <h1 className="font-display text-2xl md:text-3xl font-bold mb-3 text-foreground">{title}</h1>
 
       {category && !subSlug && category.children.length > 0 && (
