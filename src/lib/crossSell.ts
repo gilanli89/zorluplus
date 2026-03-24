@@ -125,15 +125,12 @@ export function getTVCrossSellItems(
   maxItems = 6
 ): CrossSellItem[] {
   // Only for TV products
-  if (currentProduct.subcategory !== "tv" && currentProduct.category !== "tv-goruntu") {
-    // Check if it's actually a TV by name
-    const nameLower = currentProduct.name.toLowerCase();
-    if (!nameLower.includes("televizyon") && !nameLower.includes(" tv ") && !nameLower.endsWith(" tv")) {
-      return [];
-    }
-  }
-  // Skip if current product IS an accessory
-  if (currentProduct.subcategory !== "tv") return [];
+  const nameLower = currentProduct.name.toLowerCase();
+  const isTV = currentProduct.subcategory === "tv" ||
+    (currentProduct.category === "tv-goruntu" && (
+      nameLower.includes("televizyon") || nameLower.includes(" tv") || nameLower.includes("led tv") || nameLower.includes("oled tv")
+    ));
+  if (!isTV) return [];
 
   const tvSize = extractScreenSize(currentProduct);
   const results: CrossSellItem[] = [];
