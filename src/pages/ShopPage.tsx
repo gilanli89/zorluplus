@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import CategoryIconBar from "@/components/CategoryIconBar";
+import { getProductsByCategory } from "@/lib/products";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -22,7 +23,10 @@ export default function ShopPage() {
   const [filters, setFilters] = useState<FilterState>({ brands: [], inStock: false, attributes: {}, sort: "popular" });
   const { t } = useLanguage();
 
-  const filteredProducts = useMemo(() => applyFilters(products, filters), [products, filters]);
+  // Default to TV category products
+  const categorySlug = "tv-goruntu";
+  const categoryProducts = useMemo(() => getProductsByCategory(products, categorySlug), [products]);
+  const filteredProducts = useMemo(() => applyFilters(categoryProducts, filters, categorySlug), [categoryProducts, filters]);
 
   return (
     <div className="container py-6 md:py-8">
@@ -34,13 +38,14 @@ export default function ShopPage() {
 
       <CategoryIconBar />
 
+      <h1 className="font-display text-2xl md:text-3xl font-bold mb-3 text-foreground">TV & Görüntü Sistemleri</h1>
 
       <div className="flex gap-6">
-        <FilterSidebar products={products} filters={filters} onFiltersChange={setFilters} />
+        <FilterSidebar products={categoryProducts} filters={filters} onFiltersChange={setFilters} categorySlug={categorySlug} />
 
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-4">
-            <MobileFilterTrigger products={products} filters={filters} onFiltersChange={setFilters} />
+            <MobileFilterTrigger products={categoryProducts} filters={filters} onFiltersChange={setFilters} categorySlug={categorySlug} />
             <SortBar filters={filters} onFiltersChange={setFilters} />
             <span className="ml-auto text-sm text-muted-foreground">{filteredProducts.length} {t("general.products")}</span>
           </div>
