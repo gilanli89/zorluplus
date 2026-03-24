@@ -29,7 +29,7 @@ export default function CategoryPage() {
   const category = CATEGORIES.find(c => c.slug === categorySlug);
   const subcategory = category?.children.find(s => s.slug === subSlug);
   const categoryProducts = useMemo(() => getProductsByCategory(products, categorySlug || "", subSlug), [products, categorySlug, subSlug]);
-  const { filtered: filteredProducts, debugInfo } = useNormalizedFiltering(categoryProducts, filters, categorySlug, subSlug);
+  const { filtered: filteredProducts } = useNormalizedFiltering(categoryProducts, filters, categorySlug, subSlug);
 
   const catName = category ? (t(`cat.${category.slug}`) !== `cat.${category.slug}` ? t(`cat.${category.slug}`) : category.name) : "";
   const title = subcategory?.name || catName || t("general.products");
