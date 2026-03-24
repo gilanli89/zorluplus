@@ -96,7 +96,7 @@ export default function CategoryPage() {
         </div>
       </div>
 
-      <FilterDebugPanel debugInfo={debugInfo} />
+      
     </div>
   );
 }

@@ -78,8 +78,6 @@ export default function ShopPage() {
         </div>
       </div>
 
-      {/* Debug toggle - remove in production */}
-      <FilterDebugPanel debugInfo={debugInfo} />
     </div>
   );
 }
