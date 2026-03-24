@@ -10,6 +10,7 @@ import { FilterSidebar, MobileFilterTrigger, SortBar, applyFilters } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import CategoryIconBar from "@/components/CategoryIconBar";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -45,6 +46,8 @@ export default function CategoryPage() {
           </>
         )}
       </nav>
+
+      <CategoryIconBar />
 
       <h1 className="font-display text-2xl md:text-3xl font-bold mb-3 text-foreground">{title}</h1>
 
