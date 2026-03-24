@@ -82,7 +82,7 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
     { match: "iklimlendirme", category: "klima-isitma", subcategory: "klima" },
     // Video / Audio
     { match: "video / audio > televizyonlar", category: "tv-goruntu", subcategory: "tv" },
-    { match: "video / audio > soundbarlar", category: "tv-goruntu", subcategory: "soundbar" },
+    { match: "video / audio > soundbarlar", category: "ses-sistemleri", subcategory: "soundbar" },
     { match: "video / audio > kulaklıklar", category: "ses-sistemleri", subcategory: "kulaklik" },
     { match: "aksesuarlar > tv askı aparatları", category: "tv-goruntu", subcategory: "duvar-masaustu-aparatlari" },
     { match: "video / audio > aksesuar", category: "tv-goruntu", subcategory: "tv-aksesuar" },
