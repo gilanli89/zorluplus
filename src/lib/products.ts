@@ -135,7 +135,7 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
     { match: "televizyon", category: "tv-goruntu", subcategory: "tv" },
     { match: "kulaklık", category: "ses-sistemleri", subcategory: "kulaklik" },
     { match: "tv", category: "tv-goruntu", subcategory: "tv" },
-    { match: "soundbar", category: "tv-goruntu", subcategory: "soundbar" },
+    { match: "soundbar", category: "ses-sistemleri", subcategory: "soundbar" },
     { match: "air fryer", category: "mutfak-aletleri", subcategory: "air-fryer" },
     { match: "mikrodalga", category: "mutfak-aletleri", subcategory: "mikrodalga" },
     { match: "kahve", category: "mutfak-aletleri", subcategory: "kahve-makinesi" },
