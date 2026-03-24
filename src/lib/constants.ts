@@ -49,16 +49,9 @@ export const CATEGORIES = [
     icon: "Tv",
     children: [
       { slug: "tv", name: "Televizyon" },
-    ],
-  },
-  {
-    slug: "aksesuar",
-    name: "Aksesuarlar",
-    icon: "Cable",
-    children: [
-      { slug: "duvar-masaustu-aparatlari", name: "Duvar ve Masaüstü Aparatları" },
-      { slug: "uydu-ekipman", name: "Uydu Ekipmanları" },
-      { slug: "temizlik-urunleri", name: "Temizlik Ürünleri" },
+      { slug: "soundbar", name: "Soundbar" },
+      { slug: "duvar-masaustu-aparatlari", name: "TV Askı Aparatları" },
+      { slug: "tv-aksesuar", name: "TV Aksesuar" },
     ],
   },
   {
@@ -66,18 +59,9 @@ export const CATEGORIES = [
     name: "Ses Sistemleri",
     icon: "Speaker",
     children: [
-      { slug: "soundbar-ses-sistemleri", name: "Soundbar / Ses Sistemleri" },
-      { slug: "soundbar-ses", name: "Soundbar" },
       { slug: "bluetooth-hoparlor", name: "Bluetooth Hoparlör" },
       { slug: "kulaklik", name: "Kulaklık" },
-    ],
-  },
-  {
-    slug: "oyun",
-    name: "Oyun",
-    icon: "Gamepad2",
-    children: [
-      { slug: "oyun-aksesuar", name: "Aksesuar" },
+      { slug: "soundbar", name: "Soundbar" },
     ],
   },
   {
@@ -86,11 +70,12 @@ export const CATEGORIES = [
     icon: "Refrigerator",
     children: [
       { slug: "buzdolabi", name: "Buzdolapları" },
-      { slug: "derin-dondurucu", name: "Derin Dondurucu" },
       { slug: "mini-buzdolabi", name: "Mini Buzdolabı" },
+      { slug: "derin-dondurucu", name: "Derin Dondurucu" },
       { slug: "camasir-makinesi", name: "Çamaşır Makineleri" },
       { slug: "kurutma-makinesi", name: "Kurutma Makinesi" },
       { slug: "bulasik-makinesi", name: "Bulaşık Makinesi" },
+      { slug: "su-sebili", name: "Su Sebili" },
     ],
   },
   {
@@ -98,9 +83,20 @@ export const CATEGORIES = [
     name: "Ankastre",
     icon: "CookingPot",
     children: [
-      { slug: "ocak", name: "Ocak" },
       { slug: "firin", name: "Fırın" },
+      { slug: "ocak", name: "Ocak" },
       { slug: "davlumbaz", name: "Davlumbaz" },
+    ],
+  },
+  {
+    slug: "klima-isitma",
+    name: "İklimlendirme",
+    icon: "Snowflake",
+    children: [
+      { slug: "klima", name: "Klimalar" },
+      { slug: "split-klima", name: "Split Klimalar" },
+      { slug: "portatif-klima", name: "Portatif Klimalar" },
+      { slug: "isiticilar", name: "Konvektör Isıtıcılar" },
     ],
   },
   {
@@ -109,10 +105,10 @@ export const CATEGORIES = [
     icon: "ChefHat",
     children: [
       { slug: "air-fryer", name: "Air Fryer" },
-      { slug: "pisirici", name: "Pişiriciler" },
-      { slug: "mikrodalga", name: "Solo Mikrodalga" },
-      { slug: "su-sebili", name: "Su Sebili" },
+      { slug: "mikrodalga", name: "Mikrodalga" },
       { slug: "kahve-makinesi", name: "Kahve Makinesi" },
+      { slug: "pisirici", name: "Pişiriciler" },
+      { slug: "su-sebili", name: "Su Sebili" },
     ],
   },
   {
@@ -126,14 +122,27 @@ export const CATEGORIES = [
     ],
   },
   {
-    slug: "klima-isitma",
-    name: "İklimlendirme",
-    icon: "Snowflake",
+    slug: "aksesuar",
+    name: "Aksesuarlar",
+    icon: "Cable",
     children: [
-      { slug: "split-klima", name: "Split Klimalar" },
-      { slug: "portatif-klima", name: "Portatif Klimalar" },
-      { slug: "isiticilar", name: "Konvektör Isıtıcılar" },
+      { slug: "uydu-ekipman", name: "Uydu Ekipmanları" },
+      { slug: "temizlik-urunleri", name: "Temizlik Ürünleri" },
     ],
+  },
+  {
+    slug: "oyun",
+    name: "Oyun",
+    icon: "Gamepad2",
+    children: [
+      { slug: "oyun-aksesuar", name: "Aksesuar" },
+    ],
+  },
+  {
+    slug: "diger",
+    name: "Diğer Ürünler",
+    icon: "Package",
+    children: [],
   },
 ];
 
