@@ -59,13 +59,24 @@ export default function CategoryPage() {
 
       <h1 className="font-display text-2xl md:text-3xl font-bold mb-3 text-foreground">{title}</h1>
 
-      {category && !subSlug && category.children.length > 0 && (
+      {category && category.children.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-5">
-          {category.children.map(sub => (
-            <Link key={sub.slug} to={`/kategori/${category.slug}/${sub.slug}`} className="rounded-full border border-border bg-card px-4 py-2 text-xs font-semibold text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all">
-              {sub.name}
-            </Link>
-          ))}
+          {category.children.map(sub => {
+            const isActiveSub = subSlug === sub.slug;
+            return (
+              <Link
+                key={sub.slug}
+                to={`/kategori/${category.slug}/${sub.slug}`}
+                className={`rounded-full border px-4 py-2 text-xs font-semibold transition-all ${
+                  isActiveSub
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-card text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5"
+                }`}
+              >
+                {sub.name}
+              </Link>
+            );
+          })}
         </div>
       )}
 
