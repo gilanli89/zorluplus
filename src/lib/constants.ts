@@ -137,6 +137,7 @@ export const CATEGORIES = [
     icon: "Gamepad2",
     children: [
       { slug: "oyun-aksesuar", name: "Aksesuar" },
+      { slug: "hdmi-kablo", name: "HDMI Kablolar" },
     ],
   },
   {
