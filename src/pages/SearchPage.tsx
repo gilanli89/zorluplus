@@ -141,8 +141,18 @@ export default function SearchPage() {
     const aiIds = new Set(aiResults.map(p => p.id));
     const merged = [...aiResults, ...textResults.filter(p => !aiIds.has(p.id))];
     
-    return merged;
-  }, [products, query, aiResult]);
+    // Apply sort
+    let sorted = [...merged];
+    switch (sortBy) {
+      case "price-asc": sorted.sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price)); break;
+      case "price-desc": sorted.sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price)); break;
+      case "newest": sorted.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()); break;
+      case "oldest": sorted.sort((a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()); break;
+      case "name-asc": sorted.sort((a, b) => a.name.localeCompare(b.name, "tr")); break;
+      case "name-desc": sorted.sort((a, b) => b.name.localeCompare(a.name, "tr")); break;
+    }
+    return sorted;
+  }, [products, query, aiResult, sortBy]);
 
   const handleSearch = (val: string) => {
     setQuery(val);
