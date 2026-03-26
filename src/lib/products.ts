@@ -232,7 +232,9 @@ function parseRow(row: Record<string, string>, index: number): Product {
     const attrName = row[`Nitelik ${i} ismi`];
     const attrVal = row[`Nitelik ${i} değer(ler)i`];
     if (attrName && attrVal) {
-      specs[attrName.trim()] = attrVal.trim();
+      const cleanName = attrName.trim().replace(/^pa_/, "").replace(/-/g, " ");
+      const displayName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+      specs[displayName] = attrVal.trim();
     }
   }
   for (const [key, val] of Object.entries(row)) {
