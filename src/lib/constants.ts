@@ -49,6 +49,9 @@ export const CATEGORIES = [
     icon: "Tv",
     children: [
       { slug: "tv", name: "Televizyon" },
+      { slug: "kumanda", name: "Kumandalar" },
+      { slug: "tv-aksesuar", name: "TV Aksesuarları" },
+      { slug: "tv-aski-aparatlari", name: "Askı Aparatları" },
     ],
   },
   {
@@ -123,9 +126,6 @@ export const CATEGORIES = [
     name: "Aksesuarlar",
     icon: "Cable",
     children: [
-      { slug: "kumanda", name: "Kumandalar" },
-      { slug: "tv-aski-aparatlari", name: "TV Askı Aparatları" },
-      { slug: "hdmi-kablo", name: "HDMI Kablolar" },
       { slug: "uydu-ekipman", name: "Uydu Ekipmanları" },
       { slug: "temizlik-urunleri", name: "Temizlik Ürünleri" },
       { slug: "voltaj-regulatoru", name: "Voltaj Regülatörü" },
