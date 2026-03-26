@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import ProductCard from "@/components/ProductCard";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { SortOption } from "@/lib/types";
 
 interface AISearchResult {
   keywords: string[];
@@ -23,6 +25,7 @@ export default function SearchPage() {
   const q = searchParams.get("q") || "";
   const [query, setQuery] = useState(q);
   const [isListening, setIsListening] = useState(false);
+  const [sortBy, setSortBy] = useState<SortOption>("popular");
   const [aiResult, setAiResult] = useState<AISearchResult | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const recognitionRef = useRef<any>(null);
@@ -138,8 +141,18 @@ export default function SearchPage() {
     const aiIds = new Set(aiResults.map(p => p.id));
     const merged = [...aiResults, ...textResults.filter(p => !aiIds.has(p.id))];
     
-    return merged;
-  }, [products, query, aiResult]);
+    // Apply sort
+    let sorted = [...merged];
+    switch (sortBy) {
+      case "price-asc": sorted.sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price)); break;
+      case "price-desc": sorted.sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price)); break;
+      case "newest": sorted.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()); break;
+      case "oldest": sorted.sort((a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()); break;
+      case "name-asc": sorted.sort((a, b) => a.name.localeCompare(b.name, "tr")); break;
+      case "name-desc": sorted.sort((a, b) => b.name.localeCompare(a.name, "tr")); break;
+    }
+    return sorted;
+  }, [products, query, aiResult, sortBy]);
 
   const handleSearch = (val: string) => {
     setQuery(val);
@@ -196,7 +209,24 @@ export default function SearchPage() {
               {aiResult.brand && <Badge variant="secondary">{aiResult.brand}</Badge>}
             </>
           ) : null}
-          <span className="text-sm text-muted-foreground ml-auto">{results.length} {t("general.resultsFound")}</span>
+          <Select value={sortBy} onValueChange={v => setSortBy(v as SortOption)}>
+            <SelectTrigger className="w-44 h-8 text-xs ml-auto">
+              <span className="text-muted-foreground mr-1 font-medium">{t("sort.label")}:</span>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {[
+                { value: "popular", label: t("sort.popular") },
+                { value: "newest", label: t("sort.newest") },
+                { value: "oldest", label: t("sort.oldest") },
+                { value: "price-asc", label: t("sort.priceAsc") },
+                { value: "price-desc", label: t("sort.priceDesc") },
+                { value: "name-asc", label: t("sort.nameAsc") },
+                { value: "name-desc", label: t("sort.nameDesc") },
+              ].map(o => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
+            </SelectContent>
+          </Select>
+          <span className="text-sm text-muted-foreground">{results.length} {t("general.resultsFound")}</span>
         </div>
       )}
 

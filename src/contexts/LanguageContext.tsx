@@ -276,7 +276,13 @@ const translations: Record<string, Record<Lang, string>> = {
   "filter.btu": { tr: "BTU", en: "BTU" },
   "filter.capacity": { tr: "Kapasite", en: "Capacity" },
   "sort.popular": { tr: "En Popüler", en: "Most Popular" },
-  "sort.newest": { tr: "Yeni Gelenler", en: "New Arrivals" },
+  "sort.newest": { tr: "Yeni Eklenen", en: "Newest First" },
+  "sort.oldest": { tr: "En Eski", en: "Oldest First" },
+  "sort.priceAsc": { tr: "Fiyat: Artan", en: "Price: Low to High" },
+  "sort.priceDesc": { tr: "Fiyat: Azalan", en: "Price: High to Low" },
+  "sort.nameAsc": { tr: "İsim: A-Z", en: "Name: A to Z" },
+  "sort.nameDesc": { tr: "İsim: Z-A", en: "Name: Z to A" },
+  "sort.label": { tr: "Sırala", en: "Sort By" },
 
   // Category landing template
   "landing.productsListing": { tr: "ürün listeleniyor", en: "products listed" },

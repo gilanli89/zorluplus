@@ -38,9 +38,12 @@ export interface FilterState {
 
 export type SortOption =
   | "popular"
+  | "newest"
+  | "oldest"
   | "price-asc"
   | "price-desc"
-  | "newest"
+  | "name-asc"
+  | "name-desc"
   | "sale";
 
 export interface Branch {
