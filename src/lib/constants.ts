@@ -140,12 +140,6 @@ export const CATEGORIES = [
       { slug: "hdmi-kablo", name: "HDMI Kablolar" },
     ],
   },
-  {
-    slug: "diger",
-    name: "Diğer Ürünler",
-    icon: "Package",
-    children: [],
-  },
 ];
 
 export const CATALOGUE_URL = "https://online.fliphtml5.com/wcszl/ZDP-March-E-Catalogue/#p=1";
