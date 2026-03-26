@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useProducts } from "@/hooks/useProducts";
 import { CATEGORIES } from "@/lib/constants";
@@ -23,8 +23,16 @@ const fadeUp = {
 export default function CategoryPage() {
   const { t } = useLanguage();
   const { categorySlug, subSlug } = useParams();
+  const navigate = useNavigate();
   const { data: products = [], isLoading } = useProducts();
   const [filters, setFilters] = useState<FilterState>({ brands: [], inStock: false, attributes: {}, sort: "popular" });
+
+  // Auto-redirect to "tv" subcategory when entering tv-goruntu without a sub
+  useEffect(() => {
+    if (categorySlug === "tv-goruntu" && !subSlug) {
+      navigate("/kategori/tv-goruntu/tv", { replace: true });
+    }
+  }, [categorySlug, subSlug, navigate]);
 
   const category = CATEGORIES.find(c => c.slug === categorySlug);
   const subcategory = category?.children.find(s => s.slug === subSlug);
