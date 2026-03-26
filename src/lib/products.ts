@@ -306,7 +306,20 @@ export async function fetchProducts(): Promise<Product[]> {
 
 export function getProductsByCategory(products: Product[], categorySlug: string, subSlug?: string): Product[] {
   return products.filter(p => {
-    if (subSlug) return p.category === categorySlug && p.subcategory === subSlug;
+    if (subSlug) {
+      // Oyun > hdmi-kablo: show HDMI cables from tv-goruntu
+      if (categorySlug === "oyun" && subSlug === "hdmi-kablo") {
+        return p.category === "tv-goruntu" && p.subcategory === "tv-aksesuar" && 
+               (p.name.toLowerCase().includes("hdmi") || p.name.toLowerCase().includes("kablo"));
+      }
+      return p.category === categorySlug && p.subcategory === subSlug;
+    }
+    // Oyun category: also include HDMI cables
+    if (categorySlug === "oyun") {
+      const isHdmi = p.category === "tv-goruntu" && p.subcategory === "tv-aksesuar" &&
+                     (p.name.toLowerCase().includes("hdmi") || p.name.toLowerCase().includes("kablo"));
+      return p.category === "oyun" || isHdmi;
+    }
     return p.category === categorySlug;
   });
 }
