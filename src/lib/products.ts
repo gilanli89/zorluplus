@@ -205,9 +205,14 @@ function parseRow(row: Record<string, string>, index: number): Product {
     subcategory = "utu";
   }
   // Multi cooker / pişirici → kucuk-ev-aletleri
-  else if (nameLower.includes("multi cooker") || nameLower.includes("multicooker")) {
+  else if (nameLower.includes("multi cooker") || nameLower.includes("multicooker") || nameLower.includes("pişirici") || nameLower.includes("çoklu pişirici")) {
     category = "kucuk-ev-aletleri";
     subcategory = "pisirici";
+  }
+  // Su sebili → beyaz-esya ONLY
+  else if (nameLower.includes("su sebil") || nameLower.includes("sebili") || nameLower.includes("damacana")) {
+    category = "beyaz-esya";
+    subcategory = "su-sebili";
   }
   const sku = (row["Stok kodu (SKU)"] || row["SKU"] || row["sku"] || row["Kimlik"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
   const price = parseFloat(row["Normal fiyat"] || row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
