@@ -143,8 +143,8 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
     { match: "ütü", category: "kucuk-ev-aletleri", subcategory: "utu" },
     { match: "hoparlör", category: "ses-sistemleri", subcategory: "bluetooth-hoparlor" },
     { match: "oyun", category: "oyun", subcategory: "oyun-aksesuar" },
-    { match: "voltaj", category: "diger", subcategory: "" },
-    { match: "regülatör", category: "diger", subcategory: "" },
+    { match: "voltaj", category: "aksesuar", subcategory: "voltaj-regulatoru" },
+    { match: "regülatör", category: "aksesuar", subcategory: "voltaj-regulatoru" },
   ];
 
   for (const entry of keywordMap) {
