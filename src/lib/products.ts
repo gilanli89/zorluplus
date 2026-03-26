@@ -160,17 +160,54 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const name = row["İsim"] || row["Ürün Adı"] || row["Name"] || row["name"] || `Ürün ${index + 1}`;
   const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
 
-  // Override: route mount/bracket products to duvar-masaustu-aparatlari
+  // Override: name-based routing for accessories that should NOT be in TV category
   const nameLower = name.toLowerCase();
   const brandLower = brand.toLowerCase().trim();
-  if (
+
+  // Kumandalar → aksesuar
+  if (nameLower.includes("kumanda")) {
+    category = "aksesuar";
+    subcategory = "kumanda";
+  }
+  // HDMI kablolar → aksesuar
+  else if (nameLower.includes("hdmi") && (nameLower.includes("kablo") || nameLower.includes("cable"))) {
+    category = "aksesuar";
+    subcategory = "hdmi-kablo";
+  }
+  // Soundbar → ses-sistemleri
+  else if (nameLower.includes("soundbar") && !nameLower.includes("kumanda")) {
+    category = "ses-sistemleri";
+    subcategory = "soundbar";
+  }
+  // Hoparlör / Boombox → ses-sistemleri
+  else if (nameLower.includes("hoparlör") || nameLower.includes("boombox") || nameLower.includes("xboom")) {
+    category = "ses-sistemleri";
+    subcategory = "bluetooth-hoparlor";
+  }
+  // Kulaklık → ses-sistemleri
+  else if (nameLower.includes("kulaklık") || nameLower.includes("kulaklik")) {
+    category = "ses-sistemleri";
+    subcategory = "kulaklik";
+  }
+  // TV Askı Aparatları → aksesuar
+  else if (
     brandLower === "brateck" || brandLower === "aksesuar" ||
     nameLower.includes("askı aparat") || nameLower.includes("tv askı") ||
     nameLower.includes("duvar aparat") || nameLower.includes("masaüstü aparat") ||
     nameLower.includes("wall mount") || nameLower.includes("desk mount")
   ) {
-    category = "tv-goruntu";
-    subcategory = "duvar-masaustu-aparatlari";
+    category = "aksesuar";
+    subcategory = "tv-aski-aparatlari";
+  }
+  // Ütü → kucuk-ev-aletleri
+  else if (nameLower.includes("ütü") || nameLower.includes("utu") || nameLower.includes("iron")) {
+    category = "kucuk-ev-aletleri";
+    subcategory = "utu";
+  }
+  // Multi cooker / pişirici → kucuk-ev-aletleri
+  else if (nameLower.includes("multi cooker") || nameLower.includes("multicooker")) {
+    category = "kucuk-ev-aletleri";
+    subcategory = "pisirici";
   }
   const sku = (row["Stok kodu (SKU)"] || row["SKU"] || row["sku"] || row["Kimlik"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
   const price = parseFloat(row["Normal fiyat"] || row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
