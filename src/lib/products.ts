@@ -164,15 +164,15 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const nameLower = name.toLowerCase();
   const brandLower = brand.toLowerCase().trim();
 
-  // Kumandalar → aksesuar
+  // Kumandalar → tv-goruntu/kumanda
   if (nameLower.includes("kumanda")) {
-    category = "aksesuar";
+    category = "tv-goruntu";
     subcategory = "kumanda";
   }
-  // HDMI kablolar → aksesuar
+  // HDMI kablolar → tv-goruntu/tv-aksesuar
   else if (nameLower.includes("hdmi") && (nameLower.includes("kablo") || nameLower.includes("cable"))) {
-    category = "aksesuar";
-    subcategory = "hdmi-kablo";
+    category = "tv-goruntu";
+    subcategory = "tv-aksesuar";
   }
   // Soundbar → ses-sistemleri
   else if (nameLower.includes("soundbar") && !nameLower.includes("kumanda")) {
@@ -189,14 +189,14 @@ function parseRow(row: Record<string, string>, index: number): Product {
     category = "ses-sistemleri";
     subcategory = "kulaklik";
   }
-  // TV Askı Aparatları → aksesuar
+  // TV Askı Aparatları → tv-goruntu/tv-aski-aparatlari
   else if (
     brandLower === "brateck" || brandLower === "aksesuar" ||
     nameLower.includes("askı aparat") || nameLower.includes("tv askı") ||
     nameLower.includes("duvar aparat") || nameLower.includes("masaüstü aparat") ||
     nameLower.includes("wall mount") || nameLower.includes("desk mount")
   ) {
-    category = "aksesuar";
+    category = "tv-goruntu";
     subcategory = "tv-aski-aparatlari";
   }
   // Ütü → kucuk-ev-aletleri
