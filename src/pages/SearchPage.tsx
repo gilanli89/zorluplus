@@ -209,7 +209,24 @@ export default function SearchPage() {
               {aiResult.brand && <Badge variant="secondary">{aiResult.brand}</Badge>}
             </>
           ) : null}
-          <span className="text-sm text-muted-foreground ml-auto">{results.length} {t("general.resultsFound")}</span>
+          <Select value={sortBy} onValueChange={v => setSortBy(v as SortOption)}>
+            <SelectTrigger className="w-44 h-8 text-xs ml-auto">
+              <span className="text-muted-foreground mr-1 font-medium">{t("sort.label")}:</span>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {[
+                { value: "popular", label: t("sort.popular") },
+                { value: "newest", label: t("sort.newest") },
+                { value: "oldest", label: t("sort.oldest") },
+                { value: "price-asc", label: t("sort.priceAsc") },
+                { value: "price-desc", label: t("sort.priceDesc") },
+                { value: "name-asc", label: t("sort.nameAsc") },
+                { value: "name-desc", label: t("sort.nameDesc") },
+              ].map(o => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
+            </SelectContent>
+          </Select>
+          <span className="text-sm text-muted-foreground">{results.length} {t("general.resultsFound")}</span>
         </div>
       )}
 
