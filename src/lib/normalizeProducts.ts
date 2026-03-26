@@ -284,7 +284,10 @@ export function applyNormalizedFilters(
   switch (sort) {
     case "price-asc": result = [...result].sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price)); break;
     case "price-desc": result = [...result].sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price)); break;
-    case "newest": result = [...result].sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0)); break;
+    case "newest": result = [...result].sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()); break;
+    case "oldest": result = [...result].sort((a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()); break;
+    case "name-asc": result = [...result].sort((a, b) => a.name.localeCompare(b.name, "tr")); break;
+    case "name-desc": result = [...result].sort((a, b) => b.name.localeCompare(a.name, "tr")); break;
     case "sale": result = result.filter(p => p.salePrice && p.salePrice < p.price); break;
   }
 

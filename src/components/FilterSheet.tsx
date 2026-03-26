@@ -176,6 +176,11 @@ export function SortBar({ filters, onFiltersChange }: { filters: FilterState; on
   const SORT_OPTIONS: { value: SortOption; label: string }[] = [
     { value: "popular", label: t("sort.popular") },
     { value: "newest", label: t("sort.newest") },
+    { value: "oldest", label: t("sort.oldest") },
+    { value: "price-asc", label: t("sort.priceAsc") },
+    { value: "price-desc", label: t("sort.priceDesc") },
+    { value: "name-asc", label: t("sort.nameAsc") },
+    { value: "name-desc", label: t("sort.nameDesc") },
   ];
 
   const removeChip = (groupKey: string, value: string) => {
@@ -186,7 +191,10 @@ export function SortBar({ filters, onFiltersChange }: { filters: FilterState; on
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Select value={filters.sort} onValueChange={v => onFiltersChange({ ...filters, sort: v as SortOption })}>
-        <SelectTrigger className="w-40 h-9 text-xs"><SelectValue /></SelectTrigger>
+        <SelectTrigger className="w-44 h-9 text-xs">
+          <span className="text-muted-foreground mr-1 font-medium">{t("sort.label")}:</span>
+          <SelectValue />
+        </SelectTrigger>
         <SelectContent>
           {SORT_OPTIONS.map(o => (<SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>))}
         </SelectContent>
