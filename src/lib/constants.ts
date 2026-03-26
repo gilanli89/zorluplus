@@ -49,6 +49,9 @@ export const CATEGORIES = [
     icon: "Tv",
     children: [
       { slug: "tv", name: "Televizyon" },
+      { slug: "kumanda", name: "Kumandalar" },
+      { slug: "tv-aksesuar", name: "TV Aksesuarları" },
+      { slug: "tv-aski-aparatlari", name: "Askı Aparatları" },
     ],
   },
   {
