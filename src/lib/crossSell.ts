@@ -19,8 +19,8 @@ const TV_ACCESSORY_TYPES: AccessoryType[] = [
     id: "wall-mount",
     label: "TV Askı Aparatı",
     keywords: ["askı", "aparat", "mount", "brateck"],
-    categories: ["tv-goruntu", "aksesuar"],
-    subcategories: ["duvar-masaustu-aparatlari", "tv-aski-aparatlari"],
+    categories: ["aksesuar"],
+    subcategories: ["tv-aski-aparatlari"],
     priority: 1,
     compatibilityLabel: (tv) => {
       const size = extractScreenSize(tv);
@@ -31,8 +31,8 @@ const TV_ACCESSORY_TYPES: AccessoryType[] = [
     id: "hdmi",
     label: "HDMI Kablo",
     keywords: ["hdmi"],
-    categories: ["tv-goruntu", "aksesuar", "oyun"],
-    subcategories: ["tv-aksesuar", "oyun-aksesuar"],
+    categories: ["aksesuar"],
+    subcategories: ["hdmi-kablo"],
     priority: 2,
     compatibilityLabel: () => "Yüksek Hızlı HDMI 2.1",
   },
