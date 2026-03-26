@@ -84,8 +84,8 @@ function normalizeCategorySlug(raw: string): { category: string; subcategory: st
     { match: "video / audio > televizyonlar", category: "tv-goruntu", subcategory: "tv" },
     { match: "video / audio > soundbarlar", category: "ses-sistemleri", subcategory: "soundbar" },
     { match: "video / audio > kulaklıklar", category: "ses-sistemleri", subcategory: "kulaklik" },
-    { match: "aksesuarlar > tv askı aparatları", category: "tv-goruntu", subcategory: "duvar-masaustu-aparatlari" },
-    { match: "video / audio > aksesuar", category: "tv-goruntu", subcategory: "tv-aksesuar" },
+    { match: "aksesuarlar > tv askı aparatları", category: "aksesuar", subcategory: "tv-aski-aparatlari" },
+    { match: "video / audio > aksesuar", category: "aksesuar", subcategory: "kumanda" },
     // Ses Sistemleri
     { match: "ses sistemleri > bluetooth hoparlörler", category: "ses-sistemleri", subcategory: "bluetooth-hoparlor" },
     { match: "ses sistemleri > kulaklıklar", category: "ses-sistemleri", subcategory: "kulaklik" },
