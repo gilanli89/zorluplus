@@ -18,13 +18,36 @@ import { useProductTranslation } from "@/hooks/useProductTranslation";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
 
+const SPEC_LABELS: Record<string, { tr: string; en: string }> = {
+  "Screen size": { tr: "Ekran Boyutu", en: "Screen Size" },
+  "Panel type": { tr: "Panel Tipi", en: "Panel Type" },
+  "Resolution": { tr: "Çözünürlük", en: "Resolution" },
+  "Ekran": { tr: "Ekran", en: "Screen" },
+  "BTU": { tr: "BTU", en: "BTU" },
+  "Kapasite": { tr: "Kapasite", en: "Capacity" },
+  "Enerji Sınıfı": { tr: "Enerji Sınıfı", en: "Energy Class" },
+  "Devir": { tr: "Devir", en: "Spin Speed" },
+  "Panel": { tr: "Panel", en: "Panel" },
+  "Çözünürlük": { tr: "Çözünürlük", en: "Resolution" },
+  "Litre": { tr: "Litre", en: "Litre" },
+  "No Frost": { tr: "No-Frost", en: "No-Frost" },
+  "İnverter": { tr: "İnverter", en: "Inverter" },
+  "Smart": { tr: "Akıllı", en: "Smart" },
+};
+
+function translateSpecLabel(key: string, lang: string): string {
+  const entry = SPEC_LABELS[key];
+  if (entry) return lang === "tr" ? entry.tr : entry.en;
+  // Fallback: capitalize
+  return key;
+}
 
 export default function ProductPage() {
   const { slug } = useParams();
   const { data: products = [], isLoading } = useProducts();
   const { recentIds, addViewed } = useRecentlyViewed();
   const stripRef = useRef<HTMLDivElement>(null);
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { translateProduct } = useProductTranslation();
   const { addItem } = useCart();
   
@@ -144,12 +167,15 @@ export default function ProductPage() {
                 <h3 className="font-display font-bold text-foreground mb-3">{t("product.specs")}</h3>
                 <table className="w-full text-sm">
                   <tbody>
-                    {Object.entries(product.specs).map(([k, v]) => (
-                      <tr key={k} className="border-b border-border">
-                        <td className="py-2 text-muted-foreground font-medium">{k}</td>
-                        <td className="py-2 text-foreground text-right">{v}</td>
-                      </tr>
-                    ))}
+                    {Object.entries(product.specs).map(([k, v]) => {
+                      const specLabel = translateSpecLabel(k, lang);
+                      return (
+                        <tr key={k} className="border-b border-border">
+                          <td className="py-2 text-muted-foreground font-medium">{specLabel}</td>
+                          <td className="py-2 text-foreground text-right">{v}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
