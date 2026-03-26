@@ -108,7 +108,6 @@ export const CATEGORIES = [
       { slug: "mikrodalga", name: "Mikrodalga" },
       { slug: "kahve-makinesi", name: "Kahve Makinesi" },
       { slug: "pisirici", name: "Pişiriciler" },
-      { slug: "su-sebili", name: "Su Sebili" },
     ],
   },
   {
@@ -119,6 +118,7 @@ export const CATEGORIES = [
       { slug: "utu", name: "Ütü" },
       { slug: "supurge", name: "Süpürge" },
       { slug: "ventilator", name: "Vantilatör" },
+      { slug: "pisirici", name: "Çok Amaçlı Pişirici" },
     ],
   },
   {
