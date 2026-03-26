@@ -144,12 +144,15 @@ export default function ProductPage() {
                 <h3 className="font-display font-bold text-foreground mb-3">{t("product.specs")}</h3>
                 <table className="w-full text-sm">
                   <tbody>
-                    {Object.entries(product.specs).map(([k, v]) => (
-                      <tr key={k} className="border-b border-border">
-                        <td className="py-2 text-muted-foreground font-medium">{k}</td>
-                        <td className="py-2 text-foreground text-right">{v}</td>
-                      </tr>
-                    ))}
+                    {Object.entries(product.specs).map(([k, v]) => {
+                      const specLabel = translateSpecLabel(k, lang);
+                      return (
+                        <tr key={k} className="border-b border-border">
+                          <td className="py-2 text-muted-foreground font-medium">{specLabel}</td>
+                          <td className="py-2 text-foreground text-right">{v}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
