@@ -1,0 +1,1 @@
+UPDATE inventory SET is_active = true, quantity = 1 WHERE sku = 'UE32T5372C';
