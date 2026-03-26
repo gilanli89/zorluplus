@@ -25,6 +25,7 @@ export default function SearchPage() {
   const q = searchParams.get("q") || "";
   const [query, setQuery] = useState(q);
   const [isListening, setIsListening] = useState(false);
+  const [sortBy, setSortBy] = useState<SortOption>("popular");
   const [aiResult, setAiResult] = useState<AISearchResult | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const recognitionRef = useRef<any>(null);
