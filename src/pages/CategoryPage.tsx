@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useProducts } from "@/hooks/useProducts";
 import { CATEGORIES } from "@/lib/constants";
