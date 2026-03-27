@@ -830,6 +830,8 @@ export function EkibimizPage() {
     </div>
   );
 }
+
+export function DestekPage() {
   const { t, lang } = useLanguage();
 
   const samsungServices = lang === "tr" ? [
