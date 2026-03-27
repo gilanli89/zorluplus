@@ -390,16 +390,9 @@ export function HakkimizdaPage() {
                 whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.15)" }}
                 transition={{ duration: 0.4 }}
               >
-                <motion.div
-                  className="h-12 w-12 rounded-xl flex items-center justify-center mb-3"
-                  animate={{
-                    backgroundColor: ["hsl(221,83%,53%,0.1)", "hsl(221,83%,53%,0.2)", "hsl(221,83%,53%,0.1)"],
-                    boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 15px hsl(221,83%,53%,0.15)", "0 0 0px hsl(221,83%,53%,0)"],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
-                >
-                  <cat.icon className="h-6 w-6 text-primary" />
-                </motion.div>
+                <div className="mb-3">
+                  <PremiumIcon icon={cat.icon} size="lg" variant="glow" />
+                </div>
                 <motion.h3
                   className="heading-4 mb-1"
                   animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
