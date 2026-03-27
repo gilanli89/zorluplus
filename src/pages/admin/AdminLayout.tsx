@@ -82,7 +82,7 @@ export default function AdminLayout() {
                               active ? "bg-primary/10 text-primary font-semibold" : "text-muted-foreground hover:bg-muted"
                             )}
                           >
-                            <item.icon className="h-4 w-4" />
+                            <item.icon className="h-4 w-4 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" />
                             <span className="flex-1">{item.title}</span>
                             {item.url === "/admin/izinler" && pendingLeaves > 0 && (
                               <Badge className="bg-destructive text-destructive-foreground text-[10px] px-1.5 py-0 h-5 min-w-5 flex items-center justify-center">

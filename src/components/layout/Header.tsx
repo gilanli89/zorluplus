@@ -178,7 +178,7 @@ export default function Header() {
               ))}
               <hr className="my-3 border-border" />
               <Link to="/e-katalog" className="flex items-center gap-2 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-                <FileText className="h-4 w-4" /> {t("header.eCatalogue")}
+                <FileText className="h-4 w-4 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.2)]" /> {t("header.eCatalogue")}
               </Link>
               <Link to="/subelerimiz" className="px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
                 {t("header.branches")}
@@ -267,10 +267,10 @@ export default function Header() {
           <CartSheet />
           <a href="https://servis.zorluplus.com/" target="_blank" rel="noopener noreferrer">
             <Button variant="outline" size="sm" className="rounded-full gap-1.5 border-primary/30 text-primary hover:bg-primary/5 font-semibold hidden sm:inline-flex tap-scale">
-              <Wrench className="h-3.5 w-3.5" /> {t("header.serviceRequest")}
+              <Wrench className="h-3.5 w-3.5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {t("header.serviceRequest")}
             </Button>
             <Button variant="ghost" size="icon" className="rounded-full sm:hidden tap-scale">
-              <Wrench className="h-5 w-5 text-primary" />
+              <Wrench className="h-5 w-5 text-primary drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" />
             </Button>
           </a>
           <Link to="/magaza">
