@@ -115,8 +115,8 @@ export default function Header() {
         <div className="container relative flex items-center justify-between py-1.5 text-[11px]">
           <div className="flex items-center gap-4 font-medium">
             <span className="hidden sm:inline-flex items-center gap-1 text-primary-foreground/80 font-semibold">{greeting}</span>
-            <span className="hidden md:inline-flex items-center gap-1"><Shield className="h-3 w-3" /> {t("header.authorized")}</span>
-            <span className="inline-flex items-center gap-1"><Award className="h-3 w-3" /> {t("header.warranty")}</span>
+            <span className="hidden md:inline-flex items-center gap-1"><Shield className="h-3 w-3 drop-shadow-[0_0_3px_rgba(255,255,255,0.4)]" /> {t("header.authorized")}</span>
+            <span className="inline-flex items-center gap-1"><Award className="h-3 w-3 drop-shadow-[0_0_3px_rgba(255,255,255,0.4)]" /> {t("header.warranty")}</span>
           </div>
           <div className="flex items-center gap-3">
             {/* Language switcher */}

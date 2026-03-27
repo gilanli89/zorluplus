@@ -119,17 +119,17 @@ export default function HomePage() {
               <motion.div
                 key={b.id}
                 variants={branchCard}
-                className="card-lift rounded-2xl border border-border bg-card p-6 pulse-card"
+                className="card-premium card-premium-border rounded-2xl p-6"
               >
                 <h3 className="heading-4 text-foreground mb-2">{b.name}</h3>
                 <p className="text-sm text-muted-foreground mb-1">{b.address}</p>
                 <p className="text-sm text-muted-foreground mb-4">{b.hours}</p>
                 <div className="flex gap-2">
                   <a href={b.mapsLink} target="_blank" rel="noopener noreferrer">
-                    <Button size="sm" variant="outline" className="rounded-full gap-1.5 tap-scale"><MapPin className="h-3.5 w-3.5" /> {t("home.getDirections")}</Button>
+                    <Button size="sm" variant="outline" className="rounded-full gap-1.5 tap-scale"><MapPin className="h-3.5 w-3.5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {t("home.getDirections")}</Button>
                   </a>
                   <a href={`tel:${b.phone}`}>
-                    <Button size="sm" variant="ghost" className="rounded-full gap-1.5 tap-scale"><Phone className="h-3.5 w-3.5" /> {t("home.call")}</Button>
+                    <Button size="sm" variant="ghost" className="rounded-full gap-1.5 tap-scale"><Phone className="h-3.5 w-3.5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {t("home.call")}</Button>
                   </a>
                 </div>
               </motion.div>
