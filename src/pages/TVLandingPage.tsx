@@ -436,7 +436,7 @@ export default function TVLandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* WhatsApp CTA */}
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-              className="rounded-2xl border border-border bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center"
+              className="card-premium card-premium-border rounded-2xl bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center"
             >
               <MessageCircle className="h-10 w-10 text-[hsl(142,70%,40%)] mx-auto mb-4" />
               <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
@@ -450,7 +450,7 @@ export default function TVLandingPage() {
 
             {/* Phone CTA */}
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
-              className="rounded-2xl border border-border bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 text-center"
+              className="card-premium card-premium-border rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 text-center"
             >
               <Phone className="h-10 w-10 text-primary mx-auto mb-4" />
               <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.callUs")}</h3>
@@ -476,11 +476,9 @@ export default function TVLandingPage() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
-                className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/50 transition-colors"
+                className="card-premium card-premium-border flex items-start gap-3 rounded-xl p-4"
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Star className="h-5 w-5" />
-                </div>
+                <PremiumIcon icon={Star} size="md" variant="glow" />
                 <div>
                   <p className="text-sm font-bold text-foreground">{branch.name}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{branch.address}</p>
