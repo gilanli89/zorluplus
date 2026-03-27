@@ -1878,14 +1878,14 @@ export function MesafeliSatisSozlesmesiPage() {
   const { t } = useLanguage();
 
   const sectionIcons = [
-    { src: "/src/assets/icons/contract.png", alt: "Taraflar" },
-    { src: "/src/assets/icons/contract.png", alt: "Konu" },
-    { src: "/src/assets/icons/contract.png", alt: "Ürün" },
-    { src: "/src/assets/icons/installment.png", alt: "Ödeme" },
-    { src: "/src/assets/icons/delivery.png", alt: "Teslimat" },
-    { src: "/src/assets/icons/refund.png", alt: "Cayma" },
-    { src: "/src/assets/icons/certificate.png", alt: "Garanti" },
-    { src: "/src/assets/icons/legal.png", alt: "Uyuşmazlık" },
+    { src: contractIcon, alt: "Taraflar" },
+    { src: contractIcon, alt: "Konu" },
+    { src: contractIcon, alt: "Ürün" },
+    { src: installmentIcon, alt: "Ödeme" },
+    { src: deliveryIcon, alt: "Teslimat" },
+    { src: refundIcon, alt: "Cayma" },
+    { src: certificateIcon, alt: "Garanti" },
+    { src: legalIcon, alt: "Uyuşmazlık" },
   ];
 
   const sections = [
