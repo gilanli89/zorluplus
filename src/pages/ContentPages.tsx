@@ -5,6 +5,12 @@ import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, 
 import { BRANCHES } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 import PremiumIcon, { PremiumBadgeIcon, PremiumIconInline } from "@/components/PremiumIcon";
+import contractIcon from "@/assets/icons/contract.png";
+import installmentIcon from "@/assets/icons/installment.png";
+import deliveryIcon from "@/assets/icons/delivery.png";
+import refundIcon from "@/assets/icons/refund.png";
+import certificateIcon from "@/assets/icons/certificate.png";
+import legalIcon from "@/assets/icons/legal.png";
 
 const testimonials = [
   { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
