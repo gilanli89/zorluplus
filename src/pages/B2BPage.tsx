@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Building2, Package, Truck, HeadphonesIcon, BadgeCheck, Users, Wrench, Phone, Mail, ChevronRight } from "lucide-react";
-import PremiumIcon, { PremiumBadgeIcon } from "@/components/PremiumIcon";
+import PremiumIcon, { PremiumBadgeIcon, PremiumIconInline } from "@/components/PremiumIcon";
 import { BRAND } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 
