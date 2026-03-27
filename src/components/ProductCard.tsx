@@ -55,7 +55,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
         transition: "transform 0.2s ease-out",
       }}
-      className="group flex flex-col rounded-2xl border border-border bg-card overflow-hidden relative shine-on-hover will-change-transform hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1"
+      className="group flex flex-col rounded-2xl border border-border bg-card overflow-hidden relative shine-on-hover will-change-transform card-premium"
     >
       <Link to={`/urun/${product.slug}`} className="flex flex-col flex-1">
         {/* Image */}
@@ -121,7 +121,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           onClick={(e) => e.stopPropagation()}
           className="flex items-center justify-center gap-1.5 flex-1 py-2.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-all duration-200 tap-scale"
         >
-          <Eye size={14} />
+          <Eye size={14} className="drop-shadow-[0_1px_2px_hsl(var(--primary)/0.2)]" />
           {t("product.view")}
         </Link>
         {product.inStock && product.price > 0 && (
@@ -130,7 +130,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="flex-1 rounded-xl text-xs font-bold gap-1.5 tap-scale"
             onClick={handleAddToCart}
           >
-            <ShoppingCart size={14} />
+            <ShoppingCart size={14} className="drop-shadow-[0_1px_2px_hsl(var(--primary-foreground)/0.3)]" />
             {t("cart.addToCart")}
           </Button>
         )}

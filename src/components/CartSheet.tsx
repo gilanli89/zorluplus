@@ -20,7 +20,7 @@ export default function CartSheet() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full relative">
-          <ShoppingCart className="h-5 w-5" />
+          <ShoppingCart className="h-5 w-5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.2)]" />
           {itemCount > 0 && (
             <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px] bg-primary text-primary-foreground rounded-full">
               {itemCount}
@@ -31,13 +31,13 @@ export default function CartSheet() {
       <SheetContent className="w-full sm:w-96 flex flex-col">
         <SheetHeader>
           <SheetTitle className="font-display flex items-center gap-2">
-            <ShoppingCart className="h-5 w-5" /> {t("cart.myCart")} ({itemCount})
+            <ShoppingCart className="h-5 w-5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {t("cart.myCart")} ({itemCount})
           </SheetTitle>
         </SheetHeader>
 
         {items.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center gap-3">
-            <ShoppingCart className="h-12 w-12 text-muted-foreground/30" />
+            <ShoppingCart className="h-12 w-12 text-muted-foreground/30 drop-shadow-[0_2px_4px_hsl(var(--muted-foreground)/0.1)]" />
             <p className="text-muted-foreground text-sm">{t("cart.empty")}</p>
             <Button variant="outline" className="rounded-full" onClick={() => setOpen(false)}>
               {t("cart.startShopping")}
