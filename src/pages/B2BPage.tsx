@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Building2, Package, Truck, HeadphonesIcon, BadgeCheck, Users, Wrench, Phone, Mail, ChevronRight } from "lucide-react";
+import PremiumIcon, { PremiumBadgeIcon } from "@/components/PremiumIcon";
 import { BRAND } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -150,13 +151,9 @@ export default function B2BPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <motion.span
-          className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-6"
-          animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 25px hsl(221,83%,53%,0.4)", "0 0 0px hsl(221,83%,53%,0)"] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Building2 className="h-8 w-8 text-primary" />
-        </motion.span>
+        <div className="mb-6 flex justify-center">
+          <PremiumIcon icon={Building2} size="xl" variant="glow" />
+        </div>
         <motion.h1
           className="heading-1 mb-4"
           animate={colorCycle}
@@ -191,7 +188,7 @@ export default function B2BPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {productGroups.map((p) => (
             <div key={p} className="flex items-start gap-2 text-sm text-muted-foreground">
-               <ChevronRight className="h-4 w-4 text-primary mt-0.5 shrink-0 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" />
+               <PremiumBadgeIcon icon={ChevronRight} size={14} />
               <span>{p}</span>
             </div>
           ))}
@@ -204,7 +201,7 @@ export default function B2BPage() {
           {advantages.map((a) => (
             <motion.div key={a.text} className="flex items-center gap-3 p-3 rounded-xl border border-border bg-muted/30 card-premium relative overflow-hidden" whileHover={{ y: -2 }}>
               <motion.div className="absolute inset-0 rounded-xl pointer-events-none" animate={pulse} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-              <a.icon className="h-5 w-5 text-primary shrink-0 relative z-10 drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" />
+              <PremiumIcon icon={a.icon} size="sm" variant="glow" containerClassName="shrink-0 relative z-10" />
               <span className="text-sm text-foreground relative z-10">{a.text}</span>
             </motion.div>
           ))}
@@ -217,7 +214,7 @@ export default function B2BPage() {
         <div className="space-y-2">
           {corporateSolutions.map((s) => (
             <div key={s} className="flex items-start gap-2 text-sm text-muted-foreground">
-              <ChevronRight className="h-4 w-4 text-primary mt-0.5 shrink-0 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" />
+              <PremiumBadgeIcon icon={ChevronRight} size={14} />
               <span>{s}</span>
             </div>
           ))}
@@ -260,7 +257,7 @@ export default function B2BPage() {
         <div className="space-y-2 relative z-10">
           {finalAdvantages.map((a) => (
             <div key={a} className="flex items-center gap-2 text-sm text-muted-foreground">
-              <BadgeCheck className="h-4 w-4 text-primary shrink-0 drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" />
+              <PremiumBadgeIcon icon={BadgeCheck} size={16} />
               <span>{a}</span>
             </div>
           ))}
