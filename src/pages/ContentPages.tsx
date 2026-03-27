@@ -1777,6 +1777,7 @@ export function CerezPolitikasiPage() {
   );
 }
 
+export function MesafeliSatisSozlesmesiPage() {
   const { t } = useLanguage();
 
   const sectionIcons = [
