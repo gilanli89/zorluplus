@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, Facebook, Instagram, Youtube } from "lucide-react";
+import { Phone, Mail } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { motion } from "framer-motion";
 import { BRAND, FOOTER_LINKS } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -109,10 +110,10 @@ export default function Footer() {
             <h4 className="font-display font-bold text-sm mb-3 text-foreground">{t("footer.contact")}</h4>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
               <a href={`tel:${BRAND.phone}`} className="flex items-center gap-2 hover:text-foreground transition-colors">
-                <Phone className="h-4 w-4 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {BRAND.phoneDisplay}
+                <PremiumIconInline icon={Phone} size={16} /> {BRAND.phoneDisplay}
               </a>
               <a href={`mailto:${BRAND.email}`} className="flex items-center gap-2 hover:text-foreground transition-colors">
-                <Mail className="h-4 w-4 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {BRAND.email}
+                <PremiumIconInline icon={Mail} size={16} /> {BRAND.email}
               </a>
             </div>
             <div className="mt-4 flex flex-col gap-1.5">

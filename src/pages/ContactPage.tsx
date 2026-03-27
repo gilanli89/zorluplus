@@ -1,4 +1,5 @@
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { BRAND, BRANCHES } from "@/lib/constants";
 import { trackWhatsAppClick } from "@/lib/tracking";
 import QuoteForm from "@/components/QuoteForm";
@@ -30,7 +31,7 @@ export default function ContactPage() {
 
           {BRANCHES.map(b => (
             <div key={b.id} className="mb-4 flex items-start gap-3">
-              <MapPin className="h-5 w-5 text-primary mt-0.5 shrink-0 drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" />
+              <PremiumIconInline icon={MapPin} size={20} />
               <div>
                 <p className="font-semibold text-foreground">{b.name}</p>
                 <p className="text-sm text-muted-foreground">{b.address}</p>

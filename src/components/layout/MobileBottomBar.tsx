@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Home, Grid3X3, BookOpen, ShoppingCart } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/contexts/CartContext";
@@ -41,9 +42,9 @@ export default function MobileBottomBar() {
                   active && "bg-primary/10 shadow-[0_2px_8px_-2px_hsl(var(--primary)/0.3)]"
                 )}
               >
-                <Icon className={cn(
-                  "h-5 w-5 transition-all duration-300",
-                  active && "drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]"
+                <PremiumIconInline icon={Icon} size={20} className={cn(
+                  "transition-all duration-300",
+                  active ? "text-primary drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" : "text-muted-foreground"
                 )} />
               </motion.div>
               <AnimatePresence>

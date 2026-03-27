@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { CATALOGUE_URL, CATEGORIES } from "@/lib/constants";
 import { Link } from "react-router-dom";
 import { Maximize2, Loader2, AlertTriangle } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -20,7 +21,7 @@ export default function ECataloguePage() {
         <div className={`relative ${fullscreen ? "flex-1" : "aspect-[3/4] md:aspect-video"} rounded-xl overflow-hidden border border-border bg-card`}>
           {!iframeLoaded && !iframeError && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10 bg-card">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <PremiumIconInline icon={Loader2} size={32} className="animate-spin" />
               <p className="text-sm text-muted-foreground font-medium">
                 {t("ecatalogue.loading") || "Katalog yükleniyor..."}
               </p>
@@ -28,7 +29,7 @@ export default function ECataloguePage() {
           )}
           {iframeError && (
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-10 bg-card">
-              <AlertTriangle className="h-8 w-8 text-destructive" />
+              <PremiumIconInline icon={AlertTriangle} size={32} className="text-destructive" />
               <p className="text-sm text-muted-foreground font-medium">
                 {t("ecatalogue.error") || "Katalog yüklenemedi. Lütfen tekrar deneyin."}
               </p>
@@ -46,7 +47,7 @@ export default function ECataloguePage() {
             onError={() => setIframeError(true)}
           />
           <Button size="icon" variant="secondary" className="absolute top-3 right-3 z-10" onClick={() => setFullscreen(!fullscreen)}>
-            <Maximize2 className="h-4 w-4" />
+            <PremiumIconInline icon={Maximize2} size={16} />
           </Button>
         </div>
         {!fullscreen && (

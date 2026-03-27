@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { trackWhatsAppClick } from "@/lib/tracking";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -37,7 +38,7 @@ export default function FloatingLinktree() {
               onClick={() => trackWhatsAppClick("floating_linktree")}
               className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
             >
-              <MessageCircle className="h-4 w-4" />
+              <PremiumIconInline icon={MessageCircle} size={16} className="text-primary-foreground" />
               {t("floating.openChannels")}
             </a>
           </motion.div>
@@ -54,11 +55,11 @@ export default function FloatingLinktree() {
         <AnimatePresence mode="wait">
           {showTooltip ? (
             <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-              <X className="h-6 w-6" />
+              <PremiumIconInline icon={X} size={24} className="text-primary-foreground" />
             </motion.div>
           ) : (
             <motion.div key="chat" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-              <MessageCircle className="h-6 w-6" />
+              <PremiumIconInline icon={MessageCircle} size={24} className="text-primary-foreground" />
             </motion.div>
           )}
         </AnimatePresence>

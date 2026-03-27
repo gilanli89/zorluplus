@@ -22,7 +22,7 @@ export default function CartSheet() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full relative">
-          <ShoppingCart className="h-5 w-5 text-primary drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)] filter brightness-110" />
+          <PremiumIconInline icon={ShoppingCart} size={20} />
           {itemCount > 0 && (
             <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px] bg-primary text-primary-foreground rounded-full shadow-[0_2px_6px_-1px_hsl(var(--primary)/0.5)]">
               {itemCount}
@@ -39,7 +39,7 @@ export default function CartSheet() {
 
         {items.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center gap-3">
-            <ShoppingCart className="h-12 w-12 text-muted-foreground/30 drop-shadow-[0_3px_6px_hsl(var(--muted-foreground)/0.15)]" />
+            <PremiumIconInline icon={ShoppingCart} size={48} className="text-muted-foreground/30" />
             <p className="text-muted-foreground text-sm">{t("cart.empty")}</p>
             <Button variant="outline" className="rounded-full" onClick={() => setOpen(false)}>
               {t("cart.startShopping")}
@@ -63,7 +63,7 @@ export default function CartSheet() {
                         <p className="text-sm font-medium text-foreground line-clamp-2">{item.product.name}</p>
                       </div>
                       <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => removeItem(item.product.id)}>
-                        <Trash2 className="h-4 w-4" />
+                        <PremiumIconInline icon={Trash2} size={16} className="text-muted-foreground" />
                       </Button>
                     </div>
                     <div className="flex items-center justify-between mt-2">
@@ -93,7 +93,7 @@ export default function CartSheet() {
               </div>
               <Link to="/sepet" onClick={() => setOpen(false)}>
                 <Button className="w-full rounded-full font-semibold gap-2 mt-2" size="lg">
-                  <ShoppingCart className="h-4 w-4" /> {t("cart.goToCart")}
+                  <PremiumIconInline icon={ShoppingCart} size={16} className="text-primary-foreground" /> {t("cart.goToCart")}
                 </Button>
               </Link>
             </div>

@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { trackWhatsAppClick } from "@/lib/tracking";
 import { useEffect, useRef } from "react";
 import { Shield, Award, Wrench, MessageCircle, ChevronLeft, ChevronRight, ShoppingCart, Sparkles, Package } from "lucide-react";
-import { PremiumIconInline, PremiumBadgeIcon } from "@/components/PremiumIcon";
+import PremiumIcon, { PremiumIconInline, PremiumBadgeIcon } from "@/components/PremiumIcon";
 import BrandLogo from "@/components/BrandLogo";
 import { useProducts } from "@/hooks/useProducts";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
@@ -81,8 +81,8 @@ export default function ProductPage() {
           <div className="container py-3">
             <div className="flex items-center gap-2 mb-2">
               <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex-1">{t("product.similar")}</h2>
-              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => scrollStrip("left")}><ChevronLeft className="h-4 w-4" /></Button>
-              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => scrollStrip("right")}><ChevronRight className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => scrollStrip("left")}><PremiumIconInline icon={ChevronLeft} size={16} /></Button>
+              <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => scrollStrip("right")}><PremiumIconInline icon={ChevronRight} size={16} /></Button>
             </div>
             <div ref={stripRef} className="flex gap-3 overflow-x-auto scrollbar-hide pb-1 -mx-1 px-1">
               {related.map(p => (
@@ -167,12 +167,12 @@ export default function ProductPage() {
                     toast.success(`${product.name} sepete eklendi!`);
                   }}
                 >
-                  <ShoppingCart className="h-5 w-5" /> {t("cart.addToCart")}
+                  <PremiumIconInline icon={ShoppingCart} size={20} className="text-primary-foreground" /> {t("cart.addToCart")}
                 </Button>
               )}
               <a href={getWhatsAppLink(product)} target="_blank" rel="noopener noreferrer" className="flex-1" onClick={() => trackWhatsAppClick("product_page")}>
                 <Button size="lg" variant="outline" className="w-full gap-2 border-[hsl(142,70%,40%)] text-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] hover:text-white font-semibold">
-                  <MessageCircle className="h-5 w-5" /> {t("product.orderWhatsApp")}
+                  <PremiumIconInline icon={MessageCircle} size={20} /> {t("product.orderWhatsApp")}
                 </Button>
               </a>
             </div>

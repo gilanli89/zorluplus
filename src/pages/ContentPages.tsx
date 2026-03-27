@@ -150,16 +150,7 @@ export function HakkimizdaPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 + i * 0.15 }}
                 >
-                  <motion.div
-                    className="h-16 w-16 rounded-2xl flex items-center justify-center"
-                    animate={{
-                      backgroundColor: ["rgba(255,255,255,0.15)", "rgba(255,255,255,0.25)", "rgba(255,255,255,0.15)"],
-                      boxShadow: ["0 0 0px rgba(255,255,255,0)", "0 0 20px rgba(255,255,255,0.2)", "0 0 0px rgba(255,255,255,0)"],
-                    }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
-                  >
-                    <s.icon className="h-8 w-8" />
-                  </motion.div>
+                  <PremiumIcon icon={s.icon} size="lg" variant="glow" containerClassName="[&_.premium-icon-inner]:from-white/15 [&_.premium-icon-inner]:to-white/10 [&_.premium-icon-inner]:border-white/20 [&_svg]:text-white" />
                   <motion.p
                     className="font-display text-3xl md:text-4xl font-extrabold"
                     animate={{ color: ["hsl(0,0%,100%)", "hsl(210,100%,85%)", "hsl(0,0%,100%)"] }}
