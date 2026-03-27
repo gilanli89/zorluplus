@@ -191,7 +191,7 @@ export default function B2BPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {productGroups.map((p) => (
             <div key={p} className="flex items-start gap-2 text-sm text-muted-foreground">
-              <ChevronRight className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+               <ChevronRight className="h-4 w-4 text-primary mt-0.5 shrink-0 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" />
               <span>{p}</span>
             </div>
           ))}
@@ -202,9 +202,9 @@ export default function B2BPage() {
         <p className="text-sm text-muted-foreground mb-4">{t("b2b.advantagesDesc")}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {advantages.map((a) => (
-            <motion.div key={a.text} className="flex items-center gap-3 p-3 rounded-xl border border-border bg-muted/30 relative overflow-hidden" whileHover={{ y: -2, boxShadow: "0 8px 20px -6px hsl(221 83% 53% / 0.15)" }}>
+            <motion.div key={a.text} className="flex items-center gap-3 p-3 rounded-xl border border-border bg-muted/30 card-premium relative overflow-hidden" whileHover={{ y: -2 }}>
               <motion.div className="absolute inset-0 rounded-xl pointer-events-none" animate={pulse} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-              <a.icon className="h-5 w-5 text-primary shrink-0 relative z-10" />
+              <a.icon className="h-5 w-5 text-primary shrink-0 relative z-10 drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" />
               <span className="text-sm text-foreground relative z-10">{a.text}</span>
             </motion.div>
           ))}
@@ -217,7 +217,7 @@ export default function B2BPage() {
         <div className="space-y-2">
           {corporateSolutions.map((s) => (
             <div key={s} className="flex items-start gap-2 text-sm text-muted-foreground">
-              <ChevronRight className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+              <ChevronRight className="h-4 w-4 text-primary mt-0.5 shrink-0 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" />
               <span>{s}</span>
             </div>
           ))}
@@ -260,7 +260,7 @@ export default function B2BPage() {
         <div className="space-y-2 relative z-10">
           {finalAdvantages.map((a) => (
             <div key={a} className="flex items-center gap-2 text-sm text-muted-foreground">
-              <BadgeCheck className="h-4 w-4 text-primary shrink-0" />
+              <BadgeCheck className="h-4 w-4 text-primary shrink-0 drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" />
               <span>{a}</span>
             </div>
           ))}
@@ -307,7 +307,7 @@ export default function B2BPage() {
 function SectionCard({ title, delay = 0, children }: { title: string; delay?: number; children: React.ReactNode }) {
   return (
     <motion.div
-      className="rounded-2xl border border-border bg-card p-6 md:p-8 relative overflow-hidden mb-6"
+      className="card-premium card-premium-border rounded-2xl p-6 md:p-8 relative overflow-hidden mb-6"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
