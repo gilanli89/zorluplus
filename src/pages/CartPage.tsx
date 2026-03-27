@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ShoppingCart, Trash2, Plus, Minus, ShieldPlus, Zap, ArrowLeft, CreditCard, Banknote, Package, Building2 } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -169,7 +170,7 @@ export default function CartPage() {
                     <div className="mt-4 space-y-3 border-t border-border pt-4">
                       {!isAccessory && (
                         <div className="flex items-start gap-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 p-3">
-                          <ShieldPlus className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+                          <PremiumIconInline icon={ShieldPlus} size={20} color="text-amber-600" />
                           <div className="flex-1">
                             <div className="flex items-center justify-between">
                               <div>
@@ -184,7 +185,7 @@ export default function CartPage() {
                       )}
                       {showExpress && (
                         <div className="flex items-start gap-3 rounded-xl bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 p-3">
-                          <Zap className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+                          <PremiumIconInline icon={Zap} size={20} color="text-blue-600" />
                           <div className="flex-1">
                             <div className="flex items-center justify-between">
                               <div>
@@ -206,7 +207,7 @@ export default function CartPage() {
           {recommended.length > 0 && (
             <div className="mt-6">
               <h3 className="font-display font-bold text-foreground text-lg mb-3 flex items-center gap-2">
-                <Package className="h-5 w-5 text-primary" /> {t("cart.recommended")}
+                <PremiumIconInline icon={Package} size={20} /> {t("cart.recommended")}
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {recommended.map(rp => (
@@ -245,7 +246,7 @@ export default function CartPage() {
                 <div className="flex items-center gap-3 rounded-xl border border-border p-3 cursor-pointer hover:bg-muted/50 transition-colors">
                   <RadioGroupItem value="card" id="card" />
                   <Label htmlFor="card" className="flex items-center gap-2 cursor-pointer flex-1">
-                    <CreditCard className="h-4 w-4 text-primary" />
+                    <PremiumIconInline icon={CreditCard} size={16} />
                     <div>
                       <p className="font-semibold text-sm">{t("cart.creditCard")}</p>
                       <p className="text-xs text-muted-foreground">{t("cart.creditCardDesc")}</p>
@@ -255,7 +256,7 @@ export default function CartPage() {
                 <div className="flex items-center gap-3 rounded-xl border border-border p-3 cursor-pointer hover:bg-muted/50 transition-colors">
                   <RadioGroupItem value="transfer" id="transfer" />
                   <Label htmlFor="transfer" className="flex items-center gap-2 cursor-pointer flex-1">
-                    <Building2 className="h-4 w-4 text-primary" />
+                    <PremiumIconInline icon={Building2} size={16} />
                     <div>
                       <p className="font-semibold text-sm">{t("cart.bankTransfer")}</p>
                       <p className="text-xs text-muted-foreground">{t("cart.bankTransferDesc")}</p>
@@ -265,7 +266,7 @@ export default function CartPage() {
                 <div className="flex items-center gap-3 rounded-xl border border-border p-3 cursor-pointer hover:bg-muted/50 transition-colors">
                   <RadioGroupItem value="cash" id="cash" />
                   <Label htmlFor="cash" className="flex items-center gap-2 cursor-pointer flex-1">
-                    <Banknote className="h-4 w-4 text-primary" />
+                    <PremiumIconInline icon={Banknote} size={16} />
                     <div>
                       <p className="font-semibold text-sm">{t("cart.cashOnDelivery")}</p>
                       <p className="text-xs text-muted-foreground">{t("cart.cashOnDeliveryDesc")}</p>

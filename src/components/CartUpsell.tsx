@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 
 interface Props {
   allProducts: Product[];
@@ -29,7 +30,7 @@ export default function CartUpsell({ allProducts, maxItems = 3 }: Props) {
   return (
     <div className="rounded-xl border border-border bg-muted/30 p-4">
       <div className="flex items-center gap-2 mb-3">
-        <Sparkles className="h-4 w-4 text-primary" />
+        <PremiumIconInline icon={Sparkles} size={16} />
         <h4 className="text-sm font-bold text-foreground">TV'niz için önerilen aksesuarlar</h4>
       </div>
       <div className="space-y-3">

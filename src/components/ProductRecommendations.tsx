@@ -3,6 +3,7 @@ import { Product } from "@/lib/types";
 import ProductCard from "@/components/ProductCard";
 import { Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 
 interface Props {
   currentProduct: Product;
@@ -59,7 +60,7 @@ export default function ProductRecommendations({ currentProduct, allProducts, ma
   return (
     <div className="mt-8">
       <div className="flex items-center gap-2 mb-4">
-        <Sparkles className="h-5 w-5 text-primary" />
+        <PremiumIconInline icon={Sparkles} size={20} />
         <h3 className="text-lg font-bold text-foreground">
           {lang === "tr" ? "Sizin İçin Öneriler" : "Recommended for You"}
         </h3>

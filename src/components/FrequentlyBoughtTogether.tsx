@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
 import { toast } from "sonner";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 
 interface Props {
   currentProduct: Product;
@@ -37,7 +38,7 @@ export default function FrequentlyBoughtTogether({ currentProduct, allProducts, 
     <section className="mt-10">
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2.5">
-          <Package className="h-5 w-5 text-primary" />
+          <PremiumIconInline icon={Package} size={20} />
           <h3 className="text-lg font-bold text-foreground">Bunlarla Birlikte Alınır</h3>
         </div>
         <div className="flex items-center gap-1">
