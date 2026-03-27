@@ -115,8 +115,8 @@ export default function Header() {
         <div className="container relative flex items-center justify-between py-1.5 text-[11px]">
           <div className="flex items-center gap-4 font-medium">
             <span className="hidden sm:inline-flex items-center gap-1 text-primary-foreground/80 font-semibold">{greeting}</span>
-            <span className="hidden md:inline-flex items-center gap-1"><Shield className="h-3 w-3" /> {t("header.authorized")}</span>
-            <span className="inline-flex items-center gap-1"><Award className="h-3 w-3" /> {t("header.warranty")}</span>
+            <span className="hidden md:inline-flex items-center gap-1"><Shield className="h-3 w-3 drop-shadow-[0_0_3px_rgba(255,255,255,0.4)]" /> {t("header.authorized")}</span>
+            <span className="inline-flex items-center gap-1"><Award className="h-3 w-3 drop-shadow-[0_0_3px_rgba(255,255,255,0.4)]" /> {t("header.warranty")}</span>
           </div>
           <div className="flex items-center gap-3">
             {/* Language switcher */}
@@ -178,7 +178,7 @@ export default function Header() {
               ))}
               <hr className="my-3 border-border" />
               <Link to="/e-katalog" className="flex items-center gap-2 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-                <FileText className="h-4 w-4" /> {t("header.eCatalogue")}
+                <FileText className="h-4 w-4 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.2)]" /> {t("header.eCatalogue")}
               </Link>
               <Link to="/subelerimiz" className="px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
                 {t("header.branches")}
@@ -267,10 +267,10 @@ export default function Header() {
           <CartSheet />
           <a href="https://servis.zorluplus.com/" target="_blank" rel="noopener noreferrer">
             <Button variant="outline" size="sm" className="rounded-full gap-1.5 border-primary/30 text-primary hover:bg-primary/5 font-semibold hidden sm:inline-flex tap-scale">
-              <Wrench className="h-3.5 w-3.5" /> {t("header.serviceRequest")}
+              <Wrench className="h-3.5 w-3.5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {t("header.serviceRequest")}
             </Button>
             <Button variant="ghost" size="icon" className="rounded-full sm:hidden tap-scale">
-              <Wrench className="h-5 w-5 text-primary" />
+              <Wrench className="h-5 w-5 text-primary drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" />
             </Button>
           </a>
           <Link to="/magaza">

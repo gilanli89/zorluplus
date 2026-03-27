@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Home, Grid3X3, ArrowLeft } from "lucide-react";
+import { Home, Grid3X3 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import PremiumIcon from "@/components/PremiumIcon";
 
 const NotFound = () => {
   const { t } = useLanguage();
@@ -57,7 +58,7 @@ const NotFound = () => {
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           className="mb-6"
         >
-          <span className="text-[120px] sm:text-[160px] font-extrabold leading-none bg-gradient-to-br from-primary via-primary/60 to-accent bg-clip-text text-transparent select-none">
+          <span className="text-[120px] sm:text-[160px] font-extrabold leading-none bg-gradient-to-br from-primary via-primary/60 to-accent bg-clip-text text-transparent select-none drop-shadow-[0_4px_24px_hsl(var(--primary)/0.3)]">
             404
           </span>
         </motion.div>
@@ -83,13 +84,13 @@ const NotFound = () => {
         >
           <Link to="/">
             <Button size="lg" className="rounded-full gap-2 pulse-btn tap-scale w-full sm:w-auto">
-              <Home className="w-4 h-4" />
+              <Home className="w-4 h-4 drop-shadow-[0_1px_2px_hsl(var(--primary-foreground)/0.3)]" />
               {t("general.homePage")}
             </Button>
           </Link>
           <Link to="/kategoriler">
             <Button size="lg" variant="outline" className="rounded-full gap-2 tap-scale w-full sm:w-auto">
-              <Grid3X3 className="w-4 h-4" />
+              <Grid3X3 className="w-4 h-4 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" />
               {t("nav.categories")}
             </Button>
           </Link>
