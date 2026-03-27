@@ -36,8 +36,15 @@ export default function MobileBottomBar() {
               <motion.div
                 animate={active ? { scale: 1.15, y: -2 } : { scale: 1, y: 0 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                className={cn(
+                  "p-1 rounded-lg transition-all duration-300",
+                  active && "bg-primary/10 shadow-[0_2px_8px_-2px_hsl(var(--primary)/0.3)]"
+                )}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className={cn(
+                  "h-5 w-5 transition-all duration-300",
+                  active && "drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]"
+                )} />
               </motion.div>
               <AnimatePresence>
                 {isCart && itemCount > 0 && (
@@ -45,7 +52,7 @@ export default function MobileBottomBar() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     exit={{ scale: 0 }}
-                    className="absolute -top-1 right-0 h-4 w-4 flex items-center justify-center text-[9px] font-bold bg-primary text-primary-foreground rounded-full animate-pulse-ring"
+                    className="absolute -top-1 right-0 h-4 w-4 flex items-center justify-center text-[9px] font-bold bg-primary text-primary-foreground rounded-full animate-pulse-ring shadow-[0_2px_6px_-1px_hsl(var(--primary)/0.4)]"
                   >
                     {itemCount}
                   </motion.span>
@@ -58,7 +65,7 @@ export default function MobileBottomBar() {
               {active && (
                 <motion.span
                   layoutId="bottombar-indicator"
-                  className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full bg-primary"
+                  className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.4)]"
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 />
               )}

@@ -26,15 +26,17 @@ export default function CategoriesPage() {
             <motion.div key={cat.slug} custom={i} initial="hidden" animate="visible" variants={fadeUp}>
               <Link
                 to={`/kategori/${cat.slug}`}
-                className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-5 md:p-6 hover:border-primary hover:shadow-lg hover:bg-primary/5 transition-all duration-300 tap-scale h-full"
+                className="group card-premium card-premium-border flex flex-col items-center gap-3 rounded-2xl p-5 md:p-6 h-full"
               >
-                <div className="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                  {IconComp && <IconComp className="h-7 w-7 md:h-8 md:w-8" />}
+                <div className="premium-icon-wrap">
+                  <div className="premium-icon-inner flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-primary/15 via-primary/10 to-accent/10 border border-primary/20 shadow-[0_2px_8px_-2px_hsl(var(--primary)/0.25),inset_0_1px_0_hsl(var(--primary-foreground)/0.1)] text-primary group-hover:shadow-[0_4px_16px_-4px_hsl(var(--primary)/0.35)]">
+                    {IconComp && <IconComp className="h-7 w-7 md:h-8 md:w-8 drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" />}
+                  </div>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="font-display font-bold text-sm md:text-base text-center text-foreground leading-tight">{catName}</span>
                   {cat.children.length > 0 && (
-                    <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-primary/15 text-primary text-[10px] font-bold">
+                    <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-primary/15 text-primary text-[10px] font-bold shadow-[0_1px_4px_-1px_hsl(var(--primary)/0.2)]">
                       {cat.children.length}
                     </span>
                   )}

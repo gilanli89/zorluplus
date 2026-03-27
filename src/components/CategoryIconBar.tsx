@@ -28,13 +28,21 @@ export default function CategoryIconBar() {
             >
               <Link
                 to={`/kategori/${cat.slug}`}
-                className={`flex flex-col items-center gap-1.5 min-w-[72px] rounded-xl border px-3 py-3 text-xs transition-all tap-scale ${
+                className={`premium-icon-wrap flex flex-col items-center gap-1.5 min-w-[72px] rounded-xl border px-3 py-3 text-xs transition-all tap-scale ${
                   isActive
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border bg-card text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5"
+                    ? "border-primary bg-primary/10 text-primary shadow-[0_2px_12px_-4px_hsl(var(--primary)/0.3)]"
+                    : "border-border bg-card text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 hover:shadow-[0_2px_8px_-4px_hsl(var(--primary)/0.2)]"
                 }`}
               >
-                {IconComp && <IconComp className="h-5 w-5" />}
+                {IconComp && (
+                  <div className={`premium-icon-inner rounded-lg p-1.5 ${
+                    isActive 
+                      ? "bg-gradient-to-br from-primary/20 to-accent/10 border border-primary/30 shadow-[0_2px_6px_-2px_hsl(var(--primary)/0.3)]" 
+                      : "bg-primary/5"
+                  }`}>
+                    <IconComp className={`h-5 w-5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)] transition-all duration-300`} />
+                  </div>
+                )}
                 <span className="text-[10px] font-semibold text-center leading-tight whitespace-nowrap">{getCatName(cat.slug)}</span>
               </Link>
             </motion.div>

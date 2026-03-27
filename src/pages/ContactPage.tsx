@@ -3,6 +3,7 @@ import { BRAND, BRANCHES } from "@/lib/constants";
 import { trackWhatsAppClick } from "@/lib/tracking";
 import QuoteForm from "@/components/QuoteForm";
 import { useLanguage } from "@/contexts/LanguageContext";
+import PremiumIcon from "@/components/PremiumIcon";
 
 export default function ContactPage() {
   const { t } = useLanguage();
@@ -14,22 +15,22 @@ export default function ContactPage() {
         <div>
           <div className="flex flex-col gap-4 mb-8">
             <a href={`tel:${BRAND.phone}`} className="flex items-center gap-3 text-foreground hover:text-primary transition-colors">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary pulse-icon"><Phone className="h-5 w-5" /></div>
+              <PremiumIcon icon={Phone} size="md" variant="glow" />
               <div><p className="text-sm text-muted-foreground">{t("contact.phone")}</p><p className="font-semibold">{BRAND.phoneDisplay}</p></div>
             </a>
             <a href={`mailto:${BRAND.email}`} className="flex items-center gap-3 text-foreground hover:text-primary transition-colors">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary pulse-icon" style={{ animationDelay: "0.5s" }}><Mail className="h-5 w-5" /></div>
+              <PremiumIcon icon={Mail} size="md" variant="glow" />
               <div><p className="text-sm text-muted-foreground">{t("contact.email")}</p><p className="font-semibold">{BRAND.email}</p></div>
             </a>
             <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("contact_page")} className="flex items-center gap-3 text-foreground hover:text-success transition-colors">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-success/10 text-success"><MessageCircle className="h-5 w-5" /></div>
+              <PremiumIcon icon={MessageCircle} size="md" variant="gradient" containerClassName="[&_.premium-icon-inner]:from-success/15 [&_.premium-icon-inner]:to-success/10 [&_.premium-icon-inner]:border-success/20 [&_svg]:text-success" />
               <div><p className="text-sm text-muted-foreground">WhatsApp</p><p className="font-semibold">{BRAND.phoneDisplay}</p></div>
             </a>
           </div>
 
           {BRANCHES.map(b => (
             <div key={b.id} className="mb-4 flex items-start gap-3">
-              <MapPin className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+              <MapPin className="h-5 w-5 text-primary mt-0.5 shrink-0 drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" />
               <div>
                 <p className="font-semibold text-foreground">{b.name}</p>
                 <p className="text-sm text-muted-foreground">{b.address}</p>
@@ -39,7 +40,7 @@ export default function ContactPage() {
           ))}
         </div>
 
-         <div className="rounded-xl border border-border bg-card p-6 pulse-card">
+         <div className="card-premium card-premium-border rounded-xl p-6">
            <h2 className="heading-4 text-foreground mb-4">{t("contact.getQuote")}</h2>
           <QuoteForm />
         </div>

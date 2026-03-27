@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
+import PremiumIcon from "@/components/PremiumIcon";
 
 export default function BranchesPage() {
   const { t } = useLanguage();
@@ -19,7 +20,7 @@ export default function BranchesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.15, duration: 0.4 }}
-            className="rounded-2xl border border-border bg-card overflow-hidden shadow-md"
+            className="card-premium card-premium-border rounded-2xl overflow-hidden"
           >
             {/* Map with Google Maps badge */}
             <div className="relative aspect-[16/9] md:aspect-[21/9]">
@@ -31,7 +32,6 @@ export default function BranchesPage() {
                 title={b.name}
                 referrerPolicy="no-referrer-when-downgrade"
               />
-              {/* Google Maps badge */}
               <a
                 href={b.mapsLink}
                 target="_blank"
@@ -50,24 +50,28 @@ export default function BranchesPage() {
               <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-5">{b.name}</h2>
               <div className="flex flex-col gap-3.5 text-base text-muted-foreground mb-7">
                 <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 shrink-0 mt-0.5 text-primary" />
-                  {b.address}
+                  <PremiumIcon icon={MapPin} size="sm" variant="glow" />
+                  <span className="mt-1">{b.address}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 shrink-0 text-primary" />
+                  <PremiumIcon icon={Phone} size="sm" variant="glow" />
                   <span>{b.phone}{b.phone2 ? ` / ${b.phone2}` : ""}</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Clock className="h-5 w-5 shrink-0 mt-0.5 text-primary" />
-                  {b.hours}
+                  <PremiumIcon icon={Clock} size="sm" variant="glow" />
+                  <span className="mt-1">{b.hours}</span>
                 </div>
               </div>
               <div className="flex gap-3">
                 <a href={b.mapsLink} target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="gap-2 rounded-full text-base"><MapPin className="h-5 w-5" /> {t("branches.getDirections")}</Button>
+                  <Button size="lg" className="gap-2 rounded-full text-base">
+                    <MapPin className="h-5 w-5 drop-shadow-[0_1px_2px_hsl(var(--primary-foreground)/0.3)]" /> {t("branches.getDirections")}
+                  </Button>
                 </a>
                 <a href={`tel:${b.phone}`}>
-                  <Button size="lg" variant="outline" className="gap-2 rounded-full text-base"><Phone className="h-5 w-5" /> {t("branches.call")}</Button>
+                  <Button size="lg" variant="outline" className="gap-2 rounded-full text-base">
+                    <Phone className="h-5 w-5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {t("branches.call")}
+                  </Button>
                 </a>
               </div>
             </div>
