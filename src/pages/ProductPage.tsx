@@ -117,6 +117,9 @@ export default function ProductPage() {
           <div className="flex flex-col gap-4">
             <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{product.brand}</p>
             <h1 className="heading-2 text-foreground">{translateProduct(product.name)}</h1>
+            {product.sku && (
+              <p className="text-xs font-mono text-muted-foreground">{t("product.modelNo") || "Model No"}: {product.sku}</p>
+            )}
             {product.price > 0 ? (
               <div className="flex items-center gap-3">
                 {product.salePrice && product.salePrice > 0 ? (
