@@ -223,6 +223,8 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const IMAGE_OVERRIDES: Record<string, string> = {
     "43NANO81T3A": "/products/lg-43-nanocell-tv-43nano81t3a.png",
     "QE75QN90FA": "/products/samsung-75-neo-qled-tv-qe75qn90fa.png",
+    "AR12": "/products/samsung-24000btu-klima-ar12.png",
+    "ADAX-FLEX-WALLMOUNT": "/products/adax-flex-tv-aski-aparati.png",
   };
 
   const rawImage = row["Görseller"] || row["Image"] || row["Görsel"] || row["image"] || "";
