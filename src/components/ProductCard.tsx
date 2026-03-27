@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/types";
-import { ShoppingCart, Eye, Sparkles } from "lucide-react";
+import { ShoppingCart, Eye, Sparkles, Flame, Zap, TrendingUp } from "lucide-react";
 import { PremiumBadgeIcon } from "@/components/PremiumIcon";
 import { formatPrice } from "@/lib/products";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -83,13 +83,25 @@ export default function ProductCard({ product }: ProductCardProps) {
               if (next) target.src = next;
             }}
           />
-          <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
+          <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-10">
             {product.isNew && (
               <Badge variant="premium" className="text-[10px] rounded-full px-2.5 gap-1">
                 <PremiumBadgeIcon icon={Sparkles} size={10} /> {t("product.new")}
               </Badge>
             )}
+            {product.isFeatured && !product.isNew && (
+              <Badge className="text-[10px] rounded-full px-2.5 gap-1 bg-amber-500 hover:bg-amber-600 text-white border-0 shadow-[0_2px_8px_-2px_rgba(245,158,11,0.5)]">
+                <Flame size={10} /> Çok Satan
+              </Badge>
+            )}
           </div>
+          {product.salePrice && product.salePrice > 0 && product.price > product.salePrice && (
+            <div className="absolute top-2.5 right-2.5 z-10">
+              <Badge className="text-[10px] rounded-full px-2.5 gap-1 bg-rose-500 hover:bg-rose-600 text-white border-0 shadow-[0_2px_8px_-2px_rgba(244,63,94,0.5)] font-bold">
+                <Zap size={10} /> %{Math.round(((product.price - product.salePrice) / product.price) * 100)}
+              </Badge>
+            </div>
+          )}
           {!product.inStock && (
             <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px] flex items-center justify-center">
               <span className="text-sm font-semibold text-muted-foreground">{t("product.outOfStock")}</span>
