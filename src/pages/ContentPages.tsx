@@ -813,7 +813,7 @@ export function EkibimizPage() {
                 src={m.photo}
                 alt={m.name}
                 className="w-full h-full object-cover"
-                style={{ objectPosition: "center 20%" }}
+                style={{ objectPosition: "center 45%" }}
                 loading="lazy"
               />
             </motion.div>
