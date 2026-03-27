@@ -415,7 +415,7 @@ export default function TVLandingPage() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
-                className="group rounded-xl border border-border bg-card overflow-hidden"
+                className="group card-premium rounded-xl overflow-hidden"
               >
                 <summary className="flex items-center justify-between cursor-pointer p-4 md:p-5 font-semibold text-sm text-foreground hover:text-primary transition-colors list-none [&::-webkit-details-marker]:hidden">
                   {item.q}
