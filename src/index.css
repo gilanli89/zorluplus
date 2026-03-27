@@ -439,10 +439,32 @@ html {
   .animate-float,
   .animate-shimmer,
   .blockchain-line,
-  .blockchain-dot {
+  .blockchain-dot,
+  .float-3d,
+  .gradient-mesh,
+  .shine-on-hover::after {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Input focus gradient glow */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.12);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Input error shake */
+@keyframes input-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+.input-shake {
+  animation: input-shake 0.4s ease;
 }
 
 /* Skeleton shimmer for product loading */

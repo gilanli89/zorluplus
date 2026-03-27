@@ -46,12 +46,24 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="container max-w-3xl py-16 text-center">
-        <ShoppingCart className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
+        <div className="relative mx-auto w-32 h-32 mb-6">
+          {/* Animated empty box */}
+          <div className="absolute inset-0 rounded-2xl border-2 border-dashed border-muted-foreground/20 animate-pulse" />
+          <ShoppingCart className="absolute inset-0 m-auto h-16 w-16 text-muted-foreground/20" />
+          <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-muted flex items-center justify-center">
+            <span className="text-xs font-bold text-muted-foreground">0</span>
+          </div>
+        </div>
         <h1 className="heading-2 text-foreground mb-2">{t("cart.emptyTitle")}</h1>
         <p className="text-muted-foreground mb-6">{t("cart.emptyDesc")}</p>
-        <Link to="/">
-          <Button className="rounded-full gap-2"><ArrowLeft className="h-4 w-4" /> {t("cart.startShopping")}</Button>
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link to="/">
+            <Button className="rounded-full gap-2"><ArrowLeft className="h-4 w-4" /> {t("cart.startShopping")}</Button>
+          </Link>
+          <Link to="/kategoriler">
+            <Button variant="outline" className="rounded-full gap-2">{t("nav.categories")}</Button>
+          </Link>
+        </div>
       </div>
     );
   }
