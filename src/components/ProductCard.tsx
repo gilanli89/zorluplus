@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/types";
 import { ShoppingCart, Eye, Sparkles, Flame, Zap, TrendingUp } from "lucide-react";
-import { PremiumBadgeIcon } from "@/components/PremiumIcon";
+import { PremiumBadgeIcon, PremiumIconInline } from "@/components/PremiumIcon";
 import { formatPrice } from "@/lib/products";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
