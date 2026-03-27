@@ -482,16 +482,7 @@ export function HakkimizdaPage() {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <div className="flex items-center gap-4 shrink-0">
-              <motion.div
-                className="h-14 w-14 rounded-xl flex items-center justify-center"
-                animate={{
-                  backgroundColor: ["hsl(221,83%,53%,0.1)", "hsl(221,83%,53%,0.2)", "hsl(221,83%,53%,0.1)"],
-                  boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 20px hsl(221,83%,53%,0.15)", "0 0 0px hsl(221,83%,53%,0)"],
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <MapPin className="h-7 w-7 text-primary" />
-              </motion.div>
+              <PremiumIcon icon={MapPin} size="xl" variant="glow" />
               <div>
                 <motion.p
                   className="font-display text-2xl font-extrabold"
