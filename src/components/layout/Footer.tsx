@@ -51,7 +51,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="border-t border-border bg-card pb-24 lg:pb-8">
+    <footer className="border-t border-border bg-card pb-24 lg:pb-8 wave-separator relative">
       <div className="container py-8">
         <motion.div
           className="grid grid-cols-2 gap-8 md:grid-cols-4"
