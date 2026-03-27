@@ -12,6 +12,8 @@ import { trackWhatsAppClick } from "@/lib/tracking";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ProductCard from "@/components/ProductCard";
 import QuoteForm from "@/components/QuoteForm";
+import PremiumIcon from "@/components/PremiumIcon";
+import { TRUST_3D_ICONS } from "@/lib/categoryIcons";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -138,15 +140,25 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
       <section className="border-b border-border bg-card">
         <div className="container py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {config.trustItems.map((item, i) => (
-              <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="trust-card rounded-xl p-4 flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary pulse-icon" style={{ animationDelay: `${i * 0.5}s` }}><item.icon className="h-5 w-5" /></div>
-                <div>
-                  <p className="text-sm font-bold text-foreground">{item.label}</p>
-                  <p className="text-xs text-muted-foreground">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
+            {config.trustItems.map((item, i) => {
+              const icon3d = TRUST_3D_ICONS[item.icon.displayName || ""];
+              return (
+                <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="card-premium card-premium-border rounded-xl p-4 flex items-center gap-3">
+                  {icon3d ? (
+                    <div className="relative w-10 h-10 flex-shrink-0">
+                      <div className="absolute inset-0 rounded-xl bg-primary/10 blur-sm opacity-60" />
+                      <img src={icon3d} alt={item.label} className="relative z-10 w-10 h-10 object-contain drop-shadow-[0_3px_6px_hsl(var(--primary)/0.25)]" loading="lazy" width={40} height={40} />
+                    </div>
+                  ) : (
+                    <PremiumIcon icon={item.icon} size="md" variant="glow" />
+                  )}
+                  <div>
+                    <p className="text-sm font-bold text-foreground">{item.label}</p>
+                    <p className="text-xs text-muted-foreground">{item.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -172,7 +184,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 rounded-2xl border border-border bg-card">
+            <div className="text-center py-12 card-premium rounded-2xl">
               <p className="text-muted-foreground mb-4">{t("landing.productsLoading")}</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_fallback")}>
                 <Button className="rounded-full gap-2 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
@@ -199,8 +211,8 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
             <div className={`grid grid-cols-2 ${config.subtypes.length >= 4 ? "md:grid-cols-4" : config.subtypes.length === 3 ? "md:grid-cols-3" : "md:grid-cols-2"} gap-3 md:gap-5`}>
               {config.subtypes.map((type, i) => (
                 <motion.div key={type.name} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-                  <Link to={type.link} className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-6 text-center hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors"><type.icon className="h-7 w-7" /></div>
+                  <Link to={type.link} className="group card-premium card-premium-border flex flex-col items-center gap-3 rounded-2xl p-6 text-center">
+                    <PremiumIcon icon={type.icon} size="lg" variant="gradient" />
                     <h3 className="font-display font-bold text-foreground">{type.name}</h3>
                     <p className="text-xs text-muted-foreground leading-relaxed">{type.desc}</p>
                   </Link>
@@ -220,8 +232,8 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
               <p className="text-muted-foreground leading-relaxed mb-6">{config.benefitsDescription}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {config.benefits.map((b, i) => (
-                  <motion.div key={b.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex gap-3 rounded-xl border border-border bg-card p-4 pulse-card" style={{ animationDelay: `${i * 0.6}s` }}>
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary pulse-icon" style={{ animationDelay: `${i * 0.4}s` }}><b.icon className="h-5 w-5" /></div>
+                  <motion.div key={b.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="card-premium card-premium-border flex gap-3 rounded-xl p-4">
+                    <PremiumIcon icon={b.icon} size="md" variant="glow" />
                     <div>
                       <p className="text-sm font-bold text-foreground">{b.title}</p>
                       <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{b.desc}</p>
@@ -230,7 +242,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
                 ))}
               </div>
             </motion.div>
-            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="rounded-2xl border border-border bg-card p-6 shadow-lg">
+            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} className="card-premium card-premium-border rounded-2xl p-6 shadow-lg">
               <h3 className="heading-4 text-foreground mb-1">{config.quoteTitle}</h3>
               <p className="text-sm text-muted-foreground mb-5">{config.quoteDescription}</p>
               <QuoteForm />
@@ -248,7 +260,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
           </motion.div>
           <div className="space-y-3">
             {config.faq.map((item, i) => (
-              <motion.details key={i} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="group rounded-xl border border-border bg-card overflow-hidden">
+              <motion.details key={i} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="group card-premium rounded-xl overflow-hidden">
                 <summary className="flex items-center justify-between cursor-pointer p-4 md:p-5 font-semibold text-sm text-foreground hover:text-primary transition-colors list-none [&::-webkit-details-marker]:hidden">
                   {item.q}
                   <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90" />
@@ -266,8 +278,8 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
       <section className="py-12 md:py-16">
         <div className="container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="rounded-2xl border border-border bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center">
-              <MessageCircle className="h-10 w-10 text-[hsl(142,70%,40%)] mx-auto mb-4" />
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="card-premium card-premium-border rounded-2xl bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center">
+              <MessageCircle className="h-10 w-10 text-[hsl(142,70%,40%)] mx-auto mb-4 drop-shadow-[0_3px_8px_hsl(142,70%,40%,0.3)]" />
               <h3 className="heading-3 text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
               <p className="text-sm text-muted-foreground mb-5">{t("landing.whatsappOrderDesc")}</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_cta")}>
@@ -276,8 +288,8 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
                 </Button>
               </a>
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="rounded-2xl border border-border bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 text-center">
-              <Phone className="h-10 w-10 text-primary mx-auto mb-4" />
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }} className="card-premium card-premium-border rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 text-center">
+              <Phone className="h-10 w-10 text-primary mx-auto mb-4 drop-shadow-[0_3px_8px_hsl(var(--primary)/0.3)]" />
               <h3 className="heading-3 text-foreground mb-2">{t("landing.callUs")}</h3>
               <p className="text-sm text-muted-foreground mb-5">{t("landing.callUsDesc")}</p>
               <a href={`tel:${BRAND.phone.replace(/\s/g, "")}`}>
@@ -290,8 +302,8 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
             {BRANCHES.map((branch, i) => (
-              <motion.a key={branch.id} href={branch.mapsLink} target="_blank" rel="noopener noreferrer" custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/50 transition-colors">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Star className="h-5 w-5" /></div>
+              <motion.a key={branch.id} href={branch.mapsLink} target="_blank" rel="noopener noreferrer" custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="card-premium card-premium-border flex items-start gap-3 rounded-xl p-4">
+                <PremiumIcon icon={Star} size="md" variant="glow" />
                 <div>
                   <p className="text-sm font-bold text-foreground">{branch.name}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{branch.address}</p>

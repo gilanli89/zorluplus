@@ -6,6 +6,8 @@ import {
   Shield, Award, Wrench, MessageCircle, Phone, CheckCircle2,
   Star, ArrowRight, Tv, Monitor, Volume2, Zap, Eye, Maximize2, SlidersHorizontal, X,
 } from "lucide-react";
+import PremiumIcon from "@/components/PremiumIcon";
+import { TRUST_3D_ICONS } from "@/lib/categoryIcons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -234,17 +236,25 @@ export default function TVLandingPage() {
               { icon: Award, label: t("lp.tv.trust2"), desc: t("lp.tv.trust2d") },
               { icon: Wrench, label: t("lp.tv.trust3"), desc: t("lp.tv.trust3d") },
               { icon: Star, label: t("lp.tv.trust4"), desc: t("lp.tv.trust4d") },
-            ].map((item, i) => (
-              <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <item.icon className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-foreground">{item.label}</p>
-                  <p className="text-xs text-muted-foreground">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
+            ].map((item, i) => {
+              const icon3d = TRUST_3D_ICONS[item.icon.displayName || ""];
+              return (
+                <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="card-premium card-premium-border rounded-xl p-4 flex items-center gap-3">
+                  {icon3d ? (
+                    <div className="relative w-10 h-10 flex-shrink-0">
+                      <div className="absolute inset-0 rounded-xl bg-primary/10 blur-sm opacity-60" />
+                      <img src={icon3d} alt={item.label} className="relative z-10 w-10 h-10 object-contain drop-shadow-[0_3px_6px_hsl(var(--primary)/0.25)]" loading="lazy" width={40} height={40} />
+                    </div>
+                  ) : (
+                    <PremiumIcon icon={item.icon} size="md" variant="glow" />
+                  )}
+                  <div>
+                    <p className="text-sm font-bold text-foreground">{item.label}</p>
+                    <p className="text-xs text-muted-foreground">{item.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -333,11 +343,9 @@ export default function TVLandingPage() {
               <motion.div key={type.name} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
                 <Link
                   to={`/kategori/tv-goruntu/${type.slug}`}
-                  className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-6 text-center hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
+                  className="group card-premium card-premium-border flex flex-col items-center gap-3 rounded-2xl p-6 text-center"
                 >
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 text-primary group-hover:from-purple-500/20 group-hover:to-blue-500/20 transition-colors">
-                    <type.icon className="h-7 w-7" />
-                  </div>
+                  <PremiumIcon icon={type.icon} size="lg" variant="gradient" />
                   <h3 className="font-display font-bold text-foreground">{type.name}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{type.desc}</p>
                 </Link>
@@ -361,11 +369,9 @@ export default function TVLandingPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {BENEFITS.map((b, i) => (
                   <motion.div key={b.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                    className="flex gap-3 rounded-xl border border-border bg-card p-4"
+                    className="card-premium card-premium-border flex gap-3 rounded-xl p-4"
                   >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <b.icon className="h-5 w-5" />
-                    </div>
+                    <PremiumIcon icon={b.icon} size="md" variant="glow" />
                     <div>
                       <p className="text-sm font-bold text-foreground">{b.title}</p>
                       <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{b.desc}</p>
@@ -377,7 +383,7 @@ export default function TVLandingPage() {
 
             {/* Quote Form */}
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-              className="rounded-2xl border border-border bg-card p-6 shadow-lg"
+              className="card-premium card-premium-border rounded-2xl p-6 shadow-lg"
             >
               <h3 className="font-display font-bold text-lg text-foreground mb-1">
                 {t("lp.tv.quoteTitle")}
@@ -409,7 +415,7 @@ export default function TVLandingPage() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
-                className="group rounded-xl border border-border bg-card overflow-hidden"
+                className="group card-premium rounded-xl overflow-hidden"
               >
                 <summary className="flex items-center justify-between cursor-pointer p-4 md:p-5 font-semibold text-sm text-foreground hover:text-primary transition-colors list-none [&::-webkit-details-marker]:hidden">
                   {item.q}
@@ -430,7 +436,7 @@ export default function TVLandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* WhatsApp CTA */}
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-              className="rounded-2xl border border-border bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center"
+              className="card-premium card-premium-border rounded-2xl bg-gradient-to-br from-[hsl(142,70%,40%)]/10 to-[hsl(142,70%,40%)]/5 p-6 md:p-8 text-center"
             >
               <MessageCircle className="h-10 w-10 text-[hsl(142,70%,40%)] mx-auto mb-4" />
               <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.whatsappOrder")}</h3>
@@ -444,7 +450,7 @@ export default function TVLandingPage() {
 
             {/* Phone CTA */}
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
-              className="rounded-2xl border border-border bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 text-center"
+              className="card-premium card-premium-border rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 text-center"
             >
               <Phone className="h-10 w-10 text-primary mx-auto mb-4" />
               <h3 className="font-display text-xl font-bold text-foreground mb-2">{t("landing.callUs")}</h3>
@@ -470,11 +476,9 @@ export default function TVLandingPage() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
-                className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/50 transition-colors"
+                className="card-premium card-premium-border flex items-start gap-3 rounded-xl p-4"
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Star className="h-5 w-5" />
-                </div>
+                <PremiumIcon icon={Star} size="md" variant="glow" />
                 <div>
                   <p className="text-sm font-bold text-foreground">{branch.name}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">{branch.address}</p>
