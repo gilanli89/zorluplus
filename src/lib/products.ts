@@ -218,8 +218,18 @@ function parseRow(row: Record<string, string>, index: number): Product {
   const price = parseFloat(row["Normal fiyat"] || row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
   const salePrice = parseFloat(row["İndirimli satış fiyatı"] || row["İndirimli Fiyat"] || row["Sale Price"] || "0") || undefined;
   const fallback = getFallbackImage(category, subcategory);
+
+  // SKU-based image overrides for products with broken/template CMS images
+  const IMAGE_OVERRIDES: Record<string, string> = {
+    "43NANO81T3A": "/products/lg-43-nanocell-tv-43nano81t3a.png",
+    "QE75QN90FA": "/products/samsung-75-neo-qled-tv-qe75qn90fa.png",
+  };
+
   const rawImage = row["Görseller"] || row["Image"] || row["Görsel"] || row["image"] || "";
-  const images = rawImage ? rawImage.split(",").map(s => s.trim()).filter(Boolean).map(u => cloudinaryFetch(u)) : [];
+  const overrideImage = IMAGE_OVERRIDES[sku];
+  const images = overrideImage
+    ? [overrideImage]
+    : rawImage ? rawImage.split(",").map(s => s.trim()).filter(Boolean).map(u => cloudinaryFetch(u)) : [];
   const image = images[0] || fallback;
   const desc = row["Kısa açıklama"] || row["Kısa Açıklama"] || row["Açıklama"] || row["Description"] || "";
   const fullDesc = row["Açıklama"] || row["Description"] || "";
