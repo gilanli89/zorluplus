@@ -812,7 +812,8 @@ export function EkibimizPage() {
               <img
                 src={m.photo}
                 alt={m.name}
-                className="w-full h-full object-cover object-top"
+                className="w-full h-full object-cover"
+                style={{ objectPosition: "center 15%" }}
                 loading="lazy"
               />
             </motion.div>
