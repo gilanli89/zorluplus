@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award, Mic, MicOff, Globe, MapPin, MessageCircle } from "lucide-react";
-import { PremiumIconInline, PremiumBadgeIcon } from "@/components/PremiumIcon";
-import { CATEGORY_3D_ICONS } from "@/lib/categoryIcons";
+import { Search, Phone, Menu, X, FileText, Wrench, Mic, MicOff, Globe, MapPin, MessageCircle } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
+import { CATEGORY_3D_ICONS, HEADER_BADGE_ICONS } from "@/lib/categoryIcons";
 import { motion, AnimatePresence } from "framer-motion";
 import CartSheet from "@/components/CartSheet";
 import Logo from "@/components/Logo";
@@ -117,8 +117,18 @@ export default function Header() {
         <div className="container relative flex items-center justify-between py-1.5 text-[11px]">
           <div className="flex items-center gap-4 font-medium">
             <span className="hidden sm:inline-flex items-center gap-1 text-primary-foreground/80 font-semibold">{greeting}</span>
-            <span className="hidden md:inline-flex items-center gap-1"><PremiumIconInline icon={Shield} size={12} className="text-white drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]" /> {t("header.authorized")}</span>
-            <span className="inline-flex items-center gap-1"><PremiumIconInline icon={Award} size={12} className="text-white drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]" /> {t("header.warranty")}</span>
+            <span className="hidden md:inline-flex items-center gap-1.5">
+              <img src={HEADER_BADGE_ICONS.install} alt="" className="h-4 w-4 object-contain drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" width={16} height={16} />
+              {t("header.freeInstall")}
+            </span>
+            <span className="hidden lg:inline-flex items-center gap-1.5">
+              <img src={HEADER_BADGE_ICONS.certificate} alt="" className="h-4 w-4 object-contain drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" width={16} height={16} />
+              {t("header.authorized")}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <img src={HEADER_BADGE_ICONS.installment} alt="" className="h-4 w-4 object-contain drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" width={16} height={16} />
+              {t("header.installment")}
+            </span>
           </div>
           <div className="flex items-center gap-3">
             {/* Language switcher */}

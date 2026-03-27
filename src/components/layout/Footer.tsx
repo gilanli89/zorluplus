@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail } from "lucide-react";
 import { PremiumIconInline } from "@/components/PremiumIcon";
+import { getFooterCategoryIcon } from "@/lib/categoryIcons";
 import { motion } from "framer-motion";
 import { BRAND, FOOTER_LINKS } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -135,24 +136,19 @@ export default function Footer() {
           <h4 className="font-display font-bold text-xs uppercase tracking-wider mb-3 text-muted-foreground">{t("footer.categories")}</h4>
           <div className="flex flex-wrap gap-2">
             {FOOTER_LINKS.kategoriler.map(l => {
+              const icon3d = getFooterCategoryIcon(l.label);
               const isExternal = l.href.startsWith('http');
+              const chipClass = "text-xs px-3 py-1.5 rounded-full border border-border bg-muted/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-200 inline-flex items-center gap-1.5";
+              const iconEl = icon3d ? (
+                <img src={icon3d} alt="" className="h-3.5 w-3.5 object-contain opacity-70" width={14} height={14} loading="lazy" />
+              ) : null;
               return isExternal ? (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs px-3 py-1.5 rounded-full border border-border bg-muted/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-200"
-                >
-                  {l.label}
+                <a key={l.href + l.label} href={l.href} target="_blank" rel="noopener noreferrer" className={chipClass}>
+                  {iconEl}{l.label}
                 </a>
               ) : (
-                <Link
-                  key={l.href}
-                  to={l.href}
-                  className="text-xs px-3 py-1.5 rounded-full border border-border bg-muted/50 text-muted-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all duration-200"
-                >
-                  {l.label}
+                <Link key={l.href + l.label} to={l.href} className={chipClass}>
+                  {iconEl}{l.label}
                 </Link>
               );
             })}
