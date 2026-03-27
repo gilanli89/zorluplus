@@ -20,6 +20,7 @@ import privacyIcon from "@/assets/icons/privacy.png";
 import cookieIcon from "@/assets/icons/cookie.png";
 import databaseIcon from "@/assets/icons/database.png";
 import installIcon from "@/assets/icons/install.png";
+import teamIcon from "@/assets/icons/team.png";
 
 const testimonials = [
   { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
@@ -730,21 +731,44 @@ export function EkibimizPage() {
     { name: "Karetta", roleKey: "team.role.aiAssistant", branch: "", photo: "/team/karetta.jpg" },
   ];
 
+  const pulseGlow = {
+    boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.08)", "inset 0 0 25px hsl(221,83%,53%,0.0)"],
+  };
+
   return (
     <div className="container py-12 md:py-16 max-w-4xl">
-      <motion.h1
-        className="font-display text-3xl md:text-4xl font-extrabold mb-4"
+      {/* Hero */}
+      <motion.div
+        className="flex items-center gap-4 mb-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <motion.span
-          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          {t("team.title")}
-        </motion.span>
-      </motion.h1>
+        <motion.div className="relative shrink-0">
+          <motion.div
+            className="absolute inset-[-8px] rounded-full border-2 border-primary/30"
+            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.img
+            src={teamIcon}
+            alt=""
+            className="h-16 w-16 object-contain"
+            width={64}
+            height={64}
+            animate={{ filter: ["drop-shadow(0 0 6px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 16px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 6px hsl(221,83%,53%,0.2))"] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+        <h1 className="font-display text-3xl md:text-4xl font-extrabold">
+          <motion.span
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t("team.title")}
+          </motion.span>
+        </h1>
+      </motion.div>
 
       <motion.p
         className="text-muted-foreground leading-relaxed mb-10 max-w-2xl"
@@ -770,11 +794,12 @@ export function EkibimizPage() {
             transition={{ duration: 0.4 }}
           >
             <motion.div
-              className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              style={{ background: "linear-gradient(135deg, hsl(221,83%,53%,0.05), transparent)" }}
+              className="absolute inset-0 rounded-xl pointer-events-none"
+              animate={pulseGlow}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
             />
             <motion.div
-              className="relative mb-3"
+              className="relative mb-3 w-24 h-28 rounded-lg overflow-hidden bg-muted/30 flex items-center justify-center"
               animate={{
                 filter: [
                   "drop-shadow(0 0 0px hsl(221,83%,53%,0))",
@@ -784,16 +809,21 @@ export function EkibimizPage() {
               }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
             >
-              <img src={m.photo} alt={m.name} className="w-24 h-28 object-cover object-top rounded-lg" loading="lazy" />
+              <img
+                src={m.photo}
+                alt={m.name}
+                className="w-full h-full object-contain"
+                loading="lazy"
+              />
             </motion.div>
             <motion.p
-              className="font-display font-bold text-sm leading-tight"
+              className="font-display font-bold text-sm leading-tight relative z-10"
               animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
             >
               {m.name}
             </motion.p>
-            <p className="text-xs text-muted-foreground mt-1">{m.branch ? `${m.branch} – ` : ""}{t(m.roleKey)}</p>
+            <p className="text-xs text-muted-foreground mt-1 relative z-10">{m.branch ? `${m.branch} – ` : ""}{t(m.roleKey)}</p>
           </motion.div>
         ))}
       </motion.div>
