@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { Button } from "@/components/ui/button";
 import { BRAND } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -70,11 +71,11 @@ export default function HeroBanner() {
             <motion.p custom={3} variants={textVariants} className="text-white/70 text-base md:text-lg mb-8 max-w-md leading-relaxed">{slide.desc}</motion.p>
             <motion.div custom={4} variants={textVariants} className="flex flex-wrap gap-3">
               <Link to={slide.cta.href}>
-                <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg">{slide.cta.label} <ArrowRight className="h-4 w-4" /></Button>
+                <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg">{slide.cta.label} <PremiumIconInline icon={ArrowRight} size={16} /></Button>
               </Link>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="font-semibold gap-2 rounded-full px-6 shadow-lg border-0" style={{ backgroundColor: "#25D366", color: "#fff" }}>
-                  <MessageCircle className="h-4 w-4" /> WhatsApp
+                  <PremiumIconInline icon={MessageCircle} size={16} className="text-white" /> WhatsApp
                 </Button>
               </a>
             </motion.div>
@@ -83,10 +84,10 @@ export default function HeroBanner() {
       </div>
 
       <button onClick={prev} className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/25 transition-colors" aria-label="Previous">
-        <ChevronLeft className="h-5 w-5" />
+        <PremiumIconInline icon={ChevronLeft} size={20} className="text-white" />
       </button>
       <button onClick={next} className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 h-10 w-10 md:h-12 md:w-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/25 transition-colors" aria-label="Next">
-        <ChevronRight className="h-5 w-5" />
+        <PremiumIconInline icon={ChevronRight} size={20} className="text-white" />
       </button>
 
       <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2">

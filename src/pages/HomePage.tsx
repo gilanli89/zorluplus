@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, MapPin, Phone, Sparkles, Truck, ShieldCheck, Gift } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -56,11 +57,11 @@ export default function HomePage() {
         className="bg-primary text-primary-foreground"
       >
         <div className="container py-3 flex items-center justify-center gap-6 text-xs md:text-sm font-semibold overflow-x-auto scrollbar-hide">
-          <span className="flex items-center gap-1.5 whitespace-nowrap"><Truck size={15} /> Ücretsiz Kurulum & Montaj</span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap"><PremiumIconInline icon={Truck} size={15} className="text-primary-foreground" /> Ücretsiz Kurulum & Montaj</span>
           <span className="hidden sm:inline text-primary-foreground/40">|</span>
-          <span className="flex items-center gap-1.5 whitespace-nowrap"><ShieldCheck size={15} /> Resmi Distribütör Garantisi</span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap"><PremiumIconInline icon={ShieldCheck} size={15} className="text-primary-foreground" /> Resmi Distribütör Garantisi</span>
           <span className="hidden sm:inline text-primary-foreground/40">|</span>
-          <span className="hidden md:flex items-center gap-1.5 whitespace-nowrap"><Gift size={15} /> Taksit Seçenekleri Mevcut</span>
+          <span className="hidden md:flex items-center gap-1.5 whitespace-nowrap"><PremiumIconInline icon={Gift} size={15} className="text-primary-foreground" /> Taksit Seçenekleri Mevcut</span>
         </div>
       </motion.div>
 
@@ -169,10 +170,10 @@ export default function HomePage() {
                 <p className="text-sm text-muted-foreground mb-4">{b.hours}</p>
                 <div className="flex gap-2">
                   <a href={b.mapsLink} target="_blank" rel="noopener noreferrer">
-                    <Button size="sm" variant="outline" className="rounded-full gap-1.5 tap-scale"><MapPin className="h-3.5 w-3.5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {t("home.getDirections")}</Button>
+                    <Button size="sm" variant="outline" className="rounded-full gap-1.5 tap-scale"><PremiumIconInline icon={MapPin} size={14} /> {t("home.getDirections")}</Button>
                   </a>
                   <a href={`tel:${b.phone}`}>
-                    <Button size="sm" variant="ghost" className="rounded-full gap-1.5 tap-scale"><Phone className="h-3.5 w-3.5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {t("home.call")}</Button>
+                    <Button size="sm" variant="ghost" className="rounded-full gap-1.5 tap-scale"><PremiumIconInline icon={Phone} size={14} /> {t("home.call")}</Button>
                   </a>
                 </div>
               </motion.div>
