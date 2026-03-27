@@ -26,8 +26,10 @@ function detectLang(): Lang {
 // Translation dictionary
 const translations: Record<string, Record<Lang, string>> = {
   // Header
-  "header.authorized": { tr: "Samsung & LG Yetkili Bayi", en: "Samsung & LG Authorized Dealer" },
+  "header.authorized": { tr: "Resmi Distribütör Garantisi", en: "Official Distributor Warranty" },
   "header.warranty": { tr: "2 Yıl Garanti", en: "2 Year Warranty" },
+  "header.freeInstall": { tr: "Ücretsiz Kurulum & Montaj", en: "Free Installation & Setup" },
+  "header.installment": { tr: "Taksit Seçenekleri Mevcut", en: "Installment Options Available" },
   "header.search": { tr: "Ürün ara...", en: "Search products..." },
   "header.voiceSearch": { tr: "Sesle ara", en: "Voice search" },
   "header.stopListening": { tr: "Dinlemeyi durdur", en: "Stop listening" },
