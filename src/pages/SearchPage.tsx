@@ -186,7 +186,7 @@ export default function SearchPage() {
             onClick={isListening ? stopListening : startListening}
             title={isListening ? t("search.stopListening") : t("search.voiceSearch")}
           >
-            {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5 text-primary" />}
+            {isListening ? <PremiumIconInline icon={MicOff} size={20} /> : <PremiumIconInline icon={Mic} size={20} />}
           </Button>
         )}
       </div>
@@ -196,13 +196,13 @@ export default function SearchPage() {
         <div className="flex items-center gap-2 mb-4 flex-wrap">
           {aiLoading ? (
             <Badge variant="secondary" className="gap-1.5">
-              <Loader2 className="h-3 w-3 animate-spin" />
+              <PremiumIconInline icon={Loader2} size={12} className="animate-spin" />
               {lang === "tr" ? "AI analiz ediyor..." : "AI analyzing..."}
             </Badge>
           ) : aiResult && (aiResult.category || aiResult.brand) ? (
             <>
               <Badge variant="outline" className="gap-1">
-                <Sparkles className="h-3 w-3 text-primary" />
+                <PremiumIconInline icon={Sparkles} size={12} />
                 {lang === "tr" ? "AI destekli arama" : "AI-powered search"}
               </Badge>
               {aiResult.category && <Badge variant="secondary">{aiResult.category}</Badge>}
