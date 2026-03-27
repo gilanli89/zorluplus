@@ -5,6 +5,12 @@ import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, 
 import { BRANCHES } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 import PremiumIcon, { PremiumBadgeIcon, PremiumIconInline } from "@/components/PremiumIcon";
+import contractIcon from "@/assets/icons/contract.png";
+import installmentIcon from "@/assets/icons/installment.png";
+import deliveryIcon from "@/assets/icons/delivery.png";
+import refundIcon from "@/assets/icons/refund.png";
+import certificateIcon from "@/assets/icons/certificate.png";
+import legalIcon from "@/assets/icons/legal.png";
 
 const testimonials = [
   { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
@@ -1870,98 +1876,150 @@ export function CerezPolitikasiPage() {
 
 export function MesafeliSatisSozlesmesiPage() {
   const { t } = useLanguage();
+
+  const sectionIcons = [
+    { src: contractIcon, alt: "Taraflar" },
+    { src: contractIcon, alt: "Konu" },
+    { src: contractIcon, alt: "Ürün" },
+    { src: installmentIcon, alt: "Ödeme" },
+    { src: deliveryIcon, alt: "Teslimat" },
+    { src: refundIcon, alt: "Cayma" },
+    { src: certificateIcon, alt: "Garanti" },
+    { src: legalIcon, alt: "Uyuşmazlık" },
+  ];
+
+  const sections = [
+    { title: "1. Taraflar", iconIdx: 0, hasCards: true },
+    { title: "2. Konu", iconIdx: 1, content: "Bu sözleşme, alıcının satıcıya ait internet sitesi üzerinden elektronik ortamda sipariş verdiği ürünlerin satışı ve teslimine ilişkin hak ve yükümlülükleri düzenler." },
+    { title: "3. Ürün ve Hizmet Bilgileri", iconIdx: 2, content: "Ürünlerin temel özellikleri, satış fiyatı ve ödeme bilgileri sipariş sayfasında belirtilir." },
+    { title: "4. Ödeme", iconIdx: 3, content: "Ödeme aşağıdaki yöntemlerle yapılabilir:", list: ["Kredi kartı", "Banka kartı", "Havale / EFT", "Online ödeme sistemleri"] },
+    { title: "5. Teslimat", iconIdx: 4, content: "Siparişler stok durumuna göre en kısa sürede hazırlanarak kargo firması aracılığıyla teslim edilir.", extra: "Teslimat süresi bölgeye göre değişiklik gösterebilir." },
+    { title: "6. Cayma Hakkı", iconIdx: 5, content: "Tüketici, ürünü teslim aldığı tarihten itibaren **14 gün** içinde herhangi bir gerekçe göstermeden cayma hakkına sahiptir.", subContent: "İade edilen ürün:", list: ["Kullanılmamış", "Zarar görmemiş", "Orijinal ambalajında"], extra: "olmalıdır." },
+    { title: "7. Garanti", iconIdx: 6, content: "Satın alınan ürünler üretici garantisi veya en az **2 yıl garanti** kapsamındadır." },
+    { title: "8. Uyuşmazlıkların Çözümü", iconIdx: 7, content: "Bu sözleşme Kuzey Kıbrıs Türk Cumhuriyeti yasalarına tabidir.", extra: "Uyuşmazlık durumunda **Lefkoşa Mahkemeleri** yetkilidir." },
+  ];
+
+  const pulseGlow = {
+    boxShadow: [
+      "inset 0 0 25px hsl(221,83%,53%,0.0)",
+      "inset 0 0 25px hsl(221,83%,53%,0.08)",
+      "inset 0 0 25px hsl(221,83%,53%,0.0)",
+    ],
+  };
+
+  const renderBold = (text: string) => {
+    const parts = text.split(/\*\*(.*?)\*\*/g);
+    return parts.map((part, i) =>
+      i % 2 === 1 ? <strong key={i} className="text-foreground">{part}</strong> : part
+    );
+  };
+
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
-      <motion.h1
-        className="font-display text-3xl md:text-4xl font-extrabold mb-6"
+      {/* Hero */}
+      <motion.div
+        className="flex items-center gap-4 mb-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <motion.span
-          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          {t("content.distance.title")}
-        </motion.span>
-      </motion.h1>
-
-      <motion.div
-        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.15 }}
-      >
-        <h2>1. Taraflar</h2>
+        <motion.div className="relative shrink-0">
+          <motion.div
+            className="absolute inset-[-8px] rounded-full border-2 border-primary/30"
+            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.img
+            src={sectionIcons[0].src}
+            alt=""
+            className="h-16 w-16 object-contain"
+            width={64}
+            height={64}
+            animate={{ filter: ["drop-shadow(0 0 6px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 16px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 6px hsl(221,83%,53%,0.2))"] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+        <h1 className="font-display text-3xl md:text-4xl font-extrabold">
+          <motion.span
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t("content.distance.title")}
+          </motion.span>
+        </h1>
       </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-        <motion.div className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden">
-          <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.07)", "inset 0 0 25px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-          <p className="relative z-10 font-display font-bold text-foreground text-sm mb-2">Satıcı</p>
-          <div className="relative z-10 text-xs text-muted-foreground space-y-1">
-            <p><strong className="text-foreground">Zorlu Digital Plaza</strong></p>
-            <p>Web: www.zorluplus.com</p>
-            <div className="flex flex-col gap-1 mt-2">
-              <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
-                <motion.span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}>
-                  <Mail className="h-3.5 w-3.5 text-primary" />
-                </motion.span>
-                deniz@zorludigitalplaza.com
-              </a>
-              <a href="tel:+905428783131" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
-                <motion.span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}>
-                  <svg className="h-3.5 w-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                </motion.span>
-                +90 542 878 31 31
-              </a>
+      {/* Sections */}
+      <div className="space-y-6">
+        {sections.map((section, idx) => (
+          <motion.div
+            key={idx}
+            className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.08 * idx }}
+          >
+            <motion.div
+              className="absolute inset-0 rounded-2xl pointer-events-none"
+              animate={pulseGlow}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: idx * 0.2 }}
+            />
+            <div className="relative z-10 flex items-start gap-4">
+              <motion.img
+                src={sectionIcons[section.iconIdx].src}
+                alt=""
+                className="h-10 w-10 object-contain shrink-0 mt-0.5"
+                width={40}
+                height={40}
+                loading="lazy"
+                animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.15 }}
+              />
+              <div className="flex-1">
+                <h2 className="font-display font-bold text-lg text-foreground mb-2">{section.title}</h2>
+
+                {section.hasCards && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+                    <div className="rounded-xl border border-border bg-muted/30 p-4">
+                      <p className="font-display font-bold text-foreground text-sm mb-2">Satıcı</p>
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <p><strong className="text-foreground">Zorlu Digital Plaza</strong></p>
+                        <p>Web: www.zorluplus.com</p>
+                        <div className="flex flex-col gap-1 mt-2">
+                          <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+                            <motion.span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}>
+                              <Mail className="h-3.5 w-3.5 text-primary" />
+                            </motion.span>
+                            deniz@zorludigitalplaza.com
+                          </a>
+                          <a href="tel:+905428783131" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+                            <motion.span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}>
+                              <svg className="h-3.5 w-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            </motion.span>
+                            +90 542 878 31 31
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="rounded-xl border border-border bg-muted/30 p-4">
+                      <p className="font-display font-bold text-foreground text-sm mb-2">Alıcı</p>
+                      <p className="text-xs text-muted-foreground">Site üzerinden sipariş oluşturan kullanıcı.</p>
+                    </div>
+                  </div>
+                )}
+
+                {section.content && <p className="text-sm text-muted-foreground leading-relaxed">{renderBold(section.content)}</p>}
+                {section.subContent && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{section.subContent}</p>}
+                {section.list && (
+                  <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1 mt-2">
+                    {section.list.map((item, i) => <li key={i}>{item}</li>)}
+                  </ul>
+                )}
+                {section.extra && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{renderBold(section.extra)}</p>}
+              </div>
             </div>
-          </div>
-        </motion.div>
-
-        <motion.div className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden">
-          <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.07)", "inset 0 0 25px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.4 }} />
-          <p className="relative z-10 font-display font-bold text-foreground text-sm mb-2">Alıcı</p>
-          <p className="relative z-10 text-xs text-muted-foreground">Site üzerinden sipariş oluşturan kullanıcı.</p>
-        </motion.div>
-      </div>
-
-      <div className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3 mt-6">
-        <h2>2. Konu</h2>
-        <p>Bu sözleşme, alıcının satıcıya ait internet sitesi üzerinden elektronik ortamda sipariş verdiği ürünlerin satışı ve teslimine ilişkin hak ve yükümlülükleri düzenler.</p>
-
-        <h2>3. Ürün ve Hizmet Bilgileri</h2>
-        <p>Ürünlerin temel özellikleri, satış fiyatı ve ödeme bilgileri sipariş sayfasında belirtilir.</p>
-
-        <h2>4. Ödeme</h2>
-        <p>Ödeme aşağıdaki yöntemlerle yapılabilir:</p>
-        <ul>
-          <li>Kredi kartı</li>
-          <li>Banka kartı</li>
-          <li>Havale / EFT</li>
-          <li>Online ödeme sistemleri</li>
-        </ul>
-
-        <h2>5. Teslimat</h2>
-        <p>Siparişler stok durumuna göre en kısa sürede hazırlanarak kargo firması aracılığıyla teslim edilir.</p>
-        <p>Teslimat süresi bölgeye göre değişiklik gösterebilir.</p>
-
-        <h2>6. Cayma Hakkı</h2>
-        <p>Tüketici, ürünü teslim aldığı tarihten itibaren <strong className="text-foreground">14 gün</strong> içinde herhangi bir gerekçe göstermeden cayma hakkına sahiptir.</p>
-        <p>İade edilen ürün:</p>
-        <ul>
-          <li>Kullanılmamış</li>
-          <li>Zarar görmemiş</li>
-          <li>Orijinal ambalajında</li>
-        </ul>
-        <p>olmalıdır.</p>
-
-        <h2>7. Garanti</h2>
-        <p>Satın alınan ürünler üretici garantisi veya en az <strong className="text-foreground">2 yıl garanti</strong> kapsamındadır.</p>
-
-        <h2>8. Uyuşmazlıkların Çözümü</h2>
-        <p>Bu sözleşme Kuzey Kıbrıs Türk Cumhuriyeti yasalarına tabidir.</p>
-        <p>Uyuşmazlık durumunda <strong className="text-foreground">Lefkoşa Mahkemeleri</strong> yetkilidir.</p>
+          </motion.div>
+        ))}
       </div>
     </div>
   );
