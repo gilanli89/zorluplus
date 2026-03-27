@@ -2257,13 +2257,9 @@ export function SurdurulebilirlikPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <motion.div
-          className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4"
-          animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 24px hsl(221,83%,53%,0.35)", "0 0 0px hsl(221,83%,53%,0)"] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Leaf className="h-8 w-8 text-primary" />
-        </motion.div>
+        <div className="mb-4 flex justify-center">
+          <PremiumIcon icon={Leaf} size="xl" variant="glow" />
+        </div>
         <motion.h1
           className="font-display text-3xl md:text-5xl font-extrabold mb-4"
         >
