@@ -170,12 +170,12 @@ export default function ProductPage() {
                 <h3 className="font-display font-bold text-foreground mb-3">{t("product.specs")}</h3>
                 <table className="w-full text-sm">
                   <tbody>
-                    {Object.entries(product.specs).map(([k, v]) => {
+                    {Object.entries(product.specs).map(([k, v], idx) => {
                       const specLabel = translateSpecLabel(k, lang);
                       return (
-                        <tr key={k} className="border-b border-border">
-                          <td className="py-2 text-muted-foreground font-medium">{specLabel}</td>
-                          <td className="py-2 text-foreground text-right">{v}</td>
+                        <tr key={k} className={`border-b border-border ${idx % 2 === 0 ? "bg-muted/30" : ""}`}>
+                          <td className="py-2.5 px-3 text-muted-foreground font-medium rounded-l-lg">{specLabel}</td>
+                          <td className="py-2.5 px-3 text-foreground text-right font-medium rounded-r-lg">{v}</td>
                         </tr>
                       );
                     })}
