@@ -799,7 +799,7 @@ export function EkibimizPage() {
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
             />
             <motion.div
-              className="relative mb-3 w-24 h-28 rounded-lg overflow-hidden bg-muted/30 flex items-center justify-center"
+              className="relative mb-3 w-28 h-32 rounded-xl overflow-hidden bg-muted/20 mx-auto"
               animate={{
                 filter: [
                   "drop-shadow(0 0 0px hsl(221,83%,53%,0))",
@@ -812,7 +812,7 @@ export function EkibimizPage() {
               <img
                 src={m.photo}
                 alt={m.name}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover object-top"
                 loading="lazy"
               />
             </motion.div>
