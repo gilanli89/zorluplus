@@ -1029,13 +1029,9 @@ export function DestekPage() {
               className="rounded-xl border border-border bg-muted/30 p-3 text-center"
               whileHover={{ scale: 1.03 }}
             >
-              <motion.span
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 mb-2"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 14px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-              >
-                <MapPin className="h-4 w-4 text-primary" />
-              </motion.span>
+              <div className="mb-2 flex justify-center">
+                <PremiumIcon icon={MapPin} size="sm" variant="glow" />
+              </div>
               <p className="text-sm font-semibold text-foreground">{bolge} Teknik Servis</p>
             </motion.div>
           ))}
