@@ -89,7 +89,7 @@ export default function CheckoutPage() {
   return (
     <div className="container max-w-lg py-8 md:py-16">
       <Link to="/sepet" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6">
-        <ArrowLeft className="h-4 w-4" /> {t("checkout.backToCart")}
+        <PremiumIconInline icon={ArrowLeft} size={16} /> {t("checkout.backToCart")}
       </Link>
 
       <Card className="border-border">
@@ -113,7 +113,7 @@ export default function CheckoutPage() {
               <Label htmlFor="cardNumber">{t("checkout.cardNumber")}</Label>
               <div className="relative">
                 <Input id="cardNumber" placeholder="0000 0000 0000 0000" value={formatCardNumber(form.cardNumber)} onChange={e => handleChange("cardNumber", e.target.value)} className="mt-1 pl-10" inputMode="numeric" />
-                <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 mt-0.5 h-4 w-4 text-muted-foreground" />
+                <PremiumIconInline icon={CreditCard} size={16} className="absolute left-3 top-1/2 -translate-y-1/2 mt-0.5 text-muted-foreground" />
               </div>
               {errors.cardNumber && <p className="text-xs text-destructive mt-1">{errors.cardNumber}</p>}
             </div>
@@ -135,11 +135,11 @@ export default function CheckoutPage() {
               </div>
             </div>
             <Button type="submit" className="w-full rounded-full gap-2" size="lg" disabled={loading || !orderId}>
-              {loading ? (<><Loader2 className="h-4 w-4 animate-spin" /> {t("checkout.processing")}</>) : (<><ShieldCheck className="h-4 w-4" /> {t("checkout.completePayment")}</>)}
+              {loading ? (<><PremiumIconInline icon={Loader2} size={16} className="animate-spin text-primary-foreground" /> {t("checkout.processing")}</>) : (<><PremiumIconInline icon={ShieldCheck} size={16} className="text-primary-foreground" /> {t("checkout.completePayment")}</>)}
             </Button>
           </form>
           <div className="mt-4 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-            <Lock className="h-3 w-3" />
+            <PremiumIconInline icon={Lock} size={12} />
             <span>{t("checkout.encrypted")}</span>
           </div>
         </CardContent>
