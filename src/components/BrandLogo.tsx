@@ -1,0 +1,50 @@
+const BRAND_LOGOS: Record<string, string> = {
+  samsung: "/brands/samsung-logo.png",
+  lg: "/brands/lg-logo.png",
+  midea: "/brands/midea.png",
+  aux: "/brands/aux.png",
+  toshiba: "/brands/toshiba.png",
+  philips: "/brands/philips.png",
+  krups: "/brands/krups.png",
+  sharp: "/brands/sharp.png",
+  bosch: "/brands/bosch.png",
+};
+
+function normalizeBrand(brand: string): string {
+  return brand.toLowerCase().trim();
+}
+
+interface BrandLogoProps {
+  brand: string;
+  size?: "xs" | "sm" | "md" | "lg";
+  className?: string;
+}
+
+const SIZES = {
+  xs: "h-3.5 max-w-[48px]",
+  sm: "h-4 max-w-[56px]",
+  md: "h-5 max-w-[72px]",
+  lg: "h-7 max-w-[96px]",
+};
+
+export default function BrandLogo({ brand, size = "sm", className = "" }: BrandLogoProps) {
+  const key = normalizeBrand(brand);
+  const logo = BRAND_LOGOS[key];
+
+  if (!logo) {
+    return (
+      <span className={`text-[11px] font-semibold text-primary/70 uppercase tracking-wider ${className}`}>
+        {brand}
+      </span>
+    );
+  }
+
+  return (
+    <img
+      src={logo}
+      alt={brand}
+      className={`${SIZES[size]} w-auto object-contain select-none opacity-80 hover:opacity-100 transition-opacity ${className}`}
+      loading="lazy"
+    />
+  );
+}

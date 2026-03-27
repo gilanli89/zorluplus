@@ -10,6 +10,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useProducts } from "@/hooks/useProducts";
 import CartUpsell from "@/components/CartUpsell";
 import { PremiumIconInline } from "@/components/PremiumIcon";
+import BrandLogo from "@/components/BrandLogo";
 
 export default function CartSheet() {
   const { items, itemCount, removeItem, updateQuantity, subtotal, grandTotal } = useCart();
@@ -58,7 +59,7 @@ export default function CartSheet() {
                         className="h-16 w-16 rounded-lg object-contain bg-card border border-border"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-primary/70 uppercase">{item.product.brand}</p>
+                        <BrandLogo brand={item.product.brand} size="xs" />
                         <p className="text-sm font-medium text-foreground line-clamp-2">{item.product.name}</p>
                       </div>
                       <Button variant="ghost" size="icon" className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive" onClick={() => removeItem(item.product.id)}>

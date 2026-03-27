@@ -11,6 +11,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
 import { toast } from "sonner";
 import { PremiumIconInline } from "@/components/PremiumIcon";
+import BrandLogo from "@/components/BrandLogo";
 
 interface Props {
   currentProduct: Product;
@@ -80,9 +81,7 @@ export default function FrequentlyBoughtTogether({ currentProduct, allProducts, 
                     {compatibilityLabel}
                   </Badge>
                 )}
-                <p className="text-[10px] font-semibold text-primary/70 uppercase tracking-wider">
-                  {product.brand}
-                </p>
+                <BrandLogo brand={product.brand} size="xs" />
                 <Link to={`/urun/${product.slug}`} className="flex-1">
                   <p className="text-xs font-medium text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">
                     {translateProduct(product.name)}
