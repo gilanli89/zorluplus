@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { useProducts } from "@/hooks/useProducts";
 import { Input } from "@/components/ui/input";
 import { Search, Mic, MicOff, Sparkles, Loader2 } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import ProductCard from "@/components/ProductCard";

@@ -51,7 +51,7 @@ export default function CartPage() {
         <div className="relative mx-auto w-32 h-32 mb-6">
           {/* Animated empty box */}
           <div className="absolute inset-0 rounded-2xl border-2 border-dashed border-muted-foreground/20 animate-pulse" />
-          <ShoppingCart className="absolute inset-0 m-auto h-16 w-16 text-muted-foreground/20" />
+          <PremiumIconInline icon={ShoppingCart} size={64} className="absolute inset-0 m-auto text-muted-foreground/20" />
           <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-muted flex items-center justify-center">
             <span className="text-xs font-bold text-muted-foreground">0</span>
           </div>
