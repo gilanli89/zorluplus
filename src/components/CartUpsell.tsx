@@ -66,7 +66,7 @@ export default function CartUpsell({ allProducts, maxItems = 3 }: Props) {
                 toast.success(`${product.name} sepete eklendi!`);
               }}
             >
-              <ShoppingCart className="h-3 w-3" /> Ekle
+              <PremiumIconInline icon={ShoppingCart} size={12} /> Ekle
             </Button>
           </div>
         ))}

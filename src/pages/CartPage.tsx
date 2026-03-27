@@ -60,7 +60,7 @@ export default function CartPage() {
         <p className="text-muted-foreground mb-6">{t("cart.emptyDesc")}</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link to="/">
-            <Button className="rounded-full gap-2"><ArrowLeft className="h-4 w-4" /> {t("cart.startShopping")}</Button>
+            <Button className="rounded-full gap-2"><PremiumIconInline icon={ArrowLeft} size={16} className="text-primary-foreground" /> {t("cart.startShopping")}</Button>
           </Link>
           <Link to="/kategoriler">
             <Button variant="outline" className="rounded-full gap-2">{t("nav.categories")}</Button>
@@ -126,7 +126,7 @@ export default function CartPage() {
   return (
     <div className="container max-w-4xl py-6 md:py-10">
       <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6">
-        <ArrowLeft className="h-4 w-4" /> {t("cart.continueShopping")}
+        <PremiumIconInline icon={ArrowLeft} size={16} /> {t("cart.continueShopping")}
       </Link>
 
       <h1 className="heading-2 text-foreground mb-6 pulse-heading">
@@ -161,7 +161,7 @@ export default function CartPage() {
                           <Plus className="h-3 w-3" />
                         </Button>
                         <Button variant="ghost" size="sm" className="ml-auto text-muted-foreground hover:text-destructive gap-1" onClick={() => removeItem(item.product.id)}>
-                          <Trash2 className="h-4 w-4" /> {t("cart.delete")}
+                          <PremiumIconInline icon={Trash2} size={16} className="text-muted-foreground" /> {t("cart.delete")}
                         </Button>
                       </div>
                     </div>
@@ -219,7 +219,7 @@ export default function CartPage() {
                       </Link>
                       <p className="text-xs font-medium text-foreground line-clamp-2 mb-1">{rp.name}</p>
                       <Button size="sm" className="w-full rounded-full text-xs gap-1" onClick={() => { addItem(rp); toast.success(`${rp.name} ${t("cart.addedToCart")}`); }}>
-                        <ShoppingCart className="h-3 w-3" /> {t("cart.addToCart")}
+                        <PremiumIconInline icon={ShoppingCart} size={12} className="text-primary-foreground" /> {t("cart.addToCart")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -314,11 +314,11 @@ export default function CartPage() {
 
               <Button className="w-full rounded-full font-semibold gap-2 mt-2" size="lg" onClick={handleCheckout}>
                 {paymentMethod === "card" ? (
-                  <><CreditCard className="h-4 w-4" /> {t("cart.payWithCard")}</>
+                  <><PremiumIconInline icon={CreditCard} size={16} className="text-primary-foreground" /> {t("cart.payWithCard")}</>
                 ) : paymentMethod === "transfer" ? (
-                  <><Building2 className="h-4 w-4" /> {t("cart.orderWithTransfer")}</>
+                  <><PremiumIconInline icon={Building2} size={16} className="text-primary-foreground" /> {t("cart.orderWithTransfer")}</>
                 ) : (
-                  <><Banknote className="h-4 w-4" /> {t("cart.orderWithCash")}</>
+                  <><PremiumIconInline icon={Banknote} size={16} className="text-primary-foreground" /> {t("cart.orderWithCash")}</>
                 )}
               </Button>
             </CardContent>
