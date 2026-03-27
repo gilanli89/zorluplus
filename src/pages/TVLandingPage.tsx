@@ -102,7 +102,7 @@ export default function TVLandingPage() {
       oses.add(getOS(p));
     });
     return {
-      brands: ["Samsung", "LG"].filter(b => brands.has(b) || brands.has(b.toUpperCase()) || brands.has(b.toLowerCase())),
+      brands: ["Samsung", "LG", "Sony", "Xiaomi", "TCL", "Toshiba", "Sharp", "Philips"].filter(b => brands.has(b) || brands.has(b.toUpperCase()) || brands.has(b.toLowerCase())),
       inches: Array.from(inches).sort((a, b) => Number(a) - Number(b)),
       panels: Array.from(panels).sort(),
       oses: Array.from(oses).sort(),
