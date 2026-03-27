@@ -65,25 +65,38 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "shine-sweep": {
+          "0%": { left: "-100%" },
+          "100%": { left: "200%" },
+        },
+        "float-3d": {
+          "0%, 100%": { transform: "translateY(0) rotateX(0) rotateY(0)" },
+          "25%": { transform: "translateY(-8px) rotateX(2deg) rotateY(-2deg)" },
+          "75%": { transform: "translateY(-4px) rotateX(-1deg) rotateY(1deg)" },
+        },
+        "mesh-shift": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        "count-up": {
+          from: { opacity: "0", transform: "translateY(8px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "shine": "shine-sweep 0.8s ease-out",
+        "float-3d": "float-3d 6s ease-in-out infinite",
+        "mesh": "mesh-shift 15s ease infinite",
+        "count-up": "count-up 0.5s ease-out forwards",
       },
     },
   },

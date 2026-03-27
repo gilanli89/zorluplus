@@ -1,11 +1,27 @@
 import { useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ShoppingCart, Package, Users, Wrench } from "lucide-react";
+import { ShoppingCart, Package, Users, Wrench, LucideIcon } from "lucide-react";
+import { useCountUp } from "@/hooks/useCountUp";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { format } from "date-fns";
+
+function StatCard({ stat }: { stat: { label: string; value: number; icon: LucideIcon; color: string } }) {
+  const count = useCountUp(stat.value);
+  return (
+    <div className="bg-card rounded-2xl border border-border p-5 hover:shadow-lg hover:shadow-primary/5 transition-shadow duration-300">
+      <div className="flex items-center gap-3 mb-2">
+        <div className={`h-9 w-9 rounded-xl bg-muted flex items-center justify-center ${stat.color}`}>
+          <stat.icon className="h-4 w-4" />
+        </div>
+        <span className="text-sm font-medium text-muted-foreground">{stat.label}</span>
+      </div>
+      <p className="text-3xl font-bold text-foreground tabular-nums">{count.toLocaleString("tr-TR")}</p>
+    </div>
+  );
+}
 
 // Fix default marker icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -156,15 +172,7 @@ export default function AdminDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map(s => (
-          <div key={s.label} className="bg-card rounded-2xl border border-border p-5">
-            <div className="flex items-center gap-3 mb-2">
-              <div className={`h-9 w-9 rounded-xl bg-muted flex items-center justify-center ${s.color}`}>
-                <s.icon className="h-4 w-4" />
-              </div>
-              <span className="text-sm font-medium text-muted-foreground">{s.label}</span>
-            </div>
-            <p className="text-3xl font-bold text-foreground">{s.value}</p>
-          </div>
+          <StatCard key={s.label} stat={s} />
         ))}
       </div>
 

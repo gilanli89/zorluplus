@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { Home, Grid3X3, BookOpen, ShoppingCart } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/contexts/CartContext";
-import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function MobileBottomBar() {
@@ -18,7 +18,7 @@ export default function MobileBottomBar() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-xl supports-[backdrop-filter]:bg-card/80 lg:hidden safe-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border/50 bg-card/80 backdrop-blur-2xl supports-[backdrop-filter]:bg-card/60 lg:hidden safe-bottom">
       <div className="flex items-center justify-around py-2">
         {items.map(item => {
           const active = pathname === item.href;
@@ -33,23 +33,34 @@ export default function MobileBottomBar() {
                 active ? "text-primary" : "text-muted-foreground"
               )}
             >
-              <div className={cn(
-                "transition-all duration-200",
-                active && "scale-110 -translate-y-0.5"
-              )}>
+              <motion.div
+                animate={active ? { scale: 1.15, y: -2 } : { scale: 1, y: 0 }}
+                transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              >
                 <Icon className="h-5 w-5" />
-              </div>
-              {isCart && itemCount > 0 && (
-                <Badge className="absolute -top-1 right-0 h-4 w-4 p-0 flex items-center justify-center text-[9px] bg-primary text-primary-foreground rounded-full animate-pulse-ring">
-                  {itemCount}
-                </Badge>
-              )}
+              </motion.div>
+              <AnimatePresence>
+                {isCart && itemCount > 0 && (
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="absolute -top-1 right-0 h-4 w-4 flex items-center justify-center text-[9px] font-bold bg-primary text-primary-foreground rounded-full animate-pulse-ring"
+                  >
+                    {itemCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
               <span className={cn(
                 "text-[10px] font-medium transition-all duration-200",
                 active && "font-bold"
               )}>{item.label}</span>
               {active && (
-                <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-primary" />
+                <motion.span
+                  layoutId="bottombar-indicator"
+                  className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-0.5 rounded-full bg-primary"
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
               )}
             </Link>
           );
