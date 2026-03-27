@@ -148,6 +148,11 @@ const translations: Record<string, Record<Lang, string>> = {
   "home.call": { tr: "Ara", en: "Call" },
   "home.authorizedBrands": { tr: "Yetkili Bayi & Servis Markalarımız", en: "Authorized Dealer & Service Brands" },
 
+  // 404 Not Found
+  "notFound.title": { tr: "Sayfa Bulunamadı", en: "Page Not Found" },
+  "notFound.desc": { tr: "Aradığınız sayfa mevcut değil veya taşınmış olabilir.", en: "The page you're looking for doesn't exist or may have been moved." },
+  "notFound.redirect": { tr: "Ana sayfaya yönlendiriliyorsunuz...", en: "Redirecting to homepage..." },
+
   // General
   "general.loading": { tr: "Yükleniyor...", en: "Loading..." },
   "general.viewAll": { tr: "Tümünü Gör", en: "View All" },
