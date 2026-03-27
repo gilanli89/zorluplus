@@ -3,6 +3,7 @@ import { trackWhatsAppClick } from "@/lib/tracking";
 import { useEffect, useRef } from "react";
 import { Shield, Award, Wrench, MessageCircle, ChevronLeft, ChevronRight, ShoppingCart, Sparkles, Package } from "lucide-react";
 import { PremiumIconInline, PremiumBadgeIcon } from "@/components/PremiumIcon";
+import BrandLogo from "@/components/BrandLogo";
 import { useProducts } from "@/hooks/useProducts";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { getProductBySlug, formatPrice, getWhatsAppLink } from "@/lib/products";

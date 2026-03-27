@@ -11,6 +11,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
 import { toast } from "sonner";
 import { PremiumIconInline } from "@/components/PremiumIcon";
+import BrandLogo from "@/components/BrandLogo";
 
 interface Props {
   currentProduct: Product;
