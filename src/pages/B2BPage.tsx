@@ -19,12 +19,21 @@ const colorCycle = {
 const brands = [
   { name: "Samsung", logo: "/brands/samsung-logo.png" },
   { name: "LG", logo: "/brands/lg-logo.png" },
+  { name: "Sony", logo: "/brands/sony.png" },
+  { name: "Xiaomi", logo: "/brands/xiaomi.png" },
+  { name: "TCL", logo: "/brands/tcl.png" },
   { name: "Midea", logo: "/brands/midea.png" },
   { name: "AUX", logo: "/brands/aux.png" },
   { name: "Toshiba", logo: "/brands/toshiba.png" },
   { name: "Philips", logo: "/brands/philips.png" },
+  { name: "Tefal", logo: "/brands/tefal.png" },
   { name: "Krups", logo: "/brands/krups.png" },
   { name: "Sharp", logo: "/brands/sharp.png" },
+  { name: "Bosch", logo: "/brands/bosch.png" },
+  { name: "JBL", logo: "/brands/jbl.png" },
+  { name: "Indesit", logo: "/brands/indesit.png" },
+  { name: "ADAX", logo: "/brands/adax.png" },
+  { name: "Atlantic", logo: "/brands/atlantic.png" },
 ];
 
 export default function B2BPage() {
