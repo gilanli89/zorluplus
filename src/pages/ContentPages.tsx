@@ -1207,101 +1207,124 @@ export function DestekPage() {
 
 export function KullanimKosullariPage() {
   const { t } = useLanguage();
+
+  const sections = [
+    { title: "1. Genel Hükümler", icon: termsIcon, content: "Bu Site'ye erişim sağlayan tüm kullanıcılar, yürürlükteki ilgili yasal düzenlemeler ile birlikte bu Kullanım Koşulları'nı kabul etmiş sayılır.", extra: "Koşulları kabul etmiyorsanız Site'yi kullanmamanız gerekmektedir." },
+    { title: "2. Hizmetlerin Kapsamı", icon: contractIcon, content: "Zorlu Digital Plaza web sitesi üzerinden kullanıcılar;", list: ["Ürünler hakkında detaylı bilgi edinebilir", "Online sipariş oluşturabilir", "Müşteri hizmetlerine talep iletebilir", "Teknik servis ve garanti süreçlerini başlatabilir", "Kampanya ve duyuruları takip edebilir"], extra: "Şirket, sunulan hizmetlerin kapsamını önceden bildirimde bulunmaksızın değiştirme veya güncelleme hakkını saklı tutar." },
+    { title: "3. Kullanıcı Yükümlülükleri", icon: userIcon, content: "Siteyi kullanan tüm kullanıcılar aşağıdaki kurallara uymayı kabul eder:", list: ["Site içeriğini yasa dışı amaçlarla kullanmamak", "Yanlış, eksik veya yanıltıcı bilgi vermemek", "Site güvenliğini tehlikeye sokacak girişimlerde bulunmamak", "Bot, script veya otomatik sistemlerle veri taraması yapmamak", "Site üzerindeki tüm fikri mülkiyet haklarına saygı göstermek", "Site altyapısına zarar verebilecek davranışlardan kaçınmak"], extra: "Bu yükümlülüklerin ihlali durumunda kullanıcının Site'ye erişimi geçici veya kalıcı olarak sonlandırılabilir." },
+    { title: "4. Fikri Mülkiyet Hakları", icon: copyrightIcon, content: "Site'de yer alan tüm metinler, görseller, logolar, markalar, tasarımlar, grafikler ve içerikler Zorlu Digital Plaza'ya ait olup telif hakları ile korunmaktadır veya lisans kapsamında kullanılmaktadır.", subContent: "Bu içeriklerin;", list: ["kopyalanması", "çoğaltılması", "dağıtılması", "ticari amaçla kullanılması"], extra: "Şirketin yazılı izni olmadan kesinlikle yasaktır. İzinsiz kullanım hukuki ve cezai yaptırımlara tabidir." },
+    { title: "5. Sipariş, Ödeme ve Teslimat Koşulları", icon: installmentIcon, list: ["Ürün fiyatları ve stok bilgileri değişiklik gösterebilir.", "Siparişler ödeme onayı alındıktan sonra kesinleşir.", "Ödeme altyapısı ve teslimat süreçleri üçüncü taraf hizmet sağlayıcılar aracılığıyla yürütülebilir.", "Kullanıcılar sipariş sırasında doğru iletişim ve adres bilgileri vermekle yükümlüdür."] },
+    { title: "6. Garanti ve Teknik Servis", icon: certificateIcon, content: "Zorlu Digital Plaza'dan satın alınan ürünler, ilgili marka üretici garantisi veya en az **2 yıl** tedarikçi garantisi kapsamındadır.", extra: "Servis hizmetleri; bakım, onarım, teknik destek ve yedek parça Şirketimiz veya yetkili servis merkezleri tarafından sağlanmaktadır. Garanti kapsamı dışında kalan durumlar (kullanıcı hatası, sıvı teması, düşme/darbe, yetkisiz müdahale) ücretli servis kapsamına girebilir." },
+    { title: "7. Sorumluluk Reddi", icon: shieldIcon, content: "Zorlu Digital Plaza; sistem kesintileri, teknik arızalar, üçüncü taraf saldırıları, internet bağlantı problemleri ve kullanıcı hataları nedeniyle oluşabilecek zararlardan sorumlu tutulamaz.", extra: "Site üzerinde yer alan ürün açıklamaları, teknik özellikler ve görseller üretici kaynaklı değişiklik gösterebilir." },
+    { title: "8. Üçüncü Taraf Bağlantıları", icon: linkIcon, content: "Site üzerinde üçüncü taraf web sitelerine yönlendiren bağlantılar bulunabilir. Bu sitelerin içeriklerinden, veri güvenliğinden veya gizlilik politikalarından Zorlu Digital Plaza sorumlu değildir.", extra: "Bu bağlantılar yalnızca kullanıcıya kolaylık sağlamak amacıyla sunulmaktadır." },
+    { title: "9. Gizlilik Politikası ile İlişki", icon: shieldIcon, content: "Bu Kullanım Koşulları, Site'de yer alan Gizlilik Politikası ile birlikte değerlendirilmelidir. Siteyi kullanan kullanıcılar, kişisel verilerin işlenmesine ilişkin Gizlilik Politikası'nı da kabul etmiş sayılır." },
+    { title: "10. Koşullarda Değişiklik Yapma Hakkı", icon: termsIcon, content: "Zorlu Digital Plaza, bu Kullanım Koşulları üzerinde önceden bildirimde bulunmaksızın değişiklik yapma hakkını saklı tutar. Güncellenmiş koşullar Site'de yayımlandığı tarihten itibaren yürürlüğe girer.", extra: "Kullanıcıların bu koşulları düzenli olarak kontrol etmesi önerilir." },
+    { title: "11. Uygulanacak Hukuk ve Yetkili Mahkeme", icon: legalIcon, content: "Bu Kullanım Koşulları Kuzey Kıbrıs Türk Cumhuriyeti yasalarına tabidir. Her türlü uyuşmazlıkta **Lefkoşa Mahkemeleri** ve İcra Daireleri yetkilidir." },
+  ];
+
+  const pulseGlow = {
+    boxShadow: [
+      "inset 0 0 25px hsl(221,83%,53%,0.0)",
+      "inset 0 0 25px hsl(221,83%,53%,0.08)",
+      "inset 0 0 25px hsl(221,83%,53%,0.0)",
+    ],
+  };
+
+  const renderBold = (text: string) => {
+    const parts = text.split(/\*\*(.*?)\*\*/g);
+    return parts.map((part, i) =>
+      i % 2 === 1 ? <strong key={i} className="text-foreground">{part}</strong> : part
+    );
+  };
+
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
-      <motion.h1
-        className="font-display text-3xl md:text-4xl font-extrabold mb-6"
+      {/* Hero */}
+      <motion.div
+        className="flex items-center gap-4 mb-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <motion.span
-          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          {t("content.terms.title")}
-        </motion.span>
-      </motion.h1>
+        <motion.div className="relative shrink-0">
+          <motion.div
+            className="absolute inset-[-8px] rounded-full border-2 border-primary/30"
+            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.img
+            src={termsIcon}
+            alt=""
+            className="h-16 w-16 object-contain"
+            width={64}
+            height={64}
+            animate={{ filter: ["drop-shadow(0 0 6px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 16px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 6px hsl(221,83%,53%,0.2))"] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+        <h1 className="font-display text-3xl md:text-4xl font-extrabold">
+          <motion.span
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t("content.terms.title")}
+          </motion.span>
+        </h1>
+      </motion.div>
 
+      {/* Intro */}
       <motion.div
-        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4"
+        className="rounded-2xl border border-border bg-card p-6 mb-6 relative overflow-hidden"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.15 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
       >
-        <p>Bu Kullanım Koşulları, <strong className="text-foreground">Zorlu Digital Plaza</strong> ("Şirket", "biz", "bize", "bizim") tarafından işletilen <strong className="text-foreground">www.zorluplus.com</strong> ("Site") üzerinden sunulan hizmetlerin kullanımına ilişkin şartları düzenlemektedir.</p>
-        <p>Siteyi ziyaret eden veya kullanan her kullanıcı, aşağıda belirtilen kullanım koşullarını okuduğunu, anladığını ve kabul ettiğini beyan etmiş sayılır.</p>
-
-        <h2>1. Genel Hükümler</h2>
-        <p>Bu Site'ye erişim sağlayan tüm kullanıcılar, yürürlükteki ilgili yasal düzenlemeler ile birlikte bu Kullanım Koşulları'nı kabul etmiş sayılır.</p>
-        <p>Koşulları kabul etmiyorsanız Site'yi kullanmamanız gerekmektedir.</p>
-
-        <h2>2. Hizmetlerin Kapsamı</h2>
-        <p>Zorlu Digital Plaza web sitesi üzerinden kullanıcılar;</p>
-        <ul>
-          <li>Ürünler hakkında detaylı bilgi edinebilir</li>
-          <li>Online sipariş oluşturabilir</li>
-          <li>Müşteri hizmetlerine talep iletebilir</li>
-          <li>Teknik servis ve garanti süreçlerini başlatabilir</li>
-          <li>Kampanya ve duyuruları takip edebilir</li>
-        </ul>
-        <p>Şirket, sunulan hizmetlerin kapsamını önceden bildirimde bulunmaksızın değiştirme veya güncelleme hakkını saklı tutar.</p>
-
-        <h2>3. Kullanıcı Yükümlülükleri</h2>
-        <p>Siteyi kullanan tüm kullanıcılar aşağıdaki kurallara uymayı kabul eder:</p>
-        <ul>
-          <li>Site içeriğini yasa dışı amaçlarla kullanmamak</li>
-          <li>Yanlış, eksik veya yanıltıcı bilgi vermemek</li>
-          <li>Site güvenliğini tehlikeye sokacak girişimlerde bulunmamak</li>
-          <li>Bot, script veya otomatik sistemlerle veri taraması yapmamak</li>
-          <li>Site üzerindeki tüm fikri mülkiyet haklarına saygı göstermek</li>
-          <li>Site altyapısına zarar verebilecek davranışlardan kaçınmak</li>
-        </ul>
-        <p>Bu yükümlülüklerin ihlali durumunda kullanıcının Site'ye erişimi geçici veya kalıcı olarak sonlandırılabilir.</p>
-
-        <h2>4. Fikri Mülkiyet Hakları</h2>
-        <p>Site'de yer alan tüm metinler, görseller, logolar, markalar, tasarımlar, grafikler ve içerikler Zorlu Digital Plaza'ya ait olup telif hakları ile korunmaktadır veya lisans kapsamında kullanılmaktadır.</p>
-        <p>Bu içeriklerin;</p>
-        <ul>
-          <li>kopyalanması</li>
-          <li>çoğaltılması</li>
-          <li>dağıtılması</li>
-          <li>ticari amaçla kullanılması</li>
-        </ul>
-        <p>Şirketin yazılı izni olmadan kesinlikle yasaktır.</p>
-        <p>İzinsiz kullanım hukuki ve cezai yaptırımlara tabidir.</p>
-
-        <h2>5. Sipariş, Ödeme ve Teslimat Koşulları</h2>
-        <ul>
-          <li>Ürün fiyatları ve stok bilgileri değişiklik gösterebilir.</li>
-          <li>Siparişler ödeme onayı alındıktan sonra kesinleşir.</li>
-          <li>Ödeme altyapısı ve teslimat süreçleri üçüncü taraf hizmet sağlayıcılar aracılığıyla yürütülebilir.</li>
-          <li>Kullanıcılar sipariş sırasında doğru iletişim ve adres bilgileri vermekle yükümlüdür.</li>
-        </ul>
-
-        <h2>6. Garanti ve Teknik Servis</h2>
-        <p>Zorlu Digital Plaza'dan satın alınan ürünler, ilgili marka üretici garantisi veya en az <strong>2 yıl</strong> tedarikçi garantisi kapsamındadır.</p>
-        <p>Servis hizmetleri; bakım, onarım, teknik destek ve yedek parça Şirketimiz veya yetkili servis merkezleri tarafından sağlanmaktadır.</p>
-        <p>Garanti kapsamı dışında kalan durumlar (kullanıcı hatası, sıvı teması, düşme/darbe, yetkisiz müdahale) ücretli servis kapsamına girebilir.</p>
-
-        <h2>7. Sorumluluk Reddi</h2>
-        <p>Zorlu Digital Plaza; sistem kesintileri, teknik arızalar, üçüncü taraf saldırıları, internet bağlantı problemleri ve kullanıcı hataları nedeniyle oluşabilecek zararlardan sorumlu tutulamaz.</p>
-        <p>Site üzerinde yer alan ürün açıklamaları, teknik özellikler ve görseller üretici kaynaklı değişiklik gösterebilir.</p>
-
-        <h2>8. Üçüncü Taraf Bağlantıları</h2>
-        <p>Site üzerinde üçüncü taraf web sitelerine yönlendiren bağlantılar bulunabilir. Bu sitelerin içeriklerinden, veri güvenliğinden veya gizlilik politikalarından Zorlu Digital Plaza sorumlu değildir.</p>
-        <p>Bu bağlantılar yalnızca kullanıcıya kolaylık sağlamak amacıyla sunulmaktadır.</p>
-
-        <h2>9. Gizlilik Politikası ile İlişki</h2>
-        <p>Bu Kullanım Koşulları, Site'de yer alan Gizlilik Politikası ile birlikte değerlendirilmelidir. Siteyi kullanan kullanıcılar, kişisel verilerin işlenmesine ilişkin Gizlilik Politikası'nı da kabul etmiş sayılır.</p>
-
-        <h2>10. Koşullarda Değişiklik Yapma Hakkı</h2>
-        <p>Zorlu Digital Plaza, bu Kullanım Koşulları üzerinde önceden bildirimde bulunmaksızın değişiklik yapma hakkını saklı tutar. Güncellenmiş koşullar Site'de yayımlandığı tarihten itibaren yürürlüğe girer.</p>
-        <p>Kullanıcıların bu koşulları düzenli olarak kontrol etmesi önerilir.</p>
-
-        <h2>11. Uygulanacak Hukuk ve Yetkili Mahkeme</h2>
-        <p>Bu Kullanım Koşulları Kuzey Kıbrıs Türk Cumhuriyeti yasalarına tabidir. Her türlü uyuşmazlıkta Lefkoşa Mahkemeleri ve İcra Daireleri yetkilidir.</p>
+        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
+        <p className="relative z-10 text-sm text-muted-foreground leading-relaxed">
+          Bu Kullanım Koşulları, <strong className="text-foreground">Zorlu Digital Plaza</strong> ("Şirket", "biz", "bize", "bizim") tarafından işletilen <strong className="text-foreground">www.zorluplus.com</strong> ("Site") üzerinden sunulan hizmetlerin kullanımına ilişkin şartları düzenlemektedir.
+        </p>
+        <p className="relative z-10 text-sm text-muted-foreground leading-relaxed mt-2">
+          Siteyi ziyaret eden veya kullanan her kullanıcı, aşağıda belirtilen kullanım koşullarını okuduğunu, anladığını ve kabul ettiğini beyan etmiş sayılır.
+        </p>
       </motion.div>
+
+      {/* Sections */}
+      <div className="space-y-5">
+        {sections.map((section, idx) => (
+          <motion.div
+            key={idx}
+            className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.06 * idx }}
+          >
+            <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: idx * 0.2 }} />
+            <div className="relative z-10 flex items-start gap-4">
+              <motion.img
+                src={section.icon}
+                alt=""
+                className="h-10 w-10 object-contain shrink-0 mt-0.5"
+                width={40}
+                height={40}
+                loading="lazy"
+                animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.15 }}
+              />
+              <div className="flex-1">
+                <h2 className="font-display font-bold text-lg text-foreground mb-2">{section.title}</h2>
+                {section.content && <p className="text-sm text-muted-foreground leading-relaxed">{renderBold(section.content)}</p>}
+                {section.subContent && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{section.subContent}</p>}
+                {section.list && (
+                  <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1 mt-2">
+                    {section.list.map((item, i) => <li key={i}>{item}</li>)}
+                  </ul>
+                )}
+                {section.extra && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{renderBold(section.extra)}</p>}
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
 
       {/* İletişim */}
       <motion.div
@@ -1310,17 +1333,7 @@ export function KullanimKosullariPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
       >
-        <motion.div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
-          animate={{
-            boxShadow: [
-              "inset 0 0 30px hsl(221,83%,53%,0.0)",
-              "inset 0 0 30px hsl(221,83%,53%,0.08)",
-              "inset 0 0 30px hsl(221,83%,53%,0.0)",
-            ],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        />
+        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.08)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
         <motion.h2
           className="font-display text-xl md:text-2xl font-bold relative z-10"
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
@@ -1355,8 +1368,6 @@ export function KullanimKosullariPage() {
     </div>
   );
 }
-
-export function IadeKosullariPage() {
   const { t } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
