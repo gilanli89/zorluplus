@@ -83,7 +83,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
           <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
             {product.isNew && (
-              <Badge className="bg-primary text-primary-foreground text-[10px] rounded-full px-2.5 shadow-sm">{t("product.new")}</Badge>
+              <Badge variant="premium" className="text-[10px] rounded-full px-2.5">{t("product.new")}</Badge>
             )}
           </div>
           {!product.inStock && (
