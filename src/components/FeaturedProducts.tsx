@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Flame, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useProducts } from "@/hooks/useProducts";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -37,11 +38,17 @@ export default function FeaturedProducts() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <div>
+          <div className="flex items-center gap-3">
             <h2 className="heading-2 text-foreground pulse-heading">
               {t("home.featuredProducts") || "Popüler Ürünler"}
             </h2>
-            <p className="text-muted-foreground text-sm mt-1">
+            <Badge className="hidden sm:inline-flex text-[10px] rounded-full px-3 py-1 gap-1 bg-rose-500 hover:bg-rose-600 text-white border-0 shadow-[0_2px_8px_-2px_rgba(244,63,94,0.4)] animate-pulse font-bold">
+              <Flame size={12} /> FIRSATLAR
+            </Badge>
+          </div>
+          <div>
+            <p className="text-muted-foreground text-sm mt-1 flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-primary" />
               {t("home.featuredProductsDesc") || "En çok tercih edilen ürünlerimiz"}
             </p>
           </div>
