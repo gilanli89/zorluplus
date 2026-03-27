@@ -47,6 +47,23 @@ export default function HomePage() {
     <>
       <HeroBanner />
       <TrustSection />
+
+      {/* Promo Strip */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="bg-primary text-primary-foreground"
+      >
+        <div className="container py-3 flex items-center justify-center gap-6 text-xs md:text-sm font-semibold overflow-x-auto scrollbar-hide">
+          <span className="flex items-center gap-1.5 whitespace-nowrap"><Truck size={15} /> Ücretsiz Kurulum & Montaj</span>
+          <span className="hidden sm:inline text-primary-foreground/40">|</span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap"><ShieldCheck size={15} /> Resmi Distribütör Garantisi</span>
+          <span className="hidden sm:inline text-primary-foreground/40">|</span>
+          <span className="hidden md:flex items-center gap-1.5 whitespace-nowrap"><Gift size={15} /> Taksit Seçenekleri Mevcut</span>
+        </div>
+      </motion.div>
+
       <FeaturedProducts />
 
       {/* Category Widgets */}
