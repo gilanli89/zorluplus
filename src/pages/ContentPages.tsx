@@ -222,13 +222,7 @@ export function HakkimizdaPage() {
                 className="flex items-center gap-3 text-muted-foreground"
                 variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
               >
-                <motion.div
-                  className="shrink-0"
-                  animate={{ color: ["hsl(221,83%,53%)", "hsl(221,83%,73%)", "hsl(221,83%,53%)"] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-                >
-                  <CheckCircle className="h-5 w-5" />
-                </motion.div>
+                <PremiumBadgeIcon icon={CheckCircle} size={18} />
                 {item}
               </motion.li>
             ))}
@@ -310,13 +304,7 @@ export function HakkimizdaPage() {
                 className="flex items-center gap-3 text-muted-foreground"
                 variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
               >
-                <motion.div
-                  className="shrink-0"
-                  animate={{ color: ["hsl(221,83%,53%)", "hsl(221,83%,73%)", "hsl(221,83%,53%)"] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
-                >
-                  <Wrench className="h-5 w-5" />
-                </motion.div>
+                <PremiumBadgeIcon icon={Wrench} size={18} />
                 {item}
               </motion.li>
             ))}
@@ -347,13 +335,7 @@ export function HakkimizdaPage() {
                 className="flex items-center gap-3 text-muted-foreground"
                 variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
               >
-                <motion.div
-                  className="shrink-0"
-                  animate={{ color: ["hsl(221,83%,53%)", "hsl(221,83%,73%)", "hsl(221,83%,53%)"] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-                >
-                  <CheckCircle className="h-5 w-5" />
-                </motion.div>
+                <PremiumBadgeIcon icon={CheckCircle} size={18} />
                 {item}
               </motion.li>
             ))}
