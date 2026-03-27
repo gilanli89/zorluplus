@@ -8,6 +8,14 @@ const BRAND_LOGOS: Record<string, string> = {
   krups: "/brands/krups.png",
   sharp: "/brands/sharp.png",
   bosch: "/brands/bosch.png",
+  sony: "/brands/sony.png",
+  xiaomi: "/brands/xiaomi.png",
+  tcl: "/brands/tcl.png",
+  jbl: "/brands/jbl.png",
+  tefal: "/brands/tefal.png",
+  indesit: "/brands/indesit.png",
+  adax: "/brands/adax.png",
+  atlantic: "/brands/atlantic.png",
 };
 
 function normalizeBrand(brand: string): string {
