@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, Mail, Recycle, BatteryCharging, Zap, Globe, Lightbulb, Leaf, Monitor, Snowflake, Refrigerator, Coffee, Volume2, Cpu, CheckCircle, Wrench, Building2, Phone } from "lucide-react";
 import { BRANCHES } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
+import PremiumIcon, { PremiumBadgeIcon, PremiumIconInline } from "@/components/PremiumIcon";
 
 const testimonials = [
   { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
@@ -221,13 +222,7 @@ export function HakkimizdaPage() {
                 className="flex items-center gap-3 text-muted-foreground"
                 variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
               >
-                <motion.div
-                  className="shrink-0"
-                  animate={{ color: ["hsl(221,83%,53%)", "hsl(221,83%,73%)", "hsl(221,83%,53%)"] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-                >
-                  <CheckCircle className="h-5 w-5" />
-                </motion.div>
+                <PremiumBadgeIcon icon={CheckCircle} size={18} />
                 {item}
               </motion.li>
             ))}
@@ -309,13 +304,7 @@ export function HakkimizdaPage() {
                 className="flex items-center gap-3 text-muted-foreground"
                 variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
               >
-                <motion.div
-                  className="shrink-0"
-                  animate={{ color: ["hsl(221,83%,53%)", "hsl(221,83%,73%)", "hsl(221,83%,53%)"] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
-                >
-                  <Wrench className="h-5 w-5" />
-                </motion.div>
+                <PremiumBadgeIcon icon={Wrench} size={18} />
                 {item}
               </motion.li>
             ))}
@@ -346,13 +335,7 @@ export function HakkimizdaPage() {
                 className="flex items-center gap-3 text-muted-foreground"
                 variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
               >
-                <motion.div
-                  className="shrink-0"
-                  animate={{ color: ["hsl(221,83%,53%)", "hsl(221,83%,73%)", "hsl(221,83%,53%)"] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-                >
-                  <CheckCircle className="h-5 w-5" />
-                </motion.div>
+                <PremiumBadgeIcon icon={CheckCircle} size={18} />
                 {item}
               </motion.li>
             ))}
@@ -375,16 +358,7 @@ export function HakkimizdaPage() {
                 transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.2)" }}
               >
-                <motion.div
-                  className="h-10 w-10 rounded-xl flex items-center justify-center shrink-0"
-                  animate={{
-                    backgroundColor: ["hsl(221,83%,53%,0.1)", "hsl(221,83%,53%,0.2)", "hsl(221,83%,53%,0.1)"],
-                    boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.15)", "0 0 0px hsl(221,83%,53%,0)"],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
-                >
-                  <item.icon className="h-5 w-5 text-primary" />
-                </motion.div>
+                <PremiumIcon icon={item.icon} size="md" variant="glow" />
                 <span className="text-sm font-semibold text-foreground">{item.label}</span>
               </motion.div>
             ))}
@@ -416,16 +390,9 @@ export function HakkimizdaPage() {
                 whileHover={{ y: -4, boxShadow: "0 12px 30px -8px hsl(221 83% 53% / 0.15)" }}
                 transition={{ duration: 0.4 }}
               >
-                <motion.div
-                  className="h-12 w-12 rounded-xl flex items-center justify-center mb-3"
-                  animate={{
-                    backgroundColor: ["hsl(221,83%,53%,0.1)", "hsl(221,83%,53%,0.2)", "hsl(221,83%,53%,0.1)"],
-                    boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 15px hsl(221,83%,53%,0.15)", "0 0 0px hsl(221,83%,53%,0)"],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
-                >
-                  <cat.icon className="h-6 w-6 text-primary" />
-                </motion.div>
+                <div className="mb-3">
+                  <PremiumIcon icon={cat.icon} size="lg" variant="glow" />
+                </div>
                 <motion.h3
                   className="heading-4 mb-1"
                   animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
@@ -515,16 +482,7 @@ export function HakkimizdaPage() {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <div className="flex items-center gap-4 shrink-0">
-              <motion.div
-                className="h-14 w-14 rounded-xl flex items-center justify-center"
-                animate={{
-                  backgroundColor: ["hsl(221,83%,53%,0.1)", "hsl(221,83%,53%,0.2)", "hsl(221,83%,53%,0.1)"],
-                  boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 20px hsl(221,83%,53%,0.15)", "0 0 0px hsl(221,83%,53%,0)"],
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <MapPin className="h-7 w-7 text-primary" />
-              </motion.div>
+              <PremiumIcon icon={MapPin} size="xl" variant="glow" />
               <div>
                 <motion.p
                   className="font-display text-2xl font-extrabold"
@@ -1062,13 +1020,9 @@ export function DestekPage() {
               className="rounded-xl border border-border bg-muted/30 p-3 text-center"
               whileHover={{ scale: 1.03 }}
             >
-              <motion.span
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 mb-2"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 14px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-              >
-                <MapPin className="h-4 w-4 text-primary" />
-              </motion.span>
+              <div className="mb-2 flex justify-center">
+                <PremiumIcon icon={MapPin} size="sm" variant="glow" />
+              </div>
               <p className="text-sm font-semibold text-foreground">{bolge} Teknik Servis</p>
             </motion.div>
           ))}
@@ -1143,13 +1097,7 @@ export function DestekPage() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
             >
-              <motion.span
-                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.25)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-              >
-                <ShieldCheck className="h-4 w-4 text-primary" />
-              </motion.span>
+              <PremiumIcon icon={ShieldCheck} size="sm" variant="glow" />
               <span className="text-foreground font-medium">{item}</span>
             </motion.div>
           ))}
@@ -2300,13 +2248,9 @@ export function SurdurulebilirlikPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <motion.div
-          className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 mb-4"
-          animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 24px hsl(221,83%,53%,0.35)", "0 0 0px hsl(221,83%,53%,0)"] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Leaf className="h-8 w-8 text-primary" />
-        </motion.div>
+        <div className="mb-4 flex justify-center">
+          <PremiumIcon icon={Leaf} size="xl" variant="glow" />
+        </div>
         <motion.h1
           className="font-display text-3xl md:text-5xl font-extrabold mb-4"
         >
@@ -2339,13 +2283,7 @@ export function SurdurulebilirlikPage() {
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
             />
             <div className="flex items-start gap-4 relative z-10">
-              <motion.span
-                className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
-              >
-                <s.icon className="h-6 w-6 text-primary" />
-              </motion.span>
+              <PremiumIcon icon={s.icon} size="lg" variant="glow" />
               <div>
                 <motion.h2
                   className="font-display text-lg md:text-xl font-bold mb-2"
@@ -2375,13 +2313,9 @@ export function SurdurulebilirlikPage() {
           animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.12)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
-        <motion.span
-          className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-4"
-          animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 20px hsl(221,83%,53%,0.35)", "0 0 0px hsl(221,83%,53%,0)"] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Lightbulb className="h-6 w-6 text-primary" />
-        </motion.span>
+        <div className="mb-4 flex justify-center">
+          <PremiumIcon icon={Lightbulb} size="lg" variant="glow" />
+        </div>
         <motion.h2
           className="font-display text-xl md:text-2xl font-bold mb-3 relative z-10"
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
