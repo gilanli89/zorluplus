@@ -1368,6 +1368,8 @@ export function KullanimKosullariPage() {
     </div>
   );
 }
+
+export function IadeKosullariPage() {
   const { t } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
