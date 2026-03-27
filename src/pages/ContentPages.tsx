@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, Mail, Recycle, BatteryCharging, Zap, Globe, Lightbulb, Leaf, Monitor, Snowflake, Refrigerator, Coffee, Volume2, Cpu, CheckCircle, Wrench, Building2, Phone } from "lucide-react";
 import { BRANCHES } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
+import PremiumIcon, { PremiumBadgeIcon, PremiumIconInline } from "@/components/PremiumIcon";
 
 const testimonials = [
   { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
