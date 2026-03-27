@@ -343,11 +343,9 @@ export default function TVLandingPage() {
               <motion.div key={type.name} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
                 <Link
                   to={`/kategori/tv-goruntu/${type.slug}`}
-                  className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-6 text-center hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
+                  className="group card-premium card-premium-border flex flex-col items-center gap-3 rounded-2xl p-6 text-center"
                 >
-                  <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500/10 to-blue-500/10 text-primary group-hover:from-purple-500/20 group-hover:to-blue-500/20 transition-colors">
-                    <type.icon className="h-7 w-7" />
-                  </div>
+                  <PremiumIcon icon={type.icon} size="lg" variant="gradient" />
                   <h3 className="font-display font-bold text-foreground">{type.name}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed">{type.desc}</p>
                 </Link>
@@ -371,11 +369,9 @@ export default function TVLandingPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {BENEFITS.map((b, i) => (
                   <motion.div key={b.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                    className="flex gap-3 rounded-xl border border-border bg-card p-4"
+                    className="card-premium card-premium-border flex gap-3 rounded-xl p-4"
                   >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <b.icon className="h-5 w-5" />
-                    </div>
+                    <PremiumIcon icon={b.icon} size="md" variant="glow" />
                     <div>
                       <p className="text-sm font-bold text-foreground">{b.title}</p>
                       <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{b.desc}</p>
@@ -387,7 +383,7 @@ export default function TVLandingPage() {
 
             {/* Quote Form */}
             <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-              className="rounded-2xl border border-border bg-card p-6 shadow-lg"
+              className="card-premium card-premium-border rounded-2xl p-6 shadow-lg"
             >
               <h3 className="font-display font-bold text-lg text-foreground mb-1">
                 {t("lp.tv.quoteTitle")}
