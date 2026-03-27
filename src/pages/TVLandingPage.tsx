@@ -6,6 +6,8 @@ import {
   Shield, Award, Wrench, MessageCircle, Phone, CheckCircle2,
   Star, ArrowRight, Tv, Monitor, Volume2, Zap, Eye, Maximize2, SlidersHorizontal, X,
 } from "lucide-react";
+import PremiumIcon from "@/components/PremiumIcon";
+import { TRUST_3D_ICONS } from "@/lib/categoryIcons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
