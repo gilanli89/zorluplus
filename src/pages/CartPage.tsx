@@ -147,7 +147,7 @@ export default function CartPage() {
                       <img src={item.product.image} alt={item.product.name} className="h-24 w-24 rounded-xl object-contain bg-muted/50 border border-border p-2" />
                     </Link>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-primary/70 uppercase">{item.product.brand}</p>
+                      <BrandLogo brand={item.product.brand} size="sm" />
                       <Link to={`/urun/${item.product.slug}`}>
                         <p className="text-sm font-semibold text-foreground line-clamp-2 hover:text-primary transition-colors">{item.product.name}</p>
                       </Link>

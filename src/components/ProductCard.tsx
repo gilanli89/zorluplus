@@ -11,6 +11,7 @@ import { useProductTranslation } from "@/hooks/useProductTranslation";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
 import { useRef, useState, useCallback } from "react";
+import BrandLogo from "@/components/BrandLogo";
 
 interface ProductCardProps {
   product: Product;
@@ -98,7 +99,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Info */}
         <div className="flex flex-col gap-1.5 p-3.5 flex-1">
-          <p className="text-[11px] font-semibold text-primary/70 uppercase tracking-wider">{product.brand}</p>
+          <BrandLogo brand={product.brand} size="xs" />
           <h3 className="text-sm font-semibold text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors duration-200">
             {translateProduct(product.name)}
           </h3>

@@ -89,7 +89,7 @@ export default function ProductPage() {
                   <div className="aspect-square rounded-xl border border-border bg-card overflow-hidden mb-1.5">
                     <img src={p.image} alt={p.name} className="h-full w-full object-contain p-3 group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                   </div>
-                  <p className="text-[10px] font-semibold text-primary/70 uppercase tracking-wider">{p.brand}</p>
+                  <BrandLogo brand={p.brand} size="xs" />
                   <p className="text-xs font-medium text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">{translateProduct(p.name)}</p>
                 </Link>
               ))}
@@ -116,7 +116,7 @@ export default function ProductPage() {
 
           {/* Info */}
           <div className="flex flex-col gap-4">
-            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{product.brand}</p>
+            <BrandLogo brand={product.brand} size="lg" />
             <h1 className="heading-2 text-foreground">{translateProduct(product.name)}</h1>
             {product.sku && (
               <p className="text-xs font-mono text-muted-foreground">{t("product.modelNo") || "Model No"}: {product.sku}</p>
