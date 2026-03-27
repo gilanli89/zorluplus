@@ -118,7 +118,32 @@
     <!-- End Google Tag Manager (noscript) -->
     <!-- Yandex.Metrika noscript -->
     <noscript><div><img src="https://mc.yandex.ru/watch/106295459" style="position:absolute;left:-9999px;" alt="" /></div></noscript>
+    <!-- Global loading screen -->
+    <div id="global-loader" style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,hsl(222,47%,6%),hsl(221,83%,15%));transition:opacity 0.5s ease">
+      <div style="text-align:center">
+        <div style="width:48px;height:48px;margin:0 auto 16px;border:3px solid rgba(59,130,246,0.2);border-top-color:rgb(59,130,246);border-radius:50%;animation:spin 1s linear infinite"></div>
+        <p style="color:rgba(255,255,255,0.7);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600">Zorlu Digital Plaza</p>
+      </div>
+    </div>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Remove loader when app mounts
+      window.addEventListener('DOMContentLoaded', function() {
+        var check = setInterval(function() {
+          if (document.getElementById('root') && document.getElementById('root').children.length > 0) {
+            clearInterval(check);
+            var loader = document.getElementById('global-loader');
+            if (loader) { loader.style.opacity = '0'; setTimeout(function() { loader.remove(); }, 500); }
+          }
+        }, 100);
+        // Fallback: remove after 5s regardless
+        setTimeout(function() {
+          var loader = document.getElementById('global-loader');
+          if (loader) { loader.style.opacity = '0'; setTimeout(function() { loader.remove(); }, 500); }
+        }, 5000);
+      });
+    </script>
   </body>
 </html>
