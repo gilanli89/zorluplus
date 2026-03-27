@@ -9,6 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
+import { useRef, useState, useCallback } from "react";
 
 interface ProductCardProps {
   product: Product;
@@ -18,6 +19,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   const { t } = useLanguage();
   const { translateProduct } = useProductTranslation();
   const { addItem } = useCart();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -26,24 +30,48 @@ export default function ProductCard({ product }: ProductCardProps) {
     toast.success(`${product.name} ${t("cart.addedToCart")}`);
   };
 
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: y * -8, y: x * 8 });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setTilt({ x: 0, y: 0 });
+  }, []);
+
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-30px" }}
       transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-      className="card-lift group flex flex-col rounded-2xl border border-border bg-card overflow-hidden relative"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+        transition: "transform 0.2s ease-out",
+      }}
+      className="group flex flex-col rounded-2xl border border-border bg-card overflow-hidden relative shine-on-hover will-change-transform hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1"
     >
       <Link to={`/urun/${product.slug}`} className="flex flex-col flex-1">
         {/* Image */}
         <div className="relative aspect-square bg-muted/50 overflow-hidden">
+          {!imgLoaded && (
+            <div className="absolute inset-0 skeleton-shimmer" />
+          )}
           <img
             src={product.image}
             alt={product.name}
-            className="h-full w-full object-contain p-5 group-hover:scale-105 transition-transform duration-500 ease-out"
+            className={`h-full w-full object-contain p-5 group-hover:scale-105 transition-transform duration-500 ease-out ${imgLoaded ? "opacity-100" : "opacity-0"}`}
             loading="lazy"
+            onLoad={() => setImgLoaded(true)}
             onError={(e) => {
               const target = e.currentTarget;
+              setImgLoaded(true);
               const fallbacks = [
                 `/products/${product.category === "tv-goruntu" ? "samsung-oled-tv" : product.category === "klima-isitma" ? "klima" : product.category === "beyaz-esya" ? "samsung-buzdolabi" : "midea-su-sebili"}.png`,
                 "/placeholder.svg"
