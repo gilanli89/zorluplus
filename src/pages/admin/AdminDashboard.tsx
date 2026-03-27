@@ -7,15 +7,14 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { format } from "date-fns";
+import PremiumIcon from "@/components/PremiumIcon";
 
 function StatCard({ stat }: { stat: { label: string; value: number; icon: LucideIcon; color: string } }) {
   const count = useCountUp(stat.value);
   return (
-    <div className="bg-card rounded-2xl border border-border p-5 hover:shadow-lg hover:shadow-primary/5 transition-shadow duration-300">
+    <div className="card-premium card-premium-border rounded-2xl p-5">
       <div className="flex items-center gap-3 mb-2">
-        <div className={`h-9 w-9 rounded-xl bg-muted flex items-center justify-center ${stat.color}`}>
-          <stat.icon className="h-4 w-4" />
-        </div>
+        <PremiumIcon icon={stat.icon} size="md" variant="glow" />
         <span className="text-sm font-medium text-muted-foreground">{stat.label}</span>
       </div>
       <p className="text-3xl font-bold text-foreground tabular-nums">{count.toLocaleString("tr-TR")}</p>
@@ -177,7 +176,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Map */}
-      <div className="bg-card rounded-2xl border border-border overflow-hidden">
+      <div className="card-premium card-premium-border rounded-2xl overflow-hidden">
         <div className="flex items-center justify-between p-4 border-b border-border">
           <h2 className="font-display font-bold text-foreground">Kıbrıs Haritası</h2>
           <div className="flex items-center gap-4">
