@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { Calendar, ArrowRight, FileText, Loader2 } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { motion } from "framer-motion";
 import { useWPPosts, useWPPages, useWPCategories } from "@/hooks/useWordPress";
 import { Badge } from "@/components/ui/badge";

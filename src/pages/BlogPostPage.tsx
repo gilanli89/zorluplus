@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { ArrowLeft, Calendar } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { useWPPostBySlug } from "@/hooks/useWordPress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

@@ -2,6 +2,8 @@ import { useParams, Link } from "react-router-dom";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Shield, Award, Wrench, MessageCircle, Phone, CheckCircle2, Star } from "lucide-react";
+import { PremiumIconInline, PremiumBadgeIcon } from "@/components/PremiumIcon";
+import PremiumIcon from "@/components/PremiumIcon";
 import { Button } from "@/components/ui/button";
 import { useProducts } from "@/hooks/useProducts";
 import { CATEGORIES, BRAND, BRANCHES } from "@/lib/constants";
