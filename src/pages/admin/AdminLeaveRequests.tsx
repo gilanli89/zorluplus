@@ -405,9 +405,9 @@ export default function AdminLeaveRequests() {
 
 function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
   return (
-    <div className="bg-card rounded-2xl border border-border p-5">
+    <div className="card-premium card-premium-border rounded-2xl p-5">
       <div className="flex items-center gap-3 mb-2">
-        <div className="h-9 w-9 rounded-xl bg-muted flex items-center justify-center">
+        <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-primary/15 to-accent/10 border border-primary/20 shadow-[0_2px_8px_-2px_hsl(var(--primary)/0.25)] flex items-center justify-center">
           {icon}
         </div>
         <span className="text-sm font-medium text-muted-foreground">{label}</span>

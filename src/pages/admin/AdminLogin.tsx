@@ -56,7 +56,7 @@ export default function AdminLogin() {
         <div className="flex justify-center mb-8">
           <Logo size="sm" />
         </div>
-        <div className="bg-card rounded-2xl border border-border p-8 shadow-lg">
+        <div className="card-premium card-premium-border rounded-2xl p-8 shadow-lg">
           <h1 className="font-display text-xl font-bold text-foreground text-center mb-6">
             Admin Girişi
           </h1>

@@ -48,7 +48,7 @@ export default function AdminService() {
   return (
     <div>
       <h1 className="font-display text-2xl font-bold text-foreground mb-6">Servis Talepleri</h1>
-      <div className="bg-card rounded-2xl border border-border overflow-hidden">
+      <div className="card-premium card-premium-border rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
