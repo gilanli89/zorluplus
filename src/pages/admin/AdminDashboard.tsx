@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ShoppingCart, Package, Users, Wrench } from "lucide-react";
+import { useCountUp } from "@/hooks/useCountUp";
+import { ShoppingCart, Package, Users, Wrench } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -156,15 +158,7 @@ export default function AdminDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map(s => (
-          <div key={s.label} className="bg-card rounded-2xl border border-border p-5">
-            <div className="flex items-center gap-3 mb-2">
-              <div className={`h-9 w-9 rounded-xl bg-muted flex items-center justify-center ${s.color}`}>
-                <s.icon className="h-4 w-4" />
-              </div>
-              <span className="text-sm font-medium text-muted-foreground">{s.label}</span>
-            </div>
-            <p className="text-3xl font-bold text-foreground">{s.value}</p>
-          </div>
+          <StatCard key={s.label} stat={s} />
         ))}
       </div>
 
