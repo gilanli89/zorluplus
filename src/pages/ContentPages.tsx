@@ -1374,144 +1374,99 @@ export function KullanimKosullariPage() {
 
 export function IadeKosullariPage() {
   const { t } = useLanguage();
+
+  const sections = [
+    { title: "1. Genel İade Koşulları", icon: refundIcon, list: ["**Premium Hizmet Standardı:** İade talebi, ürün teslim alındıktan sonra **7 gün** içinde yapılmalıdır.", "Ürün; kullanılmamış, orijinal ambalajında, tüm aksesuarlarıyla eksiksiz ve yeniden satılabilir durumda olmalıdır.", "Fatura veya dijital satın alma belgesinin ibrazı, işlem güvenliği açısından zorunludur.", "Ürün veya ambalajında kullanıcı kaynaklı (hasar, çizik, kırık vb.) bir kusur tespit edilirse iade kabul edilmeyecektir."] },
+    { title: "2. İade Kapsamı Dışındaki Ürünler", icon: shieldIcon, content: "Mevzuat ve hijyen kuralları gereği aşağıdaki ürünlerde iade yapılamaz (Arıza/Defect durumları hariç):", list: ["**Hijyen Ürünleri:** Paketi açılmış kulak içi kulaklıklar ve kişisel bakım cihazları.", "**Dijital İçerikler:** Yazılım, oyun, dijital lisans ve aktivasyon kodları.", "**Kurulumu Yapılmış Cihazlar:** Yetkili servis tarafından kurulumu tamamlanan büyük beyaz eşyalar kurulum sonrası iade edilemez.", "**Özel Siparişler:** Müşteri talebi doğrultusunda özelleştirilen ürünler."] },
+    { title: "3. Arızalı ve Ayıplı Ürün Süreci", icon: certificateIcon, list: ["**Teslimat Kontrolü:** Ürünü teslim alırken kontrol ediniz. Hasar varsa tutanak tutturarak ürünü teslim almayınız.", "**Teknik Servis Onayı:** Teslimat sonrası fark edilen üretim hatalarında ürün, Premium teknik servis kontrolünden geçirilir. Servis raporu olmadan iade veya değişim işlemi yapılamamaktadır."] },
+    { title: "4. Premium Değişim Koşulları", icon: contractIcon, list: ["Stok durumu uygun olduğu sürece, teslim tarihinden itibaren **7 gün** içerisinde değişim başvurusu yapılabilir.", "Ürün fiyat farkı oluşması durumunda, bakiye dengelemesi yapılarak işlem tamamlanır."] },
+    { title: "5. İade Süreci ve İletişim", icon: contractIcon, content: "İade taleplerinizi Premium destek kanallarımız üzerinden iletebilirsiniz:", hasContact: true, extra: "Ürün tarafımıza ulaştıktan sonra uzman ekibimizce **7 iş günü** içinde incelenir ve onaylandığında ödeme iadesi aynı yöntemle gerçekleştirilir." },
+    { title: "6. Lojistik ve Kargo", icon: deliveryIcon, list: ["Arızalı/defolu ürün gönderimlerinde kargo ücreti Şirketimiz tarafından karşılanır.", "Kişisel tercih veya memnuniyet kaynaklı iadelerde kargo ücreti müşteriye aittir."] },
+    { title: "7. Kurulum Gerektiren Ürünler (Beyaz Eşya & TV)", icon: installIcon, list: ["Samsung, LG ve diğer markalı ürünlerde kutu açılımı mutlaka yetkili servis tarafından yapılmalıdır.", "Yetkisiz müdahaleler garanti kapsamını ve iade hakkını geçersiz kılabilir."] },
+    { title: "8. İptal ve Geri Ödeme", icon: installmentIcon, list: ["Kargoya verilmemiş siparişler anında iptal edilebilir.", "İade bedelinin hesabınıza yansıması, banka süreçlerine bağlı olarak **10 iş günü** sürebilir."] },
+  ];
+
+  const pulseGlow = {
+    boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.08)", "inset 0 0 25px hsl(221,83%,53%,0.0)"],
+  };
+
+  const renderBold = (text: string) => {
+    const parts = text.split(/\*\*(.*?)\*\*/g);
+    return parts.map((part, i) =>
+      i % 2 === 1 ? <strong key={i} className="text-foreground">{part}</strong> : part
+    );
+  };
+
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
-      <motion.h1
-        className="font-display text-3xl md:text-4xl font-extrabold mb-2"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <motion.span
-          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          {t("content.returns.title")}
-        </motion.span>
-      </motion.h1>
-      <p className="text-sm text-muted-foreground mb-8">Son Güncelleme Tarihi: 23.12.2025</p>
-
-      <motion.div
-        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.15 }}
-      >
-        <p>Bu politika, <strong className="text-foreground">Zorlu Digital Plaza</strong> ("Şirket") üzerinden gerçekleştirilen tüm alışverişlerde sunulan Premium hizmet standartlarını, iade, değişim ve iptal şartlarını kapsamaktadır. Müşteri memnuniyetini en üst seviyede tutmak adına süreçlerimiz şeffaf, güvenilir ve ayrıcalıklı bir temele oturtulmuştur.</p>
-
-        <h2>1. Genel İade Koşulları</h2>
-        <ul>
-          <li><strong className="text-foreground">Premium Hizmet Standardı:</strong> İade talebi, ürün teslim alındıktan sonra <strong>7 gün</strong> içinde yapılmalıdır.</li>
-          <li>Ürün; kullanılmamış, orijinal ambalajında, tüm aksesuarlarıyla eksiksiz ve yeniden satılabilir durumda olmalıdır.</li>
-          <li>Fatura veya dijital satın alma belgesinin ibrazı, işlem güvenliği açısından zorunludur.</li>
-          <li>Ürün veya ambalajında kullanıcı kaynaklı (hasar, çizik, kırık vb.) bir kusur tespit edilirse iade kabul edilmeyecektir.</li>
-        </ul>
-
-        <h2>2. İade Kapsamı Dışındaki Ürünler</h2>
-        <p>Mevzuat ve hijyen kuralları gereği aşağıdaki ürünlerde iade yapılamaz (Arıza/Defect durumları hariç):</p>
-        <ul>
-          <li><strong className="text-foreground">Hijyen Ürünleri:</strong> Paketi açılmış kulak içi kulaklıklar ve kişisel bakım cihazları.</li>
-          <li><strong className="text-foreground">Dijital İçerikler:</strong> Yazılım, oyun, dijital lisans ve aktivasyon kodları.</li>
-          <li><strong className="text-foreground">Kurulumu Yapılmış Cihazlar:</strong> Yetkili servis tarafından kurulumu tamamlanan büyük beyaz eşyalar (buzdolabı, çamaşır makinesi vb.) kurulum sonrası iade edilemez.</li>
-          <li><strong className="text-foreground">Özel Siparişler:</strong> Müşteri talebi doğrultusunda özelleştirilen ürünler.</li>
-        </ul>
-
-        <h2>3. Arızalı ve Ayıplı Ürün Süreci</h2>
-        <ul>
-          <li><strong className="text-foreground">Teslimat Kontrolü:</strong> Ürünü teslim alırken kontrol ediniz. Hasar varsa tutanak tutturarak ürünü teslim almayınız.</li>
-          <li><strong className="text-foreground">Teknik Servis Onayı:</strong> Teslimat sonrası fark edilen üretim hatalarında ürün, Premium teknik servis kontrolünden geçirilir. Servis raporu olmadan iade veya değişim işlemi yapılamamaktadır.</li>
-        </ul>
-
-        <h2>4. Premium Değişim Koşulları</h2>
-        <ul>
-          <li>Stok durumu uygun olduğu sürece, teslim tarihinden itibaren <strong>7 gün</strong> içerisinde değişim başvurusu yapılabilir.</li>
-          <li>Ürün fiyat farkı oluşması durumunda, bakiye dengelemesi yapılarak işlem tamamlanır.</li>
-        </ul>
-
-        <h2>5. İade Süreci ve İletişim</h2>
-        <p>İade taleplerinizi Premium destek kanallarımız üzerinden iletebilirsiniz:</p>
-      </motion.div>
-
-      {/* Contact card */}
-      <motion.div
-        className="rounded-2xl border border-border bg-card p-6 md:p-8 space-y-4 relative overflow-hidden mt-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-      >
-        <motion.div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
-          animate={{
-            boxShadow: [
-              "inset 0 0 30px hsl(221,83%,53%,0.0)",
-              "inset 0 0 30px hsl(221,83%,53%,0.08)",
-              "inset 0 0 30px hsl(221,83%,53%,0.0)",
-            ],
-          }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <div className="flex flex-col gap-3 relative z-10">
-          <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
-            <motion.span
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
-              animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <Mail className="h-5 w-5 text-primary" />
+      {/* Hero */}
+      <motion.div className="flex items-center gap-4 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+        <motion.div className="relative shrink-0">
+          <motion.div className="absolute inset-[-8px] rounded-full border-2 border-primary/30" animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
+          <motion.img src={refundIcon} alt="" className="h-16 w-16 object-contain" width={64} height={64} animate={{ filter: ["drop-shadow(0 0 6px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 16px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 6px hsl(221,83%,53%,0.2))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
+        </motion.div>
+        <div>
+          <h1 className="font-display text-3xl md:text-4xl font-extrabold">
+            <motion.span animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
+              {t("content.returns.title")}
             </motion.span>
-            E-posta: deniz@zorludigitalplaza.com
-          </a>
-          <a href="tel:+905488783131" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
-            <motion.span
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
-              animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
-            >
-              <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            </motion.span>
-            Telefon: +90 548 878 31 31
-          </a>
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">Son Güncelleme Tarihi: 23.12.2025</p>
         </div>
       </motion.div>
 
-      <motion.div
-        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4 mt-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.45 }}
-      >
-        <p>Ürün tarafımıza ulaştıktan sonra uzman ekibimizce <strong>7 iş günü</strong> içinde incelenir ve onaylandığında ödeme iadesi aynı yöntemle gerçekleştirilir.</p>
-
-        <h2>6. Lojistik ve Kargo</h2>
-        <ul>
-          <li>Arızalı/defolu ürün gönderimlerinde kargo ücreti Şirketimiz tarafından karşılanır.</li>
-          <li>Kişisel tercih veya memnuniyet kaynaklı iadelerde kargo ücreti müşteriye aittir.</li>
-        </ul>
-
-        <h2>7. Kurulum Gerektiren Ürünler (Beyaz Eşya & TV)</h2>
-        <ul>
-          <li>Samsung, LG ve diğer markalı ürünlerde kutu açılımı mutlaka yetkili servis tarafından yapılmalıdır.</li>
-          <li>Yetkisiz müdahaleler garanti kapsamını ve iade hakkını geçersiz kılabilir.</li>
-        </ul>
-
-        <h2>8. İptal ve Geri Ödeme</h2>
-        <ul>
-          <li>Kargoya verilmemiş siparişler anında iptal edilebilir.</li>
-          <li>İade bedelinin hesabınıza yansıması, banka süreçlerine bağlı olarak <strong>10 iş günü</strong> sürebilir.</li>
-        </ul>
+      {/* Intro */}
+      <motion.div className="rounded-2xl border border-border bg-card p-6 mb-6 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
+        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
+        <p className="relative z-10 text-sm text-muted-foreground leading-relaxed">
+          Bu politika, <strong className="text-foreground">Zorlu Digital Plaza</strong> ("Şirket") üzerinden gerçekleştirilen tüm alışverişlerde sunulan Premium hizmet standartlarını, iade, değişim ve iptal şartlarını kapsamaktadır. Müşteri memnuniyetini en üst seviyede tutmak adına süreçlerimiz şeffaf, güvenilir ve ayrıcalıklı bir temele oturtulmuştur.
+        </p>
       </motion.div>
 
-      <motion.p
-        className="text-center font-display font-bold text-lg md:text-xl mt-10 italic"
-        animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      >
+      {/* Sections */}
+      <div className="space-y-5">
+        {sections.map((section, idx) => (
+          <motion.div key={idx} className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.06 * idx }}>
+            <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: idx * 0.2 }} />
+            <div className="relative z-10 flex items-start gap-4">
+              <motion.img src={section.icon} alt="" className="h-10 w-10 object-contain shrink-0 mt-0.5" width={40} height={40} loading="lazy" animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.15 }} />
+              <div className="flex-1">
+                <h2 className="font-display font-bold text-lg text-foreground mb-2">{section.title}</h2>
+                {section.content && <p className="text-sm text-muted-foreground leading-relaxed">{renderBold(section.content)}</p>}
+                {section.hasContact && (
+                  <div className="flex flex-col gap-2 my-3">
+                    <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-2 font-semibold text-foreground hover:text-primary transition-colors text-sm">
+                      <motion.span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}>
+                        <Mail className="h-4 w-4 text-primary" />
+                      </motion.span>
+                      deniz@zorludigitalplaza.com
+                    </a>
+                    <a href="tel:+905488783131" className="flex items-center gap-2 font-semibold text-foreground hover:text-primary transition-colors text-sm">
+                      <motion.span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}>
+                        <svg className="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                      </motion.span>
+                      +90 548 878 31 31
+                    </a>
+                  </div>
+                )}
+                {section.list && (
+                  <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1 mt-2">
+                    {section.list.map((item, i) => <li key={i}>{renderBold(item)}</li>)}
+                  </ul>
+                )}
+                {section.extra && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{renderBold(section.extra)}</p>}
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      <motion.p className="text-center font-display font-bold text-lg md:text-xl mt-10 italic" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
         Zorlu Digital Plaza | Teknolojiye Premium Dokunuş
       </motion.p>
     </div>
   );
 }
-
 export function GizlilikPolitikasiPage() {
   const { t } = useLanguage();
 
