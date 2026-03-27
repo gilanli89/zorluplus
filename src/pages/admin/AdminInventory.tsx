@@ -210,7 +210,7 @@ export default function AdminInventory() {
         />
       </div>
 
-      <div className="bg-card rounded-2xl border border-border overflow-hidden">
+      <div className="card-premium card-premium-border rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

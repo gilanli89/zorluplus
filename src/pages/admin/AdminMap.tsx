@@ -139,7 +139,7 @@ export default function AdminMap() {
         </div>
       </div>
 
-      <div className="bg-card rounded-2xl border border-border overflow-hidden" style={{ height: "calc(100vh - 200px)", minHeight: 500 }}>
+      <div className="card-premium card-premium-border rounded-2xl overflow-hidden" style={{ height: "calc(100vh - 200px)", minHeight: 500 }}>
         <MapContainer
           center={CYPRUS_CENTER}
           zoom={10}
