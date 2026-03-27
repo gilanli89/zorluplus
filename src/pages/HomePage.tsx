@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { BRANCHES } from "@/lib/constants";
 import TrustSection from "@/components/TrustSection";
 import HeroBanner from "@/components/HeroBanner";
+import FeaturedProducts from "@/components/FeaturedProducts";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 import widgetTv from "@/assets/widget-tv.jpg";
@@ -45,6 +46,7 @@ export default function HomePage() {
     <>
       <HeroBanner />
       <TrustSection />
+      <FeaturedProducts />
 
       {/* Category Widgets */}
       <section className="py-10 md:py-16">

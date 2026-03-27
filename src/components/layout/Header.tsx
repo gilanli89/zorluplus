@@ -104,12 +104,15 @@ export default function Header() {
 
   return (
     <header className={cn(
-      "sticky top-0 z-50 bg-card/95 backdrop-blur-xl supports-[backdrop-filter]:bg-card/80 transition-shadow duration-300",
-      scrolled ? "shadow-md" : "shadow-sm"
+      "sticky top-0 z-50 transition-all duration-300",
+      scrolled 
+        ? "bg-card/90 backdrop-blur-2xl shadow-lg shadow-foreground/5" 
+        : "bg-card/95 backdrop-blur-xl shadow-sm"
     )}>
-      {/* Top bar */}
-      <div className="bg-foreground text-background">
-        <div className="container flex items-center justify-between py-1.5 text-[11px]">
+      {/* Top bar - animated gradient */}
+      <div className="bg-foreground text-background relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20 opacity-50" />
+        <div className="container relative flex items-center justify-between py-1.5 text-[11px]">
           <div className="flex items-center gap-4 font-medium">
             <span className="hidden sm:inline-flex items-center gap-1 text-primary-foreground/80 font-semibold">{greeting}</span>
             <span className="hidden md:inline-flex items-center gap-1"><Shield className="h-3 w-3" /> {t("header.authorized")}</span>

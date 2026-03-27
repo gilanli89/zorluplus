@@ -75,21 +75,36 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
       <section className="relative overflow-hidden min-h-[420px] md:min-h-[500px] flex items-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         {config.heroImage && (
           <div className="absolute inset-0">
-            <img src={config.heroImage} alt={config.heroTitle} className="h-full w-full object-cover" />
+            <img src={config.heroImage} alt={config.heroTitle} className="h-full w-full object-cover" loading="eager" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
           </div>
         )}
         {!config.heroImage && (
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,hsl(var(--primary)/0.15),transparent)]" />
-          </div>
+          <div className="absolute inset-0 gradient-mesh opacity-30" />
         )}
+        {/* Floating particles */}
+        <div className="absolute inset-0 pointer-events-none">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1.5 h-1.5 rounded-full bg-white/20"
+              style={{ left: `${10 + i * 12}%`, top: `${20 + (i % 3) * 25}%` }}
+              animate={{ y: [0, -20, 0], opacity: [0.2, 0.5, 0.2] }}
+              transition={{ duration: 3 + i * 0.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+            />
+          ))}
+        </div>
         <div className="container relative z-10 py-16 md:py-24">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-2xl">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold text-white mb-5 border border-white/20">
+            <motion.span
+              className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold text-white mb-5 border border-white/20 shine-on-hover"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+            >
               <Shield className="h-3.5 w-3.5" /> {config.heroBadge}
-            </span>
+            </motion.span>
             <h1 className="heading-1 mb-4 text-white">
               {config.heroTitle}<br />
               <span className={`bg-gradient-to-r ${heroGradient} bg-clip-text text-transparent`}>{config.heroTitleHighlight}</span>
@@ -97,16 +112,24 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
             <p className="text-white/80 body-lg mb-8 max-w-lg">{config.heroDescription}</p>
             <div className="flex flex-wrap gap-3">
               <a href="#urunler">
-                <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg">
+                <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg tap-scale">
                   <Eye className="h-4 w-4" /> {config.ctaButtonText}
                 </Button>
               </a>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer" onClick={() => trackWhatsAppClick("landing_hero")}>
-                <Button size="lg" className="font-semibold gap-2 rounded-full px-6 shadow-lg bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white border-0">
+                <Button size="lg" className="font-semibold gap-2 rounded-full px-6 shadow-lg bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white border-0 tap-scale">
                   <MessageCircle className="h-4 w-4" /> {t("landing.getInfo")}
                 </Button>
               </a>
             </div>
+            {/* Scroll indicator */}
+            <motion.div
+              className="mt-10 flex justify-start"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <ArrowRight className="h-5 w-5 text-white/40 rotate-90" />
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -116,7 +139,7 @@ export default function CategoryLandingTemplate({ config }: { config: CategoryLa
         <div className="container py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {config.trustItems.map((item, i) => (
-              <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex items-center gap-3">
+              <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="trust-card rounded-xl p-4 flex items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary pulse-icon" style={{ animationDelay: `${i * 0.5}s` }}><item.icon className="h-5 w-5" /></div>
                 <div>
                   <p className="text-sm font-bold text-foreground">{item.label}</p>

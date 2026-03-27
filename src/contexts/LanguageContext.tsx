@@ -147,6 +147,8 @@ const translations: Record<string, Record<Lang, string>> = {
   "home.getDirections": { tr: "Yol Tarifi", en: "Get Directions" },
   "home.call": { tr: "Ara", en: "Call" },
   "home.authorizedBrands": { tr: "Yetkili Bayi & Servis Markalarımız", en: "Authorized Dealer & Service Brands" },
+  "home.featuredProducts": { tr: "Popüler Ürünler", en: "Popular Products" },
+  "home.featuredProductsDesc": { tr: "En çok tercih edilen ürünlerimiz", en: "Our most popular products" },
 
   // 404 Not Found
   "notFound.title": { tr: "Sayfa Bulunamadı", en: "Page Not Found" },
