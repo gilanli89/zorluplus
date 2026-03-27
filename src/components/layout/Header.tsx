@@ -149,43 +149,55 @@ export default function Header() {
           <SheetContent side="left" className="w-80 overflow-y-auto">
             <SheetTitle className="text-lg font-display font-bold">{BRAND.name}</SheetTitle>
             <nav className="mt-6 flex flex-col gap-1">
-              {CATEGORIES.map((cat, i) => (
-                <motion.div
-                  key={cat.slug}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05, duration: 0.3 }}
-                >
-                  <Link
-                    to={`/kategori/${cat.slug}`}
-                    className="block rounded-xl px-3 py-2.5 font-medium text-foreground hover:bg-muted transition-colors"
+              {CATEGORIES.map((cat, i) => {
+                const icon3d = CATEGORY_3D_ICONS[cat.slug];
+                return (
+                  <motion.div
+                    key={cat.slug}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05, duration: 0.3 }}
                   >
-                    {getCatName(cat.slug)}
-                  </Link>
-                  {cat.children.length > 0 && (
-                    <div className="ml-4 flex flex-col">
-                      {cat.children.map(sub => (
-                        <Link
-                          key={sub.slug}
-                          to={`/kategori/${cat.slug}/${sub.slug}`}
-                          className="block rounded-xl px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-                        >
-                          {sub.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </motion.div>
-              ))}
+                    <Link
+                      to={`/kategori/${cat.slug}`}
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-foreground hover:bg-muted transition-colors"
+                    >
+                      {icon3d && (
+                        <img
+                          src={icon3d}
+                          alt={getCatName(cat.slug)}
+                          className="h-6 w-6 object-contain drop-shadow-[0_2px_4px_hsl(var(--primary)/0.2)]"
+                          width={24}
+                          height={24}
+                        />
+                      )}
+                      {getCatName(cat.slug)}
+                    </Link>
+                    {cat.children.length > 0 && (
+                      <div className="ml-4 flex flex-col">
+                        {cat.children.map(sub => (
+                          <Link
+                            key={sub.slug}
+                            to={`/kategori/${cat.slug}/${sub.slug}`}
+                            className="block rounded-xl px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors ml-9"
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
               <hr className="my-3 border-border" />
-              <Link to="/e-katalog" className="flex items-center gap-2 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-                <FileText className="h-4 w-4 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.2)]" /> {t("header.eCatalogue")}
+              <Link to="/e-katalog" className="flex items-center gap-3 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
+                <FileText className="h-5 w-5 text-primary drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" /> {t("header.eCatalogue")}
               </Link>
-              <Link to="/subelerimiz" className="px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-                {t("header.branches")}
+              <Link to="/subelerimiz" className="flex items-center gap-3 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
+                <MapPin className="h-5 w-5 text-primary drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" /> {t("header.branches")}
               </Link>
-              <Link to="/iletisim" className="px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-                {t("header.contactUs")}
+              <Link to="/iletisim" className="flex items-center gap-3 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
+                <MessageCircle className="h-5 w-5 text-primary drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" /> {t("header.contactUs")}
               </Link>
             </nav>
           </SheetContent>
