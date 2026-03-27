@@ -64,21 +64,50 @@ export function PremiumIconInline({
   icon: Icon,
   size = 20,
   className,
+  color,
+}: {
+  icon: LucideIcon;
+  size?: number;
+  className?: string;
+  color?: string;
+}) {
+  return (
+    <Icon
+      size={size}
+      className={cn(
+        "drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]",
+        "filter brightness-110",
+        "transition-all duration-300",
+        color || "text-primary",
+        className
+      )}
+      strokeWidth={2.2}
+    />
+  );
+}
+
+/** Mini badge icon - smaller 3D icon for inline badge/label usage */
+export function PremiumBadgeIcon({
+  icon: Icon,
+  size = 14,
+  className,
 }: {
   icon: LucideIcon;
   size?: number;
   className?: string;
 }) {
   return (
-    <Icon
-      size={size}
-      className={cn(
-        "text-primary drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]",
-        "filter brightness-110",
-        "transition-all duration-300",
-        className
-      )}
-      strokeWidth={2.2}
-    />
+    <span className="inline-flex items-center justify-center relative">
+      <span className="absolute inset-0 rounded-md bg-primary/10 blur-[1px] opacity-50" />
+      <Icon
+        size={size}
+        className={cn(
+          "relative z-10 text-primary drop-shadow-[0_1px_2px_hsl(var(--primary)/0.35)]",
+          "filter brightness-110",
+          className
+        )}
+        strokeWidth={2.2}
+      />
+    </span>
   );
 }
