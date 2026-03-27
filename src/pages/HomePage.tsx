@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, MapPin, Phone } from "lucide-react";
+import { ArrowRight, MapPin, Phone, Sparkles, Truck, ShieldCheck, Gift } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { BRANCHES } from "@/lib/constants";
@@ -71,6 +72,31 @@ export default function HomePage() {
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-foreground/70 via-foreground/40 to-transparent" />
+                
+                {/* Sales Tags */}
+                <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 items-end">
+                  {i === 0 && (
+                    <Badge className="text-[10px] rounded-full px-3 py-1 gap-1 bg-rose-500 text-white border-0 shadow-lg animate-pulse font-bold">
+                      <Sparkles size={11} /> Yeni Modeller
+                    </Badge>
+                  )}
+                  {i === 1 && (
+                    <Badge className="text-[10px] rounded-full px-3 py-1 gap-1 bg-emerald-500 text-white border-0 shadow-lg font-bold">
+                      <Truck size={11} /> Ücretsiz Kurulum
+                    </Badge>
+                  )}
+                  {i === 2 && (
+                    <Badge className="text-[10px] rounded-full px-3 py-1 gap-1 bg-amber-500 text-white border-0 shadow-lg font-bold">
+                      <ShieldCheck size={11} /> Resmi Garanti
+                    </Badge>
+                  )}
+                  {i === 3 && (
+                    <Badge className="text-[10px] rounded-full px-3 py-1 gap-1 bg-violet-500 text-white border-0 shadow-lg animate-pulse font-bold">
+                      <Gift size={11} /> Kampanya
+                    </Badge>
+                  )}
+                </div>
+
                 <div className="relative z-10 flex flex-col justify-center h-full px-6 md:px-12 lg:px-16 max-w-xl">
                   <h2 className="heading-2 text-white leading-tight">
                     {t(cat.titleKey)}
