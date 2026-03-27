@@ -16,6 +16,7 @@ import { getProductsByCategory } from "@/lib/products";
 import { trackWhatsAppClick } from "@/lib/tracking";
 import { BRAND, BRANCHES } from "@/lib/constants";
 import ProductCard from "@/components/ProductCard";
+import BrandLogo from "@/components/BrandLogo";
 import QuoteForm from "@/components/QuoteForm";
 import tvHero from "@/assets/tv-hero.jpg";
 
@@ -143,7 +144,7 @@ export default function TVLandingPage() {
             return (
               <label key={item} className={`flex items-center gap-2 cursor-pointer text-sm rounded-lg px-2 py-1.5 transition-colors ${isActive ? 'bg-primary/10 text-primary font-medium' : 'text-foreground hover:bg-muted'}`}>
                 <Checkbox checked={isActive} onCheckedChange={() => onToggle(item)} />
-                <span>{item}</span>
+                <span className="flex items-center">{title === t("lp.tv.brand") ? <BrandLogo brand={item} size="sm" /> : item}</span>
               </label>
             );
           })}

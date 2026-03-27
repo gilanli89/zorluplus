@@ -8,6 +8,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { SlidersHorizontal, X, Minus, Bug } from "lucide-react";
 import { FilterState, SortOption, Product } from "@/lib/types";
 import { useLanguage } from "@/contexts/LanguageContext";
+import BrandLogo from "@/components/BrandLogo";
 import {
   NormalizedProduct,
   DynamicFilterGroup,
@@ -48,8 +49,12 @@ function FilterBody({ filterGroups, filters, onFiltersChange }: FilterBodyProps)
               return (
                 <label key={opt.value} className="flex items-center gap-2.5 cursor-pointer group">
                   <Checkbox checked={selected} onCheckedChange={() => toggleValue(group.key, opt.value)} />
-                  <span className="text-sm text-foreground group-hover:text-primary transition-colors flex-1">
-                    {group.key === "brand" ? opt.value.toUpperCase() : opt.value}
+                  <span className="text-sm text-foreground group-hover:text-primary transition-colors flex-1 flex items-center gap-2">
+                    {group.key === "brand" ? (
+                      <BrandLogo brand={opt.value} size="sm" />
+                    ) : (
+                      opt.value
+                    )}
                   </span>
                   <span className="text-xs text-muted-foreground">({opt.count})</span>
                 </label>
@@ -202,8 +207,8 @@ export function SortBar({ filters, onFiltersChange }: { filters: FilterState; on
 
       {Object.entries(filters.attributes).flatMap(([key, vals]) =>
         vals.map(v => (
-          <Badge key={`${key}-${v}`} variant="secondary" className="gap-1 cursor-pointer" onClick={() => removeChip(key, v)}>
-            {key === "brand" ? v.toUpperCase() : v} <X className="h-3 w-3" />
+          <Badge key={`${key}-${v}`} variant="secondary" className="gap-1.5 cursor-pointer flex items-center" onClick={() => removeChip(key, v)}>
+            {key === "brand" ? <BrandLogo brand={v} size="xs" /> : v} <X className="h-3 w-3" />
           </Badge>
         ))
       )}
