@@ -19,6 +19,7 @@ import shieldIcon from "@/assets/icons/shield.png";
 import privacyIcon from "@/assets/icons/privacy.png";
 import cookieIcon from "@/assets/icons/cookie.png";
 import databaseIcon from "@/assets/icons/database.png";
+import installIcon from "@/assets/icons/install.png";
 
 const testimonials = [
   { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
