@@ -2296,13 +2296,7 @@ export function SurdurulebilirlikPage() {
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
             />
             <div className="flex items-start gap-4 relative z-10">
-              <motion.span
-                className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
-              >
-                <s.icon className="h-6 w-6 text-primary" />
-              </motion.span>
+              <PremiumIcon icon={s.icon} size="lg" variant="glow" />
               <div>
                 <motion.h2
                   className="font-display text-lg md:text-xl font-bold mb-2"
@@ -2332,13 +2326,9 @@ export function SurdurulebilirlikPage() {
           animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.12)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
-        <motion.span
-          className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 mb-4"
-          animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 20px hsl(221,83%,53%,0.35)", "0 0 0px hsl(221,83%,53%,0)"] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Lightbulb className="h-6 w-6 text-primary" />
-        </motion.span>
+        <div className="mb-4 flex justify-center">
+          <PremiumIcon icon={Lightbulb} size="lg" variant="glow" />
+        </div>
         <motion.h2
           className="font-display text-xl md:text-2xl font-bold mb-3 relative z-10"
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
