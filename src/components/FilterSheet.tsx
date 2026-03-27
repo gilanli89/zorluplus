@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { SlidersHorizontal, X, Minus, Bug } from "lucide-react";
+import { SlidersHorizontal, X, Minus, Bug, Tag, Monitor, Layers, Maximize, Thermometer, Weight, Droplets, Users, PackageCheck } from "lucide-react";
+import { PremiumBadgeIcon } from "@/components/PremiumIcon";
 import { FilterState, SortOption, Product } from "@/lib/types";
 import { useLanguage } from "@/contexts/LanguageContext";
 import BrandLogo from "@/components/BrandLogo";
@@ -35,12 +36,26 @@ function FilterBody({ filterGroups, filters, onFiltersChange }: FilterBodyProps)
     onFiltersChange({ ...filters, attributes: { ...filters.attributes, [groupKey]: next } });
   };
 
+  const FILTER_ICON_MAP: Record<string, typeof Tag> = {
+    brand: Tag,
+    screenSize: Monitor,
+    panelType: Layers,
+    resolution: Maximize,
+    btu: Thermometer,
+    capacityKg: Weight,
+    capacityLt: Droplets,
+    capacityPerson: Users,
+  };
+
   return (
     <div className="space-y-1">
       {filterGroups.map(group => (
         <Collapsible key={group.key} defaultOpen>
           <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-1 border-b border-border text-sm font-semibold text-foreground hover:text-primary transition-colors">
-            {group.key === "brand" ? t("filter.brand") : group.label}
+            <span className="flex items-center gap-2">
+              <PremiumBadgeIcon icon={FILTER_ICON_MAP[group.key] || Tag} size={14} />
+              {group.key === "brand" ? t("filter.brand") : group.label}
+            </span>
             <Minus className="h-3.5 w-3.5 text-muted-foreground" />
           </CollapsibleTrigger>
           <CollapsibleContent className="py-3 px-1 space-y-2 max-h-[280px] overflow-y-auto">
@@ -66,7 +81,10 @@ function FilterBody({ filterGroups, filters, onFiltersChange }: FilterBodyProps)
 
       <Collapsible defaultOpen>
         <CollapsibleTrigger className="flex items-center justify-between w-full py-3 px-1 border-b border-border text-sm font-semibold text-foreground hover:text-primary transition-colors">
-          {t("filter.stock")}
+          <span className="flex items-center gap-2">
+            <PremiumBadgeIcon icon={PackageCheck} size={14} />
+            {t("filter.stock")}
+          </span>
           <Minus className="h-3.5 w-3.5 text-muted-foreground" />
         </CollapsibleTrigger>
         <CollapsibleContent className="py-3 px-1">
