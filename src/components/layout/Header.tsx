@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award, Mic, MicOff, Globe } from "lucide-react";
+import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award, Mic, MicOff, Globe, MapPin, MessageCircle, icons } from "lucide-react";
+import { CATEGORY_3D_ICONS } from "@/lib/categoryIcons";
 import { motion, AnimatePresence } from "framer-motion";
 import CartSheet from "@/components/CartSheet";
 import Logo from "@/components/Logo";
