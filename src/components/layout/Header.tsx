@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award, Mic, MicOff, Globe, MapPin, MessageCircle, icons } from "lucide-react";
+import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award, Mic, MicOff, Globe, MapPin, MessageCircle } from "lucide-react";
+import { PremiumIconInline, PremiumBadgeIcon } from "@/components/PremiumIcon";
 import { CATEGORY_3D_ICONS } from "@/lib/categoryIcons";
 import { motion, AnimatePresence } from "framer-motion";
 import CartSheet from "@/components/CartSheet";
@@ -116,8 +117,8 @@ export default function Header() {
         <div className="container relative flex items-center justify-between py-1.5 text-[11px]">
           <div className="flex items-center gap-4 font-medium">
             <span className="hidden sm:inline-flex items-center gap-1 text-primary-foreground/80 font-semibold">{greeting}</span>
-            <span className="hidden md:inline-flex items-center gap-1"><Shield className="h-3 w-3 drop-shadow-[0_0_3px_rgba(255,255,255,0.4)]" /> {t("header.authorized")}</span>
-            <span className="inline-flex items-center gap-1"><Award className="h-3 w-3 drop-shadow-[0_0_3px_rgba(255,255,255,0.4)]" /> {t("header.warranty")}</span>
+            <span className="hidden md:inline-flex items-center gap-1"><PremiumIconInline icon={Shield} size={12} className="text-white drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]" /> {t("header.authorized")}</span>
+            <span className="inline-flex items-center gap-1"><PremiumIconInline icon={Award} size={12} className="text-white drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]" /> {t("header.warranty")}</span>
           </div>
           <div className="flex items-center gap-3">
             {/* Language switcher */}
@@ -126,11 +127,11 @@ export default function Header() {
               className="flex items-center gap-1 font-semibold hover:opacity-80 transition-opacity"
               title={lang === "tr" ? "Switch to English" : "Türkçeye geç"}
             >
-              <Globe className="h-3 w-3" />
+              <PremiumIconInline icon={Globe} size={12} className="text-white" />
               <span>{lang === "tr" ? "EN" : "TR"}</span>
             </button>
             <a href={`tel:${BRAND.phone}`} className="flex items-center gap-1.5 font-semibold hover:opacity-80 transition-opacity">
-              <Phone className="h-3 w-3" />
+              <PremiumIconInline icon={Phone} size={12} className="text-white" />
               {BRAND.phoneDisplay}
             </a>
           </div>
@@ -143,7 +144,7 @@ export default function Header() {
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="lg:hidden tap-scale">
-              <Menu className="h-5 w-5" />
+              <PremiumIconInline icon={Menu} size={20} />
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-80 overflow-y-auto">
@@ -191,13 +192,13 @@ export default function Header() {
               })}
               <hr className="my-3 border-border" />
               <Link to="/e-katalog" className="flex items-center gap-3 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-                <FileText className="h-5 w-5 text-primary drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" /> {t("header.eCatalogue")}
+                <PremiumIconInline icon={FileText} size={20} /> {t("header.eCatalogue")}
               </Link>
               <Link to="/subelerimiz" className="flex items-center gap-3 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-                <MapPin className="h-5 w-5 text-primary drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" /> {t("header.branches")}
+                <PremiumIconInline icon={MapPin} size={20} /> {t("header.branches")}
               </Link>
               <Link to="/iletisim" className="flex items-center gap-3 px-3 py-2.5 font-medium text-foreground hover:bg-muted rounded-xl transition-colors">
-                <MessageCircle className="h-5 w-5 text-primary drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" /> {t("header.contactUs")}
+                <PremiumIconInline icon={MessageCircle} size={20} /> {t("header.contactUs")}
               </Link>
             </nav>
           </SheetContent>
@@ -222,7 +223,7 @@ export default function Header() {
                 className="flex items-center gap-1.5 overflow-hidden"
               >
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <PremiumIconInline icon={Search} size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
@@ -243,21 +244,21 @@ export default function Header() {
                     onClick={isListening ? stopListening : startListening}
                     title={isListening ? t("header.stopListening") : t("header.voiceSearch")}
                   >
-                    {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4 text-primary" />}
+                    {isListening ? <PremiumIconInline icon={MicOff} size={16} /> : <PremiumIconInline icon={Mic} size={16} />}
                   </Button>
                 )}
                 <Button type="button" variant="ghost" size="icon" className="rounded-full shrink-0 tap-scale" onClick={() => { setSearchOpen(false); stopListening(); }}>
-                  <X className="h-4 w-4" />
+                  <PremiumIconInline icon={X} size={16} />
                 </Button>
               </motion.form>
             ) : (
               <motion.div key="search-icons" className="flex items-center gap-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 <Button variant="ghost" size="icon" className="rounded-full tap-scale" onClick={() => setSearchOpen(true)}>
-                  <Search className="h-5 w-5" />
+                  <PremiumIconInline icon={Search} size={20} />
                 </Button>
                 {hasSpeechSupport && (
                   <Button variant="ghost" size="icon" className="rounded-full tap-scale" onClick={startListening} title={t("header.voiceSearch")}>
-                    <Mic className="h-5 w-5 text-primary" />
+                    <PremiumIconInline icon={Mic} size={20} />
                   </Button>
                 )}
               </motion.div>
@@ -280,10 +281,10 @@ export default function Header() {
           <CartSheet />
           <a href="https://servis.zorluplus.com/" target="_blank" rel="noopener noreferrer">
             <Button variant="outline" size="sm" className="rounded-full gap-1.5 border-primary/30 text-primary hover:bg-primary/5 font-semibold hidden sm:inline-flex tap-scale">
-              <Wrench className="h-3.5 w-3.5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {t("header.serviceRequest")}
+              <PremiumIconInline icon={Wrench} size={14} /> {t("header.serviceRequest")}
             </Button>
             <Button variant="ghost" size="icon" className="rounded-full sm:hidden tap-scale">
-              <Wrench className="h-5 w-5 text-primary drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" />
+              <PremiumIconInline icon={Wrench} size={20} />
             </Button>
           </a>
           <Link to="/magaza">
