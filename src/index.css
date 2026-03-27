@@ -371,3 +371,88 @@ html {
 .blockchain-dot-3 { top: 70%; left: 35%; animation-delay: 1s; }
 .blockchain-dot-4 { top: 25%; left: 75%; animation-delay: 1.5s; }
 .blockchain-dot-5 { top: 60%; left: 85%; animation-delay: 2s; }
+
+/* ===== 3D PREMIUM UTILITIES ===== */
+
+/* Trust card glassmorphism */
+.trust-card {
+  background: hsl(var(--card) / 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 4px 24px -4px hsl(var(--foreground) / 0.06);
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease;
+}
+.trust-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 40px -8px hsl(var(--primary) / 0.15);
+}
+
+/* 3D Card Tilt */
+.card-3d {
+  perspective: 800px;
+  transform-style: preserve-3d;
+}
+
+/* Shine sweep */
+@keyframes shine-sweep {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+.shine-on-hover {
+  position: relative;
+  overflow: hidden;
+}
+.shine-on-hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, hsl(var(--primary-foreground) / 0.08), transparent);
+  transition: none;
+  pointer-events: none;
+}
+.shine-on-hover:hover::after {
+  animation: shine-sweep 0.8s ease-out;
+}
+
+/* Floating 3D animation */
+@keyframes premium-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.float-subtle {
+  animation: premium-float 4s ease-in-out infinite;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .trust-card,
+  .card-lift,
+  .float-subtle,
+  .pulse-heading,
+  .pulse-icon,
+  .pulse-card,
+  .pulse-btn,
+  .animate-float,
+  .animate-shimmer,
+  .blockchain-line,
+  .blockchain-dot {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Skeleton shimmer for product loading */
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--muted-foreground) / 0.08) 50%, hsl(var(--muted)) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius);
+}
