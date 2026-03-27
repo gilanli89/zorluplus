@@ -171,7 +171,7 @@ export default function CategoryLandingPage() {
             className="max-w-2xl"
           >
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold text-white mb-5 border border-white/20">
-              <Shield className="h-3.5 w-3.5" /> {BRAND.name} — Yetkili Bayi
+              <PremiumIconInline icon={Shield} size={14} /> {BRAND.name} — Yetkili Bayi
             </span>
             <h1 className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] mb-4 text-white">
               {landing.headline}
@@ -182,7 +182,7 @@ export default function CategoryLandingPage() {
             <div className="flex flex-wrap gap-3">
               <a href="#urunler">
                 <Button size="lg" variant="secondary" className="font-semibold gap-2 rounded-full px-6 shadow-lg">
-                  Ürünleri Gör <ArrowRight className="h-4 w-4" />
+                  Ürünleri Gör <PremiumIconInline icon={ArrowRight} size={16} />
                 </Button>
               </a>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer">
@@ -191,7 +191,7 @@ export default function CategoryLandingPage() {
                   className="font-semibold gap-2 rounded-full px-6 shadow-lg border-0"
                   style={{ backgroundColor: "#25D366", color: "#fff" }}
                 >
-                  <MessageCircle className="h-4 w-4" /> Hemen Bilgi Al
+                  <PremiumIconInline icon={MessageCircle} size={16} /> Hemen Bilgi Al
                 </Button>
               </a>
             </div>
@@ -253,7 +253,7 @@ export default function CategoryLandingPage() {
                     variants={fadeUp}
                     className="flex items-center gap-2.5 rounded-xl border border-border bg-card p-3.5"
                   >
-                    <CheckCircle2 className="h-5 w-5 text-success shrink-0" />
+                    <PremiumBadgeIcon icon={CheckCircle2} size={20} />
                     <span className="text-sm font-medium text-foreground">{benefit}</span>
                   </motion.div>
                 ))}
@@ -294,7 +294,7 @@ export default function CategoryLandingPage() {
                     to={`/kategori/${category.slug}/${sub.slug}`}
                     className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all shadow-sm"
                   >
-                    {sub.name} <ArrowRight className="h-3.5 w-3.5" />
+                    {sub.name} <PremiumIconInline icon={ArrowRight} size={14} />
                   </Link>
                 </motion.div>
               ))}
@@ -341,7 +341,7 @@ export default function CategoryLandingPage() {
               <p className="text-muted-foreground mb-4">Bu kategoride henüz ürün eklenmemiş.</p>
               <a href={BRAND.whatsappLink} target="_blank" rel="noopener noreferrer">
                 <Button className="rounded-full gap-2" style={{ backgroundColor: "#25D366", color: "#fff" }}>
-                  <MessageCircle className="h-4 w-4" /> WhatsApp ile Sorun
+                  <PremiumIconInline icon={MessageCircle} size={16} /> WhatsApp ile Sorun
                 </Button>
               </a>
             </div>
@@ -374,7 +374,7 @@ export default function CategoryLandingPage() {
               className="card-lift flex items-center gap-4 rounded-2xl border border-border bg-card p-5 hover:border-success/40 transition-colors"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-success/10 text-success">
-                <MessageCircle className="h-6 w-6" />
+                <PremiumIconInline icon={MessageCircle} size={24} />
               </div>
               <div>
                 <p className="font-bold text-foreground">WhatsApp</p>
@@ -386,7 +386,7 @@ export default function CategoryLandingPage() {
               className="card-lift flex items-center gap-4 rounded-2xl border border-border bg-card p-5 hover:border-primary/40 transition-colors"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <Phone className="h-6 w-6" />
+                <PremiumIconInline icon={Phone} size={24} />
               </div>
               <div>
                 <p className="font-bold text-foreground">Telefon</p>
@@ -398,7 +398,7 @@ export default function CategoryLandingPage() {
               className="card-lift flex items-center gap-4 rounded-2xl border border-border bg-card p-5 hover:border-primary/40 transition-colors sm:col-span-2 lg:col-span-1"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
-                <ArrowRight className="h-6 w-6" />
+                <PremiumIconInline icon={ArrowRight} size={24} />
               </div>
               <div>
                 <p className="font-bold text-foreground">Mağazalarımız</p>

@@ -38,7 +38,7 @@ export default function BlogPostPage() {
         <h1 className="heading-2 text-foreground mb-4">Yazı bulunamadı</h1>
         <Link to="/blog">
           <Button variant="outline">
-            <ArrowLeft className="h-4 w-4 mr-2" /> Blog'a Dön
+            <PremiumIconInline icon={ArrowLeft} size={16} className="mr-2" /> Blog'a Dön
           </Button>
         </Link>
       </div>
@@ -54,7 +54,7 @@ export default function BlogPostPage() {
         to="/blog"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
       >
-        <ArrowLeft className="h-4 w-4" /> Blog'a Dön
+        <PremiumIconInline icon={ArrowLeft} size={16} /> Blog'a Dön
       </Link>
 
       {image && (
@@ -67,7 +67,7 @@ export default function BlogPostPage() {
 
       <div className="flex items-center gap-3 mb-4 flex-wrap">
         <span className="text-sm text-muted-foreground flex items-center gap-1">
-          <Calendar className="h-3.5 w-3.5" />
+          <PremiumIconInline icon={Calendar} size={14} />
           {format(new Date(post.date), "d MMMM yyyy", { locale: tr })}
         </span>
         {cats.map((cat: any) => (

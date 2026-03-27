@@ -103,7 +103,7 @@ export default function BlogPage() {
             </div>
           ) : !filteredPosts?.length ? (
             <div className="text-center py-16 text-muted-foreground">
-              <FileText className="h-12 w-12 mx-auto mb-4 opacity-40" />
+              <PremiumIconInline icon={FileText} size={48} className="mx-auto mb-4 opacity-40" />
               <p>Henüz yazı bulunmuyor.</p>
             </div>
           ) : (
@@ -140,7 +140,7 @@ export default function BlogPage() {
                       <div className="p-5">
                         <div className="flex items-center gap-2 mb-2 flex-wrap">
                           <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
+                            <PremiumIconInline icon={Calendar} size={12} />
                             {format(new Date(post.date), "d MMMM yyyy", { locale: tr })}
                           </span>
                           {postCategories.map((cat: any) => (
@@ -157,7 +157,7 @@ export default function BlogPage() {
                           {stripHtml(post.excerpt.rendered)}
                         </p>
                         <span className="inline-flex items-center gap-1 text-sm font-medium text-primary mt-3 group-hover:gap-2 transition-all">
-                          Devamını Oku <ArrowRight className="h-3.5 w-3.5" />
+                          Devamını Oku <PremiumIconInline icon={ArrowRight} size={14} />
                         </span>
                       </div>
                     </Link>
@@ -182,7 +182,7 @@ export default function BlogPage() {
             </div>
           ) : !pages?.length ? (
             <div className="text-center py-16 text-muted-foreground">
-              <FileText className="h-12 w-12 mx-auto mb-4 opacity-40" />
+              <PremiumIconInline icon={FileText} size={48} className="mx-auto mb-4 opacity-40" />
               <p>Henüz sayfa bulunmuyor.</p>
             </div>
           ) : (
@@ -208,7 +208,7 @@ export default function BlogPage() {
                       {stripHtml(page.excerpt.rendered || page.content.rendered)}
                     </p>
                     <span className="inline-flex items-center gap-1 text-sm font-medium text-primary mt-3 group-hover:gap-2 transition-all">
-                      Görüntüle <ArrowRight className="h-3.5 w-3.5" />
+                      Görüntüle <PremiumIconInline icon={ArrowRight} size={14} />
                     </span>
                   </Link>
                 </motion.div>

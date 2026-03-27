@@ -278,10 +278,10 @@ export default function B2BPage() {
         <p className="text-sm text-muted-foreground relative z-10 mb-4">{t("b2b.contactDesc")}</p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
           <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors">
-            <Mail className="h-4 w-4" /> deniz@zorludigitalplaza.com
+            <PremiumIconInline icon={Mail} size={16} /> deniz@zorludigitalplaza.com
           </a>
           <a href="tel:+905428783131" className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors">
-            <Phone className="h-4 w-4" /> +90 542 878 31 31
+            <PremiumIconInline icon={Phone} size={16} /> +90 542 878 31 31
           </a>
         </div>
       </motion.div>
