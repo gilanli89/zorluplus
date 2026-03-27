@@ -1106,13 +1106,7 @@ export function DestekPage() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
             >
-              <motion.span
-                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10"
-                animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.25)", "0 0 0px hsl(221,83%,53%,0)"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-              >
-                <ShieldCheck className="h-4 w-4 text-primary" />
-              </motion.span>
+              <PremiumIcon icon={ShieldCheck} size="sm" variant="glow" />
               <span className="text-foreground font-medium">{item}</span>
             </motion.div>
           ))}
