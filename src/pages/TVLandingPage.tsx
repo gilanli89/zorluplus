@@ -236,17 +236,25 @@ export default function TVLandingPage() {
               { icon: Award, label: t("lp.tv.trust2"), desc: t("lp.tv.trust2d") },
               { icon: Wrench, label: t("lp.tv.trust3"), desc: t("lp.tv.trust3d") },
               { icon: Star, label: t("lp.tv.trust4"), desc: t("lp.tv.trust4d") },
-            ].map((item, i) => (
-              <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <item.icon className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-foreground">{item.label}</p>
-                  <p className="text-xs text-muted-foreground">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
+            ].map((item, i) => {
+              const icon3d = TRUST_3D_ICONS[item.icon.displayName || ""];
+              return (
+                <motion.div key={item.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="card-premium card-premium-border rounded-xl p-4 flex items-center gap-3">
+                  {icon3d ? (
+                    <div className="relative w-10 h-10 flex-shrink-0">
+                      <div className="absolute inset-0 rounded-xl bg-primary/10 blur-sm opacity-60" />
+                      <img src={icon3d} alt={item.label} className="relative z-10 w-10 h-10 object-contain drop-shadow-[0_3px_6px_hsl(var(--primary)/0.25)]" loading="lazy" width={40} height={40} />
+                    </div>
+                  ) : (
+                    <PremiumIcon icon={item.icon} size="md" variant="glow" />
+                  )}
+                  <div>
+                    <p className="text-sm font-bold text-foreground">{item.label}</p>
+                    <p className="text-xs text-muted-foreground">{item.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
