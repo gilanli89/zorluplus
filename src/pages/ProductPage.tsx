@@ -121,11 +121,14 @@ export default function ProductPage() {
               <p className="text-xs font-mono text-muted-foreground">{t("product.modelNo") || "Model No"}: {product.sku}</p>
             )}
             {product.price > 0 ? (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 {product.salePrice && product.salePrice > 0 ? (
                   <>
                     <span className="text-2xl font-bold text-primary">{formatPrice(product.salePrice)}</span>
                     <span className="text-lg text-muted-foreground line-through">{formatPrice(product.price)}</span>
+                    <Badge className="bg-destructive text-destructive-foreground text-xs font-bold">
+                      %{Math.round((1 - product.salePrice / product.price) * 100)} {t("product.discount") || "İndirim"}
+                    </Badge>
                   </>
                 ) : (
                   <span className="text-2xl font-bold text-foreground">{formatPrice(product.price)}</span>
@@ -134,6 +137,13 @@ export default function ProductPage() {
             ) : (
               <p className="text-sm font-medium text-primary">{t("product.callForPrice")}</p>
             )}
+
+            {product.price > 0 && (
+              <p className="text-xs text-muted-foreground">
+                {t("product.installment") || "12 aya varan taksit seçenekleri mevcuttur."}
+              </p>
+            )}
+
 
             <Badge variant={product.inStock ? "default" : "secondary"} className="w-fit">
               {product.inStock ? t("product.inStock") : t("product.outOfStock")}
@@ -170,12 +180,12 @@ export default function ProductPage() {
                 <h3 className="font-display font-bold text-foreground mb-3">{t("product.specs")}</h3>
                 <table className="w-full text-sm">
                   <tbody>
-                    {Object.entries(product.specs).map(([k, v]) => {
+                    {Object.entries(product.specs).map(([k, v], idx) => {
                       const specLabel = translateSpecLabel(k, lang);
                       return (
-                        <tr key={k} className="border-b border-border">
-                          <td className="py-2 text-muted-foreground font-medium">{specLabel}</td>
-                          <td className="py-2 text-foreground text-right">{v}</td>
+                        <tr key={k} className={`border-b border-border ${idx % 2 === 0 ? "bg-muted/30" : ""}`}>
+                          <td className="py-2.5 px-3 text-muted-foreground font-medium rounded-l-lg">{specLabel}</td>
+                          <td className="py-2.5 px-3 text-foreground text-right font-medium rounded-r-lg">{v}</td>
                         </tr>
                       );
                     })}
