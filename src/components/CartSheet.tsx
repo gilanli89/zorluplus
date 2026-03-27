@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProducts } from "@/hooks/useProducts";
 import CartUpsell from "@/components/CartUpsell";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 
 export default function CartSheet() {
   const { items, itemCount, removeItem, updateQuantity, subtotal, grandTotal } = useCart();
@@ -20,9 +21,9 @@ export default function CartSheet() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full relative">
-          <ShoppingCart className="h-5 w-5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.2)]" />
+          <ShoppingCart className="h-5 w-5 text-primary drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)] filter brightness-110" />
           {itemCount > 0 && (
-            <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px] bg-primary text-primary-foreground rounded-full">
+            <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px] bg-primary text-primary-foreground rounded-full shadow-[0_2px_6px_-1px_hsl(var(--primary)/0.5)]">
               {itemCount}
             </Badge>
           )}
@@ -31,13 +32,13 @@ export default function CartSheet() {
       <SheetContent className="w-full sm:w-96 flex flex-col">
         <SheetHeader>
           <SheetTitle className="font-display flex items-center gap-2">
-            <ShoppingCart className="h-5 w-5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {t("cart.myCart")} ({itemCount})
+            <PremiumIconInline icon={ShoppingCart} size={20} /> {t("cart.myCart")} ({itemCount})
           </SheetTitle>
         </SheetHeader>
 
         {items.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center gap-3">
-            <ShoppingCart className="h-12 w-12 text-muted-foreground/30 drop-shadow-[0_2px_4px_hsl(var(--muted-foreground)/0.1)]" />
+            <ShoppingCart className="h-12 w-12 text-muted-foreground/30 drop-shadow-[0_3px_6px_hsl(var(--muted-foreground)/0.15)]" />
             <p className="text-muted-foreground text-sm">{t("cart.empty")}</p>
             <Button variant="outline" className="rounded-full" onClick={() => setOpen(false)}>
               {t("cart.startShopping")}

@@ -1,7 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import { trackWhatsAppClick } from "@/lib/tracking";
 import { useEffect, useRef } from "react";
-import { Shield, Award, Wrench, MessageCircle, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { Shield, Award, Wrench, MessageCircle, ChevronLeft, ChevronRight, ShoppingCart, Sparkles, Package } from "lucide-react";
+import { PremiumIconInline, PremiumBadgeIcon } from "@/components/PremiumIcon";
 import { useProducts } from "@/hooks/useProducts";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { getProductBySlug, formatPrice, getWhatsAppLink } from "@/lib/products";
@@ -145,14 +146,14 @@ export default function ProductPage() {
             )}
 
 
-            <Badge variant={product.inStock ? "default" : "secondary"} className="w-fit">
-              {product.inStock ? t("product.inStock") : t("product.outOfStock")}
+            <Badge variant={product.inStock ? "success" : "secondary"} className="w-fit gap-1.5">
+              {product.inStock ? <><PremiumBadgeIcon icon={Shield} size={12} /> {t("product.inStock")}</> : t("product.outOfStock")}
             </Badge>
 
-            <div className="flex flex-wrap gap-3 py-2">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><Shield className="h-4 w-4 text-primary" /> {t("product.authorizedService")}</div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><Award className="h-4 w-4 text-primary" /> {t("product.warranty")}</div>
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground"><Wrench className="h-4 w-4 text-primary" /> {t("product.freeInstall")}</div>
+            <div className="flex flex-wrap gap-4 py-2">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground"><PremiumIconInline icon={Shield} size={16} /> {t("product.authorizedService")}</div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground"><PremiumIconInline icon={Award} size={16} /> {t("product.warranty")}</div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground"><PremiumIconInline icon={Wrench} size={16} /> {t("product.freeInstall")}</div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">

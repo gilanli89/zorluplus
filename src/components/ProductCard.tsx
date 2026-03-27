@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/lib/types";
-import { ShoppingCart, Eye } from "lucide-react";
+import { ShoppingCart, Eye, Sparkles } from "lucide-react";
+import { PremiumBadgeIcon } from "@/components/PremiumIcon";
 import { formatPrice } from "@/lib/products";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
@@ -83,7 +84,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
           <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5">
             {product.isNew && (
-              <Badge variant="premium" className="text-[10px] rounded-full px-2.5">{t("product.new")}</Badge>
+              <Badge variant="premium" className="text-[10px] rounded-full px-2.5 gap-1">
+                <PremiumBadgeIcon icon={Sparkles} size={10} /> {t("product.new")}
+              </Badge>
             )}
           </div>
           {!product.inStock && (
@@ -121,7 +124,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           onClick={(e) => e.stopPropagation()}
           className="flex items-center justify-center gap-1.5 flex-1 py-2.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-all duration-200 tap-scale"
         >
-          <Eye size={14} className="drop-shadow-[0_1px_2px_hsl(var(--primary)/0.2)]" />
+          <Eye size={14} className="text-primary drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)] filter brightness-110" />
           {t("product.view")}
         </Link>
         {product.inStock && product.price > 0 && (
@@ -130,7 +133,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="flex-1 rounded-xl text-xs font-bold gap-1.5 tap-scale"
             onClick={handleAddToCart}
           >
-            <ShoppingCart size={14} className="drop-shadow-[0_1px_2px_hsl(var(--primary-foreground)/0.3)]" />
+            <ShoppingCart size={14} className="drop-shadow-[0_1px_2px_hsl(var(--primary-foreground)/0.4)] filter brightness-110" />
             {t("cart.addToCart")}
           </Button>
         )}

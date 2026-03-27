@@ -64,7 +64,7 @@ export default function HeroBanner() {
       <div className="relative h-full container flex items-center">
         <AnimatePresence mode="wait">
           <motion.div key={current} className="max-w-xl lg:max-w-2xl" initial="hidden" animate="visible" exit="hidden">
-            <motion.span custom={0} variants={textVariants} className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-4 py-1.5 text-xs font-semibold text-white mb-5 border border-white/20">{slide.badge}</motion.span>
+            <motion.span custom={0} variants={textVariants} className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-md px-4 py-1.5 text-xs font-semibold text-white mb-5 border border-white/25 shadow-[0_2px_12px_-2px_rgba(255,255,255,0.15),inset_0_1px_0_rgba(255,255,255,0.1)]">{slide.badge}</motion.span>
             <motion.h1 custom={1} variants={textVariants} className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.08] mb-2 text-white">{slide.title}</motion.h1>
             <motion.h1 custom={2} variants={textVariants} className="font-display text-3xl md:text-5xl lg:text-6xl font-extrabold leading-[1.08] mb-5 text-white/60">{slide.subtitle}</motion.h1>
             <motion.p custom={3} variants={textVariants} className="text-white/70 text-base md:text-lg mb-8 max-w-md leading-relaxed">{slide.desc}</motion.p>

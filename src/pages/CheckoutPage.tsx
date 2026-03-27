@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { CreditCard, Lock, ShieldCheck, Loader2, ArrowLeft } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -94,7 +95,7 @@ export default function CheckoutPage() {
       <Card className="border-border">
         <CardHeader className="text-center pb-4">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <Lock className="h-5 w-5 text-primary" />
+            <PremiumIconInline icon={Lock} size={20} />
             <CardTitle className="font-display text-xl">{t("checkout.securePayment")}</CardTitle>
           </div>
           <p className="text-sm text-muted-foreground">{t("checkout.secureDesc")}</p>
