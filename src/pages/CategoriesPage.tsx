@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CATEGORIES } from "@/lib/constants";
-import { icons } from "lucide-react";
+import { CATEGORY_3D_ICONS } from "@/lib/categoryIcons";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const fadeUp = {
@@ -20,7 +20,7 @@ export default function CategoriesPage() {
       <h1 className="heading-2 mb-6 text-foreground pulse-heading">{t("shop.title")}</h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
         {CATEGORIES.map((cat, i) => {
-          const IconComp = icons[cat.icon as keyof typeof icons];
+          const icon3d = CATEGORY_3D_ICONS[cat.slug];
           const catName = t(`cat.${cat.slug}`) !== `cat.${cat.slug}` ? t(`cat.${cat.slug}`) : cat.name;
           return (
             <motion.div key={cat.slug} custom={i} initial="hidden" animate="visible" variants={fadeUp}>
@@ -28,10 +28,19 @@ export default function CategoriesPage() {
                 to={`/kategori/${cat.slug}`}
                 className="group card-premium card-premium-border flex flex-col items-center gap-3 rounded-2xl p-5 md:p-6 h-full"
               >
-                <div className="premium-icon-wrap">
-                  <div className="premium-icon-inner flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-primary/15 via-primary/10 to-accent/10 border border-primary/20 shadow-[0_2px_8px_-2px_hsl(var(--primary)/0.25),inset_0_1px_0_hsl(var(--primary-foreground)/0.1)] text-primary group-hover:shadow-[0_4px_16px_-4px_hsl(var(--primary)/0.35)]">
-                    {IconComp && <IconComp className="h-7 w-7 md:h-8 md:w-8 drop-shadow-[0_1px_3px_hsl(var(--primary)/0.4)]" />}
-                  </div>
+                <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
+                  {/* Glow backdrop */}
+                  <div className="absolute inset-0 rounded-2xl bg-primary/8 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  {icon3d && (
+                    <img
+                      src={icon3d}
+                      alt={catName}
+                      className="relative z-10 w-14 h-14 md:w-16 md:h-16 object-contain drop-shadow-[0_4px_8px_hsl(var(--primary)/0.2)] group-hover:scale-110 group-hover:drop-shadow-[0_6px_16px_hsl(var(--primary)/0.3)] transition-all duration-400"
+                      loading="lazy"
+                      width={64}
+                      height={64}
+                    />
+                  )}
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="font-display font-bold text-sm md:text-base text-center text-foreground leading-tight">{catName}</span>
