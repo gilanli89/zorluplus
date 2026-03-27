@@ -11,6 +11,11 @@ import deliveryIcon from "@/assets/icons/delivery.png";
 import refundIcon from "@/assets/icons/refund.png";
 import certificateIcon from "@/assets/icons/certificate.png";
 import legalIcon from "@/assets/icons/legal.png";
+import termsIcon from "@/assets/icons/terms.png";
+import userIcon from "@/assets/icons/user.png";
+import copyrightIcon from "@/assets/icons/copyright.png";
+import linkIcon from "@/assets/icons/link.png";
+import shieldIcon from "@/assets/icons/shield.png";
 
 const testimonials = [
   { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
