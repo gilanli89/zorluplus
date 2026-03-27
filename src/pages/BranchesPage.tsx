@@ -1,6 +1,7 @@
 import { BRANCHES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Clock } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import PremiumIcon from "@/components/PremiumIcon";
@@ -65,12 +66,12 @@ export default function BranchesPage() {
               <div className="flex gap-3">
                 <a href={b.mapsLink} target="_blank" rel="noopener noreferrer">
                   <Button size="lg" className="gap-2 rounded-full text-base">
-                    <MapPin className="h-5 w-5 drop-shadow-[0_1px_2px_hsl(var(--primary-foreground)/0.3)]" /> {t("branches.getDirections")}
+                    <PremiumIconInline icon={MapPin} size={20} className="text-primary-foreground" /> {t("branches.getDirections")}
                   </Button>
                 </a>
                 <a href={`tel:${b.phone}`}>
                   <Button size="lg" variant="outline" className="gap-2 rounded-full text-base">
-                    <Phone className="h-5 w-5 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" /> {t("branches.call")}
+                    <PremiumIconInline icon={Phone} size={20} /> {t("branches.call")}
                   </Button>
                 </a>
               </div>

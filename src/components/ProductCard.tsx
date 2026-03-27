@@ -137,7 +137,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           onClick={(e) => e.stopPropagation()}
           className="flex items-center justify-center gap-1.5 flex-1 py-2.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-all duration-200 tap-scale"
         >
-          <Eye size={14} className="text-primary drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)] filter brightness-110" />
+          <PremiumIconInline icon={Eye} size={14} />
           {t("product.view")}
         </Link>
         {product.inStock && product.price > 0 && (
@@ -146,7 +146,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="flex-1 rounded-xl text-xs font-bold gap-1.5 tap-scale"
             onClick={handleAddToCart}
           >
-            <ShoppingCart size={14} className="drop-shadow-[0_1px_2px_hsl(var(--primary-foreground)/0.4)] filter brightness-110" />
+            <PremiumIconInline icon={ShoppingCart} size={14} className="text-primary-foreground" />
             {t("cart.addToCart")}
           </Button>
         )}
