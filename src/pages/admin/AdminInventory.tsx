@@ -97,6 +97,7 @@ export default function AdminInventory() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<Record<string, string | number | boolean>>({});
   const [syncing, setSyncing] = useState(false);
+  const [sheetSyncing, setSheetSyncing] = useState(false);
   const [search, setSearch] = useState("");
 
   const { data: items = [], isLoading } = useQuery({
