@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Save, RefreshCw, X, Sparkles, Loader2, FileText, Copy } from "lucide-react";
+import { Save, RefreshCw, X, Sparkles, Loader2, FileText, Copy, CloudDownload } from "lucide-react";
 import { fetchProducts } from "@/lib/products";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
