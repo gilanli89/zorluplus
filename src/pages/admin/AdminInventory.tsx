@@ -223,10 +223,16 @@ export default function AdminInventory() {
           <h1 className="font-display text-2xl font-bold text-foreground">Stok Yönetimi</h1>
           <p className="text-sm text-muted-foreground mt-1">{items.length} ürün kayıtlı</p>
         </div>
-        <Button onClick={syncProducts} disabled={syncing} variant="outline" className="gap-2 rounded-full">
-          <RefreshCw className={`h-4 w-4 ${syncing ? "animate-spin" : ""}`} />
-          {syncing ? "Senkronize ediliyor..." : "CSV'den Senkronize Et"}
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={syncFromGoogleSheet} disabled={sheetSyncing} variant="default" className="gap-2 rounded-full">
+            <CloudDownload className={`h-4 w-4 ${sheetSyncing ? "animate-pulse" : ""}`} />
+            {sheetSyncing ? "Senkronize ediliyor..." : "Google Sheets'ten Güncelle"}
+          </Button>
+          <Button onClick={syncProducts} disabled={syncing} variant="outline" className="gap-2 rounded-full">
+            <RefreshCw className={`h-4 w-4 ${syncing ? "animate-spin" : ""}`} />
+            {syncing ? "Senkronize ediliyor..." : "CSV'den Senkronize Et"}
+          </Button>
+        </div>
       </div>
 
       <div className="mb-4">
