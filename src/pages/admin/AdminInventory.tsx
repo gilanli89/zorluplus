@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Save, RefreshCw, X, Sparkles, Loader2, FileText, Copy } from "lucide-react";
+import { Save, RefreshCw, X, Sparkles, Loader2, FileText, Copy, CloudDownload } from "lucide-react";
 import { fetchProducts } from "@/lib/products";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
@@ -97,6 +97,7 @@ export default function AdminInventory() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<Record<string, string | number | boolean>>({});
   const [syncing, setSyncing] = useState(false);
+  const [sheetSyncing, setSheetSyncing] = useState(false);
   const [search, setSearch] = useState("");
 
   const { data: items = [], isLoading } = useQuery({
@@ -135,6 +136,33 @@ export default function AdminInventory() {
       toast.error("Senkronizasyon hatası: " + e.message);
     }
     setSyncing(false);
+  };
+
+  const syncFromGoogleSheet = async () => {
+    setSheetSyncing(true);
+    try {
+      const resp = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-google-sheet`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+        }
+      );
+      const data = await resp.json();
+      if (data.success) {
+        qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+        qc.invalidateQueries({ queryKey: ["products"] });
+        toast.success(`Google Sheets: ${data.synced} ürün fiyatı güncellendi`);
+      } else {
+        toast.error(data.error || "Senkronizasyon hatası");
+      }
+    } catch (e: any) {
+      toast.error("Google Sheets senkronizasyon hatası: " + e.message);
+    }
+    setSheetSyncing(false);
   };
 
   const updateItem = useMutation({
@@ -195,10 +223,16 @@ export default function AdminInventory() {
           <h1 className="font-display text-2xl font-bold text-foreground">Stok Yönetimi</h1>
           <p className="text-sm text-muted-foreground mt-1">{items.length} ürün kayıtlı</p>
         </div>
-        <Button onClick={syncProducts} disabled={syncing} variant="outline" className="gap-2 rounded-full">
-          <RefreshCw className={`h-4 w-4 ${syncing ? "animate-spin" : ""}`} />
-          {syncing ? "Senkronize ediliyor..." : "CSV'den Senkronize Et"}
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={syncFromGoogleSheet} disabled={sheetSyncing} variant="default" className="gap-2 rounded-full">
+            <CloudDownload className={`h-4 w-4 ${sheetSyncing ? "animate-pulse" : ""}`} />
+            {sheetSyncing ? "Senkronize ediliyor..." : "Google Sheets'ten Güncelle"}
+          </Button>
+          <Button onClick={syncProducts} disabled={syncing} variant="outline" className="gap-2 rounded-full">
+            <RefreshCw className={`h-4 w-4 ${syncing ? "animate-spin" : ""}`} />
+            {syncing ? "Senkronize ediliyor..." : "CSV'den Senkronize Et"}
+          </Button>
+        </div>
       </div>
 
       <div className="mb-4">
