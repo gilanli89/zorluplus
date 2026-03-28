@@ -138,6 +138,33 @@ export default function AdminInventory() {
     setSyncing(false);
   };
 
+  const syncFromGoogleSheet = async () => {
+    setSheetSyncing(true);
+    try {
+      const resp = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-google-sheet`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+        }
+      );
+      const data = await resp.json();
+      if (data.success) {
+        qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+        qc.invalidateQueries({ queryKey: ["products"] });
+        toast.success(`Google Sheets: ${data.synced} ürün fiyatı güncellendi`);
+      } else {
+        toast.error(data.error || "Senkronizasyon hatası");
+      }
+    } catch (e: any) {
+      toast.error("Google Sheets senkronizasyon hatası: " + e.message);
+    }
+    setSheetSyncing(false);
+  };
+
   const updateItem = useMutation({
     mutationFn: async (values: { id: string; quantity: number; unit_price: number | null; sale_price: number | null; original_price: number | null; is_active: boolean }) => {
       const { error } = await supabase.from("inventory").update({
