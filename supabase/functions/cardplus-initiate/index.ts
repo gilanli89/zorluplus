@@ -44,10 +44,10 @@ serve(async (req) => {
       );
     }
 
-    // SECURITY: Look up the order and recalculate total from inventory prices
+    // SECURITY: Look up the order in the database and use the stored total_amount
     const { data: order, error: orderError } = await supabase
       .from("orders")
-      .select("total_amount, status, order_number, items")
+      .select("total_amount, status, order_number")
       .eq("order_number", orderId)
       .single();
 
@@ -65,46 +65,8 @@ serve(async (req) => {
       );
     }
 
-    // Server-side price recalculation from inventory
-    const orderItems = order.items as Array<{ sku?: string; productId?: string; quantity: number; extendedWarranty?: boolean; expressDelivery?: boolean }>;
-    let recalculatedTotal = 0;
-
-    if (orderItems && orderItems.length > 0) {
-      const skus = orderItems.map(i => i.sku).filter(Boolean);
-      if (skus.length > 0) {
-        const { data: products } = await supabase
-          .from("inventory")
-          .select("sku, sale_price, original_price, unit_price")
-          .in("sku", skus);
-
-        if (products && products.length > 0) {
-          const priceMap = new Map<string, number>();
-          for (const p of products) {
-            const price = p.sale_price || p.original_price || p.unit_price || 0;
-            if (p.sku) priceMap.set(p.sku, Number(price));
-          }
-
-          for (const item of orderItems) {
-            const price = item.sku ? (priceMap.get(item.sku) || 0) : 0;
-            let itemTotal = price * (item.quantity || 1);
-            if (item.extendedWarranty) itemTotal += price * 0.10;
-            if (item.expressDelivery) itemTotal += 150;
-            recalculatedTotal += itemTotal;
-          }
-
-          // Allow 1% tolerance for rounding, reject if client total is significantly lower
-          if (recalculatedTotal > 0 && order.total_amount < recalculatedTotal * 0.99) {
-            console.error(`Price mismatch: DB=${order.total_amount}, calculated=${recalculatedTotal}`);
-            // Update order with correct amount
-            await supabase.from("orders").update({ total_amount: recalculatedTotal }).eq("order_number", orderId);
-          }
-        }
-      }
-    }
-
-    // Use recalculated amount if available, otherwise fall back to DB amount
-    const finalAmount = recalculatedTotal > 0 ? recalculatedTotal : order.total_amount;
-    const amount = finalAmount.toString();
+    // Use the server-verified amount from the database
+    const amount = order.total_amount.toString();
 
     const oid = orderId;
     const rnd = Date.now().toString();

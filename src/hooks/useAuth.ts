@@ -12,7 +12,7 @@ export function useAuth() {
       const u = session?.user ?? null;
       setUser(u);
       if (u?.email) {
-        const { data } = await supabase.rpc("check_own_admin_status" as any);
+        const { data } = await supabase.rpc("is_admin", { check_email: u.email });
         setIsAdmin(!!data);
       } else {
         setIsAdmin(false);
@@ -24,7 +24,7 @@ export function useAuth() {
       const u = session?.user ?? null;
       setUser(u);
       if (u?.email) {
-        const { data } = await supabase.rpc("check_own_admin_status" as any);
+        const { data } = await supabase.rpc("is_admin", { check_email: u.email });
         setIsAdmin(!!data);
       }
       setLoading(false);
@@ -38,25 +38,9 @@ export function useAuth() {
     return { error };
   };
 
-  const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.origin },
-    });
-    return { error };
-  };
-
-  const signInWithApple = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "apple",
-      options: { redirectTo: window.location.origin },
-    });
-    return { error };
-  };
-
   const signOut = async () => {
     await supabase.auth.signOut();
   };
 
-  return { user, isAdmin, loading, signIn, signInWithGoogle, signInWithApple, signOut };
+  return { user, isAdmin, loading, signIn, signOut };
 }

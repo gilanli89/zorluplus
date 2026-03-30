@@ -1,28 +1,12 @@
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useParams } from "react-router-dom";
-import { CATEGORIES, CATEGORY_GROUPS } from "@/lib/constants";
+import { CATEGORIES } from "@/lib/constants";
 import { CATEGORY_3D_ICONS } from "@/lib/categoryIcons";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { cn } from "@/lib/utils";
 
 export default function CategoryIconBar() {
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
   const { categorySlug } = useParams();
-  const [activeGroup, setActiveGroup] = useState<string>("tv-ses");
-
-  // Auto-select group when a category from URL params is active
-  useEffect(() => {
-    if (categorySlug) {
-      const cat = CATEGORIES.find(c => c.slug === categorySlug);
-      if (cat && cat.group) {
-        setActiveGroup(cat.group);
-      }
-    }
-  }, [categorySlug]);
-
-  const filteredCats = CATEGORIES.filter(c => c.group === activeGroup);
-
   const getCatName = (slug: string) => {
     const key = `cat.${slug}`;
     const translated = t(key);
@@ -31,24 +15,8 @@ export default function CategoryIconBar() {
 
   return (
     <div className="sticky top-[88px] z-30 bg-background/95 backdrop-blur-sm -mx-4 px-4 py-2 mb-3">
-      <div className="flex items-center gap-1 px-4 mb-1">
-        {CATEGORY_GROUPS.map(g => (
-          <button
-            key={g.id}
-            onClick={() => setActiveGroup(g.id)}
-            className={cn(
-              "px-3 py-1 rounded-full text-xs font-semibold transition-all whitespace-nowrap",
-              activeGroup === g.id
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "bg-muted text-muted-foreground hover:bg-muted/80"
-            )}
-          >
-            {lang === "tr" ? g.name : g.nameEn}
-          </button>
-        ))}
-      </div>
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        {filteredCats.map((cat, i) => {
+        {CATEGORIES.map((cat, i) => {
           const icon3d = CATEGORY_3D_ICONS[cat.slug];
           const isActive = categorySlug === cat.slug;
           return (

@@ -304,48 +304,9 @@ export type Database = {
       }
     }
     Views: {
-      inventory_public: {
-        Row: {
-          brand: string | null
-          category: string | null
-          id: string | null
-          image_url: string | null
-          is_active: boolean | null
-          original_price: number | null
-          product_name: string | null
-          quantity: number | null
-          sale_price: number | null
-          sku: string | null
-        }
-        Insert: {
-          brand?: string | null
-          category?: string | null
-          id?: string | null
-          image_url?: string | null
-          is_active?: boolean | null
-          original_price?: number | null
-          product_name?: string | null
-          quantity?: number | null
-          sale_price?: number | null
-          sku?: string | null
-        }
-        Update: {
-          brand?: string | null
-          category?: string | null
-          id?: string | null
-          image_url?: string | null
-          is_active?: boolean | null
-          original_price?: number | null
-          product_name?: string | null
-          quantity?: number | null
-          sale_price?: number | null
-          sku?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
-      check_own_admin_status: { Args: never; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

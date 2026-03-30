@@ -5,22 +5,6 @@ import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, 
 import { BRANCHES } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 import PremiumIcon, { PremiumBadgeIcon, PremiumIconInline } from "@/components/PremiumIcon";
-import contractIcon from "@/assets/icons/contract.png";
-import installmentIcon from "@/assets/icons/installment.png";
-import deliveryIcon from "@/assets/icons/delivery.png";
-import refundIcon from "@/assets/icons/refund.png";
-import certificateIcon from "@/assets/icons/certificate.png";
-import legalIcon from "@/assets/icons/legal.png";
-import termsIcon from "@/assets/icons/terms.png";
-import userIcon from "@/assets/icons/user.png";
-import copyrightIcon from "@/assets/icons/copyright.png";
-import linkIcon from "@/assets/icons/link.png";
-import shieldIcon from "@/assets/icons/shield.png";
-import privacyIcon from "@/assets/icons/privacy.png";
-import cookieIcon from "@/assets/icons/cookie.png";
-import databaseIcon from "@/assets/icons/database.png";
-import installIcon from "@/assets/icons/install.png";
-import teamIcon from "@/assets/icons/team.png";
 
 const testimonials = [
   { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
@@ -731,44 +715,21 @@ export function EkibimizPage() {
     { name: "Karetta", roleKey: "team.role.aiAssistant", branch: "", photo: "/team/karetta.jpg" },
   ];
 
-  const pulseGlow = {
-    boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.08)", "inset 0 0 25px hsl(221,83%,53%,0.0)"],
-  };
-
   return (
     <div className="container py-12 md:py-16 max-w-4xl">
-      {/* Hero */}
-      <motion.div
-        className="flex items-center gap-4 mb-4"
+      <motion.h1
+        className="font-display text-3xl md:text-4xl font-extrabold mb-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <motion.div className="relative shrink-0">
-          <motion.div
-            className="absolute inset-[-8px] rounded-full border-2 border-primary/30"
-            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.img
-            src={teamIcon}
-            alt=""
-            className="h-16 w-16 object-contain"
-            width={64}
-            height={64}
-            animate={{ filter: ["drop-shadow(0 0 6px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 16px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 6px hsl(221,83%,53%,0.2))"] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </motion.div>
-        <h1 className="font-display text-3xl md:text-4xl font-extrabold">
-          <motion.span
-            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            {t("team.title")}
-          </motion.span>
-        </h1>
-      </motion.div>
+        <motion.span
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {t("team.title")}
+        </motion.span>
+      </motion.h1>
 
       <motion.p
         className="text-muted-foreground leading-relaxed mb-10 max-w-2xl"
@@ -794,12 +755,11 @@ export function EkibimizPage() {
             transition={{ duration: 0.4 }}
           >
             <motion.div
-              className="absolute inset-0 rounded-xl pointer-events-none"
-              animate={pulseGlow}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
+              className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+              style={{ background: "linear-gradient(135deg, hsl(221,83%,53%,0.05), transparent)" }}
             />
             <motion.div
-              className="relative mb-3 w-28 h-32 rounded-xl overflow-hidden bg-muted/20 mx-auto"
+              className="relative mb-3"
               animate={{
                 filter: [
                   "drop-shadow(0 0 0px hsl(221,83%,53%,0))",
@@ -809,22 +769,16 @@ export function EkibimizPage() {
               }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
             >
-              <img
-                src={m.photo}
-                alt={m.name}
-                className="w-full h-full object-cover"
-                style={{ objectPosition: "center 45%" }}
-                loading="lazy"
-              />
+              <img src={m.photo} alt={m.name} className="w-24 h-28 object-cover object-top rounded-lg" loading="lazy" />
             </motion.div>
             <motion.p
-              className="font-display font-bold text-sm leading-tight relative z-10"
+              className="font-display font-bold text-sm leading-tight"
               animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
             >
               {m.name}
             </motion.p>
-            <p className="text-xs text-muted-foreground mt-1 relative z-10">{m.branch ? `${m.branch} – ` : ""}{t(m.roleKey)}</p>
+            <p className="text-xs text-muted-foreground mt-1">{m.branch ? `${m.branch} – ` : ""}{t(m.roleKey)}</p>
           </motion.div>
         ))}
       </motion.div>
@@ -1242,124 +1196,101 @@ export function DestekPage() {
 
 export function KullanimKosullariPage() {
   const { t } = useLanguage();
-
-  const sections = [
-    { title: "1. Genel Hükümler", icon: termsIcon, content: "Bu Site'ye erişim sağlayan tüm kullanıcılar, yürürlükteki ilgili yasal düzenlemeler ile birlikte bu Kullanım Koşulları'nı kabul etmiş sayılır.", extra: "Koşulları kabul etmiyorsanız Site'yi kullanmamanız gerekmektedir." },
-    { title: "2. Hizmetlerin Kapsamı", icon: contractIcon, content: "Zorlu Digital Plaza web sitesi üzerinden kullanıcılar;", list: ["Ürünler hakkında detaylı bilgi edinebilir", "Online sipariş oluşturabilir", "Müşteri hizmetlerine talep iletebilir", "Teknik servis ve garanti süreçlerini başlatabilir", "Kampanya ve duyuruları takip edebilir"], extra: "Şirket, sunulan hizmetlerin kapsamını önceden bildirimde bulunmaksızın değiştirme veya güncelleme hakkını saklı tutar." },
-    { title: "3. Kullanıcı Yükümlülükleri", icon: userIcon, content: "Siteyi kullanan tüm kullanıcılar aşağıdaki kurallara uymayı kabul eder:", list: ["Site içeriğini yasa dışı amaçlarla kullanmamak", "Yanlış, eksik veya yanıltıcı bilgi vermemek", "Site güvenliğini tehlikeye sokacak girişimlerde bulunmamak", "Bot, script veya otomatik sistemlerle veri taraması yapmamak", "Site üzerindeki tüm fikri mülkiyet haklarına saygı göstermek", "Site altyapısına zarar verebilecek davranışlardan kaçınmak"], extra: "Bu yükümlülüklerin ihlali durumunda kullanıcının Site'ye erişimi geçici veya kalıcı olarak sonlandırılabilir." },
-    { title: "4. Fikri Mülkiyet Hakları", icon: copyrightIcon, content: "Site'de yer alan tüm metinler, görseller, logolar, markalar, tasarımlar, grafikler ve içerikler Zorlu Digital Plaza'ya ait olup telif hakları ile korunmaktadır veya lisans kapsamında kullanılmaktadır.", subContent: "Bu içeriklerin;", list: ["kopyalanması", "çoğaltılması", "dağıtılması", "ticari amaçla kullanılması"], extra: "Şirketin yazılı izni olmadan kesinlikle yasaktır. İzinsiz kullanım hukuki ve cezai yaptırımlara tabidir." },
-    { title: "5. Sipariş, Ödeme ve Teslimat Koşulları", icon: installmentIcon, list: ["Ürün fiyatları ve stok bilgileri değişiklik gösterebilir.", "Siparişler ödeme onayı alındıktan sonra kesinleşir.", "Ödeme altyapısı ve teslimat süreçleri üçüncü taraf hizmet sağlayıcılar aracılığıyla yürütülebilir.", "Kullanıcılar sipariş sırasında doğru iletişim ve adres bilgileri vermekle yükümlüdür."] },
-    { title: "6. Garanti ve Teknik Servis", icon: certificateIcon, content: "Zorlu Digital Plaza'dan satın alınan ürünler, ilgili marka üretici garantisi veya en az **2 yıl** tedarikçi garantisi kapsamındadır.", extra: "Servis hizmetleri; bakım, onarım, teknik destek ve yedek parça Şirketimiz veya yetkili servis merkezleri tarafından sağlanmaktadır. Garanti kapsamı dışında kalan durumlar (kullanıcı hatası, sıvı teması, düşme/darbe, yetkisiz müdahale) ücretli servis kapsamına girebilir." },
-    { title: "7. Sorumluluk Reddi", icon: shieldIcon, content: "Zorlu Digital Plaza; sistem kesintileri, teknik arızalar, üçüncü taraf saldırıları, internet bağlantı problemleri ve kullanıcı hataları nedeniyle oluşabilecek zararlardan sorumlu tutulamaz.", extra: "Site üzerinde yer alan ürün açıklamaları, teknik özellikler ve görseller üretici kaynaklı değişiklik gösterebilir." },
-    { title: "8. Üçüncü Taraf Bağlantıları", icon: linkIcon, content: "Site üzerinde üçüncü taraf web sitelerine yönlendiren bağlantılar bulunabilir. Bu sitelerin içeriklerinden, veri güvenliğinden veya gizlilik politikalarından Zorlu Digital Plaza sorumlu değildir.", extra: "Bu bağlantılar yalnızca kullanıcıya kolaylık sağlamak amacıyla sunulmaktadır." },
-    { title: "9. Gizlilik Politikası ile İlişki", icon: shieldIcon, content: "Bu Kullanım Koşulları, Site'de yer alan Gizlilik Politikası ile birlikte değerlendirilmelidir. Siteyi kullanan kullanıcılar, kişisel verilerin işlenmesine ilişkin Gizlilik Politikası'nı da kabul etmiş sayılır." },
-    { title: "10. Koşullarda Değişiklik Yapma Hakkı", icon: termsIcon, content: "Zorlu Digital Plaza, bu Kullanım Koşulları üzerinde önceden bildirimde bulunmaksızın değişiklik yapma hakkını saklı tutar. Güncellenmiş koşullar Site'de yayımlandığı tarihten itibaren yürürlüğe girer.", extra: "Kullanıcıların bu koşulları düzenli olarak kontrol etmesi önerilir." },
-    { title: "11. Uygulanacak Hukuk ve Yetkili Mahkeme", icon: legalIcon, content: "Bu Kullanım Koşulları Kuzey Kıbrıs Türk Cumhuriyeti yasalarına tabidir. Her türlü uyuşmazlıkta **Lefkoşa Mahkemeleri** ve İcra Daireleri yetkilidir." },
-  ];
-
-  const pulseGlow = {
-    boxShadow: [
-      "inset 0 0 25px hsl(221,83%,53%,0.0)",
-      "inset 0 0 25px hsl(221,83%,53%,0.08)",
-      "inset 0 0 25px hsl(221,83%,53%,0.0)",
-    ],
-  };
-
-  const renderBold = (text: string) => {
-    const parts = text.split(/\*\*(.*?)\*\*/g);
-    return parts.map((part, i) =>
-      i % 2 === 1 ? <strong key={i} className="text-foreground">{part}</strong> : part
-    );
-  };
-
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
-      {/* Hero */}
-      <motion.div
-        className="flex items-center gap-4 mb-6"
+      <motion.h1
+        className="font-display text-3xl md:text-4xl font-extrabold mb-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <motion.div className="relative shrink-0">
-          <motion.div
-            className="absolute inset-[-8px] rounded-full border-2 border-primary/30"
-            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.img
-            src={termsIcon}
-            alt=""
-            className="h-16 w-16 object-contain"
-            width={64}
-            height={64}
-            animate={{ filter: ["drop-shadow(0 0 6px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 16px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 6px hsl(221,83%,53%,0.2))"] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </motion.div>
-        <h1 className="font-display text-3xl md:text-4xl font-extrabold">
-          <motion.span
-            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            {t("content.terms.title")}
-          </motion.span>
-        </h1>
-      </motion.div>
+        <motion.span
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {t("content.terms.title")}
+        </motion.span>
+      </motion.h1>
 
-      {/* Intro */}
       <motion.div
-        className="rounded-2xl border border-border bg-card p-6 mb-6 relative overflow-hidden"
+        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
       >
-        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-        <p className="relative z-10 text-sm text-muted-foreground leading-relaxed">
-          Bu Kullanım Koşulları, <strong className="text-foreground">Zorlu Digital Plaza</strong> ("Şirket", "biz", "bize", "bizim") tarafından işletilen <strong className="text-foreground">www.zorluplus.com</strong> ("Site") üzerinden sunulan hizmetlerin kullanımına ilişkin şartları düzenlemektedir.
-        </p>
-        <p className="relative z-10 text-sm text-muted-foreground leading-relaxed mt-2">
-          Siteyi ziyaret eden veya kullanan her kullanıcı, aşağıda belirtilen kullanım koşullarını okuduğunu, anladığını ve kabul ettiğini beyan etmiş sayılır.
-        </p>
-      </motion.div>
+        <p>Bu Kullanım Koşulları, <strong className="text-foreground">Zorlu Digital Plaza</strong> ("Şirket", "biz", "bize", "bizim") tarafından işletilen <strong className="text-foreground">www.zorluplus.com</strong> ("Site") üzerinden sunulan hizmetlerin kullanımına ilişkin şartları düzenlemektedir.</p>
+        <p>Siteyi ziyaret eden veya kullanan her kullanıcı, aşağıda belirtilen kullanım koşullarını okuduğunu, anladığını ve kabul ettiğini beyan etmiş sayılır.</p>
 
-      {/* Sections */}
-      <div className="space-y-5">
-        {sections.map((section, idx) => (
-          <motion.div
-            key={idx}
-            className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.06 * idx }}
-          >
-            <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: idx * 0.2 }} />
-            <div className="relative z-10 flex items-start gap-4">
-              <motion.img
-                src={section.icon}
-                alt=""
-                className="h-10 w-10 object-contain shrink-0 mt-0.5"
-                width={40}
-                height={40}
-                loading="lazy"
-                animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.15 }}
-              />
-              <div className="flex-1">
-                <h2 className="font-display font-bold text-lg text-foreground mb-2">{section.title}</h2>
-                {section.content && <p className="text-sm text-muted-foreground leading-relaxed">{renderBold(section.content)}</p>}
-                {section.subContent && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{section.subContent}</p>}
-                {section.list && (
-                  <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1 mt-2">
-                    {section.list.map((item, i) => <li key={i}>{item}</li>)}
-                  </ul>
-                )}
-                {section.extra && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{renderBold(section.extra)}</p>}
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+        <h2>1. Genel Hükümler</h2>
+        <p>Bu Site'ye erişim sağlayan tüm kullanıcılar, yürürlükteki ilgili yasal düzenlemeler ile birlikte bu Kullanım Koşulları'nı kabul etmiş sayılır.</p>
+        <p>Koşulları kabul etmiyorsanız Site'yi kullanmamanız gerekmektedir.</p>
+
+        <h2>2. Hizmetlerin Kapsamı</h2>
+        <p>Zorlu Digital Plaza web sitesi üzerinden kullanıcılar;</p>
+        <ul>
+          <li>Ürünler hakkında detaylı bilgi edinebilir</li>
+          <li>Online sipariş oluşturabilir</li>
+          <li>Müşteri hizmetlerine talep iletebilir</li>
+          <li>Teknik servis ve garanti süreçlerini başlatabilir</li>
+          <li>Kampanya ve duyuruları takip edebilir</li>
+        </ul>
+        <p>Şirket, sunulan hizmetlerin kapsamını önceden bildirimde bulunmaksızın değiştirme veya güncelleme hakkını saklı tutar.</p>
+
+        <h2>3. Kullanıcı Yükümlülükleri</h2>
+        <p>Siteyi kullanan tüm kullanıcılar aşağıdaki kurallara uymayı kabul eder:</p>
+        <ul>
+          <li>Site içeriğini yasa dışı amaçlarla kullanmamak</li>
+          <li>Yanlış, eksik veya yanıltıcı bilgi vermemek</li>
+          <li>Site güvenliğini tehlikeye sokacak girişimlerde bulunmamak</li>
+          <li>Bot, script veya otomatik sistemlerle veri taraması yapmamak</li>
+          <li>Site üzerindeki tüm fikri mülkiyet haklarına saygı göstermek</li>
+          <li>Site altyapısına zarar verebilecek davranışlardan kaçınmak</li>
+        </ul>
+        <p>Bu yükümlülüklerin ihlali durumunda kullanıcının Site'ye erişimi geçici veya kalıcı olarak sonlandırılabilir.</p>
+
+        <h2>4. Fikri Mülkiyet Hakları</h2>
+        <p>Site'de yer alan tüm metinler, görseller, logolar, markalar, tasarımlar, grafikler ve içerikler Zorlu Digital Plaza'ya ait olup telif hakları ile korunmaktadır veya lisans kapsamında kullanılmaktadır.</p>
+        <p>Bu içeriklerin;</p>
+        <ul>
+          <li>kopyalanması</li>
+          <li>çoğaltılması</li>
+          <li>dağıtılması</li>
+          <li>ticari amaçla kullanılması</li>
+        </ul>
+        <p>Şirketin yazılı izni olmadan kesinlikle yasaktır.</p>
+        <p>İzinsiz kullanım hukuki ve cezai yaptırımlara tabidir.</p>
+
+        <h2>5. Sipariş, Ödeme ve Teslimat Koşulları</h2>
+        <ul>
+          <li>Ürün fiyatları ve stok bilgileri değişiklik gösterebilir.</li>
+          <li>Siparişler ödeme onayı alındıktan sonra kesinleşir.</li>
+          <li>Ödeme altyapısı ve teslimat süreçleri üçüncü taraf hizmet sağlayıcılar aracılığıyla yürütülebilir.</li>
+          <li>Kullanıcılar sipariş sırasında doğru iletişim ve adres bilgileri vermekle yükümlüdür.</li>
+        </ul>
+
+        <h2>6. Garanti ve Teknik Servis</h2>
+        <p>Zorlu Digital Plaza'dan satın alınan ürünler, ilgili marka üretici garantisi veya en az <strong>2 yıl</strong> tedarikçi garantisi kapsamındadır.</p>
+        <p>Servis hizmetleri; bakım, onarım, teknik destek ve yedek parça Şirketimiz veya yetkili servis merkezleri tarafından sağlanmaktadır.</p>
+        <p>Garanti kapsamı dışında kalan durumlar (kullanıcı hatası, sıvı teması, düşme/darbe, yetkisiz müdahale) ücretli servis kapsamına girebilir.</p>
+
+        <h2>7. Sorumluluk Reddi</h2>
+        <p>Zorlu Digital Plaza; sistem kesintileri, teknik arızalar, üçüncü taraf saldırıları, internet bağlantı problemleri ve kullanıcı hataları nedeniyle oluşabilecek zararlardan sorumlu tutulamaz.</p>
+        <p>Site üzerinde yer alan ürün açıklamaları, teknik özellikler ve görseller üretici kaynaklı değişiklik gösterebilir.</p>
+
+        <h2>8. Üçüncü Taraf Bağlantıları</h2>
+        <p>Site üzerinde üçüncü taraf web sitelerine yönlendiren bağlantılar bulunabilir. Bu sitelerin içeriklerinden, veri güvenliğinden veya gizlilik politikalarından Zorlu Digital Plaza sorumlu değildir.</p>
+        <p>Bu bağlantılar yalnızca kullanıcıya kolaylık sağlamak amacıyla sunulmaktadır.</p>
+
+        <h2>9. Gizlilik Politikası ile İlişki</h2>
+        <p>Bu Kullanım Koşulları, Site'de yer alan Gizlilik Politikası ile birlikte değerlendirilmelidir. Siteyi kullanan kullanıcılar, kişisel verilerin işlenmesine ilişkin Gizlilik Politikası'nı da kabul etmiş sayılır.</p>
+
+        <h2>10. Koşullarda Değişiklik Yapma Hakkı</h2>
+        <p>Zorlu Digital Plaza, bu Kullanım Koşulları üzerinde önceden bildirimde bulunmaksızın değişiklik yapma hakkını saklı tutar. Güncellenmiş koşullar Site'de yayımlandığı tarihten itibaren yürürlüğe girer.</p>
+        <p>Kullanıcıların bu koşulları düzenli olarak kontrol etmesi önerilir.</p>
+
+        <h2>11. Uygulanacak Hukuk ve Yetkili Mahkeme</h2>
+        <p>Bu Kullanım Koşulları Kuzey Kıbrıs Türk Cumhuriyeti yasalarına tabidir. Her türlü uyuşmazlıkta Lefkoşa Mahkemeleri ve İcra Daireleri yetkilidir.</p>
+      </motion.div>
 
       {/* İletişim */}
       <motion.div
@@ -1368,7 +1299,17 @@ export function KullanimKosullariPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
       >
-        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.08)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          animate={{
+            boxShadow: [
+              "inset 0 0 30px hsl(221,83%,53%,0.0)",
+              "inset 0 0 30px hsl(221,83%,53%,0.08)",
+              "inset 0 0 30px hsl(221,83%,53%,0.0)",
+            ],
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
         <motion.h2
           className="font-display text-xl md:text-2xl font-bold relative z-10"
           animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
@@ -1406,186 +1347,247 @@ export function KullanimKosullariPage() {
 
 export function IadeKosullariPage() {
   const { t } = useLanguage();
-
-  const sections = [
-    { title: "1. Genel İade Koşulları", icon: refundIcon, list: ["**Premium Hizmet Standardı:** İade talebi, ürün teslim alındıktan sonra **7 gün** içinde yapılmalıdır.", "Ürün; kullanılmamış, orijinal ambalajında, tüm aksesuarlarıyla eksiksiz ve yeniden satılabilir durumda olmalıdır.", "Fatura veya dijital satın alma belgesinin ibrazı, işlem güvenliği açısından zorunludur.", "Ürün veya ambalajında kullanıcı kaynaklı (hasar, çizik, kırık vb.) bir kusur tespit edilirse iade kabul edilmeyecektir."] },
-    { title: "2. İade Kapsamı Dışındaki Ürünler", icon: shieldIcon, content: "Mevzuat ve hijyen kuralları gereği aşağıdaki ürünlerde iade yapılamaz (Arıza/Defect durumları hariç):", list: ["**Hijyen Ürünleri:** Paketi açılmış kulak içi kulaklıklar ve kişisel bakım cihazları.", "**Dijital İçerikler:** Yazılım, oyun, dijital lisans ve aktivasyon kodları.", "**Kurulumu Yapılmış Cihazlar:** Yetkili servis tarafından kurulumu tamamlanan büyük beyaz eşyalar kurulum sonrası iade edilemez.", "**Özel Siparişler:** Müşteri talebi doğrultusunda özelleştirilen ürünler."] },
-    { title: "3. Arızalı ve Ayıplı Ürün Süreci", icon: certificateIcon, list: ["**Teslimat Kontrolü:** Ürünü teslim alırken kontrol ediniz. Hasar varsa tutanak tutturarak ürünü teslim almayınız.", "**Teknik Servis Onayı:** Teslimat sonrası fark edilen üretim hatalarında ürün, Premium teknik servis kontrolünden geçirilir. Servis raporu olmadan iade veya değişim işlemi yapılamamaktadır."] },
-    { title: "4. Premium Değişim Koşulları", icon: contractIcon, list: ["Stok durumu uygun olduğu sürece, teslim tarihinden itibaren **7 gün** içerisinde değişim başvurusu yapılabilir.", "Ürün fiyat farkı oluşması durumunda, bakiye dengelemesi yapılarak işlem tamamlanır."] },
-    { title: "5. İade Süreci ve İletişim", icon: contractIcon, content: "İade taleplerinizi Premium destek kanallarımız üzerinden iletebilirsiniz:", hasContact: true, extra: "Ürün tarafımıza ulaştıktan sonra uzman ekibimizce **7 iş günü** içinde incelenir ve onaylandığında ödeme iadesi aynı yöntemle gerçekleştirilir." },
-    { title: "6. Lojistik ve Kargo", icon: deliveryIcon, list: ["Arızalı/defolu ürün gönderimlerinde kargo ücreti Şirketimiz tarafından karşılanır.", "Kişisel tercih veya memnuniyet kaynaklı iadelerde kargo ücreti müşteriye aittir."] },
-    { title: "7. Kurulum Gerektiren Ürünler (Beyaz Eşya & TV)", icon: installIcon, list: ["Samsung, LG ve diğer markalı ürünlerde kutu açılımı mutlaka yetkili servis tarafından yapılmalıdır.", "Yetkisiz müdahaleler garanti kapsamını ve iade hakkını geçersiz kılabilir."] },
-    { title: "8. İptal ve Geri Ödeme", icon: installmentIcon, list: ["Kargoya verilmemiş siparişler anında iptal edilebilir.", "İade bedelinin hesabınıza yansıması, banka süreçlerine bağlı olarak **10 iş günü** sürebilir."] },
-  ];
-
-  const pulseGlow = {
-    boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.08)", "inset 0 0 25px hsl(221,83%,53%,0.0)"],
-  };
-
-  const renderBold = (text: string) => {
-    const parts = text.split(/\*\*(.*?)\*\*/g);
-    return parts.map((part, i) =>
-      i % 2 === 1 ? <strong key={i} className="text-foreground">{part}</strong> : part
-    );
-  };
-
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
-      {/* Hero */}
-      <motion.div className="flex items-center gap-4 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-        <motion.div className="relative shrink-0">
-          <motion.div className="absolute inset-[-8px] rounded-full border-2 border-primary/30" animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-          <motion.img src={refundIcon} alt="" className="h-16 w-16 object-contain" width={64} height={64} animate={{ filter: ["drop-shadow(0 0 6px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 16px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 6px hsl(221,83%,53%,0.2))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-        </motion.div>
-        <div>
-          <h1 className="font-display text-3xl md:text-4xl font-extrabold">
-            <motion.span animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
-              {t("content.returns.title")}
+      <motion.h1
+        className="font-display text-3xl md:text-4xl font-extrabold mb-2"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.span
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {t("content.returns.title")}
+        </motion.span>
+      </motion.h1>
+      <p className="text-sm text-muted-foreground mb-8">Son Güncelleme Tarihi: 23.12.2025</p>
+
+      <motion.div
+        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+      >
+        <p>Bu politika, <strong className="text-foreground">Zorlu Digital Plaza</strong> ("Şirket") üzerinden gerçekleştirilen tüm alışverişlerde sunulan Premium hizmet standartlarını, iade, değişim ve iptal şartlarını kapsamaktadır. Müşteri memnuniyetini en üst seviyede tutmak adına süreçlerimiz şeffaf, güvenilir ve ayrıcalıklı bir temele oturtulmuştur.</p>
+
+        <h2>1. Genel İade Koşulları</h2>
+        <ul>
+          <li><strong className="text-foreground">Premium Hizmet Standardı:</strong> İade talebi, ürün teslim alındıktan sonra <strong>7 gün</strong> içinde yapılmalıdır.</li>
+          <li>Ürün; kullanılmamış, orijinal ambalajında, tüm aksesuarlarıyla eksiksiz ve yeniden satılabilir durumda olmalıdır.</li>
+          <li>Fatura veya dijital satın alma belgesinin ibrazı, işlem güvenliği açısından zorunludur.</li>
+          <li>Ürün veya ambalajında kullanıcı kaynaklı (hasar, çizik, kırık vb.) bir kusur tespit edilirse iade kabul edilmeyecektir.</li>
+        </ul>
+
+        <h2>2. İade Kapsamı Dışındaki Ürünler</h2>
+        <p>Mevzuat ve hijyen kuralları gereği aşağıdaki ürünlerde iade yapılamaz (Arıza/Defect durumları hariç):</p>
+        <ul>
+          <li><strong className="text-foreground">Hijyen Ürünleri:</strong> Paketi açılmış kulak içi kulaklıklar ve kişisel bakım cihazları.</li>
+          <li><strong className="text-foreground">Dijital İçerikler:</strong> Yazılım, oyun, dijital lisans ve aktivasyon kodları.</li>
+          <li><strong className="text-foreground">Kurulumu Yapılmış Cihazlar:</strong> Yetkili servis tarafından kurulumu tamamlanan büyük beyaz eşyalar (buzdolabı, çamaşır makinesi vb.) kurulum sonrası iade edilemez.</li>
+          <li><strong className="text-foreground">Özel Siparişler:</strong> Müşteri talebi doğrultusunda özelleştirilen ürünler.</li>
+        </ul>
+
+        <h2>3. Arızalı ve Ayıplı Ürün Süreci</h2>
+        <ul>
+          <li><strong className="text-foreground">Teslimat Kontrolü:</strong> Ürünü teslim alırken kontrol ediniz. Hasar varsa tutanak tutturarak ürünü teslim almayınız.</li>
+          <li><strong className="text-foreground">Teknik Servis Onayı:</strong> Teslimat sonrası fark edilen üretim hatalarında ürün, Premium teknik servis kontrolünden geçirilir. Servis raporu olmadan iade veya değişim işlemi yapılamamaktadır.</li>
+        </ul>
+
+        <h2>4. Premium Değişim Koşulları</h2>
+        <ul>
+          <li>Stok durumu uygun olduğu sürece, teslim tarihinden itibaren <strong>7 gün</strong> içerisinde değişim başvurusu yapılabilir.</li>
+          <li>Ürün fiyat farkı oluşması durumunda, bakiye dengelemesi yapılarak işlem tamamlanır.</li>
+        </ul>
+
+        <h2>5. İade Süreci ve İletişim</h2>
+        <p>İade taleplerinizi Premium destek kanallarımız üzerinden iletebilirsiniz:</p>
+      </motion.div>
+
+      {/* Contact card */}
+      <motion.div
+        className="rounded-2xl border border-border bg-card p-6 md:p-8 space-y-4 relative overflow-hidden mt-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+      >
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          animate={{
+            boxShadow: [
+              "inset 0 0 30px hsl(221,83%,53%,0.0)",
+              "inset 0 0 30px hsl(221,83%,53%,0.08)",
+              "inset 0 0 30px hsl(221,83%,53%,0.0)",
+            ],
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <div className="flex flex-col gap-3 relative z-10">
+          <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
+            <motion.span
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
+              animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Mail className="h-5 w-5 text-primary" />
             </motion.span>
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">Son Güncelleme Tarihi: 23.12.2025</p>
+            E-posta: deniz@zorludigitalplaza.com
+          </a>
+          <a href="tel:+905488783131" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
+            <motion.span
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
+              animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+            >
+              <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </motion.span>
+            Telefon: +90 548 878 31 31
+          </a>
         </div>
       </motion.div>
 
-      {/* Intro */}
-      <motion.div className="rounded-2xl border border-border bg-card p-6 mb-6 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
-        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-        <p className="relative z-10 text-sm text-muted-foreground leading-relaxed">
-          Bu politika, <strong className="text-foreground">Zorlu Digital Plaza</strong> ("Şirket") üzerinden gerçekleştirilen tüm alışverişlerde sunulan Premium hizmet standartlarını, iade, değişim ve iptal şartlarını kapsamaktadır. Müşteri memnuniyetini en üst seviyede tutmak adına süreçlerimiz şeffaf, güvenilir ve ayrıcalıklı bir temele oturtulmuştur.
-        </p>
+      <motion.div
+        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4 mt-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.45 }}
+      >
+        <p>Ürün tarafımıza ulaştıktan sonra uzman ekibimizce <strong>7 iş günü</strong> içinde incelenir ve onaylandığında ödeme iadesi aynı yöntemle gerçekleştirilir.</p>
+
+        <h2>6. Lojistik ve Kargo</h2>
+        <ul>
+          <li>Arızalı/defolu ürün gönderimlerinde kargo ücreti Şirketimiz tarafından karşılanır.</li>
+          <li>Kişisel tercih veya memnuniyet kaynaklı iadelerde kargo ücreti müşteriye aittir.</li>
+        </ul>
+
+        <h2>7. Kurulum Gerektiren Ürünler (Beyaz Eşya & TV)</h2>
+        <ul>
+          <li>Samsung, LG ve diğer markalı ürünlerde kutu açılımı mutlaka yetkili servis tarafından yapılmalıdır.</li>
+          <li>Yetkisiz müdahaleler garanti kapsamını ve iade hakkını geçersiz kılabilir.</li>
+        </ul>
+
+        <h2>8. İptal ve Geri Ödeme</h2>
+        <ul>
+          <li>Kargoya verilmemiş siparişler anında iptal edilebilir.</li>
+          <li>İade bedelinin hesabınıza yansıması, banka süreçlerine bağlı olarak <strong>10 iş günü</strong> sürebilir.</li>
+        </ul>
       </motion.div>
 
-      {/* Sections */}
-      <div className="space-y-5">
-        {sections.map((section, idx) => (
-          <motion.div key={idx} className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.06 * idx }}>
-            <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: idx * 0.2 }} />
-            <div className="relative z-10 flex items-start gap-4">
-              <motion.img src={section.icon} alt="" className="h-10 w-10 object-contain shrink-0 mt-0.5" width={40} height={40} loading="lazy" animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.15 }} />
-              <div className="flex-1">
-                <h2 className="font-display font-bold text-lg text-foreground mb-2">{section.title}</h2>
-                {section.content && <p className="text-sm text-muted-foreground leading-relaxed">{renderBold(section.content)}</p>}
-                {section.hasContact && (
-                  <div className="flex flex-col gap-2 my-3">
-                    <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-2 font-semibold text-foreground hover:text-primary transition-colors text-sm">
-                      <motion.span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}>
-                        <Mail className="h-4 w-4 text-primary" />
-                      </motion.span>
-                      deniz@zorludigitalplaza.com
-                    </a>
-                    <a href="tel:+905488783131" className="flex items-center gap-2 font-semibold text-foreground hover:text-primary transition-colors text-sm">
-                      <motion.span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}>
-                        <svg className="h-4 w-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                      </motion.span>
-                      +90 548 878 31 31
-                    </a>
-                  </div>
-                )}
-                {section.list && (
-                  <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1 mt-2">
-                    {section.list.map((item, i) => <li key={i}>{renderBold(item)}</li>)}
-                  </ul>
-                )}
-                {section.extra && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{renderBold(section.extra)}</p>}
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      <motion.p className="text-center font-display font-bold text-lg md:text-xl mt-10 italic" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
+      <motion.p
+        className="text-center font-display font-bold text-lg md:text-xl mt-10 italic"
+        animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      >
         Zorlu Digital Plaza | Teknolojiye Premium Dokunuş
       </motion.p>
     </div>
   );
 }
+
 export function GizlilikPolitikasiPage() {
   const { t } = useLanguage();
-
-  const privacySections = [
-    { title: "1. Kapsam ve Premium Hizmet Amacı", icon: privacyIcon, content: "Bu politika; dijital ve fiziksel kanallarımız üzerinden bizimle etkileşime geçen tüm Premium üyelerimizi ve ziyaretçilerimizi kapsar. Temel amacımız, verilerinizi yüksek güvenlik protokolleriyle işleyerek size kusursuz bir alışveriş deneyimi sunmaktır." },
-    { title: "2. İşlenen Veri Kategorileri", icon: databaseIcon, content: "Deneyiminizi kişiselleştirmek adına aşağıdaki verileri topluyoruz:", list: ["**Kimlik ve İletişim:** Ad, soyad, e-posta adresi, 00905488783131 numaralı hattımızla eşleşen iletişim verileri ve teslimat adresi.", "**İşlem Güvenliği:** Sipariş geçmişi ve fatura detayları. (Ödeme bilgileriniz doğrudan lisanslı ödeme sağlayıcıları tarafından işlenir; tarafımızca saklanmaz.)", "**Teknik ve Davranışsal Veriler:** IP adresi, çerezler (cookies) ve site içi gezinme tercihleri."] },
-    { title: "3. Veri İşleme Amaçlarımız", icon: shieldIcon, content: "Verileriniz, yalnızca aşağıdaki Premium hizmet süreçleri için kullanılır:", list: ["Siparişlerin yönetimi, lojistik süreçlerin takibi ve hızlı teslimat.", "Satış sonrası 2 yıl garanti ve ücretsiz montaj gibi teknik servis süreçlerinin yürütülmesi.", "Ayrıcalıklı kampanyalar ve kişiye özel indirim duyuruları (onayınız dahilinde).", "Yasal yükümlülüklerin yerine getirilmesi ve platform güvenliğinin sağlanması."] },
-    { title: "4. Premium Veri Paylaşımı ve Aktarım", icon: linkIcon, content: "Verileriniz, ticari amaçlarla asla üçüncü taraflara satılmaz. Sadece hizmetin tamamlanması için gerekli olan iş ortaklarımızla (Kargo firmaları, Samsung/LG yetkili servisleri, yasal merciler) minimum düzeyde paylaşılır." },
-    { title: "5. Veri Güvenliği ve Saklama", icon: privacyIcon, content: "Kişisel verileriniz, yetkisiz erişime karşı endüstri standardı şifreleme yöntemleriyle korunur. Veriler, yasal saklama süreleri dolduğunda güvenli bir şekilde imha edilir veya anonim hale getirilir." },
-    { title: "6. Premium Kullanıcı Haklarınız", icon: userIcon, content: "Veri sahibi olarak; verilerinizin işlenip işlenmediğini öğrenme, yanlış verilerin düzeltilmesini isteme, verilerin silinmesini talep etme ve işleme süreçlerine itiraz etme haklarına sahipsiniz." },
-  ];
-
-  const pulseGlow = {
-    boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.08)", "inset 0 0 25px hsl(221,83%,53%,0.0)"],
-  };
-
-  const renderBold = (text: string) => {
-    const parts = text.split(/\*\*(.*?)\*\*/g);
-    return parts.map((part, i) =>
-      i % 2 === 1 ? <strong key={i} className="text-foreground">{part}</strong> : part
-    );
-  };
-
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
-      {/* Hero */}
-      <motion.div className="flex items-center gap-4 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-        <motion.div className="relative shrink-0">
-          <motion.div className="absolute inset-[-8px] rounded-full border-2 border-primary/30" animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-          <motion.img src={privacyIcon} alt="" className="h-16 w-16 object-contain" width={64} height={64} animate={{ filter: ["drop-shadow(0 0 6px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 16px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 6px hsl(221,83%,53%,0.2))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-        </motion.div>
-        <h1 className="font-display text-3xl md:text-4xl font-extrabold">
-          <motion.span animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
-            {t("content.privacy.title")}
-          </motion.span>
-        </h1>
-      </motion.div>
+      <motion.h1
+        className="font-display text-3xl md:text-4xl font-extrabold mb-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.span
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {t("content.privacy.title")}
+        </motion.span>
+      </motion.h1>
 
-      {/* Intro */}
-      <motion.div className="rounded-2xl border border-border bg-card p-6 mb-6 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
-        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-        <p className="relative z-10 text-sm text-muted-foreground leading-relaxed">
-          <strong className="text-foreground">Zorlu Digital Trade and Services Ltd.</strong> ("Şirket") olarak, müşterilerimizin gizliliğini ve veri güvenliğini en üst düzey Premium standartlarda korumayı taahhüt ediyoruz. Bu politika, <strong className="text-foreground">www.zorluplus.com</strong> ("Site") üzerinden paylaştığınız verilerin işlenme süreçlerini ve haklarınızı şeffaf bir şekilde açıklar.
-        </p>
-      </motion.div>
+      <motion.div
+        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+      >
+        <p><strong className="text-foreground">Zorlu Digital Trade and Services Ltd.</strong> ("Şirket") olarak, müşterilerimizin gizliliğini ve veri güvenliğini en üst düzey Premium standartlarda korumayı taahhüt ediyoruz. Bu politika, <strong className="text-foreground">www.zorluplus.com</strong> ("Site") üzerinden paylaştığınız verilerin işlenme süreçlerini ve haklarınızı şeffaf bir şekilde açıklar.</p>
 
-      {/* Sections */}
-      <div className="space-y-5">
-        {privacySections.map((section, idx) => (
-          <motion.div key={idx} className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.06 * idx }}>
-            <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: idx * 0.2 }} />
-            <div className="relative z-10 flex items-start gap-4">
-              <motion.img src={section.icon} alt="" className="h-10 w-10 object-contain shrink-0 mt-0.5" width={40} height={40} loading="lazy" animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.15 }} />
-              <div className="flex-1">
-                <h2 className="font-display font-bold text-lg text-foreground mb-2">{section.title}</h2>
-                {section.content && <p className="text-sm text-muted-foreground leading-relaxed">{renderBold(section.content)}</p>}
-                {section.list && (
-                  <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1 mt-2">
-                    {section.list.map((item, i) => <li key={i}>{renderBold(item)}</li>)}
-                  </ul>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+        <h2>1. Kapsam ve Premium Hizmet Amacı</h2>
+        <p>Bu politika; dijital ve fiziksel kanallarımız üzerinden bizimle etkileşime geçen tüm Premium üyelerimizi ve ziyaretçilerimizi kapsar. Temel amacımız, verilerinizi yüksek güvenlik protokolleriyle işleyerek size kusursuz bir alışveriş deneyimi sunmaktır.</p>
+
+        <h2>2. İşlenen Veri Kategorileri</h2>
+        <p>Deneyiminizi kişiselleştirmek adına aşağıdaki verileri topluyoruz:</p>
+        <ul>
+          <li><strong className="text-foreground">Kimlik ve İletişim:</strong> Ad, soyad, e-posta adresi, 00905488783131 numaralı hattımızla eşleşen iletişim verileri ve teslimat adresi.</li>
+          <li><strong className="text-foreground">İşlem Güvenliği:</strong> Sipariş geçmişi ve fatura detayları. (Ödeme bilgileriniz doğrudan lisanslı ödeme sağlayıcıları tarafından işlenir; tarafımızca saklanmaz.)</li>
+          <li><strong className="text-foreground">Teknik ve Davranışsal Veriler:</strong> IP adresi, çerezler (cookies) ve site içi gezinme tercihleri.</li>
+        </ul>
+
+        <h2>3. Veri İşleme Amaçlarımız</h2>
+        <p>Verileriniz, yalnızca aşağıdaki Premium hizmet süreçleri için kullanılır:</p>
+        <ul>
+          <li>Siparişlerin yönetimi, lojistik süreçlerin takibi ve hızlı teslimat.</li>
+          <li>Satış sonrası 2 yıl garanti ve ücretsiz montaj gibi teknik servis süreçlerinin yürütülmesi.</li>
+          <li>Ayrıcalıklı kampanyalar ve kişiye özel indirim duyuruları (onayınız dahilinde).</li>
+          <li>Yasal yükümlülüklerin yerine getirilmesi ve platform güvenliğinin sağlanması.</li>
+        </ul>
+
+        <h2>4. Premium Veri Paylaşımı ve Aktarım</h2>
+        <p>Verileriniz, ticari amaçlarla asla üçüncü taraflara satılmaz. Sadece hizmetin tamamlanması için gerekli olan iş ortaklarımızla (Kargo firmaları, Samsung/LG yetkili servisleri, yasal merciler) minimum düzeyde paylaşılır.</p>
+
+        <h2>5. Veri Güvenliği ve Saklama</h2>
+        <p>Kişisel verileriniz, yetkisiz erişime karşı endüstri standardı şifreleme yöntemleriyle korunur. Veriler, yasal saklama süreleri dolduğunda güvenli bir şekilde imha edilir veya anonim hale getirilir.</p>
+
+        <h2>6. Premium Kullanıcı Haklarınız</h2>
+        <p>Veri sahibi olarak; verilerinizin işlenip işlenmediğini öğrenme, yanlış verilerin düzeltilmesini isteme, verilerin silinmesini talep etme ve işleme süreçlerine itiraz etme haklarına sahipsiniz.</p>
+      </motion.div>
 
       {/* İletişim */}
-      <motion.div className="rounded-2xl border border-border bg-card p-6 md:p-8 space-y-4 relative overflow-hidden mt-8" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}>
-        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.08)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-        <motion.h2 className="font-display text-xl md:text-2xl font-bold relative z-10" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
+      <motion.div
+        className="rounded-2xl border border-border bg-card p-6 md:p-8 space-y-4 relative overflow-hidden mt-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+      >
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          animate={{
+            boxShadow: [
+              "inset 0 0 30px hsl(221,83%,53%,0.0)",
+              "inset 0 0 30px hsl(221,83%,53%,0.08)",
+              "inset 0 0 30px hsl(221,83%,53%,0.0)",
+            ],
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.h2
+          className="font-display text-xl md:text-2xl font-bold relative z-10"
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
           7. İletişim ve Destek
         </motion.h2>
-        <p className="relative z-10 text-muted-foreground text-sm">Gizlilik süreçlerimizle ilgili her türlü soru ve talebiniz için Premium destek ekibimize ulaşabilirsiniz:</p>
+        <p className="relative z-10">Gizlilik süreçlerimizle ilgili her türlü soru ve talebiniz için Premium destek ekibimize ulaşabilirsiniz:</p>
         <div className="relative z-10 space-y-2 text-sm">
           <p><strong className="text-foreground">Şirket Ünvanı:</strong> Zorlu Digital Trade and Services Ltd.</p>
           <p><strong className="text-foreground">Adres:</strong> Belediye Bulvarı, Kent Plaza, A Blok No:1, Yenikent, Lefkoşa</p>
         </div>
         <div className="flex flex-col gap-3 relative z-10">
           <a href="tel:+905488783131" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
-            <motion.span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}>
+            <motion.span
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
+              animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            >
               <svg className="h-5 w-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             </motion.span>
             Premium Destek Hattı: 00905488783131
           </a>
           <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors">
-            <motion.span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}>
+            <motion.span
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10"
+              animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 16px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+            >
               <Mail className="h-5 w-5 text-primary" />
             </motion.span>
             Kurumsal E-posta: deniz@zorludigitalplaza.com
@@ -1594,220 +1596,135 @@ export function GizlilikPolitikasiPage() {
       </motion.div>
 
       {/* Çerez Politikası */}
-      <motion.div className="mt-12 pt-10 border-t border-border" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-        <div className="flex items-center gap-4 mb-6">
-          <motion.div className="relative shrink-0">
-            <motion.div className="absolute inset-[-6px] rounded-full border-2 border-primary/30" animate={{ scale: [1, 1.12, 1], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-            <motion.img src={cookieIcon} alt="" className="h-12 w-12 object-contain" width={48} height={48} animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 12px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.2))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-          </motion.div>
-          <motion.h2 className="font-display text-2xl md:text-3xl font-extrabold" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
-            {t("content.cookie.title")}
-          </motion.h2>
+      <motion.div
+        className="mt-12 pt-10 border-t border-border"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.h2
+          className="font-display text-2xl md:text-3xl font-extrabold mb-6"
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {t("content.cookie.title")}
+        </motion.h2>
+
+        <div className="prose prose-sm max-w-none text-muted-foreground [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-lg [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4">
+          <h3>1. Çerez Nedir?</h3>
+          <p>Çerezler (cookies), ziyaret ettiğiniz web siteleri tarafından tarayıcınıza kaydedilen küçük veri dosyalarıdır. Bu dosyalar site deneyiminizi geliştirmek amacıyla kullanılır.</p>
+
+          <h3>2. Kullanılan Çerez Türleri</h3>
         </div>
 
-        {/* Çerez Nedir */}
-        <motion.div className="rounded-2xl border border-border bg-card p-6 mb-5 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
-          <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-          <div className="relative z-10 flex items-start gap-4">
-            <motion.img src={cookieIcon} alt="" className="h-10 w-10 object-contain shrink-0 mt-0.5" width={40} height={40} loading="lazy" animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-            <div className="flex-1">
-              <h3 className="font-display font-bold text-lg text-foreground mb-2">1. Çerez Nedir?</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">Çerezler (cookies), ziyaret ettiğiniz web siteleri tarafından tarayıcınıza kaydedilen küçük veri dosyalarıdır. Bu dosyalar site deneyiminizi geliştirmek amacıyla kullanılır.</p>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Çerez Türleri */}
-        <h3 className="font-display font-bold text-lg text-foreground mb-3">2. Kullanılan Çerez Türleri</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 mb-6">
           {[
-            { title: "Zorunlu Çerezler", desc: "Site'nin temel işlevlerinin çalışmasını sağlar.", icon: shieldIcon },
-            { title: "Performans Çerezleri", desc: "Site kullanımını analiz etmek için kullanılır.", icon: databaseIcon },
-            { title: "İşlevsel Çerezler", desc: "Kullanıcı tercihlerini hatırlamak için kullanılır.", icon: userIcon },
-            { title: "Pazarlama Çerezleri", desc: "Kampanya ve reklam içeriklerinin optimize edilmesini sağlar.", icon: linkIcon },
+            { title: "Zorunlu Çerezler", desc: "Site'nin temel işlevlerinin çalışmasını sağlar." },
+            { title: "Performans Çerezleri", desc: "Site kullanımını analiz etmek için kullanılır." },
+            { title: "İşlevsel Çerezler", desc: "Kullanıcı tercihlerini hatırlamak için kullanılır." },
+            { title: "Pazarlama Çerezleri", desc: "Kampanya ve reklam içeriklerinin optimize edilmesini sağlar." },
           ].map((item, i) => (
-            <motion.div key={item.title} className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.1 }}>
-              <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }} />
-              <div className="relative z-10 flex items-start gap-3">
-                <motion.img src={item.icon} alt="" className="h-8 w-8 object-contain shrink-0" width={32} height={32} loading="lazy" animate={{ filter: ["drop-shadow(0 0 3px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 8px hsl(221,83%,53%,0.35))", "drop-shadow(0 0 3px hsl(221,83%,53%,0.15))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }} />
-                <div>
-                  <motion.h4 className="font-display font-bold text-sm mb-1" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}>
-                    {item.title}
-                  </motion.h4>
-                  <p className="text-xs text-muted-foreground">{item.desc}</p>
-                </div>
-              </div>
+            <motion.div
+              key={item.title}
+              className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+            >
+              <motion.div
+                className="absolute inset-0 rounded-2xl pointer-events-none"
+                animate={{
+                  boxShadow: [
+                    "inset 0 0 25px hsl(221,83%,53%,0.0)",
+                    "inset 0 0 25px hsl(221,83%,53%,0.07)",
+                    "inset 0 0 25px hsl(221,83%,53%,0.0)",
+                  ],
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
+              />
+              <motion.h4
+                className="font-display font-bold text-sm mb-1 relative z-10"
+                animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+              >
+                {item.title}
+              </motion.h4>
+              <p className="text-sm text-muted-foreground relative z-10">{item.desc}</p>
             </motion.div>
           ))}
         </div>
 
-        {/* Amaçlar & Kontrol */}
-        {[
-          { title: "3. Çerezlerin Kullanım Amaçları", icon: databaseIcon, list: ["Site performansını artırmak", "Kullanıcı deneyimini geliştirmek", "Güvenliği sağlamak", "Analiz ve istatistik yapmak", "Kişiselleştirilmiş içerik sunmak"] },
-          { title: "4. Çerezlerin Kontrolü", icon: shieldIcon, content: "Tarayıcı ayarlarınızdan çerezleri kontrol edebilir veya tamamen devre dışı bırakabilirsiniz.", extra: "Ancak bazı çerezlerin devre dışı bırakılması site işlevlerinin düzgün çalışmasını engelleyebilir." },
-        ].map((section, idx) => (
-          <motion.div key={idx} className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden mb-5" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: idx * 0.1 }}>
-            <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: idx * 0.3 }} />
-            <div className="relative z-10 flex items-start gap-4">
-              <motion.img src={section.icon} alt="" className="h-10 w-10 object-contain shrink-0 mt-0.5" width={40} height={40} loading="lazy" animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-              <div className="flex-1">
-                <h3 className="font-display font-bold text-lg text-foreground mb-2">{section.title}</h3>
-                {section.content && <p className="text-sm text-muted-foreground leading-relaxed">{section.content}</p>}
-                {section.list && (
-                  <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1 mt-2">
-                    {section.list.map((item, i) => <li key={i}>{item}</li>)}
-                  </ul>
-                )}
-                {section.extra && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{section.extra}</p>}
-              </div>
-            </div>
-          </motion.div>
-        ))}
+        <div className="prose prose-sm max-w-none text-muted-foreground [&_h3]:text-foreground [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-lg [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4">
+          <h3>3. Çerezlerin Kullanım Amaçları</h3>
+          <ul>
+            <li>Site performansını artırmak</li>
+            <li>Kullanıcı deneyimini geliştirmek</li>
+            <li>Güvenliği sağlamak</li>
+            <li>Analiz ve istatistik yapmak</li>
+            <li>Kişiselleştirilmiş içerik sunmak</li>
+          </ul>
+
+          <h3>4. Çerezlerin Kontrolü</h3>
+          <p>Tarayıcı ayarlarınızdan çerezleri kontrol edebilir veya tamamen devre dışı bırakabilirsiniz.</p>
+          <p>Ancak bazı çerezlerin devre dışı bırakılması site işlevlerinin düzgün çalışmasını engelleyebilir.</p>
+        </div>
       </motion.div>
 
-      <motion.p className="text-center font-display font-bold text-lg md:text-xl mt-10 italic" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
+      <motion.p
+        className="text-center font-display font-bold text-lg md:text-xl mt-10 italic"
+        animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      >
         Zorlu Digital Plaza | Teknolojiye Güvenli ve Premium Dokunuş
       </motion.p>
     </div>
   );
 }
 
-export function CerezPolitikasiPage() {
-  const { t } = useLanguage();
-
-  const pulseGlow = {
-    boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.08)", "inset 0 0 25px hsl(221,83%,53%,0.0)"],
-  };
-
-  return (
-    <div className="container py-12 md:py-16 max-w-3xl">
-      {/* Hero */}
-      <motion.div className="flex items-center gap-4 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-        <motion.div className="relative shrink-0">
-          <motion.div className="absolute inset-[-8px] rounded-full border-2 border-primary/30" animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-          <motion.img src={cookieIcon} alt="" className="h-16 w-16 object-contain" width={64} height={64} animate={{ filter: ["drop-shadow(0 0 6px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 16px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 6px hsl(221,83%,53%,0.2))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-        </motion.div>
-        <h1 className="font-display text-3xl md:text-4xl font-extrabold">
-          <motion.span animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
-            {t("content.cookie.title")}
-          </motion.span>
-        </h1>
-      </motion.div>
-
-      {/* Çerez Nedir */}
-      <motion.div className="rounded-2xl border border-border bg-card p-6 mb-5 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-        <div className="relative z-10 flex items-start gap-4">
-          <motion.img src={cookieIcon} alt="" className="h-10 w-10 object-contain shrink-0 mt-0.5" width={40} height={40} animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-          <div className="flex-1">
-            <h2 className="font-display font-bold text-lg text-foreground mb-2">1. Çerez Nedir?</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">Çerezler (cookies), ziyaret ettiğiniz web siteleri tarafından tarayıcınıza kaydedilen küçük veri dosyalarıdır. Bu dosyalar site deneyiminizi geliştirmek amacıyla kullanılır.</p>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Çerez Türleri */}
-      <h2 className="font-display font-bold text-lg text-foreground mb-3">2. Kullanılan Çerez Türleri</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-        {[
-          { title: "Zorunlu Çerezler", desc: "Site'nin temel işlevlerinin çalışmasını sağlar.", icon: shieldIcon },
-          { title: "Performans Çerezleri", desc: "Site kullanımını analiz etmek için kullanılır.", icon: databaseIcon },
-          { title: "İşlevsel Çerezler", desc: "Kullanıcı tercihlerini hatırlamak için kullanılır.", icon: userIcon },
-          { title: "Pazarlama Çerezleri", desc: "Kampanya ve reklam içeriklerinin optimize edilmesini sağlar.", icon: linkIcon },
-        ].map((item, i) => (
-          <motion.div key={item.title} className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.1 }}>
-            <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }} />
-            <div className="relative z-10 flex items-start gap-3">
-              <motion.img src={item.icon} alt="" className="h-8 w-8 object-contain shrink-0" width={32} height={32} loading="lazy" animate={{ filter: ["drop-shadow(0 0 3px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 8px hsl(221,83%,53%,0.35))", "drop-shadow(0 0 3px hsl(221,83%,53%,0.15))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }} />
-              <div>
-                <motion.h3 className="font-display font-bold text-sm mb-1" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}>
-                  {item.title}
-                </motion.h3>
-                <p className="text-xs text-muted-foreground">{item.desc}</p>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Amaçlar */}
-      <motion.div className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden mb-5" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>
-        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-        <div className="relative z-10 flex items-start gap-4">
-          <motion.img src={databaseIcon} alt="" className="h-10 w-10 object-contain shrink-0 mt-0.5" width={40} height={40} loading="lazy" animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-          <div className="flex-1">
-            <h2 className="font-display font-bold text-lg text-foreground mb-2">3. Çerezlerin Kullanım Amaçları</h2>
-            <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
-              <li>Site performansını artırmak</li>
-              <li>Kullanıcı deneyimini geliştirmek</li>
-              <li>Güvenliği sağlamak</li>
-              <li>Analiz ve istatistik yapmak</li>
-              <li>Kişiselleştirilmiş içerik sunmak</li>
-            </ul>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Kontrol */}
-      <motion.div className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}>
-        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-        <div className="relative z-10 flex items-start gap-4">
-          <motion.img src={shieldIcon} alt="" className="h-10 w-10 object-contain shrink-0 mt-0.5" width={40} height={40} loading="lazy" animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-          <div className="flex-1">
-            <h2 className="font-display font-bold text-lg text-foreground mb-2">4. Çerezlerin Kontrolü</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">Tarayıcı ayarlarınızdan çerezleri kontrol edebilir veya tamamen devre dışı bırakabilirsiniz.</p>
-            <p className="text-sm text-muted-foreground leading-relaxed mt-2">Ancak bazı çerezlerin devre dışı bırakılması site işlevlerinin düzgün çalışmasını engelleyebilir.</p>
-          </div>
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
 export function KvkkPage() {
   const { t } = useLanguage();
-
-  const pulseGlow = {
-    boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.08)", "inset 0 0 25px hsl(221,83%,53%,0.0)"],
-  };
-
-  const kvkkSections = [
-    { title: "1. Veri Sorumlusu", icon: privacyIcon, content: "Bu aydınlatma metni, **Zorlu Digital Plaza** tarafından işletilen **www.zorluplus.com** internet sitesi üzerinden toplanan kişisel verilerin işlenmesine ilişkin usul ve esasları açıklamak amacıyla hazırlanmıştır.", extra: "Şirketimiz, kişisel verilerinizi Kuzey Kıbrıs Türk Cumhuriyeti veri koruma mevzuatı, Türkiye KVKK (6698) ve Avrupa Birliği GDPR ilkeleri doğrultusunda korumayı taahhüt eder." },
-    { title: "2. Toplanan Kişisel Veriler", icon: databaseIcon, content: "Siteyi kullanmanız durumunda aşağıdaki bilgiler toplanabilir:", list: ["Ad ve soyad", "Telefon numarası", "E-posta adresi", "Teslimat adresi", "IP adresi", "Cihaz ve tarayıcı bilgileri", "Sipariş ve ödeme bilgileri", "Müşteri destek talepleri"] },
-    { title: "3. Kişisel Verilerin İşlenme Amaçları", icon: shieldIcon, content: "Toplanan veriler aşağıdaki amaçlarla işlenebilir:", list: ["Sipariş süreçlerinin yürütülmesi", "Teslimat ve servis hizmetlerinin sağlanması", "Teknik servis ve garanti işlemlerinin yürütülmesi", "Müşteri destek hizmetlerinin verilmesi", "Kampanya ve duyuruların iletilmesi", "Site güvenliğinin sağlanması", "Yasal yükümlülüklerin yerine getirilmesi"] },
-    { title: "4. Verilerin Saklanma Süresi", icon: databaseIcon, content: "Kişisel veriler; yasal yükümlülükler, ticari kayıt zorunlulukları ve müşteri hizmetleri süreçleri gerektiği süre boyunca saklanır ve süre sonunda güvenli şekilde silinir veya anonim hale getirilir." },
-    { title: "5. Verilerin Üçüncü Taraflarla Paylaşılması", icon: linkIcon, content: "Kişisel veriler aşağıdaki durumlarda paylaşılabilir:", list: ["Ödeme altyapı sağlayıcıları", "Kargo firmaları", "Teknik servis sağlayıcıları", "Resmi kurum ve otoriteler"], extra: "Bu paylaşımlar yalnızca hizmetlerin sağlanması amacıyla yapılır." },
-    { title: "6. Kullanıcı Hakları", icon: userIcon, content: "Kullanıcılar aşağıdaki haklara sahiptir:", list: ["Kişisel verilerin işlenip işlenmediğini öğrenme", "Verilerin düzeltilmesini talep etme", "Verilerin silinmesini talep etme", "Veri işlenmesine itiraz etme", "Veri taşınabilirliği talep etme"] },
-  ];
-
-  const renderBold = (text: string) => {
-    const parts = text.split(/\*\*(.*?)\*\*/g);
-    return parts.map((part, i) =>
-      i % 2 === 1 ? <strong key={i} className="text-foreground">{part}</strong> : part
-    );
-  };
-
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
-      <motion.div className="flex items-center gap-4 mb-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-        <motion.div className="relative shrink-0">
-          <motion.div className="absolute inset-[-8px] rounded-full border-2 border-primary/30" animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-          <motion.img src={shieldIcon} alt="" className="h-16 w-16 object-contain" width={64} height={64} animate={{ filter: ["drop-shadow(0 0 6px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 16px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 6px hsl(221,83%,53%,0.2))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} />
-        </motion.div>
-        <div>
-          <h1 className="font-display text-3xl md:text-4xl font-extrabold">
-            <motion.span animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
-              {t("content.kvkk.title")}
-            </motion.span>
-          </h1>
-          <p className="text-sm text-muted-foreground italic mt-1">Kişisel Verilerin Korunması ve Gizlilik Bildirimi</p>
-        </div>
+      <motion.h1
+        className="font-display text-3xl md:text-4xl font-extrabold mb-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.span
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {t("content.kvkk.title")}
+        </motion.span>
+      </motion.h1>
+      <p className="text-sm text-muted-foreground italic mb-6">Kişisel Verilerin Korunması ve Gizlilik Bildirimi</p>
+
+      <motion.div
+        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+      >
+        <h2>1. Veri Sorumlusu</h2>
+        <p>Bu aydınlatma metni, <strong className="text-foreground">Zorlu Digital Plaza</strong> tarafından işletilen <strong className="text-foreground">www.zorluplus.com</strong> internet sitesi üzerinden toplanan kişisel verilerin işlenmesine ilişkin usul ve esasları açıklamak amacıyla hazırlanmıştır.</p>
+        <p>Şirketimiz, kişisel verilerinizi Kuzey Kıbrıs Türk Cumhuriyeti veri koruma mevzuatı, Türkiye KVKK (6698) ve Avrupa Birliği GDPR ilkeleri doğrultusunda korumayı taahhüt eder.</p>
       </motion.div>
 
-      {/* Contact card */}
-      <motion.div className="rounded-2xl border border-border bg-card p-6 mb-6 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
-        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
-        <p className="relative z-10 font-semibold text-foreground text-sm mb-3">Veri sorumlusu: Zorlu Digital Plaza</p>
+      <motion.div
+        className="rounded-2xl border border-border bg-card p-6 space-y-3 relative overflow-hidden mt-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.25 }}
+      >
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.08)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <p className="relative z-10 font-semibold text-foreground text-sm">Veri sorumlusu: Zorlu Digital Plaza</p>
         <div className="flex flex-col gap-2 relative z-10">
           <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors text-sm">
             <motion.span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 14px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}>
@@ -1824,29 +1741,58 @@ export function KvkkPage() {
         </div>
       </motion.div>
 
-      <div className="space-y-5">
-        {kvkkSections.map((section, idx) => (
-          <motion.div key={idx} className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.06 * idx }}>
-            <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: idx * 0.2 }} />
-            <div className="relative z-10 flex items-start gap-4">
-              <motion.img src={section.icon} alt="" className="h-10 w-10 object-contain shrink-0 mt-0.5" width={40} height={40} loading="lazy" animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.15 }} />
-              <div className="flex-1">
-                <h2 className="font-display font-bold text-lg text-foreground mb-2">{section.title}</h2>
-                {section.content && <p className="text-sm text-muted-foreground leading-relaxed">{renderBold(section.content)}</p>}
-                {section.list && (
-                  <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1 mt-2">
-                    {section.list.map((item, i) => <li key={i}>{item}</li>)}
-                  </ul>
-                )}
-                {section.extra && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{renderBold(section.extra)}</p>}
-              </div>
-            </div>
-          </motion.div>
-        ))}
+      <div className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3 mt-6">
+        <h2>2. Toplanan Kişisel Veriler</h2>
+        <p>Siteyi kullanmanız durumunda aşağıdaki bilgiler toplanabilir:</p>
+        <ul>
+          <li>Ad ve soyad</li>
+          <li>Telefon numarası</li>
+          <li>E-posta adresi</li>
+          <li>Teslimat adresi</li>
+          <li>IP adresi</li>
+          <li>Cihaz ve tarayıcı bilgileri</li>
+          <li>Sipariş ve ödeme bilgileri</li>
+          <li>Müşteri destek talepleri</li>
+        </ul>
+
+        <h2>3. Kişisel Verilerin İşlenme Amaçları</h2>
+        <p>Toplanan veriler aşağıdaki amaçlarla işlenebilir:</p>
+        <ul>
+          <li>Sipariş süreçlerinin yürütülmesi</li>
+          <li>Teslimat ve servis hizmetlerinin sağlanması</li>
+          <li>Teknik servis ve garanti işlemlerinin yürütülmesi</li>
+          <li>Müşteri destek hizmetlerinin verilmesi</li>
+          <li>Kampanya ve duyuruların iletilmesi</li>
+          <li>Site güvenliğinin sağlanması</li>
+          <li>Yasal yükümlülüklerin yerine getirilmesi</li>
+        </ul>
+
+        <h2>4. Verilerin Saklanma Süresi</h2>
+        <p>Kişisel veriler; yasal yükümlülükler, ticari kayıt zorunlulukları ve müşteri hizmetleri süreçleri gerektiği süre boyunca saklanır ve süre sonunda güvenli şekilde silinir veya anonim hale getirilir.</p>
+
+        <h2>5. Verilerin Üçüncü Taraflarla Paylaşılması</h2>
+        <p>Kişisel veriler aşağıdaki durumlarda paylaşılabilir:</p>
+        <ul>
+          <li>Ödeme altyapı sağlayıcıları</li>
+          <li>Kargo firmaları</li>
+          <li>Teknik servis sağlayıcıları</li>
+          <li>Resmi kurum ve otoriteler</li>
+        </ul>
+        <p>Bu paylaşımlar yalnızca hizmetlerin sağlanması amacıyla yapılır.</p>
+
+        <h2>6. Kullanıcı Hakları</h2>
+        <p>Kullanıcılar aşağıdaki haklara sahiptir:</p>
+        <ul>
+          <li>Kişisel verilerin işlenip işlenmediğini öğrenme</li>
+          <li>Verilerin düzeltilmesini talep etme</li>
+          <li>Verilerin silinmesini talep etme</li>
+          <li>Veri işlenmesine itiraz etme</li>
+          <li>Veri taşınabilirliği talep etme</li>
+        </ul>
       </div>
 
-      <motion.div className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden mt-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.4 }}>
-        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={pulseGlow} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} />
+      <motion.div className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden mt-6">
+        <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 30px hsl(221,83%,53%,0.0)", "inset 0 0 30px hsl(221,83%,53%,0.08)", "inset 0 0 30px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} />
         <p className="relative z-10 text-sm text-muted-foreground mb-3">Taleplerinizi şu adrese iletebilirsiniz:</p>
         <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-3 font-semibold text-foreground hover:text-primary transition-colors text-sm relative z-10">
           <motion.span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 14px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}>
@@ -1859,152 +1805,163 @@ export function KvkkPage() {
   );
 }
 
-export function MesafeliSatisSozlesmesiPage() {
+export function CerezPolitikasiPage() {
   const { t } = useLanguage();
-
-  const sectionIcons = [
-    { src: contractIcon, alt: "Taraflar" },
-    { src: contractIcon, alt: "Konu" },
-    { src: contractIcon, alt: "Ürün" },
-    { src: installmentIcon, alt: "Ödeme" },
-    { src: deliveryIcon, alt: "Teslimat" },
-    { src: refundIcon, alt: "Cayma" },
-    { src: certificateIcon, alt: "Garanti" },
-    { src: legalIcon, alt: "Uyuşmazlık" },
-  ];
-
-  const sections = [
-    { title: "1. Taraflar", iconIdx: 0, hasCards: true },
-    { title: "2. Konu", iconIdx: 1, content: "Bu sözleşme, alıcının satıcıya ait internet sitesi üzerinden elektronik ortamda sipariş verdiği ürünlerin satışı ve teslimine ilişkin hak ve yükümlülükleri düzenler." },
-    { title: "3. Ürün ve Hizmet Bilgileri", iconIdx: 2, content: "Ürünlerin temel özellikleri, satış fiyatı ve ödeme bilgileri sipariş sayfasında belirtilir." },
-    { title: "4. Ödeme", iconIdx: 3, content: "Ödeme aşağıdaki yöntemlerle yapılabilir:", list: ["Kredi kartı", "Banka kartı", "Havale / EFT", "Online ödeme sistemleri"] },
-    { title: "5. Teslimat", iconIdx: 4, content: "Siparişler stok durumuna göre en kısa sürede hazırlanarak kargo firması aracılığıyla teslim edilir.", extra: "Teslimat süresi bölgeye göre değişiklik gösterebilir." },
-    { title: "6. Cayma Hakkı", iconIdx: 5, content: "Tüketici, ürünü teslim aldığı tarihten itibaren **14 gün** içinde herhangi bir gerekçe göstermeden cayma hakkına sahiptir.", subContent: "İade edilen ürün:", list: ["Kullanılmamış", "Zarar görmemiş", "Orijinal ambalajında"], extra: "olmalıdır." },
-    { title: "7. Garanti", iconIdx: 6, content: "Satın alınan ürünler üretici garantisi veya en az **2 yıl garanti** kapsamındadır." },
-    { title: "8. Uyuşmazlıkların Çözümü", iconIdx: 7, content: "Bu sözleşme Kuzey Kıbrıs Türk Cumhuriyeti yasalarına tabidir.", extra: "Uyuşmazlık durumunda **Lefkoşa Mahkemeleri** yetkilidir." },
-  ];
-
-  const pulseGlow = {
-    boxShadow: [
-      "inset 0 0 25px hsl(221,83%,53%,0.0)",
-      "inset 0 0 25px hsl(221,83%,53%,0.08)",
-      "inset 0 0 25px hsl(221,83%,53%,0.0)",
-    ],
-  };
-
-  const renderBold = (text: string) => {
-    const parts = text.split(/\*\*(.*?)\*\*/g);
-    return parts.map((part, i) =>
-      i % 2 === 1 ? <strong key={i} className="text-foreground">{part}</strong> : part
-    );
-  };
-
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
-      {/* Hero */}
-      <motion.div
-        className="flex items-center gap-4 mb-10"
+      <motion.h1
+        className="font-display text-3xl md:text-4xl font-extrabold mb-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <motion.div className="relative shrink-0">
-          <motion.div
-            className="absolute inset-[-8px] rounded-full border-2 border-primary/30"
-            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.img
-            src={sectionIcons[0].src}
-            alt=""
-            className="h-16 w-16 object-contain"
-            width={64}
-            height={64}
-            animate={{ filter: ["drop-shadow(0 0 6px hsl(221,83%,53%,0.2))", "drop-shadow(0 0 16px hsl(221,83%,53%,0.5))", "drop-shadow(0 0 6px hsl(221,83%,53%,0.2))"] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </motion.div>
-        <h1 className="font-display text-3xl md:text-4xl font-extrabold">
-          <motion.span
-            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            {t("content.distance.title")}
-          </motion.span>
-        </h1>
+        <motion.span
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {t("content.cookie.title")}
+        </motion.span>
+      </motion.h1>
+
+      <motion.div
+        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+      >
+        <h2>1. Çerez Nedir?</h2>
+        <p>Çerezler (cookies), ziyaret ettiğiniz web siteleri tarafından tarayıcınıza kaydedilen küçük veri dosyalarıdır. Bu dosyalar site deneyiminizi geliştirmek amacıyla kullanılır.</p>
+
+        <h2>2. Kullanılan Çerez Türleri</h2>
       </motion.div>
 
-      {/* Sections */}
-      <div className="space-y-6">
-        {sections.map((section, idx) => (
-          <motion.div
-            key={idx}
-            className="rounded-2xl border border-border bg-card p-6 relative overflow-hidden"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.08 * idx }}
-          >
-            <motion.div
-              className="absolute inset-0 rounded-2xl pointer-events-none"
-              animate={pulseGlow}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: idx * 0.2 }}
-            />
-            <div className="relative z-10 flex items-start gap-4">
-              <motion.img
-                src={sectionIcons[section.iconIdx].src}
-                alt=""
-                className="h-10 w-10 object-contain shrink-0 mt-0.5"
-                width={40}
-                height={40}
-                loading="lazy"
-                animate={{ filter: ["drop-shadow(0 0 4px hsl(221,83%,53%,0.15))", "drop-shadow(0 0 10px hsl(221,83%,53%,0.4))", "drop-shadow(0 0 4px hsl(221,83%,53%,0.15))"] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.15 }}
-              />
-              <div className="flex-1">
-                <h2 className="font-display font-bold text-lg text-foreground mb-2">{section.title}</h2>
-
-                {section.hasCards && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
-                    <div className="rounded-xl border border-border bg-muted/30 p-4">
-                      <p className="font-display font-bold text-foreground text-sm mb-2">Satıcı</p>
-                      <div className="text-xs text-muted-foreground space-y-1">
-                        <p><strong className="text-foreground">Zorlu Digital Plaza</strong></p>
-                        <p>Web: www.zorluplus.com</p>
-                        <div className="flex flex-col gap-1 mt-2">
-                          <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
-                            <motion.span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}>
-                              <Mail className="h-3.5 w-3.5 text-primary" />
-                            </motion.span>
-                            deniz@zorludigitalplaza.com
-                          </a>
-                          <a href="tel:+905428783131" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
-                            <motion.span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}>
-                              <svg className="h-3.5 w-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            </motion.span>
-                            +90 542 878 31 31
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="rounded-xl border border-border bg-muted/30 p-4">
-                      <p className="font-display font-bold text-foreground text-sm mb-2">Alıcı</p>
-                      <p className="text-xs text-muted-foreground">Site üzerinden sipariş oluşturan kullanıcı.</p>
-                    </div>
-                  </div>
-                )}
-
-                {section.content && <p className="text-sm text-muted-foreground leading-relaxed">{renderBold(section.content)}</p>}
-                {section.subContent && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{section.subContent}</p>}
-                {section.list && (
-                  <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1 mt-2">
-                    {section.list.map((item, i) => <li key={i}>{item}</li>)}
-                  </ul>
-                )}
-                {section.extra && <p className="text-sm text-muted-foreground leading-relaxed mt-2">{renderBold(section.extra)}</p>}
-              </div>
-            </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+        {[
+          { title: "Zorunlu Çerezler", desc: "Site'nin temel işlevlerinin çalışmasını sağlar." },
+          { title: "Performans Çerezleri", desc: "Site kullanımını analiz etmek için kullanılır." },
+          { title: "İşlevsel Çerezler", desc: "Kullanıcı tercihlerini hatırlamak için kullanılır." },
+          { title: "Pazarlama Çerezleri", desc: "Kampanya ve reklam içeriklerinin optimize edilmesini sağlar." },
+        ].map((item, i) => (
+          <motion.div key={item.title} className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden">
+            <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.07)", "inset 0 0 25px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }} />
+            <p className="relative z-10 font-display font-bold text-foreground text-sm mb-1">{item.title}</p>
+            <p className="relative z-10 text-xs text-muted-foreground">{item.desc}</p>
           </motion.div>
         ))}
+      </div>
+
+      <div className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3 mt-6">
+        <h2>3. Çerezlerin Kullanım Amaçları</h2>
+        <ul>
+          <li>Site performansını artırmak</li>
+          <li>Kullanıcı deneyimini geliştirmek</li>
+          <li>Güvenliği sağlamak</li>
+          <li>Analiz ve istatistik yapmak</li>
+          <li>Kişiselleştirilmiş içerik sunmak</li>
+        </ul>
+
+        <h2>4. Çerezlerin Kontrolü</h2>
+        <p>Tarayıcı ayarlarınızdan çerezleri kontrol edebilir veya tamamen devre dışı bırakabilirsiniz.</p>
+        <p>Ancak bazı çerezlerin devre dışı bırakılması site işlevlerinin düzgün çalışmasını engelleyebilir.</p>
+      </div>
+    </div>
+  );
+}
+
+export function MesafeliSatisSozlesmesiPage() {
+  const { t } = useLanguage();
+  return (
+    <div className="container py-12 md:py-16 max-w-3xl">
+      <motion.h1
+        className="font-display text-3xl md:text-4xl font-extrabold mb-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.span
+          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {t("content.distance.title")}
+        </motion.span>
+      </motion.h1>
+
+      <motion.div
+        className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+      >
+        <h2>1. Taraflar</h2>
+      </motion.div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+        <motion.div className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden">
+          <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.07)", "inset 0 0 25px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} />
+          <p className="relative z-10 font-display font-bold text-foreground text-sm mb-2">Satıcı</p>
+          <div className="relative z-10 text-xs text-muted-foreground space-y-1">
+            <p><strong className="text-foreground">Zorlu Digital Plaza</strong></p>
+            <p>Web: www.zorluplus.com</p>
+            <div className="flex flex-col gap-1 mt-2">
+              <a href="mailto:deniz@zorludigitalplaza.com" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+                <motion.span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}>
+                  <Mail className="h-3.5 w-3.5 text-primary" />
+                </motion.span>
+                deniz@zorludigitalplaza.com
+              </a>
+              <a href="tel:+905428783131" className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+                <motion.span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10" animate={{ boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}>
+                  <svg className="h-3.5 w-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </motion.span>
+                +90 542 878 31 31
+              </a>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div className="rounded-2xl border border-border bg-card p-5 relative overflow-hidden">
+          <motion.div className="absolute inset-0 rounded-2xl pointer-events-none" animate={{ boxShadow: ["inset 0 0 25px hsl(221,83%,53%,0.0)", "inset 0 0 25px hsl(221,83%,53%,0.07)", "inset 0 0 25px hsl(221,83%,53%,0.0)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.4 }} />
+          <p className="relative z-10 font-display font-bold text-foreground text-sm mb-2">Alıcı</p>
+          <p className="relative z-10 text-xs text-muted-foreground">Site üzerinden sipariş oluşturan kullanıcı.</p>
+        </motion.div>
+      </div>
+
+      <div className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-3 mt-6">
+        <h2>2. Konu</h2>
+        <p>Bu sözleşme, alıcının satıcıya ait internet sitesi üzerinden elektronik ortamda sipariş verdiği ürünlerin satışı ve teslimine ilişkin hak ve yükümlülükleri düzenler.</p>
+
+        <h2>3. Ürün ve Hizmet Bilgileri</h2>
+        <p>Ürünlerin temel özellikleri, satış fiyatı ve ödeme bilgileri sipariş sayfasında belirtilir.</p>
+
+        <h2>4. Ödeme</h2>
+        <p>Ödeme aşağıdaki yöntemlerle yapılabilir:</p>
+        <ul>
+          <li>Kredi kartı</li>
+          <li>Banka kartı</li>
+          <li>Havale / EFT</li>
+          <li>Online ödeme sistemleri</li>
+        </ul>
+
+        <h2>5. Teslimat</h2>
+        <p>Siparişler stok durumuna göre en kısa sürede hazırlanarak kargo firması aracılığıyla teslim edilir.</p>
+        <p>Teslimat süresi bölgeye göre değişiklik gösterebilir.</p>
+
+        <h2>6. Cayma Hakkı</h2>
+        <p>Tüketici, ürünü teslim aldığı tarihten itibaren <strong className="text-foreground">14 gün</strong> içinde herhangi bir gerekçe göstermeden cayma hakkına sahiptir.</p>
+        <p>İade edilen ürün:</p>
+        <ul>
+          <li>Kullanılmamış</li>
+          <li>Zarar görmemiş</li>
+          <li>Orijinal ambalajında</li>
+        </ul>
+        <p>olmalıdır.</p>
+
+        <h2>7. Garanti</h2>
+        <p>Satın alınan ürünler üretici garantisi veya en az <strong className="text-foreground">2 yıl garanti</strong> kapsamındadır.</p>
+
+        <h2>8. Uyuşmazlıkların Çözümü</h2>
+        <p>Bu sözleşme Kuzey Kıbrıs Türk Cumhuriyeti yasalarına tabidir.</p>
+        <p>Uyuşmazlık durumunda <strong className="text-foreground">Lefkoşa Mahkemeleri</strong> yetkilidir.</p>
       </div>
     </div>
   );

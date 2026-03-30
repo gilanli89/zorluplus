@@ -5,6 +5,3 @@ verify_jwt = false
 
 [functions.cardplus-callback]
 verify_jwt = false
-
-[functions.sync-google-sheet]
-verify_jwt = false

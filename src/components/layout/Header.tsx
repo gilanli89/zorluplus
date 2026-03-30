@@ -1,22 +1,17 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Phone, Menu, X, FileText, Wrench, Mic, MicOff, Globe, MapPin, MessageCircle, User } from "lucide-react";
-import { PremiumIconInline } from "@/components/PremiumIcon";
-import { CATEGORY_3D_ICONS, HEADER_BADGE_ICONS } from "@/lib/categoryIcons";
+import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award, Mic, MicOff, Globe, MapPin, MessageCircle } from "lucide-react";
+import { PremiumIconInline, PremiumBadgeIcon } from "@/components/PremiumIcon";
+import { CATEGORY_3D_ICONS } from "@/lib/categoryIcons";
 import { motion, AnimatePresence } from "framer-motion";
 import CartSheet from "@/components/CartSheet";
 import Logo from "@/components/Logo";
-import SearchDropdown from "@/components/SearchDropdown";
-import AuthModal from "@/components/AuthModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { BRAND, CATEGORIES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { shouldShowFlags } from "@/lib/specialDays";
-import { useAuth } from "@/hooks/useAuth";
-import { useProducts } from "@/hooks/useProducts";
 
 // Speech Recognition types
 interface SpeechRecognitionEvent {
@@ -46,15 +41,9 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
-  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navigate = useNavigate();
   const { lang, setLang, t, greeting } = useLanguage();
-  const { user, signOut } = useAuth();
-  const { data: products } = useProducts();
-  const showFlagDoodles = shouldShowFlags();
 
   const hasSpeechSupport = typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
 
@@ -70,18 +59,7 @@ export default function Header() {
       navigate(`/arama?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
       setSearchQuery("");
-      setDropdownOpen(false);
       stopListening();
-    }
-  };
-
-  const handleSearchInput = (value: string) => {
-    setSearchQuery(value);
-    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-    if (value.trim().length >= 2) {
-      searchTimeoutRef.current = setTimeout(() => setDropdownOpen(true), 150);
-    } else {
-      setDropdownOpen(false);
     }
   };
 
@@ -138,25 +116,9 @@ export default function Header() {
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20 opacity-50" />
         <div className="container relative flex items-center justify-between py-1.5 text-[11px]">
           <div className="flex items-center gap-4 font-medium">
-            {showFlagDoodles && (
-              <>
-                <span className="text-base leading-none" title="KKTC">🇹🇷</span>
-                <span className="text-base leading-none" title="Türkiye">🇹🇷</span>
-              </>
-            )}
             <span className="hidden sm:inline-flex items-center gap-1 text-primary-foreground/80 font-semibold">{greeting}</span>
-            <span className="hidden md:inline-flex items-center gap-1.5">
-              <img src={HEADER_BADGE_ICONS.install} alt="" className="h-4 w-4 object-contain drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" width={16} height={16} />
-              {t("header.freeInstall")}
-            </span>
-            <span className="hidden lg:inline-flex items-center gap-1.5">
-              <img src={HEADER_BADGE_ICONS.certificate} alt="" className="h-4 w-4 object-contain drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" width={16} height={16} />
-              {t("header.authorized")}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <img src={HEADER_BADGE_ICONS.installment} alt="" className="h-4 w-4 object-contain drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" width={16} height={16} />
-              {t("header.installment")}
-            </span>
+            <span className="hidden md:inline-flex items-center gap-1"><PremiumIconInline icon={Shield} size={12} className="text-white drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]" /> {t("header.authorized")}</span>
+            <span className="inline-flex items-center gap-1"><PremiumIconInline icon={Award} size={12} className="text-white drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]" /> {t("header.warranty")}</span>
           </div>
           <div className="flex items-center gap-3">
             {/* Language switcher */}
@@ -261,20 +223,13 @@ export default function Header() {
                 className="flex items-center gap-1.5 overflow-hidden"
               >
                 <div className="relative">
-                  <PremiumIconInline icon={Search} size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground z-10" />
+                  <PremiumIconInline icon={Search} size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     value={searchQuery}
-                    onChange={e => handleSearchInput(e.target.value)}
+                    onChange={e => setSearchQuery(e.target.value)}
                     placeholder={t("header.search")}
                     className="w-40 sm:w-64 h-9 rounded-full pl-9 pr-3 border-primary/30 focus-visible:ring-primary/20"
                     autoFocus
-                    onBlur={() => setTimeout(() => setDropdownOpen(false), 200)}
-                  />
-                  <SearchDropdown
-                    query={searchQuery}
-                    isOpen={dropdownOpen}
-                    onClose={() => setDropdownOpen(false)}
-                    products={products || []}
                   />
                 </div>
                 {hasSpeechSupport && (
@@ -323,16 +278,6 @@ export default function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          {user ? (
-            <Button variant="ghost" size="sm" className="rounded-full gap-1.5 text-xs tap-scale" onClick={signOut}>
-              <PremiumIconInline icon={User} size={14} />
-              <span className="hidden sm:inline">{user.email?.split("@")[0]}</span>
-            </Button>
-          ) : (
-            <Button variant="ghost" size="icon" className="rounded-full tap-scale" onClick={() => setShowAuthModal(true)} title={lang === "tr" ? "Giriş Yap" : "Sign In"}>
-              <PremiumIconInline icon={User} size={20} />
-            </Button>
-          )}
           <CartSheet />
           <a href="https://servis.zorluplus.com/" target="_blank" rel="noopener noreferrer">
             <Button variant="outline" size="sm" className="rounded-full gap-1.5 border-primary/30 text-primary hover:bg-primary/5 font-semibold hidden sm:inline-flex tap-scale">
@@ -349,8 +294,6 @@ export default function Header() {
           </Link>
         </div>
       </div>
-
-      <AuthModal open={showAuthModal} onOpenChange={setShowAuthModal} />
     </header>
   );
 }

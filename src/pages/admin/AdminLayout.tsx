@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, Link, useLocation } from "react-router-dom";
-import { ShoppingCart, Package, Users, Wrench, LogOut, LayoutDashboard, CalendarDays, Box, Tag, Palette, FileText, UserCheck, Truck, BarChart3, Settings } from "lucide-react";
+import { ShoppingCart, Package, Users, Wrench, LogOut, LayoutDashboard, CalendarDays } from "lucide-react";
 import { PremiumIconInline } from "@/components/PremiumIcon";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -23,18 +23,11 @@ import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { title: "Özet", url: "/admin", icon: LayoutDashboard },
-  { title: "Ürün Yönetimi", url: "/admin/urunler", icon: Box },
+  { title: "İzin Talepleri", url: "/admin/izinler", icon: CalendarDays },
   { title: "Siparişler", url: "/admin/siparisler", icon: ShoppingCart },
-  { title: "Müşteriler (CRM)", url: "/admin/musteriler", icon: UserCheck },
-  { title: "Stok / Envanter", url: "/admin/stok", icon: Package },
-  { title: "Kampanyalar", url: "/admin/kampanyalar", icon: Tag },
-  { title: "Tema & Özel Günler", url: "/admin/temalar", icon: Palette },
-  { title: "Faturalar", url: "/admin/faturalar", icon: FileText },
-  { title: "Kargo Takip", url: "/admin/kargo", icon: Truck },
-  { title: "Raporlar", url: "/admin/raporlar", icon: BarChart3 },
+  { title: "Stok Yönetimi", url: "/admin/stok", icon: Package },
   { title: "Müşteri Talepleri", url: "/admin/talepler", icon: Users },
   { title: "Servis Talepleri", url: "/admin/servis", icon: Wrench },
-  { title: "İzin Talepleri", url: "/admin/izinler", icon: CalendarDays },
 ];
 
 export default function AdminLayout() {

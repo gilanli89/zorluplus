@@ -116,18 +116,15 @@ export default function ProductCard({ product }: ProductCardProps) {
             {translateProduct(product.name)}
           </h3>
           {product.price > 0 && (
-            <div className="flex flex-col gap-0.5 mt-1">
-              <div className="flex items-center gap-2">
-                {product.salePrice && product.salePrice > 0 ? (
-                  <>
-                    <span className="text-sm font-bold text-primary">{formatPrice(product.salePrice)}</span>
-                    <span className="text-xs text-muted-foreground line-through">{formatPrice(product.price)}</span>
-                  </>
-                ) : (
-                  <span className="text-sm font-bold text-foreground">{formatPrice(product.price)}</span>
-                )}
-              </div>
-              <span className="text-[10px] text-muted-foreground">KDV Dahil</span>
+            <div className="flex items-center gap-2 mt-1">
+              {product.salePrice && product.salePrice > 0 ? (
+                <>
+                  <span className="text-sm font-bold text-primary">{formatPrice(product.salePrice)}</span>
+                  <span className="text-xs text-muted-foreground line-through">{formatPrice(product.price)}</span>
+                </>
+              ) : (
+                <span className="text-sm font-bold text-foreground">{formatPrice(product.price)}</span>
+              )}
             </div>
           )}
         </div>

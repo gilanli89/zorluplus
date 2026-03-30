@@ -32,7 +32,7 @@ export default function CartPage() {
   const [paymentMethod, setPaymentMethod] = useState<"card" | "cash" | "transfer">("card");
   const [customerInfo, setCustomerInfo] = useState({ name: "", phone: "", email: "", address: "" });
 
-  const hasTv = items.some(i => (i.product.category === "tv-goruntu" || i.product.category === "televizyon") && !i.product.subcategory?.includes("aksesuar"));
+  const hasTv = items.some(i => i.product.category === "tv-goruntu" && !i.product.subcategory?.includes("aksesuar"));
 
   const recommended = useMemo(() => {
     if (!hasTv) return [];
@@ -311,7 +311,6 @@ export default function CartPage() {
                 <span>{t("cart.orderSummary")}</span>
                 <span className="text-primary">{formatPrice(grandTotal)}</span>
               </div>
-              <p className="text-[11px] text-muted-foreground text-right">KDV Dahil</p>
 
               <Button className="w-full rounded-full font-semibold gap-2 mt-2" size="lg" onClick={handleCheckout}>
                 {paymentMethod === "card" ? (

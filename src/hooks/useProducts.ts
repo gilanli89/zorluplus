@@ -3,22 +3,14 @@ import { fetchProducts } from "@/lib/products";
 import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/lib/types";
 
-type InventoryRow = {
-  sku: string | null;
-  quantity: number;
-  original_price: number | null;
-  sale_price: number | null;
-  is_active: boolean;
-};
-
 async function fetchProductsWithInventory(): Promise<Product[]> {
-  // Fetch CSV products and DB inventory (public view) in parallel
+  // Fetch CSV products and DB inventory in parallel
   const [products, inventoryResult] = await Promise.all([
     fetchProducts(),
-    supabase.from("inventory_public" as any).select("sku, quantity, original_price, sale_price, is_active"),
+    supabase.from("inventory").select("sku, quantity, original_price, sale_price, is_active"),
   ]);
 
-  const inventory = (inventoryResult.data ?? []) as unknown as InventoryRow[];
+  const inventory = inventoryResult.data ?? [];
   
   if (inventory.length === 0) return products;
 

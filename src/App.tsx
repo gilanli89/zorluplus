@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import { ThemeProvider } from "@/contexts/ThemeContext";
 import Layout from "@/components/layout/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
 import { lazy, Suspense } from "react";
@@ -70,21 +69,12 @@ const AdminInventory = lazy(() => import("@/pages/admin/AdminInventory"));
 const AdminLeads = lazy(() => import("@/pages/admin/AdminLeads"));
 const AdminService = lazy(() => import("@/pages/admin/AdminService"));
 const AdminLeaveRequests = lazy(() => import("@/pages/admin/AdminLeaveRequests"));
-const AdminProducts = lazy(() => import("@/pages/admin/AdminProducts"));
-const AdminCampaigns = lazy(() => import("@/pages/admin/AdminCampaigns"));
-const AdminThemes = lazy(() => import("@/pages/admin/AdminThemes"));
-const AdminInvoices = lazy(() => import("@/pages/admin/AdminInvoices"));
-const AdminCustomers = lazy(() => import("@/pages/admin/AdminCustomers"));
-const AdminShipping = lazy(() => import("@/pages/admin/AdminShipping"));
-const AdminReports = lazy(() => import("@/pages/admin/AdminReports"));
-const AdminMap = lazy(() => import("@/pages/admin/AdminMap"));
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
-    <ThemeProvider>
     <CartProvider>
       <TooltipProvider>
         <Toaster />
@@ -148,18 +138,10 @@ const App = () => (
               <Route path="/admin/giris" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
-                <Route path="urunler" element={<AdminProducts />} />
                 <Route path="siparisler" element={<AdminOrders />} />
                 <Route path="stok" element={<AdminInventory />} />
-                <Route path="musteriler" element={<AdminCustomers />} />
                 <Route path="talepler" element={<AdminLeads />} />
                 <Route path="servis" element={<AdminService />} />
-                <Route path="kampanyalar" element={<AdminCampaigns />} />
-                <Route path="temalar" element={<AdminThemes />} />
-                <Route path="faturalar" element={<AdminInvoices />} />
-                <Route path="kargo" element={<AdminShipping />} />
-                <Route path="raporlar" element={<AdminReports />} />
-                <Route path="harita" element={<AdminMap />} />
                 <Route path="izinler" element={<AdminLeaveRequests />} />
               </Route>
             </Routes>
@@ -167,7 +149,6 @@ const App = () => (
         </BrowserRouter>
       </TooltipProvider>
     </CartProvider>
-    </ThemeProvider>
     </LanguageProvider>
   </QueryClientProvider>
 );

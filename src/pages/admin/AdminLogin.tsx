@@ -19,13 +19,27 @@ export default function AdminLogin() {
 
     const email = `${username}@zorluplus.com`;
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    // Try sign in first
+    let { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error && error.message.includes("Invalid login credentials")) {
+      // First time: create the account, then sign in
+      const { error: signUpError } = await supabase.auth.signUp({ email, password });
+      if (signUpError) {
+        toast.error("Giriş başarısız: " + signUpError.message);
+        setLoading(false);
+        return;
+      }
+      // Sign in after signup
+      const result = await supabase.auth.signInWithPassword({ email, password });
+      error = result.error;
+    }
 
     if (error) {
-      toast.error("Giriş başarısız. Lütfen bilgilerinizi kontrol edin.");
+      toast.error("Giriş başarısız: " + error.message);
     } else {
       // Verify admin status
-      const { data } = await supabase.rpc("check_own_admin_status" as any);
+      const { data } = await supabase.rpc("is_admin", { check_email: email });
       if (data) {
         navigate("/admin");
       } else {

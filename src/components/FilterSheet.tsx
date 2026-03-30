@@ -3,7 +3,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SlidersHorizontal, X, Minus, Bug, Tag, Monitor, Layers, Maximize, Thermometer, Weight, Droplets, Users, PackageCheck } from "lucide-react";
@@ -60,36 +59,22 @@ function FilterBody({ filterGroups, filters, onFiltersChange }: FilterBodyProps)
             <Minus className="h-3.5 w-3.5 text-muted-foreground" />
           </CollapsibleTrigger>
           <CollapsibleContent className="py-3 px-1 space-y-2 max-h-[280px] overflow-y-auto">
-            {group.type === "boolean" ? (
-              <div className="flex items-center justify-between py-1 px-1">
-                <span className="text-sm text-foreground">{group.label}</span>
-                <Switch
-                  checked={(filters.attributes[group.key] || []).includes("Evet")}
-                  onCheckedChange={(checked) => {
-                    const newAttrs = { ...filters.attributes };
-                    newAttrs[group.key] = checked ? ["Evet"] : [];
-                    onFiltersChange({ ...filters, attributes: newAttrs });
-                  }}
-                />
-              </div>
-            ) : (
-              group.options.map(opt => {
-                const selected = (filters.attributes[group.key] || []).includes(opt.value);
-                return (
-                  <label key={opt.value} className="flex items-center gap-2.5 cursor-pointer group">
-                    <Checkbox checked={selected} onCheckedChange={() => toggleValue(group.key, opt.value)} />
-                    <span className="text-sm text-foreground group-hover:text-primary transition-colors flex-1 flex items-center gap-2">
-                      {group.key === "brand" ? (
-                        <BrandLogo brand={opt.value} size="sm" />
-                      ) : (
-                        opt.value
-                      )}
-                    </span>
-                    <span className="text-xs text-muted-foreground">({opt.count})</span>
-                  </label>
-                );
-              })
-            )}
+            {group.options.map(opt => {
+              const selected = (filters.attributes[group.key] || []).includes(opt.value);
+              return (
+                <label key={opt.value} className="flex items-center gap-2.5 cursor-pointer group">
+                  <Checkbox checked={selected} onCheckedChange={() => toggleValue(group.key, opt.value)} />
+                  <span className="text-sm text-foreground group-hover:text-primary transition-colors flex-1 flex items-center gap-2">
+                    {group.key === "brand" ? (
+                      <BrandLogo brand={opt.value} size="sm" />
+                    ) : (
+                      opt.value
+                    )}
+                  </span>
+                  <span className="text-xs text-muted-foreground">({opt.count})</span>
+                </label>
+              );
+            })}
           </CollapsibleContent>
         </Collapsible>
       ))}
