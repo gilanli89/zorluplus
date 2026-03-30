@@ -304,7 +304,45 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      inventory_public: {
+        Row: {
+          brand: string | null
+          category: string | null
+          id: string | null
+          image_url: string | null
+          is_active: boolean | null
+          original_price: number | null
+          product_name: string | null
+          quantity: number | null
+          sale_price: number | null
+          sku: string | null
+        }
+        Insert: {
+          brand?: string | null
+          category?: string | null
+          id?: string | null
+          image_url?: string | null
+          is_active?: boolean | null
+          original_price?: number | null
+          product_name?: string | null
+          quantity?: number | null
+          sale_price?: number | null
+          sku?: string | null
+        }
+        Update: {
+          brand?: string | null
+          category?: string | null
+          id?: string | null
+          image_url?: string | null
+          is_active?: boolean | null
+          original_price?: number | null
+          product_name?: string | null
+          quantity?: number | null
+          sale_price?: number | null
+          sku?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
