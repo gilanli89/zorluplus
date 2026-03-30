@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 import {
   Dialog,
   DialogContent,
@@ -34,11 +34,15 @@ export default function AuthModal({ open, onOpenChange, onGuestContinue }: AuthM
   };
 
   const handleGoogleSignIn = async () => {
-    await supabase.auth.signInWithOAuth({ provider: "google" });
+    await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+    });
   };
 
   const handleAppleSignIn = async () => {
-    await supabase.auth.signInWithOAuth({ provider: "apple" });
+    await lovable.auth.signInWithOAuth("apple", {
+      redirect_uri: window.location.origin,
+    });
   };
 
   const handleGuestContinue = () => {
