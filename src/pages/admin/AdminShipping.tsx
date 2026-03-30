@@ -63,11 +63,11 @@ export default function AdminShipping() {
       const order = orders.find((o: any) => o.id === orderId);
       if (!order) throw new Error("Siparis bulunamadi");
 
-      const result = await createShipment(orderId, {
-        pickup: "Zorlu Digital Plaza",
-        delivery: (order as any).shipping_address || "Belirtilmemis",
-        weight: 5,
-      });
+      const result = await createShipment(
+        orderId,
+        (order as any).shipping_address || "Belirtilmemis",
+        (order as any).customer_phone || ""
+      );
 
       const { error } = await supabase.from("orders").update({
         status: "shipped",
