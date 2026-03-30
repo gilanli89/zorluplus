@@ -63,23 +63,23 @@ export default function AuthModal({ open, onOpenChange, onGuestContinue }: AuthM
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.92, y: 20 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-xl border border-white/30 shadow-2xl"
+              className="relative overflow-hidden rounded-2xl bg-background/80 backdrop-blur-xl border border-border/30 shadow-2xl"
             >
               {/* Decorative gradient blob */}
-              <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-blue-400/30 to-purple-500/20 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-tr from-rose-400/20 to-orange-400/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-primary/30 to-accent/20 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-tr from-destructive/20 to-accent/10 rounded-full blur-3xl pointer-events-none" />
 
               <div className="relative p-8 flex flex-col items-center gap-6">
                 {/* Logo / brand area */}
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-xl">Z+</span>
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg">
+                  <span className="text-primary-foreground font-bold text-xl">Z+</span>
                 </div>
 
                 <div className="text-center space-y-1">
-                  <DialogTitle className="text-2xl font-bold text-gray-900">
+                  <DialogTitle className="text-2xl font-bold text-foreground">
                     {t.title}
                   </DialogTitle>
-                  <DialogDescription className="text-sm text-gray-500">
+                  <DialogDescription className="text-sm text-muted-foreground">
                     {t.subtitle}
                   </DialogDescription>
                 </div>
@@ -89,16 +89,16 @@ export default function AuthModal({ open, onOpenChange, onGuestContinue }: AuthM
                   {/* Google button */}
                   <button
                     onClick={handleGoogleSignIn}
-                    className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white px-5 py-3.5 text-sm font-semibold text-gray-700 shadow-sm transition-all hover:shadow-md hover:border-gray-300 active:scale-[0.98]"
+                    className="group relative flex w-full items-center justify-center gap-3 rounded-xl border border-border bg-background px-5 py-3.5 text-sm font-semibold text-foreground shadow-sm transition-all hover:shadow-md hover:border-border/80 active:scale-[0.98]"
                   >
-                    <Chrome className="h-5 w-5 text-[#4285F4] group-hover:scale-110 transition-transform" />
+                    <Chrome className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
                     {t.google}
                   </button>
 
                   {/* Apple button */}
                   <button
                     onClick={handleAppleSignIn}
-                    className="group relative flex w-full items-center justify-center gap-3 rounded-xl bg-black px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-gray-900 hover:shadow-md active:scale-[0.98]"
+                    className="group relative flex w-full items-center justify-center gap-3 rounded-xl bg-foreground px-5 py-3.5 text-sm font-semibold text-background shadow-sm transition-all hover:bg-foreground/90 hover:shadow-md active:scale-[0.98]"
                   >
                     <Apple className="h-5 w-5 group-hover:scale-110 transition-transform" />
                     {t.apple}
@@ -107,17 +107,17 @@ export default function AuthModal({ open, onOpenChange, onGuestContinue }: AuthM
 
                 {/* Divider */}
                 <div className="flex w-full items-center gap-3">
-                  <div className="h-px flex-1 bg-gray-200" />
-                  <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  <div className="h-px flex-1 bg-border" />
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {t.or}
                   </span>
-                  <div className="h-px flex-1 bg-gray-200" />
+                  <div className="h-px flex-1 bg-border" />
                 </div>
 
                 {/* Guest button */}
                 <button
                   onClick={handleGuestContinue}
-                  className="group flex w-full items-center justify-center gap-3 rounded-xl border-2 border-dashed border-gray-300 px-5 py-3.5 text-sm font-semibold text-gray-500 transition-all hover:border-gray-400 hover:text-gray-700 active:scale-[0.98]"
+                  className="group flex w-full items-center justify-center gap-3 rounded-xl border-2 border-dashed border-muted-foreground/30 px-5 py-3.5 text-sm font-semibold text-muted-foreground transition-all hover:border-muted-foreground/50 hover:text-foreground active:scale-[0.98]"
                 >
                   <UserRound className="h-5 w-5 group-hover:scale-110 transition-transform" />
                   {t.guest}
