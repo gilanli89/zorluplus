@@ -632,6 +632,68 @@ select:focus-visible {
   opacity: 1;
 }
 
+/* Physics-based bounce animation */
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.08); opacity: 1; }
+  70% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+.animate-bounce-in { animation: bounce-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* 3D product scroll parallax */
+@keyframes parallax-float {
+  0%, 100% { transform: translateY(0) rotateX(0deg); }
+  50% { transform: translateY(-8px) rotateX(2deg); }
+}
+.animate-parallax { animation: parallax-float 4s ease-in-out infinite; }
+
+/* Smooth page transition */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-page-enter { animation: page-enter 0.4s ease-out; }
+
+/* Button press physics */
+.btn-physics { transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.btn-physics:active { transform: scale(0.94); }
+
+/* Spring modal */
+@keyframes spring-in {
+  0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+  60% { transform: scale(1.03) translateY(-4px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+.animate-spring-in { animation: spring-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* 3D product hover depth */
+.product-3d-hover {
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.product-3d-hover:hover {
+  transform: perspective(600px) rotateY(4deg) rotateX(-2deg) translateZ(10px);
+}
+
+/* Smooth skeleton loader enhanced */
+@keyframes skeleton-wave {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-premium {
+  background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--muted-foreground) / 0.08) 50%, hsl(var(--muted)) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-wave 1.8s ease-in-out infinite;
+}
+
+/* Flag doodle animation */
+@keyframes flag-wave {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+.flag-doodle { animation: flag-wave 2s ease-in-out infinite; display: inline-block; }
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .premium-icon-wrap:hover .premium-icon-inner,

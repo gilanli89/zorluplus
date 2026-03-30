@@ -1047,6 +1047,42 @@ const translations: Record<string, Record<Lang, string>> = {
   "lp.tv.faqTitle": { tr: "Sık Sorulan Sorular", en: "FAQ" },
   "lp.tv.faqDesc": { tr: "TV seçimi ve hizmetlerimiz hakkında merak ettikleriniz", en: "Questions about TV selection and our services" },
   "lp.tv.other": { tr: "Diğer", en: "Other" },
+
+  // Admin panel
+  "admin.products": { tr: "Ürün Yönetimi", en: "Product Management" },
+  "admin.campaigns": { tr: "Kampanyalar", en: "Campaigns" },
+  "admin.themes": { tr: "Tema & Özel Günler", en: "Themes & Special Days" },
+  "admin.invoices": { tr: "Faturalar", en: "Invoices" },
+  "admin.customers": { tr: "Müşteriler", en: "Customers" },
+  "admin.shipping": { tr: "Kargo Takip", en: "Shipping" },
+  "admin.reports": { tr: "Raporlar", en: "Reports" },
+  "admin.settings": { tr: "Ayarlar", en: "Settings" },
+
+  // Auth
+  "auth.welcome": { tr: "Hoş Geldiniz", en: "Welcome" },
+  "auth.signInDesc": { tr: "Hızlı ve güvenli giriş yapın", en: "Quick and secure sign in" },
+  "auth.googleSignIn": { tr: "Google ile Giriş Yap", en: "Sign in with Google" },
+  "auth.appleSignIn": { tr: "Apple ile Giriş Yap", en: "Sign in with Apple" },
+  "auth.guestContinue": { tr: "Misafir Olarak Devam Et", en: "Continue as Guest" },
+  "auth.signOut": { tr: "Çıkış Yap", en: "Sign Out" },
+
+  // Invoice
+  "invoice.download": { tr: "E-Fatura İndir", en: "Download Invoice" },
+  "invoice.ready": { tr: "E-faturanız hazırlanmıştır.", en: "Your invoice is ready." },
+
+  // Shipping
+  "shipping.express": { tr: "Acil Kurye", en: "Express Courier" },
+  "shipping.expressDesc": { tr: "1-2 saat içinde teslimat", en: "Delivery within 1-2 hours" },
+  "shipping.standard": { tr: "Standart Teslimat", en: "Standard Delivery" },
+
+  // Search
+  "search.instantResults": { tr: "Anlık Sonuçlar", en: "Instant Results" },
+  "search.viewAll": { tr: "Tüm sonuçları gör", en: "View all results" },
+  "search.noResults": { tr: "Sonuç bulunamadı", en: "No results found" },
+
+  // Special days
+  "specialDay.blessedFriday": { tr: "Hayırlı Cumalar", en: "Blessed Friday" },
+  "specialDay.flagDay": { tr: "Milli Gün", en: "National Day" },
 };
 
 export function LanguageProvider({ children }: { children: ReactNode }) {

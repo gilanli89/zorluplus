@@ -3,122 +3,440 @@
  * Extracts and standardizes product attributes for consistent filtering.
  */
 import { Product } from "./types";
+import { getFilterProfile, FilterFieldConfig } from "./filterConfig";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TYPES
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 export interface NormalizedAttributes {
-  screenSize: number | null;       // e.g. 43, 55, 75
-  panelType: string | null;        // e.g. "OLED", "QLED", "Neo QLED", "LED", "NanoCell", "QNED"
-  btu: number | null;              // e.g. 9000, 12000
-  capacityKg: number | null;       // e.g. 8, 9, 10
-  capacityLt: number | null;       // e.g. 5, 10
-  capacityPerson: number | null;   // e.g. 6 (kişilik)
-  resolution: string | null;       // e.g. "4K", "8K", "Full HD"
+  // TV
+  screenSize: number | null;
+  panelType: string | null;
+  resolution: string | null;
+  refreshRate: number | null;
+  os: string | null;
+  smartTv: boolean | null;
+  satellite: boolean | null;
+  smartRemote: boolean | null;
+  lumen: number | null;
+  hdmiCount: string | null;
+  usbCount: string | null;
+
+  // Audio
+  modelType: string | null;
+  watt: number | null;
+  powerType: string | null;
+
+  // Accessories
+  cableLength: string | null;
+  mountType: string | null;
+  compatibleInch: string | null;
+  vesa: string | null;
+  remoteType: string | null;
+
+  // White Goods
+  btu: number | null;
+  capacityKg: number | null;
+  capacityLt: number | null;
+  capacityPerson: number | null;
+  fridgeType: string | null;
+  freezerType: string | null;
+  applianceType: string | null;
+  inverter: boolean | null;
+  waterDispenser: boolean | null;
+  color: string | null;
+  material: string | null;
+  programCount: number | null;
+  suctionPower: string | null;
+  ovenType: string | null;
+  hasDryer: boolean | null;
+
+  // Small Appliances
+  coffeeType: string | null;
+  grill: boolean | null;
+  vacuumType: string | null;
+  dispenserType: string | null;
+
+  // HVAC
+  acType: string | null;
+  wifi: boolean | null;
+  remoteControl: boolean | null;
 }
 
 export interface NormalizedProduct extends Product {
   _norm: NormalizedAttributes;
 }
 
-/* ─── Extractors ─── */
+export interface FilterOption {
+  value: string;
+  count: number;
+  numericValue?: number;
+}
 
-function extractScreenSize(name: string, specs: Record<string, string>): number | null {
-  const text = name;
-  
-  // Pattern: 43" or 43" or 43″ or 43' 
-  // Match: 43" 43" 43″ 43′ 43' 43\u201C 43\u201D 43\u2033 43\u2032
-  const m1 = text.match(/(\d{2,3})\s*[\u0022\u201C\u201D\u201E\u2033\u2032\u0027\u2018\u2019\u0060\u00B4″′''""]/);
-  if (m1) return Math.round(parseFloat(m1[1]));
+export interface FilterGroup {
+  key: string;
+  label: string;
+  type?: "enum" | "boolean" | "numeric";
+  options: { value: string; count: number }[];
+}
 
-  // Pattern: 43 inch, 43-inch, 43inç
-  const m2 = text.match(/(\d{2,3})\s*[-]?\s*(?:inch|inç|inc)/i);
-  if (m2) return Math.round(parseFloat(m2[1]));
+/** @deprecated Use FilterGroup instead */
+export type DynamicFilterGroup = FilterGroup;
 
-  // Pattern: (80 cm) → derive inch: 80/2.54 ≈ 31.5 → 32
-  const mCm = text.match(/\((\d{2,3})\s*cm\)/i);
-  if (mCm) {
-    const inch = Math.round(parseInt(mCm[1]) / 2.54);
-    // Only use if it's a reasonable TV size
-    if (inch >= 24 && inch <= 120) return inch;
+/* ═══════════════════════════════════════════════════════════════════════════
+   BOOLEAN FIELD SET (used for filter matching)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const BOOLEAN_FIELDS = new Set<keyof NormalizedAttributes>([
+  "smartTv", "satellite", "smartRemote", "inverter", "waterDispenser",
+  "hasDryer", "grill", "wifi", "remoteControl",
+]);
+
+const NUMERIC_FIELDS_WITH_UNIT: Record<string, string> = {
+  screenSize: '"',
+  refreshRate: " Hz",
+  lumen: " Lümen",
+  watt: " W",
+  btu: " BTU",
+  capacityKg: " KG",
+  capacityLt: " Lt",
+  capacityPerson: " Kişilik",
+  programCount: "",
+};
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SINGLE-PASS ATTRIBUTE EXTRACTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+function extractAllAttributes(product: Product): NormalizedAttributes {
+  const name = product.name || "";
+  const desc = product.description || "";
+  const specs = product.specs || {};
+
+  // Build combined text for searching
+  const specsText = Object.entries(specs).map(([k, v]) => `${k}: ${v}`).join(" ");
+  const allText = `${name} ${desc} ${specsText}`;
+  const allUpper = allText.toUpperCase();
+  const nameUpper = name.toUpperCase();
+  const nameDescUpper = `${name} ${desc}`.toUpperCase();
+  const nameDesc = `${name} ${desc}`;
+
+  // Helper: find a spec value by partial key match (case-insensitive)
+  const findSpec = (partial: string): string | null => {
+    const entry = Object.entries(specs).find(([k]) => k.toLowerCase().includes(partial.toLowerCase()));
+    return entry ? entry[1] : null;
+  };
+
+  /* ─── Screen Size ─── */
+  let screenSize: number | null = null;
+  const m1 = name.match(/(\d{2,3})\s*[\u0022\u201C\u201D\u201E\u2033\u2032\u0027\u2018\u2019\u0060\u00B4\u2034″′''""]/);
+  if (m1) {
+    screenSize = Math.round(parseFloat(m1[1]));
+  } else {
+    const m2 = name.match(/(\d{2,3})\s*[-]?\s*(?:inch|inç|inc)/i);
+    if (m2) {
+      screenSize = Math.round(parseFloat(m2[1]));
+    } else {
+      const mCm = name.match(/\((\d{2,3})\s*cm\)/i);
+      if (mCm) {
+        const inch = Math.round(parseInt(mCm[1]) / 2.54);
+        if (inch >= 24 && inch <= 120) screenSize = inch;
+      } else {
+        const specSize = specs["Ekran"] || specs["Ekran Boyutu"] || specs["Screen Size"] || "";
+        const mSpec = specSize.match(/(\d{2,3})/);
+        if (mSpec) screenSize = Math.round(parseFloat(mSpec[1]));
+      }
+    }
   }
 
-  // Check specs
-  const specSize = specs["Ekran"] || specs["Ekran Boyutu"] || specs["Screen Size"] || "";
-  const mSpec = specSize.match(/(\d{2,3})/);
-  if (mSpec) return Math.round(parseFloat(mSpec[1]));
+  /* ─── Panel Type ─── */
+  let panelType: string | null = null;
+  if (nameDescUpper.includes("NEO QLED")) panelType = "Neo QLED";
+  else if (nameDescUpper.includes("QNED")) panelType = "QNED";
+  else if (nameDescUpper.includes("QLED")) panelType = "QLED";
+  else if (nameDescUpper.includes("OLED EVO")) panelType = "OLED evo";
+  else if (nameDescUpper.includes("OLED")) panelType = "OLED";
+  else if (nameDescUpper.includes("NANOCELL")) panelType = "NanoCell";
+  else if (nameDescUpper.includes("CRYSTAL") || nameDescUpper.includes("KRİSTAL")) panelType = "Crystal UHD";
+  else if (nameDescUpper.includes("LED TV") || nameDescUpper.includes("LED")) panelType = "LED";
+  else {
+    const specPanel = specs["Panel"] || specs["Panel Tipi"] || "";
+    if (specPanel) panelType = specPanel.trim();
+  }
 
-  return null;
+  /* ─── Resolution ─── */
+  let resolution: string | null = null;
+  if (nameDescUpper.includes("8K")) resolution = "8K";
+  else if (nameDescUpper.includes("4K") || nameDescUpper.includes("UHD")) resolution = "4K";
+  else if (nameDescUpper.includes("FULL HD") || nameDescUpper.includes("1080P")) resolution = "Full HD";
+  else if (nameDescUpper.includes("HD READY") || nameDescUpper.includes("720P")) resolution = "HD Ready";
+
+  /* ─── Refresh Rate ─── */
+  let refreshRate: number | null = null;
+  const mHz = allText.match(/(\d+)\s*Hz/i);
+  if (mHz) refreshRate = parseInt(mHz[1]);
+
+  /* ─── OS ─── */
+  let os: string | null = null;
+  const allLower = allText.toLowerCase();
+  if (allLower.includes("google tv")) os = "Google TV";
+  else if (allLower.includes("android tv")) os = "Android TV";
+  else if (allLower.includes("webos")) os = "WebOS";
+  else if (allLower.includes("tizen")) os = "Tizen";
+
+  /* ─── Smart TV ─── */
+  const smartTv = allLower.includes("smart") || os !== null ? true : null;
+
+  /* ─── Satellite ─── */
+  const hasSatellite = allLower.includes("uydu") || allLower.includes("satellite") || allUpper.includes("DVB-S");
+  const satellite = hasSatellite ? true : null;
+
+  /* ─── Smart Remote ─── */
+  const hasSmartRemote = allLower.includes("akıllı kumanda") || allLower.includes("magic remote") || allLower.includes("one remote");
+  const smartRemote = hasSmartRemote ? true : null;
+
+  /* ─── Lumen ─── */
+  let lumen: number | null = null;
+  const mLumen = allText.match(/(\d+)\s*(?:lm|lümen|lumen)/i);
+  if (mLumen) lumen = parseInt(mLumen[1]);
+
+  /* ─── HDMI / USB Counts ─── */
+  const hdmiCount = findSpec("hdmi");
+  const usbCount = findSpec("usb");
+
+  /* ─── Audio: Model Type ─── */
+  let modelType: string | null = null;
+  const nameLower = name.toLowerCase();
+  if (nameLower.includes("party box") || nameLower.includes("partybox")) modelType = "Party Box";
+  else if (nameLower.includes("soundbar")) modelType = "Soundbar";
+  else if (nameLower.includes("boombox")) modelType = "Boombox";
+  else if (nameLower.includes("hoparlör") || nameLower.includes("speaker")) modelType = "Hoparlör";
+  else if (nameLower.includes("kulaklık") || nameLower.includes("headphone")) modelType = "Kulaklık";
+
+  /* ─── Watt ─── */
+  let watt: number | null = null;
+  const mWatt = allText.match(/(\d+)\s*[Ww](?:att)?/);
+  if (mWatt) watt = parseInt(mWatt[1]);
+
+  /* ─── Power Type ─── */
+  let powerType: string | null = null;
+  if (allLower.includes("şarjlı") || allLower.includes("sarjli")) powerType = "Şarjlı";
+  else if (allLower.includes("elektrikli") || allLower.includes("kablolu")) powerType = "Elektrikli";
+
+  /* ─── Cable Length ─── */
+  let cableLength: string | null = null;
+  const mCable = name.match(/(\d+[.,]?\d*)\s*m\b/i);
+  if (mCable) cableLength = mCable[1].replace(",", ".") + " m";
+
+  /* ─── Mount Type ─── */
+  let mountType: string | null = null;
+  if (allLower.includes("hareketli")) mountType = "Hareketli";
+  else if (allLower.includes("sabit")) mountType = "Sabit";
+  else if (allLower.includes("tavan")) mountType = "Tavan";
+
+  /* ─── Compatible Inch ─── */
+  let compatibleInch: string | null = null;
+  const specCompat = findSpec("uyumlu");
+  if (specCompat) {
+    compatibleInch = specCompat.trim();
+  } else {
+    const mInch = name.match(/(\d{2,3})\s*[-–]\s*(\d{2,3})/);
+    if (mInch) compatibleInch = `${mInch[1]}-${mInch[2]}`;
+  }
+
+  /* ─── VESA ─── */
+  let vesa: string | null = null;
+  const specVesa = findSpec("vesa");
+  if (specVesa) {
+    vesa = specVesa.trim();
+  } else {
+    const mVesa = allText.match(/VESA\s*(\d+\s*[xX]\s*\d+)/i);
+    if (mVesa) vesa = mVesa[1].replace(/\s/g, "");
+  }
+
+  /* ─── Remote Type ─── */
+  let remoteType: string | null = null;
+  const tvBrands = ["samsung", "lg", "sony", "philips", "vestel", "tcl", "hisense", "toshiba"];
+  const brandLower = (product.brand || "").toLowerCase();
+  if (tvBrands.some(b => brandLower.includes(b))) remoteType = "TV";
+  else if (brandLower.includes("beko") || brandLower.includes("arçelik")) remoteType = "Beyaz Eşya";
+
+  /* ─── BTU ─── */
+  let btu: number | null = null;
+  const mBtu = nameDesc.match(/(\d{4,6})\s*BTU/i);
+  if (mBtu) btu = parseInt(mBtu[1]);
+
+  /* ─── Capacity: KG / LT / Person ─── */
+  let capacityKg: number | null = null;
+  let capacityLt: number | null = null;
+  let capacityPerson: number | null = null;
+
+  const mKg = nameDesc.match(/(\d+(?:[.,]\d+)?)\s*(?:KG|kg|Kg)/);
+  if (mKg) capacityKg = parseFloat(mKg[1].replace(",", "."));
+
+  const mLt = nameDesc.match(/(\d+(?:[.,]\d+)?)\s*(?:LT|lt|L|Litre)\b/i);
+  if (mLt) capacityLt = parseFloat(mLt[1].replace(",", "."));
+
+  const mPerson = nameDesc.match(/(\d+)\s*(?:Kişilik|kişilik)/i);
+  if (mPerson) capacityPerson = parseInt(mPerson[1]);
+
+  /* ─── Fridge Type ─── */
+  let fridgeType: string | null = null;
+  if (allLower.includes("side by side")) fridgeType = "Side by Side";
+  else if (allLower.includes("french door")) fridgeType = "French Door";
+  else if (allLower.includes("alttan")) fridgeType = "Alttan Donduruculu";
+  else if (allLower.includes("buzdolabı") || allLower.includes("buzdolabi")) fridgeType = "Statik";
+
+  /* ─── Freezer Type ─── */
+  let freezerType: string | null = null;
+  if (allLower.includes("sandık")) freezerType = "Sandık Tipi";
+  else if (allLower.includes("dikey")) freezerType = "Dikey";
+
+  /* ─── Appliance Type ─── */
+  let applianceType: string | null = null;
+  if (allLower.includes("yarı ankastre")) applianceType = "Yarı Ankastre";
+  else if (allLower.includes("ankastre")) applianceType = "Ankastre";
+  else if (allLower.includes("solo")) applianceType = "Solo";
+
+  /* ─── Inverter ─── */
+  const hasInverter = allLower.includes("inverter") || allLower.includes("inventer");
+  const inverter = hasInverter ? true : null;
+
+  /* ─── Water Dispenser ─── */
+  const hasWaterDispenser = allLower.includes("su pınarı") || allLower.includes("water dispenser") || allLower.includes("su sebili");
+  const waterDispenser = hasWaterDispenser ? true : null;
+
+  /* ─── Color ─── */
+  let color: string | null = null;
+  const specColor = findSpec("renk") || findSpec("color");
+  if (specColor) {
+    color = specColor.trim();
+  } else {
+    if (allLower.includes("inox")) color = "Inox";
+    else if (allLower.includes("beyaz")) color = "Beyaz";
+    else if (allLower.includes("siyah")) color = "Siyah";
+    else if (allLower.includes("gri")) color = "Gri";
+  }
+
+  /* ─── Material ─── */
+  let material: string | null = null;
+  if (allLower.includes("cam")) material = "Cam";
+  else if (allLower.includes("emaye")) material = "Emaye";
+
+  /* ─── Program Count ─── */
+  let programCount: number | null = null;
+  const mProgram = allText.match(/(\d+)\s*program/i);
+  if (mProgram) programCount = parseInt(mProgram[1]);
+
+  /* ─── Suction Power ─── */
+  let suctionPower: string | null = null;
+  const specSuction = findSpec("emiş");
+  if (specSuction) {
+    suctionPower = specSuction.trim();
+  } else {
+    const mSuction = allText.match(/(\d+)\s*m[³3]\/h/i);
+    if (mSuction) suctionPower = `${mSuction[1]} m³/h`;
+  }
+
+  /* ─── Oven Type ─── */
+  let ovenType: string | null = null;
+  if (allLower.includes("indüksiyon") || allLower.includes("induksiyon")) ovenType = "İndüksiyon";
+  else if (allLower.includes("gazlı") || allLower.includes("gazli")) ovenType = "Gazlı";
+  else if (allLower.includes("elektrikli fırın") || allLower.includes("elektrikli ocak")) ovenType = "Elektrikli";
+
+  /* ─── Has Dryer ─── */
+  const hasDryerVal = allLower.includes("kurutmalı") || allLower.includes("washer dryer");
+  const hasDryer = hasDryerVal ? true : null;
+
+  /* ─── Coffee Type ─── */
+  let coffeeType: string | null = null;
+  if (allLower.includes("kapsül") || allLower.includes("kartuş")) coffeeType = "Kartuşlu";
+  else if (allLower.includes("filtre")) coffeeType = "Filtre";
+
+  /* ─── Grill ─── */
+  const hasGrill = allLower.includes("grill") || allLower.includes("ızgara");
+  const grill = hasGrill ? true : null;
+
+  /* ─── Vacuum Type ─── */
+  let vacuumType: string | null = null;
+  if (allLower.includes("şarjlı") || allLower.includes("sarjli")) vacuumType = "Şarjlı";
+  else if (allLower.includes("şarjsız") || allLower.includes("kablolu")) vacuumType = "Elektrikli";
+
+  /* ─── Dispenser Type ─── */
+  let dispenserType: string | null = null;
+  if (allLower.includes("üstten")) dispenserType = "Üstten Damacanalı";
+  else if (allLower.includes("alttan damacana") || (allLower.includes("alttan") && allLower.includes("damacana"))) dispenserType = "Alttan Damacanalı";
+  else if (allLower.includes("yarım boy") || allLower.includes("yarım")) dispenserType = "Yarım Boy";
+
+  /* ─── AC Type ─── */
+  let acType: string | null = null;
+  if (allLower.includes("portatif")) acType = "Portatif";
+  else if (allLower.includes("artcool")) acType = "Artcool";
+  else if (allLower.includes("split")) acType = "Split";
+
+  /* ─── WiFi ─── */
+  const hasWifi = allLower.includes("wi-fi") || allLower.includes("wifi") || allLower.includes("wi̇-fi");
+  const wifi = hasWifi ? true : null;
+
+  /* ─── Remote Control (fans/heaters) ─── */
+  const hasRemoteControl = allLower.includes("uzaktan kumanda") || allLower.includes("remote control");
+  const remoteControl = hasRemoteControl ? true : null;
+
+  return {
+    screenSize,
+    panelType,
+    resolution,
+    refreshRate,
+    os,
+    smartTv,
+    satellite,
+    smartRemote,
+    lumen,
+    hdmiCount,
+    usbCount,
+    modelType,
+    watt,
+    powerType,
+    cableLength,
+    mountType,
+    compatibleInch,
+    vesa,
+    remoteType,
+    btu,
+    capacityKg,
+    capacityLt,
+    capacityPerson,
+    fridgeType,
+    freezerType,
+    applianceType,
+    inverter,
+    waterDispenser,
+    color,
+    material,
+    programCount,
+    suctionPower,
+    ovenType,
+    hasDryer,
+    coffeeType,
+    grill,
+    vacuumType,
+    dispenserType,
+    acType,
+    wifi,
+    remoteControl,
+  };
 }
 
-function extractPanelType(name: string, description: string, specs: Record<string, string>): string | null {
-  const text = `${name} ${description}`.toUpperCase();
-  
-  // Order matters: most specific first
-  if (text.includes("NEO QLED")) return "Neo QLED";
-  if (text.includes("QNED")) return "QNED";
-  if (text.includes("QLED")) return "QLED";
-  if (text.includes("OLED EVO")) return "OLED evo";
-  if (text.includes("OLED")) return "OLED";
-  if (text.includes("NANOCELL")) return "NanoCell";
-  if (text.includes("CRYSTAL") || text.includes("KRİSTAL")) return "Crystal UHD";
-  if (text.includes("LED TV") || text.includes("LED")) return "LED";
-
-  // Check specs
-  const panel = specs["Panel"] || specs["Panel Tipi"] || "";
-  if (panel) return panel.trim();
-
-  return null;
-}
-
-function extractResolution(name: string, description: string): string | null {
-  const text = `${name} ${description}`.toUpperCase();
-  if (text.includes("8K")) return "8K";
-  if (text.includes("4K") || text.includes("UHD")) return "4K";
-  if (text.includes("FULL HD") || text.includes("1080P")) return "Full HD";
-  if (text.includes("HD READY") || text.includes("720P")) return "HD Ready";
-  return null;
-}
-
-function extractBTU(name: string, description: string): number | null {
-  const text = `${name} ${description}`;
-  const m = text.match(/(\d{4,6})\s*BTU/i);
-  return m ? parseInt(m[1]) : null;
-}
-
-function extractCapacity(name: string, description: string): { kg: number | null; lt: number | null; person: number | null } {
-  const text = `${name} ${description}`;
-  
-  let kg: number | null = null;
-  let lt: number | null = null;
-  let person: number | null = null;
-
-  const mKg = text.match(/(\d+(?:[.,]\d+)?)\s*(?:KG|kg|Kg)/);
-  if (mKg) kg = parseFloat(mKg[1].replace(",", "."));
-
-  const mLt = text.match(/(\d+(?:[.,]\d+)?)\s*(?:LT|lt|L|Litre)\b/i);
-  if (mLt) lt = parseFloat(mLt[1].replace(",", "."));
-
-  const mPerson = text.match(/(\d+)\s*(?:Kişilik|kişilik)/i);
-  if (mPerson) person = parseInt(mPerson[1]);
-
-  return { kg, lt, person };
-}
-
-/* ─── Main Normalization ─── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   MAIN NORMALIZATION
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 export function normalizeProduct(p: Product): NormalizedProduct {
-  const cap = extractCapacity(p.name, p.description);
-  
   return {
     ...p,
     brand: p.brand.trim(),
-    _norm: {
-      screenSize: extractScreenSize(p.name, p.specs),
-      panelType: extractPanelType(p.name, p.description, p.specs),
-      resolution: extractResolution(p.name, p.description),
-      btu: extractBTU(p.name, p.description),
-      capacityKg: cap.kg,
-      capacityLt: cap.lt,
-      capacityPerson: cap.person,
-    },
+    _norm: extractAllAttributes(p),
   };
 }
 
@@ -126,110 +444,88 @@ export function normalizeProducts(products: Product[]): NormalizedProduct[] {
   return products.map(normalizeProduct);
 }
 
-/* ─── Dynamic Filter Option Generation ─── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   DYNAMIC FILTER OPTION GENERATION (config-driven)
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-export interface FilterOption {
-  value: string;
-  count: number;
-  numericValue?: number; // for sorting
-}
-
-export interface DynamicFilterGroup {
-  key: string;
-  label: string;
-  options: FilterOption[];
-}
-
-function buildGroup(
-  key: string,
-  label: string,
+export function getDynamicFilters(
   products: NormalizedProduct[],
-  extractor: (p: NormalizedProduct) => string | null,
-  numericSort = false
-): DynamicFilterGroup | null {
-  const counts: Record<string, { count: number; numVal?: number }> = {};
-  
-  for (const p of products) {
-    const val = extractor(p);
-    if (val) {
-      if (!counts[val]) counts[val] = { count: 0 };
-      counts[val].count++;
+  categorySlug?: string,
+  subSlug?: string
+): FilterGroup[] {
+  const slug = subSlug || categorySlug || "";
+  const profile = getFilterProfile(slug);
+  const groups: FilterGroup[] = [];
+
+  for (const field of profile) {
+    /* ── Brand: special handling with counts ── */
+    if (field.key === "brand") {
+      const brandCounts = new Map<string, number>();
+      for (const p of products) {
+        if (p.brand) brandCounts.set(p.brand, (brandCounts.get(p.brand) || 0) + 1);
+      }
+      if (brandCounts.size > 0) {
+        groups.push({
+          key: "brand",
+          label: field.label,
+          type: field.type,
+          options: [...brandCounts.entries()]
+            .sort((a, b) => b[1] - a[1])
+            .map(([value, count]) => ({ value, count })),
+        });
+      }
+      continue;
     }
-  }
-  
-  const entries = Object.entries(counts);
-  if (entries.length === 0) return null;
 
-  const options: FilterOption[] = entries.map(([value, { count }]) => ({
-    value,
-    count,
-    numericValue: numericSort ? parseFloat(value.replace(/[^\d.]/g, "")) || 0 : undefined,
-  }));
+    /* ── All other fields ── */
+    const valueCounts = new Map<string, number>();
 
-  if (numericSort) {
-    options.sort((a, b) => (a.numericValue || 0) - (b.numericValue || 0));
-  } else {
-    options.sort((a, b) => b.count - a.count);
-  }
+    for (const p of products) {
+      let val: unknown;
 
-  return { key, label, options };
-}
+      if (field.extractFrom === "norm") {
+        val = p._norm[field.key as keyof NormalizedAttributes];
+      } else {
+        // Look in specs with case-insensitive key match
+        const entry = Object.entries(p.specs || {}).find(
+          ([k]) => k.toLowerCase().includes(field.key.toLowerCase())
+        );
+        val = entry ? entry[1] : undefined;
+      }
 
-export function getDynamicFilters(products: NormalizedProduct[], categorySlug?: string, subSlug?: string): DynamicFilterGroup[] {
-  const groups: DynamicFilterGroup[] = [];
-  const slug = subSlug || categorySlug;
+      if (val === null || val === undefined) continue;
 
-  // Brand - always show
-  const brandGroup = buildGroup("brand", "filter.brand", products, p => p.brand || null);
-  if (brandGroup) groups.push(brandGroup);
+      if (typeof val === "boolean") {
+        const label = val ? "Evet" : "Hayır";
+        valueCounts.set(label, (valueCounts.get(label) || 0) + 1);
+      } else {
+        const strVal = String(val);
+        if (strVal && strVal !== "0") {
+          const displayVal = field.unit ? `${strVal} ${field.unit}` : strVal;
+          valueCounts.set(displayVal, (valueCounts.get(displayVal) || 0) + 1);
+        }
+      }
+    }
 
-  // TV-specific
-  if (slug === "tv-goruntu" || slug === "tv") {
-    const sizeGroup = buildGroup("screenSize", "Ekran Boyutu", products, 
-      p => p._norm.screenSize ? `${p._norm.screenSize}"` : null, true);
-    if (sizeGroup) groups.push(sizeGroup);
+    if (valueCounts.size > 0) {
+      let options = [...valueCounts.entries()].map(([value, count]) => ({ value, count }));
 
-    const panelGroup = buildGroup("panelType", "Panel Tipi", products, p => p._norm.panelType);
-    if (panelGroup) groups.push(panelGroup);
+      if (field.numericSort) {
+        options.sort((a, b) => parseFloat(a.value) - parseFloat(b.value));
+      } else {
+        options.sort((a, b) => b.count - a.count);
+      }
 
-    const resGroup = buildGroup("resolution", "Çözünürlük", products, p => p._norm.resolution);
-    if (resGroup) groups.push(resGroup);
-  }
-
-  // Klima
-  if (["klima-isitma", "klima", "split-klima", "portatif-klima"].includes(slug || "")) {
-    const btuGroup = buildGroup("btu", "BTU", products, 
-      p => p._norm.btu ? `${p._norm.btu} BTU` : null, true);
-    if (btuGroup) groups.push(btuGroup);
-  }
-
-  // Beyaz Eşya
-  if (["beyaz-esya", "camasir-makinesi", "kurutma-makinesi"].includes(slug || "")) {
-    const kgGroup = buildGroup("capacityKg", "Kapasite", products,
-      p => p._norm.capacityKg ? `${p._norm.capacityKg} KG` : null, true);
-    if (kgGroup) groups.push(kgGroup);
-  }
-
-  if (["bulasik-makinesi"].includes(slug || "")) {
-    const ltGroup = buildGroup("capacityLt", "Kapasite (LT)", products,
-      p => p._norm.capacityLt ? `${p._norm.capacityLt} LT` : null, true);
-    if (ltGroup) groups.push(ltGroup);
-    
-    const personGroup = buildGroup("capacityPerson", "Kapasite", products,
-      p => p._norm.capacityPerson ? `${p._norm.capacityPerson} Kişilik` : null, true);
-    if (personGroup) groups.push(personGroup);
-  }
-
-  if (["buzdolabi", "mini-buzdolabi", "derin-dondurucu"].includes(slug || "")) {
-    const ltGroup = buildGroup("capacityLt", "Kapasite (LT)", products,
-      p => p._norm.capacityLt ? `${p._norm.capacityLt} LT` : null, true);
-    if (ltGroup) groups.push(ltGroup);
+      groups.push({ key: field.key, label: field.label, type: field.type, options });
+    }
   }
 
   return groups;
 }
 
-/* ─── Filter Application using normalized data ─── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   FILTER APPLICATION
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 export function applyNormalizedFilters(
   products: NormalizedProduct[],
@@ -239,42 +535,42 @@ export function applyNormalizedFilters(
 ): NormalizedProduct[] {
   let result = products;
 
-  // Apply each filter group with AND between groups, OR within
   for (const [key, selectedValues] of Object.entries(filters)) {
     if (!selectedValues || selectedValues.length === 0) continue;
 
     result = result.filter(p => {
-      let productValue: string | null = null;
-
-      switch (key) {
-        case "brand":
-          productValue = p.brand;
-          break;
-        case "screenSize":
-          productValue = p._norm.screenSize ? `${p._norm.screenSize}"` : null;
-          break;
-        case "panelType":
-          productValue = p._norm.panelType;
-          break;
-        case "resolution":
-          productValue = p._norm.resolution;
-          break;
-        case "btu":
-          productValue = p._norm.btu ? `${p._norm.btu} BTU` : null;
-          break;
-        case "capacityKg":
-          productValue = p._norm.capacityKg ? `${p._norm.capacityKg} KG` : null;
-          break;
-        case "capacityLt":
-          productValue = p._norm.capacityLt ? `${p._norm.capacityLt} LT` : null;
-          break;
-        case "capacityPerson":
-          productValue = p._norm.capacityPerson ? `${p._norm.capacityPerson} Kişilik` : null;
-          break;
+      // Brand
+      if (key === "brand") {
+        return p.brand !== null && selectedValues.includes(p.brand);
       }
 
-      // OR logic within group: product matches if its value is in selected values
-      return productValue !== null && selectedValues.includes(productValue);
+      // Check _norm field
+      const normKey = key as keyof NormalizedAttributes;
+      const normVal = p._norm[normKey];
+
+      if (normVal === null || normVal === undefined) return false;
+
+      // Boolean fields: compare "Evet"/"Hayır"
+      if (BOOLEAN_FIELDS.has(normKey)) {
+        const label = normVal ? "Evet" : "Hayır";
+        return selectedValues.includes(label);
+      }
+
+      // Numeric fields with units
+      if (normKey in NUMERIC_FIELDS_WITH_UNIT) {
+        const unit = NUMERIC_FIELDS_WITH_UNIT[normKey];
+        const displayVal = `${normVal}${unit}`;
+        // Try with unit first, then raw value
+        return selectedValues.includes(displayVal) || selectedValues.some(sv => {
+          // Strip common unit suffixes and compare numeric value
+          const stripped = sv.replace(/\s*("|inç|Hz|Lümen|W|BTU|KG|Lt|Kişilik)\s*/gi, "").trim();
+          return stripped === String(normVal);
+        });
+      }
+
+      // String fields: direct comparison
+      const strVal = String(normVal);
+      return selectedValues.includes(strVal);
     });
   }
 
@@ -282,19 +578,36 @@ export function applyNormalizedFilters(
 
   // Sort
   switch (sort) {
-    case "price-asc": result = [...result].sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price)); break;
-    case "price-desc": result = [...result].sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price)); break;
-    case "newest": result = [...result].sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()); break;
-    case "oldest": result = [...result].sort((a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()); break;
-    case "name-asc": result = [...result].sort((a, b) => a.name.localeCompare(b.name, "tr")); break;
-    case "name-desc": result = [...result].sort((a, b) => b.name.localeCompare(a.name, "tr")); break;
-    case "sale": result = result.filter(p => p.salePrice && p.salePrice < p.price); break;
+    case "price-asc":
+      result = [...result].sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price));
+      break;
+    case "price-desc":
+      result = [...result].sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price));
+      break;
+    case "newest":
+      result = [...result].sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+      break;
+    case "oldest":
+      result = [...result].sort((a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime());
+      break;
+    case "name-asc":
+      result = [...result].sort((a, b) => a.name.localeCompare(b.name, "tr"));
+      break;
+    case "name-desc":
+      result = [...result].sort((a, b) => b.name.localeCompare(a.name, "tr"));
+      break;
+    case "sale":
+      result = result.filter(p => p.salePrice && p.salePrice < p.price);
+      break;
   }
 
   return result;
 }
 
-/* ─── Debug info ─── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   DEBUG INFO
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 export interface DebugInfo {
   productName: string;
   sku: string;
@@ -314,17 +627,25 @@ export function getDebugInfo(
 
     for (const [key, selectedValues] of Object.entries(filters)) {
       if (!selectedValues || selectedValues.length === 0) continue;
-      
+
       let val: string | null = null;
-      switch (key) {
-        case "brand": val = p.brand; break;
-        case "screenSize": val = p._norm.screenSize ? `${p._norm.screenSize}"` : null; break;
-        case "panelType": val = p._norm.panelType; break;
-        case "resolution": val = p._norm.resolution; break;
-        case "btu": val = p._norm.btu ? `${p._norm.btu} BTU` : null; break;
-        case "capacityKg": val = p._norm.capacityKg ? `${p._norm.capacityKg} KG` : null; break;
-        case "capacityLt": val = p._norm.capacityLt ? `${p._norm.capacityLt} LT` : null; break;
-        case "capacityPerson": val = p._norm.capacityPerson ? `${p._norm.capacityPerson} Kişilik` : null; break;
+
+      if (key === "brand") {
+        val = p.brand;
+      } else {
+        const normKey = key as keyof NormalizedAttributes;
+        const normVal = p._norm[normKey];
+
+        if (normVal === null || normVal === undefined) {
+          val = null;
+        } else if (BOOLEAN_FIELDS.has(normKey)) {
+          val = normVal ? "Evet" : "Hayır";
+        } else if (normKey in NUMERIC_FIELDS_WITH_UNIT) {
+          const unit = NUMERIC_FIELDS_WITH_UNIT[normKey];
+          val = `${normVal}${unit}`;
+        } else {
+          val = String(normVal);
+        }
       }
 
       if (val === null) {
