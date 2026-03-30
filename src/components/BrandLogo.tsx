@@ -1,3 +1,5 @@
+import { forwardRef } from "react";
+
 const BRAND_LOGOS: Record<string, string> = {
   samsung: "/brands/samsung-logo.png",
   lg: "/brands/lg-logo.png",
@@ -35,26 +37,33 @@ const SIZES = {
   lg: "h-8 max-w-[104px]",
 };
 
-export default function BrandLogo({ brand, size = "sm", className = "" }: BrandLogoProps) {
-  const key = normalizeBrand(brand);
-  const logo = BRAND_LOGOS[key];
+const BrandLogo = forwardRef<HTMLSpanElement | HTMLImageElement, BrandLogoProps>(
+  ({ brand, size = "sm", className = "" }, ref) => {
+    const key = normalizeBrand(brand);
+    const logo = BRAND_LOGOS[key];
 
-  if (!logo) {
+    if (!logo) {
+      return (
+        <span ref={ref as React.Ref<HTMLSpanElement>} className={`text-[11px] font-semibold text-primary/70 uppercase tracking-wider ${className}`}>
+          {brand}
+        </span>
+      );
+    }
+
+    const sizeClass = SIZES[size];
+
     return (
-      <span className={`text-[11px] font-semibold text-primary/70 uppercase tracking-wider ${className}`}>
-        {brand}
-      </span>
+      <img
+        ref={ref as React.Ref<HTMLImageElement>}
+        src={logo}
+        alt={brand}
+        className={`${sizeClass} w-auto object-contain select-none opacity-80 hover:opacity-100 transition-opacity ${className}`}
+        loading="lazy"
+      />
     );
   }
+);
 
-  const sizeClass = SIZES[size];
+BrandLogo.displayName = "BrandLogo";
 
-  return (
-    <img
-      src={logo}
-      alt={brand}
-      className={`${sizeClass} w-auto object-contain select-none opacity-80 hover:opacity-100 transition-opacity ${className}`}
-      loading="lazy"
-    />
-  );
-}
+export default BrandLogo;
