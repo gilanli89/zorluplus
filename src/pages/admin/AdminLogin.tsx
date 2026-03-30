@@ -25,7 +25,7 @@ export default function AdminLogin() {
       toast.error("Giriş başarısız. Lütfen bilgilerinizi kontrol edin.");
     } else {
       // Verify admin status
-      const { data } = await supabase.rpc("is_admin", { check_email: email });
+      const { data } = await supabase.rpc("check_own_admin_status" as any);
       if (data) {
         navigate("/admin");
       } else {
