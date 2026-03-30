@@ -345,6 +345,7 @@ export type Database = {
       }
     }
     Functions: {
+      check_own_admin_status: { Args: never; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
