@@ -71,28 +71,43 @@ serve(async (req) => {
       response === "Approved" &&
       procReturnCode === "00";
 
-    // Save order to database
-    try {
-      const { error: dbError } = await supabase.from("orders").upsert({
-        order_number: oid,
-        customer_name: params["BillToName"] || "Müşteri",
-        total_amount: parseFloat(amount) || 0,
-        status: isSuccess ? "paid" : "cancelled",
-        payment_method: "cardplus",
-        payment_auth_code: authCode || null,
-        payment_trans_id: transId || null,
-        notes: isSuccess
-          ? `3D Secure başarılı. mdStatus: ${mdStatus}`
-          : `Ödeme başarısız. Hata: ${errMsg}. mdStatus: ${mdStatus}`,
-      }, { onConflict: "order_number" });
+    // Only write to DB if hash is valid (prevents spoofed callbacks)
+    if (hashValid) {
+      try {
+        // Don't downgrade a paid order
+        const { data: existingOrder } = await supabase
+          .from("orders")
+          .select("status")
+          .eq("order_number", oid)
+          .single();
 
-      if (dbError) {
-        console.error("DB insert error:", dbError);
-      } else {
-        console.log(`Order ${oid} saved to DB. Status: ${isSuccess ? "paid" : "cancelled"}`);
+        if (existingOrder && existingOrder.status === "paid" && !isSuccess) {
+          console.log(`Order ${oid} already paid, ignoring failed callback`);
+        } else {
+          const { error: dbError } = await supabase.from("orders").upsert({
+            order_number: oid,
+            customer_name: params["BillToName"] || "Müşteri",
+            total_amount: parseFloat(amount) || 0,
+            status: isSuccess ? "paid" : "cancelled",
+            payment_method: "cardplus",
+            payment_auth_code: authCode || null,
+            payment_trans_id: transId || null,
+            notes: isSuccess
+              ? `3D Secure başarılı. mdStatus: ${mdStatus}`
+              : `Ödeme başarısız. Hata: ${errMsg}. mdStatus: ${mdStatus}`,
+          }, { onConflict: "order_number" });
+
+          if (dbError) {
+            console.error("DB insert error:", dbError);
+          } else {
+            console.log(`Order ${oid} saved to DB. Status: ${isSuccess ? "paid" : "cancelled"}`);
+          }
+        }
+      } catch (dbErr) {
+        console.error("DB save failed:", dbErr);
       }
-    } catch (dbErr) {
-      console.error("DB save failed:", dbErr);
+    } else {
+      console.error(`Invalid hash for order ${oid}, rejecting callback`);
     }
 
     // Build redirect URL
