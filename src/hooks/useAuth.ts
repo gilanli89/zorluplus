@@ -12,7 +12,7 @@ export function useAuth() {
       const u = session?.user ?? null;
       setUser(u);
       if (u?.email) {
-        const { data } = await supabase.rpc("is_admin", { check_email: u.email });
+        const { data } = await supabase.rpc("check_own_admin_status" as any);
         setIsAdmin(!!data);
       } else {
         setIsAdmin(false);
@@ -24,7 +24,7 @@ export function useAuth() {
       const u = session?.user ?? null;
       setUser(u);
       if (u?.email) {
-        const { data } = await supabase.rpc("is_admin", { check_email: u.email });
+        const { data } = await supabase.rpc("check_own_admin_status" as any);
         setIsAdmin(!!data);
       }
       setLoading(false);
