@@ -1,0 +1,1 @@
+UPDATE public.inventory SET quantity = 1 WHERE quantity = 0;
