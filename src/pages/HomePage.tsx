@@ -8,6 +8,11 @@ import { BRANCHES } from "@/lib/constants";
 import TrustSection from "@/components/TrustSection";
 import HeroBanner from "@/components/HeroBanner";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import CategoryGrid from "@/components/home/CategoryGrid";
+import BrandShowcase from "@/components/home/BrandShowcase";
+import StoreLocator from "@/components/store/StoreLocator";
+import CTASection from "@/components/home/CTASection";
+import SEOHead from "@/components/common/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 import widgetTv from "@/assets/widget-tv.jpg";
@@ -46,6 +51,7 @@ export default function HomePage() {
 
   return (
     <>
+      <SEOHead />
       <HeroBanner />
       <TrustSection />
 
@@ -139,6 +145,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      <CategoryGrid />
+      <BrandShowcase />
+
       {/* Branches CTA */}
       <section className="py-12 md:py-16 bg-muted/40">
         <div className="container">
@@ -181,6 +190,8 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      <CTASection />
 
       {/* Banner */}
       <section className="w-full overflow-hidden">
