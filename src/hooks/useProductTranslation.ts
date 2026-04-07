@@ -8,6 +8,12 @@ const CACHE_VERSION = "1";
 
 type TranslationCache = Record<string, string>;
 
+function shouldFallbackToOriginal(error: unknown) {
+  if (!error || typeof error !== "object") return false;
+  const message = "message" in error ? String((error as { message?: string }).message ?? "") : "";
+  return message.includes("402") || message.toLowerCase().includes("payment required");
+}
+
 function loadCache(): TranslationCache {
   try {
     if (localStorage.getItem(CACHE_VERSION_KEY) !== CACHE_VERSION) {
@@ -48,6 +54,16 @@ export function useProductTranslation() {
       });
 
       if (error || !data?.translations) {
+        if (shouldFallbackToOriginal(error)) {
+          const fallbackCache = { ...cache };
+          toTranslate.forEach((original) => {
+            fallbackCache[original] = original;
+            pendingRef.current.delete(original);
+          });
+          setCache(fallbackCache);
+          saveCache(fallbackCache);
+          return;
+        }
         console.error("Translation error:", error);
         toTranslate.forEach(t => pendingRef.current.delete(t));
         return;
@@ -62,6 +78,16 @@ export function useProductTranslation() {
       setCache(newCache);
       saveCache(newCache);
     } catch (e) {
+      if (shouldFallbackToOriginal(e)) {
+        const fallbackCache = { ...cache };
+        toTranslate.forEach((original) => {
+          fallbackCache[original] = original;
+          pendingRef.current.delete(original);
+        });
+        setCache(fallbackCache);
+        saveCache(fallbackCache);
+        return;
+      }
       console.error("Translation fetch error:", e);
       toTranslate.forEach(t => pendingRef.current.delete(t));
     }
