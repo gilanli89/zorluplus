@@ -56,8 +56,7 @@ ${JSON.stringify(batch)}`;
         });
       }
       if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "Payment required" }), {
-          status: 402,
+        return new Response(JSON.stringify({ translations: batch, fallback: true }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
