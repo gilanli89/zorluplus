@@ -5,6 +5,7 @@ import MobileBottomBar from "./MobileBottomBar";
 import FloatingLinktree from "@/components/FloatingLinktree";
 import AIChatbot from "@/components/AIChatbot";
 import SpecialDayBanner from "@/components/SpecialDayBanner";
+import CookieConsent from "@/components/common/CookieConsent";
 
 export default function Layout() {
   return (
@@ -18,6 +19,7 @@ export default function Layout() {
       <MobileBottomBar />
       <FloatingLinktree />
       <AIChatbot />
+      <CookieConsent />
     </div>
   );
 }
