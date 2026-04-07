@@ -145,6 +145,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      <CategoryGrid />
+      <BrandShowcase />
+
       {/* Branches CTA */}
       <section className="py-12 md:py-16 bg-muted/40">
         <div className="container">
@@ -187,6 +190,8 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      <CTASection />
 
       {/* Banner */}
       <section className="w-full overflow-hidden">
