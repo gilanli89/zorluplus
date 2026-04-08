@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, Link, useLocation } from "react-router-dom";
-import { ShoppingCart, Package, Users, Wrench, LogOut, LayoutDashboard, CalendarDays } from "lucide-react";
+import { ShoppingCart, Package, Wrench, LogOut, LayoutDashboard } from "lucide-react";
 import { PremiumIconInline } from "@/components/PremiumIcon";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Logo from "@/components/Logo";
-import { getLeaveRequests } from "@/lib/leaveStore";
+
 import {
   Sidebar,
   SidebarContent,
@@ -23,10 +23,8 @@ import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { title: "Özet", url: "/admin", icon: LayoutDashboard },
-  { title: "İzin Talepleri", url: "/admin/izinler", icon: CalendarDays },
   { title: "Siparişler", url: "/admin/siparisler", icon: ShoppingCart },
   { title: "Stok Yönetimi", url: "/admin/stok", icon: Package },
-  { title: "Müşteri Talepleri", url: "/admin/talepler", icon: Users },
   { title: "Servis Talepleri", url: "/admin/servis", icon: Wrench },
 ];
 
@@ -34,24 +32,12 @@ export default function AdminLayout() {
   const { user, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [pendingLeaves, setPendingLeaves] = useState(0);
 
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) {
       navigate("/admin/giris");
     }
   }, [user, isAdmin, loading, navigate]);
-
-  // Check pending leave requests
-  useEffect(() => {
-    const check = () => {
-      const reqs = getLeaveRequests();
-      setPendingLeaves(reqs.filter(r => r.status === "Beklemede").length);
-    };
-    check();
-    const interval = setInterval(check, 5000);
-    return () => clearInterval(interval);
-  }, []);
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Yükleniyor...</div>;
@@ -85,11 +71,6 @@ export default function AdminLayout() {
                           >
                             <PremiumIconInline icon={item.icon} size={16} />
                             <span className="flex-1">{item.title}</span>
-                            {item.url === "/admin/izinler" && pendingLeaves > 0 && (
-                              <Badge className="bg-destructive text-destructive-foreground text-[10px] px-1.5 py-0 h-5 min-w-5 flex items-center justify-center">
-                                {pendingLeaves}
-                              </Badge>
-                            )}
                           </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
