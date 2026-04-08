@@ -58,11 +58,50 @@ type PendingChange = Partial<EditableFields> & { id: string };
 function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChangeUrl: (url: string) => void }) {
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState(item.image_url || "");
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSave = () => {
     onChangeUrl(url);
     setOpen(false);
     toast.success("Görsel URL güncellendi");
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Sadece görsel dosyaları yükleyebilirsiniz");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Dosya boyutu 5MB'dan küçük olmalı");
+      return;
+    }
+
+    setUploading(true);
+    const ext = file.name.split(".").pop() || "jpg";
+    const fileName = `${item.sku || item.id}_${Date.now()}.${ext}`;
+
+    const { data, error } = await supabase.storage
+      .from("product-images")
+      .upload(fileName, file, { upsert: true });
+
+    if (error) {
+      toast.error("Görsel yüklenemedi: " + error.message);
+      setUploading(false);
+      return;
+    }
+
+    const { data: publicUrl } = supabase.storage
+      .from("product-images")
+      .getPublicUrl(data.path);
+
+    setUrl(publicUrl.publicUrl);
+    setUploading(false);
+    toast.success("Görsel yüklendi!");
   };
 
   return (
@@ -81,7 +120,7 @@ function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChan
         <p className="text-sm text-muted-foreground font-medium truncate">{item.product_name}</p>
         <div className="mt-2 rounded-lg border border-border overflow-hidden bg-muted/30 flex items-center justify-center min-h-[200px]">
           {url ? (
-            <img src={url} alt={item.product_name} className="max-h-[280px] object-contain" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
+            <img src={url} alt={item.product_name} className="max-h-[280px] object-contain p-2" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
           ) : (
             <div className="flex flex-col items-center gap-2 text-muted-foreground py-8">
               <ImageIcon className="h-10 w-10" />
@@ -89,13 +128,33 @@ function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChan
             </div>
           )}
         </div>
+
+        {/* Upload button */}
+        <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1.5 w-full"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+        >
+          {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
+          {uploading ? "Yükleniyor..." : "Görsel Yükle"}
+        </Button>
+
+        <div className="flex items-center gap-2">
+          <div className="flex-1 h-px bg-border" />
+          <span className="text-xs text-muted-foreground">veya URL girin</span>
+          <div className="flex-1 h-px bg-border" />
+        </div>
+
         <Input
           value={url}
           onChange={e => setUrl(e.target.value)}
           placeholder="Görsel URL'si girin..."
-          className="text-sm mt-2"
+          className="text-sm"
         />
-        <div className="flex justify-end gap-2 mt-2">
+        <div className="flex justify-end gap-2 mt-1">
           <Button variant="outline" size="sm" onClick={() => setOpen(false)}>İptal</Button>
           <Button size="sm" onClick={handleSave} className="gap-1.5">
             <Check className="h-3.5 w-3.5" /> Kaydet
@@ -109,16 +168,18 @@ function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChan
 // ─── Image Cell ───
 function ImageCell({ url, isEditing, onChange }: { url: string | null; isEditing: boolean; onChange: (v: string) => void }) {
   const [showFull, setShowFull] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  const hasUrl = !!url && url.trim().length > 0;
 
   return (
     <div className="flex items-center gap-2">
-      {url ? (
+      {hasUrl && !imgError ? (
         <img
           src={url}
           alt=""
           className="h-10 w-10 rounded-lg object-cover border border-border cursor-pointer flex-shrink-0"
           onClick={() => setShowFull(true)}
-          onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+          onError={() => setImgError(true)}
         />
       ) : (
         <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
@@ -133,10 +194,10 @@ function ImageCell({ url, isEditing, onChange }: { url: string | null; isEditing
           className="h-8 text-xs flex-1 min-w-[150px]"
         />
       )}
-      {showFull && url && (
+      {showFull && hasUrl && (
         <Dialog open={showFull} onOpenChange={setShowFull}>
           <DialogContent className="max-w-md p-2">
-            <img src={url} alt="" className="w-full rounded-lg" />
+            <img src={url} alt="" className="w-full rounded-lg" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
           </DialogContent>
         </Dialog>
       )}
