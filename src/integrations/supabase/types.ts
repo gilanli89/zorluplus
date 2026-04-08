@@ -34,9 +34,11 @@ export type Database = {
       }
       inventory: {
         Row: {
+          attributes: Json | null
           brand: string | null
           category: string | null
           created_at: string
+          description: string | null
           id: string
           image_url: string | null
           is_active: boolean
@@ -51,9 +53,11 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          attributes?: Json | null
           brand?: string | null
           category?: string | null
           created_at?: string
+          description?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean
@@ -68,9 +72,11 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          attributes?: Json | null
           brand?: string | null
           category?: string | null
           created_at?: string
+          description?: string | null
           id?: string
           image_url?: string | null
           is_active?: boolean

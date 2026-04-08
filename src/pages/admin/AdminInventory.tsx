@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useState, useMemo, useCallback, useRef } from "react";
 import {
-  Save, RefreshCw, X, Loader2,
+  Save, RefreshCw, X, Loader2, Plus, Trash2,
   Search, ImageIcon, Upload, Check, ChevronDown, ChevronUp,
   Filter, Package, AlertTriangle, Eye, EyeOff
 } from "lucide-react";
@@ -15,12 +15,178 @@ import {
 import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 
+// ─── Add Product Dialog ───
+function AddProductDialog({ onAdded }: { onAdded: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({
+    product_name: "",
+    brand: "",
+    category: "",
+    sku: "",
+    description: "",
+    original_price: "",
+    sale_price: "",
+    quantity: "1",
+    image_url: "",
+  });
+  const [attrs, setAttrs] = useState<{ key: string; value: string }[]>([]);
 
+  const set = (field: string, value: string) => setForm(p => ({ ...p, [field]: value }));
+
+  const addAttr = () => setAttrs(p => [...p, { key: "", value: "" }]);
+  const removeAttr = (i: number) => setAttrs(p => p.filter((_, idx) => idx !== i));
+  const updateAttr = (i: number, field: "key" | "value", value: string) => {
+    setAttrs(p => p.map((a, idx) => idx === i ? { ...a, [field]: value } : a));
+  };
+
+  const reset = () => {
+    setForm({ product_name: "", brand: "", category: "", sku: "", description: "", original_price: "", sale_price: "", quantity: "1", image_url: "" });
+    setAttrs([]);
+  };
+
+  const handleSave = async () => {
+    if (!form.product_name.trim()) { toast.error("Ürün adı zorunludur"); return; }
+    setSaving(true);
+
+    const attributes: Record<string, string> = {};
+    attrs.forEach(a => { if (a.key.trim()) attributes[a.key.trim()] = a.value.trim(); });
+
+    const { error } = await supabase.from("inventory").insert({
+      product_name: form.product_name.trim(),
+      brand: form.brand.trim() || null,
+      category: form.category.trim() || null,
+      sku: form.sku.trim() || null,
+      description: form.description.trim() || null,
+      original_price: form.original_price ? parseFloat(form.original_price) : null,
+      sale_price: form.sale_price ? parseFloat(form.sale_price) : null,
+      quantity: parseInt(form.quantity) || 1,
+      image_url: form.image_url.trim() || null,
+      attributes: Object.keys(attributes).length > 0 ? attributes : {},
+    } as any);
+
+    setSaving(false);
+    if (error) { toast.error("Ürün eklenemedi: " + error.message); return; }
+    toast.success("Ürün başarıyla eklendi!");
+    reset();
+    setOpen(false);
+    onAdded();
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) reset(); }}>
+      <DialogTrigger asChild>
+        <Button size="sm" className="gap-1.5">
+          <Plus className="h-3.5 w-3.5" /> Ürün Ekle
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Yeni Ürün Ekle</DialogTitle>
+          <DialogDescription>Ürün bilgilerini girin ve özelliklerini ekleyin.</DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-3 mt-2">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label className="text-xs">Ürün Adı *</Label>
+              <Input value={form.product_name} onChange={e => set("product_name", e.target.value)} placeholder="Samsung 55&quot; OLED TV" className="mt-1" />
+            </div>
+            <div>
+              <Label className="text-xs">Marka</Label>
+              <Input value={form.brand} onChange={e => set("brand", e.target.value)} placeholder="Samsung" className="mt-1" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label className="text-xs">Stok Kodu (SKU)</Label>
+              <Input value={form.sku} onChange={e => set("sku", e.target.value)} placeholder="SAM-TV55-OLED" className="mt-1" />
+            </div>
+            <div>
+              <Label className="text-xs">Kategori</Label>
+              <Input value={form.category} onChange={e => set("category", e.target.value)} placeholder="TV & Görüntü Sistemleri" className="mt-1" />
+            </div>
+          </div>
+
+          <div>
+            <Label className="text-xs">Açıklama</Label>
+            <Textarea value={form.description} onChange={e => set("description", e.target.value)} placeholder="Ürün açıklaması..." rows={2} className="mt-1 text-sm" />
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <Label className="text-xs">Fiyat (₺)</Label>
+              <Input type="number" value={form.original_price} onChange={e => set("original_price", e.target.value)} placeholder="25000" className="mt-1" />
+            </div>
+            <div>
+              <Label className="text-xs">İndirimli Fiyat (₺)</Label>
+              <Input type="number" value={form.sale_price} onChange={e => set("sale_price", e.target.value)} placeholder="22000" className="mt-1" />
+            </div>
+            <div>
+              <Label className="text-xs">Stok Adeti</Label>
+              <Input type="number" value={form.quantity} onChange={e => set("quantity", e.target.value)} placeholder="1" className="mt-1" />
+            </div>
+          </div>
+
+          <div>
+            <Label className="text-xs">Görsel URL</Label>
+            <Input value={form.image_url} onChange={e => set("image_url", e.target.value)} placeholder="https://..." className="mt-1" />
+          </div>
+
+          {/* Attributes / Variables */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <Label className="text-xs font-semibold">Özellikler (Değişkenler)</Label>
+              <Button type="button" size="sm" variant="outline" onClick={addAttr} className="h-7 text-xs gap-1">
+                <Plus className="h-3 w-3" /> Özellik Ekle
+              </Button>
+            </div>
+            {attrs.length === 0 && (
+              <p className="text-xs text-muted-foreground">Henüz özellik eklenmedi. Örn: Ekran Boyutu → 55", Panel Türü → OLED</p>
+            )}
+            <div className="space-y-2">
+              {attrs.map((a, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <Input
+                    value={a.key}
+                    onChange={e => updateAttr(i, "key", e.target.value)}
+                    placeholder="Özellik (Ekran Boyutu)"
+                    className="h-8 text-xs flex-1"
+                  />
+                  <Input
+                    value={a.value}
+                    onChange={e => updateAttr(i, "value", e.target.value)}
+                    placeholder="Değer (55&quot;)"
+                    className="h-8 text-xs flex-1"
+                  />
+                  <Button type="button" size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={() => removeAttr(i)}>
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-2 mt-4">
+          <Button variant="outline" size="sm" onClick={() => setOpen(false)}>İptal</Button>
+          <Button size="sm" onClick={handleSave} disabled={saving} className="gap-1.5">
+            {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+            {saving ? "Kaydediliyor..." : "Kaydet"}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 // ─── Types ───
 type InventoryItem = {
@@ -508,6 +674,7 @@ export default function AdminInventory() {
           <p className="text-sm text-muted-foreground mt-0.5">{stats.total} ürün</p>
         </div>
         <div className="flex items-center gap-2">
+          <AddProductDialog onAdded={() => { qc.invalidateQueries({ queryKey: ["admin-inventory"] }); }} />
           <Button onClick={refreshData} variant="outline" size="sm" className="gap-1.5">
             <RefreshCw className="h-3.5 w-3.5" />
             Güncelle
