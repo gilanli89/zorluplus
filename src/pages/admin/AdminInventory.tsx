@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useState, useMemo, useCallback, useRef } from "react";
 import {
-  Save, RefreshCw, X, Sparkles, Loader2, FileText, Copy,
+  Save, RefreshCw, X, Loader2,
   Search, ImageIcon, Upload, Check, ChevronDown, ChevronUp,
   Filter, Package, AlertTriangle, Eye, EyeOff
 } from "lucide-react";
@@ -295,7 +295,7 @@ function ProductRow({
             >
               {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
             </Button>
-            <AIContentDialog productName={item.product_name} brand={item.brand} category={item.category} />
+            <ImagePreviewDialog item={item} onChangeUrl={(v) => onFieldChange(item.id, "image_url", v)} />
             {hasChanges && (
               <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-400 text-[10px] px-1.5 h-5">
                 Değişti
