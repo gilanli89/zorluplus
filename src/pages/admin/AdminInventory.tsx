@@ -674,6 +674,7 @@ export default function AdminInventory() {
           <p className="text-sm text-muted-foreground mt-0.5">{stats.total} ürün</p>
         </div>
         <div className="flex items-center gap-2">
+          <AddProductDialog onAdded={() => { qc.invalidateQueries({ queryKey: ["admin-inventory"] }); }} />
           <Button onClick={refreshData} variant="outline" size="sm" className="gap-1.5">
             <RefreshCw className="h-3.5 w-3.5" />
             Güncelle
