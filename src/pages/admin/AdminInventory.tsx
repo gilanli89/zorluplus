@@ -11,7 +11,7 @@ import {
   Search, ImageIcon, Upload, Check, ChevronDown, ChevronUp,
   Filter, Package, AlertTriangle, Eye, EyeOff
 } from "lucide-react";
-import { fetchProducts } from "@/lib/products";
+
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
@@ -312,7 +312,7 @@ function ProductRow({
 export default function AdminInventory() {
   const qc = useQueryClient();
   const [pendingChanges, setPendingChanges] = useState<Map<string, PendingChange>>(new Map());
-  const [syncing, setSyncing] = useState(false);
+  
   const [publishing, setPublishing] = useState(false);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
@@ -420,35 +420,10 @@ export default function AdminInventory() {
     setPublishing(false);
   };
 
-  // ─── CSV Sync ───
-  const syncProducts = async () => {
-    setSyncing(true);
-    try {
-      const products = await fetchProducts();
-      let synced = 0;
-      for (const p of products) {
-        const { error } = await supabase.from("inventory").upsert(
-          {
-            sku: p.sku,
-            product_name: p.name,
-            brand: p.brand || null,
-            category: p.category || null,
-            original_price: p.price || null,
-            sale_price: p.salePrice || null,
-            is_active: p.inStock,
-            quantity: p.inStock ? 1 : 0,
-            image_url: p.image || null,
-          },
-          { onConflict: "sku" }
-        );
-        if (!error) synced++;
-      }
-      qc.invalidateQueries({ queryKey: ["admin-inventory"] });
-      toast.success(`${synced} ürün senkronize edildi`);
-    } catch (e: any) {
-      toast.error("Senkronizasyon hatası: " + e.message);
-    }
-    setSyncing(false);
+  // ─── Refresh from DB ───
+  const refreshData = () => {
+    qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+    toast.success("Veriler güncellendi");
   };
 
   // ─── Stats ───
@@ -476,9 +451,9 @@ export default function AdminInventory() {
           <p className="text-sm text-muted-foreground mt-0.5">{stats.total} ürün</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={syncProducts} disabled={syncing} variant="outline" size="sm" className="gap-1.5">
-            <RefreshCw className={`h-3.5 w-3.5 ${syncing ? "animate-spin" : ""}`} />
-            {syncing ? "Senkronize..." : "CSV Senkronize"}
+          <Button onClick={refreshData} variant="outline" size="sm" className="gap-1.5">
+            <RefreshCw className="h-3.5 w-3.5" />
+            Güncelle
           </Button>
         </div>
       </div>
