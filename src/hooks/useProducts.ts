@@ -7,7 +7,7 @@ async function fetchProductsWithInventory(): Promise<Product[]> {
   // Fetch CSV products and DB inventory in parallel
   const [products, inventoryResult] = await Promise.all([
     fetchProducts(),
-    supabase.from("inventory").select("sku, quantity, original_price, sale_price, is_active"),
+    supabase.from("inventory_public").select("sku, quantity, original_price, sale_price, is_active"),
   ]);
 
   const inventory = inventoryResult.data ?? [];
