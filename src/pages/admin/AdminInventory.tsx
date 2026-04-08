@@ -168,16 +168,18 @@ function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChan
 // ─── Image Cell ───
 function ImageCell({ url, isEditing, onChange }: { url: string | null; isEditing: boolean; onChange: (v: string) => void }) {
   const [showFull, setShowFull] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  const hasUrl = !!url && url.trim().length > 0;
 
   return (
     <div className="flex items-center gap-2">
-      {url ? (
+      {hasUrl && !imgError ? (
         <img
           src={url}
           alt=""
           className="h-10 w-10 rounded-lg object-cover border border-border cursor-pointer flex-shrink-0"
           onClick={() => setShowFull(true)}
-          onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+          onError={() => setImgError(true)}
         />
       ) : (
         <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
@@ -192,10 +194,10 @@ function ImageCell({ url, isEditing, onChange }: { url: string | null; isEditing
           className="h-8 text-xs flex-1 min-w-[150px]"
         />
       )}
-      {showFull && url && (
+      {showFull && hasUrl && (
         <Dialog open={showFull} onOpenChange={setShowFull}>
           <DialogContent className="max-w-md p-2">
-            <img src={url} alt="" className="w-full rounded-lg" />
+            <img src={url} alt="" className="w-full rounded-lg" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
           </DialogContent>
         </Dialog>
       )}
