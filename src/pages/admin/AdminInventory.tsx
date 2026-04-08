@@ -624,8 +624,8 @@ function ProductRow({
               className="h-8 text-sm font-medium"
             />
           ) : (
-            <div>
-              <p className="font-medium text-sm leading-tight truncate max-w-[220px]" title={item.product_name}>
+            <div className="cursor-pointer" onClick={() => setEditOpen(true)}>
+              <p className="font-medium text-sm leading-tight truncate max-w-[220px] hover:text-primary transition-colors" title={item.product_name}>
                 {getValue("product_name") as string}
               </p>
               <p className="text-[11px] text-muted-foreground font-mono mt-0.5">{item.sku || "—"}</p>
