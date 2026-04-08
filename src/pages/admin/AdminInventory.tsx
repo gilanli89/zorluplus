@@ -205,6 +205,8 @@ type InventoryItem = {
   created_at: string;
   updated_at: string;
   price_updated_at: string | null;
+  description?: string | null;
+  attributes?: Record<string, string> | null;
 };
 
 type EditableFields = {
