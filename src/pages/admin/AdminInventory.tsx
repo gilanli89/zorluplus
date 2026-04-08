@@ -22,6 +22,15 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 
+import { CATEGORIES } from "@/lib/constants";
+
+// Merge DB categories with predefined ones, deduplicated & sorted
+function allCategories(dbCats: string[]): string[] {
+  const predefined = CATEGORIES.map(c => c.name);
+  const set = new Set([...predefined, ...dbCats]);
+  return Array.from(set).sort();
+}
+
 // ─── Add Product Dialog ───
 function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; categories?: string[] }) {
   const [open, setOpen] = useState(false);
