@@ -11,8 +11,8 @@ export function useAuth() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const u = session?.user ?? null;
       setUser(u);
-      if (u?.email) {
-        const { data } = await supabase.rpc("is_admin", { check_email: u.email });
+      if (u) {
+        const { data } = await supabase.rpc("check_own_admin_status");
         setIsAdmin(!!data);
       } else {
         setIsAdmin(false);
@@ -23,8 +23,8 @@ export function useAuth() {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       const u = session?.user ?? null;
       setUser(u);
-      if (u?.email) {
-        const { data } = await supabase.rpc("is_admin", { check_email: u.email });
+      if (u) {
+        const { data } = await supabase.rpc("check_own_admin_status");
         setIsAdmin(!!data);
       }
       setLoading(false);
