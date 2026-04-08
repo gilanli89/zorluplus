@@ -205,6 +205,8 @@ type InventoryItem = {
   created_at: string;
   updated_at: string;
   price_updated_at: string | null;
+  description?: string | null;
+  attributes?: Record<string, string> | null;
 };
 
 type EditableFields = {
@@ -225,7 +227,196 @@ const normalizeImageUrl = (url: string | null | undefined) => {
   return url.replace("https://zorluplus.com/wp-content/", "https://cms.zorluplus.com/wp-content/");
 };
 
-// ─── Image Preview Dialog ───
+// ─── Edit Product Dialog ───
+function EditProductDialog({ item, open, onOpenChange, onSaved }: { item: InventoryItem; open: boolean; onOpenChange: (v: boolean) => void; onSaved: () => void }) {
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({
+    product_name: item.product_name,
+    brand: item.brand || "",
+    category: item.category || "",
+    sku: item.sku || "",
+    description: (item as any).description || "",
+    original_price: item.original_price ? String(item.original_price) : "",
+    sale_price: item.sale_price ? String(item.sale_price) : "",
+    quantity: String(item.quantity),
+    image_url: item.image_url || "",
+    is_active: item.is_active,
+  });
+
+  const existingAttrs = (item as any).attributes || {};
+  const [attrs, setAttrs] = useState<{ key: string; value: string }[]>(
+    Object.entries(existingAttrs).map(([k, v]) => ({ key: k, value: String(v) }))
+  );
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
+  const set = (field: string, value: string | boolean) => setForm(p => ({ ...p, [field]: value }));
+
+  const addAttr = () => setAttrs(p => [...p, { key: "", value: "" }]);
+  const removeAttr = (i: number) => setAttrs(p => p.filter((_, idx) => idx !== i));
+  const updateAttr = (i: number, field: "key" | "value", value: string) => {
+    setAttrs(p => p.map((a, idx) => idx === i ? { ...a, [field]: value } : a));
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith("image/")) return;
+    if (file.size > 5 * 1024 * 1024) { toast.error("Dosya 5MB'dan küçük olmalı"); return; }
+    setUploading(true);
+    const ext = file.name.split(".").pop() || "jpg";
+    const fileName = `${item.sku || item.id}_${Date.now()}.${ext}`;
+    const { data, error } = await supabase.storage.from("product-images").upload(fileName, file, { upsert: true });
+    if (error) { toast.error("Yükleme hatası"); setUploading(false); return; }
+    const { data: pub } = supabase.storage.from("product-images").getPublicUrl(data.path);
+    set("image_url", pub.publicUrl);
+    setUploading(false);
+    toast.success("Görsel yüklendi!");
+  };
+
+  const handleSave = async () => {
+    if (!form.product_name.trim()) { toast.error("Ürün adı zorunludur"); return; }
+    setSaving(true);
+
+    const attributes: Record<string, string> = {};
+    attrs.forEach(a => { if (a.key.trim()) attributes[a.key.trim()] = a.value.trim(); });
+
+    const { error } = await supabase.from("inventory").update({
+      product_name: form.product_name.trim(),
+      brand: form.brand.trim() || null,
+      category: form.category.trim() || null,
+      sku: form.sku.trim() || null,
+      description: form.description.trim() || null,
+      original_price: form.original_price ? parseFloat(form.original_price) : null,
+      sale_price: form.sale_price ? parseFloat(form.sale_price) : null,
+      quantity: parseInt(form.quantity) || 0,
+      image_url: form.image_url.trim() || null,
+      is_active: form.is_active,
+      attributes: Object.keys(attributes).length > 0 ? attributes : {},
+      price_updated_at: new Date().toISOString(),
+    } as any).eq("id", item.id);
+
+    setSaving(false);
+    if (error) { toast.error("Güncellenemedi: " + error.message); return; }
+    toast.success("Ürün güncellendi!");
+    onOpenChange(false);
+    onSaved();
+  };
+
+  const imgUrl = normalizeImageUrl(form.image_url);
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Ürün Düzenle</DialogTitle>
+          <DialogDescription>Ürün bilgilerini düzenleyin.</DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-3 mt-2">
+          {/* Image preview */}
+          <div className="flex items-center gap-3">
+            <div className="h-16 w-16 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden flex-shrink-0">
+              {imgUrl ? (
+                <img src={imgUrl} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
+              ) : (
+                <ImageIcon className="h-6 w-6 text-muted-foreground" />
+              )}
+            </div>
+            <div className="flex-1 space-y-1">
+              <Input value={form.image_url} onChange={e => set("image_url", e.target.value)} placeholder="Görsel URL'si" className="h-8 text-xs" />
+              <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
+              <Button type="button" variant="outline" size="sm" className="h-7 text-xs gap-1" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
+                {uploading ? "Yükleniyor..." : "Görsel Yükle"}
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label className="text-xs">Ürün Adı *</Label>
+              <Input value={form.product_name} onChange={e => set("product_name", e.target.value)} className="mt-1" />
+            </div>
+            <div>
+              <Label className="text-xs">Marka</Label>
+              <Input value={form.brand} onChange={e => set("brand", e.target.value)} className="mt-1" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label className="text-xs">Stok Kodu (SKU)</Label>
+              <Input value={form.sku} onChange={e => set("sku", e.target.value)} className="mt-1" />
+            </div>
+            <div>
+              <Label className="text-xs">Kategori</Label>
+              <Input value={form.category} onChange={e => set("category", e.target.value)} className="mt-1" />
+            </div>
+          </div>
+
+          <div>
+            <Label className="text-xs">Açıklama</Label>
+            <Textarea value={form.description} onChange={e => set("description", e.target.value)} rows={2} className="mt-1 text-sm" />
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <Label className="text-xs">Fiyat (₺)</Label>
+              <Input type="number" value={form.original_price} onChange={e => set("original_price", e.target.value)} className="mt-1" />
+            </div>
+            <div>
+              <Label className="text-xs">İndirimli Fiyat (₺)</Label>
+              <Input type="number" value={form.sale_price} onChange={e => set("sale_price", e.target.value)} className="mt-1" />
+            </div>
+            <div>
+              <Label className="text-xs">Stok Adeti</Label>
+              <Input type="number" value={form.quantity} onChange={e => set("quantity", e.target.value)} className="mt-1" />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Switch checked={form.is_active as boolean} onCheckedChange={v => set("is_active", v)} />
+            <Label className="text-xs">{form.is_active ? "Aktif" : "Pasif"}</Label>
+          </div>
+
+          {/* Attributes */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <Label className="text-xs font-semibold">Özellikler (Değişkenler)</Label>
+              <Button type="button" size="sm" variant="outline" onClick={addAttr} className="h-7 text-xs gap-1">
+                <Plus className="h-3 w-3" /> Özellik Ekle
+              </Button>
+            </div>
+            {attrs.length === 0 && (
+              <p className="text-xs text-muted-foreground">Henüz özellik eklenmedi.</p>
+            )}
+            <div className="space-y-2">
+              {attrs.map((a, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <Input value={a.key} onChange={e => updateAttr(i, "key", e.target.value)} placeholder="Özellik" className="h-8 text-xs flex-1" />
+                  <Input value={a.value} onChange={e => updateAttr(i, "value", e.target.value)} placeholder="Değer" className="h-8 text-xs flex-1" />
+                  <Button type="button" size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={() => removeAttr(i)}>
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-2 mt-4">
+          <Button variant="outline" size="sm" onClick={() => onOpenChange(false)}>İptal</Button>
+          <Button size="sm" onClick={handleSave} disabled={saving} className="gap-1.5">
+            {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+            {saving ? "Kaydediliyor..." : "Güncelle"}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChangeUrl: (url: string) => void }) {
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState(normalizeImageUrl(item.image_url));
@@ -384,13 +575,16 @@ function ProductRow({
   pending,
   onFieldChange,
   onToggleActive,
+  onSaved,
 }: {
   item: InventoryItem;
   pending: PendingChange | undefined;
   onFieldChange: (id: string, field: keyof EditableFields, value: string | number | boolean) => void;
   onToggleActive: (id: string, value: boolean) => void;
+  onSaved: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const hasChanges = !!pending;
 
   const getValue = <K extends keyof EditableFields>(field: K): EditableFields[K] => {
@@ -430,8 +624,8 @@ function ProductRow({
               className="h-8 text-sm font-medium"
             />
           ) : (
-            <div>
-              <p className="font-medium text-sm leading-tight truncate max-w-[220px]" title={item.product_name}>
+            <div className="cursor-pointer" onClick={() => setEditOpen(true)}>
+              <p className="font-medium text-sm leading-tight truncate max-w-[220px] hover:text-primary transition-colors" title={item.product_name}>
                 {getValue("product_name") as string}
               </p>
               <p className="text-[11px] text-muted-foreground font-mono mt-0.5">{item.sku || "—"}</p>
@@ -527,6 +721,9 @@ function ProductRow({
           </div>
         </td>
       </tr>
+      {editOpen && (
+        <EditProductDialog item={item} open={editOpen} onOpenChange={setEditOpen} onSaved={onSaved} />
+      )}
     </>
   );
 }
@@ -796,6 +993,7 @@ export default function AdminInventory() {
                   pending={pendingChanges.get(item.id)}
                   onFieldChange={handleFieldChange}
                   onToggleActive={handleToggleActive}
+                  onSaved={() => { qc.invalidateQueries({ queryKey: ["admin-inventory"] }); qc.invalidateQueries({ queryKey: ["products"] }); }}
                 />
               ))}
               {paged.length === 0 && (
