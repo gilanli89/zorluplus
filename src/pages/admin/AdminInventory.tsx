@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useState, useMemo, useCallback, useRef } from "react";
 import {
-  Save, RefreshCw, X, Loader2,
+  Save, RefreshCw, X, Loader2, Plus, Trash2,
   Search, ImageIcon, Upload, Check, ChevronDown, ChevronUp,
   Filter, Package, AlertTriangle, Eye, EyeOff
 } from "lucide-react";
