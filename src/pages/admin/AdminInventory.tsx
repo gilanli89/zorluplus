@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
 
 import {
@@ -54,10 +54,15 @@ type EditableFields = {
 
 type PendingChange = Partial<EditableFields> & { id: string };
 
+const normalizeImageUrl = (url: string | null | undefined) => {
+  if (!url) return "";
+  return url.replace("https://zorluplus.com/wp-content/", "https://cms.zorluplus.com/wp-content/");
+};
+
 // ─── Image Preview Dialog ───
 function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChangeUrl: (url: string) => void }) {
   const [open, setOpen] = useState(false);
-  const [url, setUrl] = useState(item.image_url || "");
+  const [url, setUrl] = useState(normalizeImageUrl(item.image_url));
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -105,7 +110,7 @@ function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChan
   };
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (v) setUrl(item.image_url || ""); }}>
+    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (v) setUrl(normalizeImageUrl(item.image_url)); }}>
       <DialogTrigger asChild>
         <Button size="icon" variant="ghost" className="h-7 w-7 text-primary" title="Görsel Düzenle">
           <ImageIcon className="h-3.5 w-3.5" />
@@ -116,6 +121,7 @@ function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChan
           <DialogTitle className="flex items-center gap-2 text-base">
             <ImageIcon className="h-5 w-5 text-primary" /> Ürün Görseli
           </DialogTitle>
+          <DialogDescription>Ürünün mevcut görselini önizle, yeni görsel yükle veya URL gir.</DialogDescription>
         </DialogHeader>
         <p className="text-sm text-muted-foreground font-medium truncate">{item.product_name}</p>
         <div className="mt-2 rounded-lg border border-border overflow-hidden bg-muted/30 flex items-center justify-center min-h-[200px]">
@@ -169,13 +175,14 @@ function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChan
 function ImageCell({ url, isEditing, onChange }: { url: string | null; isEditing: boolean; onChange: (v: string) => void }) {
   const [showFull, setShowFull] = useState(false);
   const [imgError, setImgError] = useState(false);
-  const hasUrl = !!url && url.trim().length > 0;
+  const normalizedUrl = normalizeImageUrl(url);
+  const hasUrl = !!normalizedUrl && normalizedUrl.trim().length > 0;
 
   return (
     <div className="flex items-center gap-2">
       {hasUrl && !imgError ? (
         <img
-          src={url}
+          src={normalizedUrl}
           alt=""
           className="h-10 w-10 rounded-lg object-cover border border-border cursor-pointer flex-shrink-0"
           onClick={() => setShowFull(true)}
@@ -197,7 +204,7 @@ function ImageCell({ url, isEditing, onChange }: { url: string | null; isEditing
       {showFull && hasUrl && (
         <Dialog open={showFull} onOpenChange={setShowFull}>
           <DialogContent className="max-w-md p-2">
-            <img src={url} alt="" className="w-full rounded-lg" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
+            <img src={normalizedUrl} alt="" className="w-full rounded-lg" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
           </DialogContent>
         </Dialog>
       )}
