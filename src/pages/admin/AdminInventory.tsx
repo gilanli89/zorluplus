@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useState, useMemo, useCallback, useRef } from "react";
 import {
-  Save, RefreshCw, X, Sparkles, Loader2, FileText, Copy,
+  Save, RefreshCw, X, Loader2,
   Search, ImageIcon, Upload, Check, ChevronDown, ChevronUp,
   Filter, Package, AlertTriangle, Eye, EyeOff
 } from "lucide-react";
@@ -15,12 +15,12 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
+
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 
-const CONTENT_GEN_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-content-gen`;
+
 
 // ─── Types ───
 type InventoryItem = {
@@ -54,64 +54,53 @@ type EditableFields = {
 
 type PendingChange = Partial<EditableFields> & { id: string };
 
-// ─── AI Content Dialog ───
-function AIContentDialog({ productName, brand, category }: { productName: string; brand?: string | null; category?: string | null }) {
-  const [content, setContent] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [type, setType] = useState<"description" | "seo" | "campaign">("description");
+// ─── Image Preview Dialog ───
+function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChangeUrl: (url: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const [url, setUrl] = useState(item.image_url || "");
 
-  const generate = async () => {
-    setLoading(true);
-    setContent("");
-    try {
-      const resp = await fetch(CONTENT_GEN_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ productName, brand, category, type }),
-      });
-      const data = await resp.json();
-      if (data.error) { toast.error(data.error); return; }
-      setContent(data.content || "");
-    } catch { toast.error("AI içerik oluşturulamadı"); }
-    setLoading(false);
+  const handleSave = () => {
+    onChangeUrl(url);
+    setOpen(false);
+    toast.success("Görsel URL güncellendi");
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (v) setUrl(item.image_url || ""); }}>
       <DialogTrigger asChild>
-        <Button size="icon" variant="ghost" className="h-7 w-7 text-primary" title="AI İçerik Üret">
-          <Sparkles className="h-3.5 w-3.5" />
+        <Button size="icon" variant="ghost" className="h-7 w-7 text-primary" title="Görsel Düzenle">
+          <ImageIcon className="h-3.5 w-3.5" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" /> AI İçerik Üretici
+          <DialogTitle className="flex items-center gap-2 text-base">
+            <ImageIcon className="h-5 w-5 text-primary" /> Ürün Görseli
           </DialogTitle>
         </DialogHeader>
-        <p className="text-sm text-muted-foreground font-medium">{productName}</p>
-        <div className="flex gap-2 mt-2">
-          {([["description", "Ürün Açıklaması"], ["seo", "SEO Meta"], ["campaign", "Kampanya Yazısı"]] as const).map(([key, label]) => (
-            <Button key={key} size="sm" variant={type === key ? "default" : "outline"} onClick={() => setType(key)} className="text-xs">
-              {label}
-            </Button>
-          ))}
+        <p className="text-sm text-muted-foreground font-medium truncate">{item.product_name}</p>
+        <div className="mt-2 rounded-lg border border-border overflow-hidden bg-muted/30 flex items-center justify-center min-h-[200px]">
+          {url ? (
+            <img src={url} alt={item.product_name} className="max-h-[280px] object-contain" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
+          ) : (
+            <div className="flex flex-col items-center gap-2 text-muted-foreground py-8">
+              <ImageIcon className="h-10 w-10" />
+              <span className="text-xs">Görsel yok</span>
+            </div>
+          )}
         </div>
-        <Button onClick={generate} disabled={loading} className="gap-2 mt-2">
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileText className="h-4 w-4" />}
-          {loading ? "Oluşturuluyor..." : "Oluştur"}
-        </Button>
-        {content && (
-          <div className="mt-3">
-            <Textarea value={content} onChange={e => setContent(e.target.value)} rows={5} className="text-sm" />
-            <Button size="sm" variant="outline" className="gap-1 mt-2" onClick={() => { navigator.clipboard.writeText(content); toast.success("Kopyalandı!"); }}>
-              <Copy className="h-3 w-3" /> Kopyala
-            </Button>
-          </div>
-        )}
+        <Input
+          value={url}
+          onChange={e => setUrl(e.target.value)}
+          placeholder="Görsel URL'si girin..."
+          className="text-sm mt-2"
+        />
+        <div className="flex justify-end gap-2 mt-2">
+          <Button variant="outline" size="sm" onClick={() => setOpen(false)}>İptal</Button>
+          <Button size="sm" onClick={handleSave} className="gap-1.5">
+            <Check className="h-3.5 w-3.5" /> Kaydet
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
@@ -295,7 +284,7 @@ function ProductRow({
             >
               {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
             </Button>
-            <AIContentDialog productName={item.product_name} brand={item.brand} category={item.category} />
+            <ImagePreviewDialog item={item} onChangeUrl={(v) => onFieldChange(item.id, "image_url", v)} />
             {hasChanges && (
               <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-400 text-[10px] px-1.5 h-5">
                 Değişti
