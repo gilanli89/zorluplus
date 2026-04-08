@@ -312,7 +312,7 @@ function ProductRow({
 export default function AdminInventory() {
   const qc = useQueryClient();
   const [pendingChanges, setPendingChanges] = useState<Map<string, PendingChange>>(new Map());
-  const [syncing, setSyncing] = useState(false);
+  
   const [publishing, setPublishing] = useState(false);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
