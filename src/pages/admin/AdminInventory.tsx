@@ -22,8 +22,17 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 
+import { CATEGORIES } from "@/lib/constants";
+
+// Merge DB categories with predefined ones, deduplicated & sorted
+function allCategories(dbCats: string[]): string[] {
+  const predefined = CATEGORIES.map(c => c.name);
+  const set = new Set([...predefined, ...dbCats]);
+  return Array.from(set).sort();
+}
+
 // ─── Add Product Dialog ───
-function AddProductDialog({ onAdded }: { onAdded: () => void }) {
+function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; categories?: string[] }) {
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
@@ -112,7 +121,12 @@ function AddProductDialog({ onAdded }: { onAdded: () => void }) {
             </div>
             <div>
               <Label className="text-xs">Kategori</Label>
-              <Input value={form.category} onChange={e => set("category", e.target.value)} placeholder="TV & Görüntü Sistemleri" className="mt-1" />
+              <Select value={form.category} onValueChange={v => set("category", v)}>
+                <SelectTrigger className="mt-1"><SelectValue placeholder="Kategori seçin" /></SelectTrigger>
+                <SelectContent>
+                  {allCategories(categories).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -228,7 +242,7 @@ const normalizeImageUrl = (url: string | null | undefined) => {
 };
 
 // ─── Edit Product Dialog ───
-function EditProductDialog({ item, open, onOpenChange, onSaved }: { item: InventoryItem; open: boolean; onOpenChange: (v: boolean) => void; onSaved: () => void }) {
+function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] }: { item: InventoryItem; open: boolean; onOpenChange: (v: boolean) => void; onSaved: () => void; categories?: string[] }) {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
     product_name: item.product_name,
@@ -351,7 +365,12 @@ function EditProductDialog({ item, open, onOpenChange, onSaved }: { item: Invent
             </div>
             <div>
               <Label className="text-xs">Kategori</Label>
-              <Input value={form.category} onChange={e => set("category", e.target.value)} className="mt-1" />
+              <Select value={form.category} onValueChange={v => set("category", v)}>
+                <SelectTrigger className="mt-1"><SelectValue placeholder="Kategori seçin" /></SelectTrigger>
+                <SelectContent>
+                  {allCategories(categories).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -576,12 +595,14 @@ function ProductRow({
   onFieldChange,
   onToggleActive,
   onSaved,
+  categories,
 }: {
   item: InventoryItem;
   pending: PendingChange | undefined;
   onFieldChange: (id: string, field: keyof EditableFields, value: string | number | boolean) => void;
   onToggleActive: (id: string, value: boolean) => void;
   onSaved: () => void;
+  categories: string[];
 }) {
   const [expanded, setExpanded] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -722,7 +743,7 @@ function ProductRow({
         </td>
       </tr>
       {editOpen && (
-        <EditProductDialog item={item} open={editOpen} onOpenChange={setEditOpen} onSaved={onSaved} />
+        <EditProductDialog item={item} open={editOpen} onOpenChange={setEditOpen} onSaved={onSaved} categories={categories} />
       )}
     </>
   );
@@ -871,7 +892,7 @@ export default function AdminInventory() {
           <p className="text-sm text-muted-foreground mt-0.5">{stats.total} ürün</p>
         </div>
         <div className="flex items-center gap-2">
-          <AddProductDialog onAdded={() => { qc.invalidateQueries({ queryKey: ["admin-inventory"] }); }} />
+          <AddProductDialog onAdded={() => { qc.invalidateQueries({ queryKey: ["admin-inventory"] }); }} categories={categories} />
           <Button onClick={refreshData} variant="outline" size="sm" className="gap-1.5">
             <RefreshCw className="h-3.5 w-3.5" />
             Güncelle
@@ -994,6 +1015,7 @@ export default function AdminInventory() {
                   onFieldChange={handleFieldChange}
                   onToggleActive={handleToggleActive}
                   onSaved={() => { qc.invalidateQueries({ queryKey: ["admin-inventory"] }); qc.invalidateQueries({ queryKey: ["products"] }); }}
+                  categories={categories}
                 />
               ))}
               {paged.length === 0 && (
