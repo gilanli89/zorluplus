@@ -575,13 +575,16 @@ function ProductRow({
   pending,
   onFieldChange,
   onToggleActive,
+  onSaved,
 }: {
   item: InventoryItem;
   pending: PendingChange | undefined;
   onFieldChange: (id: string, field: keyof EditableFields, value: string | number | boolean) => void;
   onToggleActive: (id: string, value: boolean) => void;
+  onSaved: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const hasChanges = !!pending;
 
   const getValue = <K extends keyof EditableFields>(field: K): EditableFields[K] => {
