@@ -721,6 +721,9 @@ function ProductRow({
           </div>
         </td>
       </tr>
+      {editOpen && (
+        <EditProductDialog item={item} open={editOpen} onOpenChange={setEditOpen} onSaved={onSaved} />
+      )}
     </>
   );
 }
@@ -990,6 +993,7 @@ export default function AdminInventory() {
                   pending={pendingChanges.get(item.id)}
                   onFieldChange={handleFieldChange}
                   onToggleActive={handleToggleActive}
+                  onSaved={() => { qc.invalidateQueries({ queryKey: ["admin-inventory"] }); qc.invalidateQueries({ queryKey: ["products"] }); }}
                 />
               ))}
               {paged.length === 0 && (
