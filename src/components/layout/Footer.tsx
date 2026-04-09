@@ -4,6 +4,8 @@ import { PremiumIconInline } from "@/components/PremiumIcon";
 import { motion } from "framer-motion";
 import { BRAND, FOOTER_LINKS } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import zorluLogo from "@/assets/zorlu-logo.png";
 import zorluDigitalLogo from "@/assets/zorlu-digital-logo.png";
 
