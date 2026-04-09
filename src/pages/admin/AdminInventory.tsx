@@ -945,6 +945,15 @@ export default function AdminInventory() {
     if (pendingChanges.size === 0) return;
     setPublishing(true);
 
+    try {
+      // Oturumu yenile
+      await supabase.auth.getSession();
+    } catch {
+      setPublishing(false);
+      toast.error("Oturum yenilenemedi. Lütfen tekrar giriş yapın.");
+      return;
+    }
+
     let success = 0;
     let failed = 0;
 
@@ -960,9 +969,16 @@ export default function AdminInventory() {
       if ("is_active" in changes) updateData.is_active = changes.is_active;
       updateData.price_updated_at = new Date().toISOString();
 
-      const { error } = await supabase.from("inventory").update(updateData).eq("id", id);
-      if (error) { failed++; console.error(error); }
-      else success++;
+      try {
+        const savePromise = supabase.from("inventory").update(updateData).eq("id", id);
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 15000));
+        const { error } = await Promise.race([savePromise, timeout]) as any;
+        if (error) { failed++; console.error("Update error:", id, error); }
+        else success++;
+      } catch (e: any) {
+        failed++;
+        console.error("Update exception:", id, e?.message);
+      }
     }
 
     if (failed > 0) {
@@ -973,6 +989,9 @@ export default function AdminInventory() {
       setPendingChanges(new Map());
       qc.invalidateQueries({ queryKey: ["admin-inventory"] });
       qc.invalidateQueries({ queryKey: ["products"] });
+    }
+    if (failed > 0 && success === 0) {
+      toast.error("Hiçbir güncelleme yapılamadı. Oturumunuzu kontrol edin ve tekrar deneyin.");
     }
     setPublishing(false);
   };
