@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import ContentPage from "@/components/ContentPage";
 import { motion } from "framer-motion";
-import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, Mail, Recycle, BatteryCharging, Zap, Globe, Lightbulb, Leaf, Monitor, Snowflake, Refrigerator, Coffee, Volume2, Cpu, CheckCircle, Wrench, Building2, Phone, FileText, Lock, Cookie, ScrollText, Shield, Eye, Database, UserCheck, Settings, BarChart3, AlertCircle } from "lucide-react";
+import { Users, Clock, Star, Truck, ShieldCheck, HeartHandshake, MapPin, Quote, Mail, Recycle, BatteryCharging, Zap, Globe, Lightbulb, Leaf, Monitor, Snowflake, Refrigerator, Coffee, Volume2, Cpu, CheckCircle, Wrench, Building2, Phone, FileText, Lock, Cookie, ScrollText, Shield, Eye, Database, UserCheck, Settings, BarChart3, AlertCircle, Package, CreditCard } from "lucide-react";
 import { BRANCHES } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 import PremiumIcon, { PremiumBadgeIcon, PremiumIconInline } from "@/components/PremiumIcon";
@@ -844,28 +844,21 @@ export function DestekPage() {
 
   return (
     <div className="container py-12 md:py-16 max-w-4xl">
-      {/* Hero Title */}
-      <motion.h1
-        className="font-display text-3xl md:text-5xl font-extrabold mb-2 text-center"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <motion.span
-          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          {t("content.destek.title")}
-        </motion.span>
-      </motion.h1>
-      <motion.p
-        className="text-center text-muted-foreground text-lg mb-10"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.15 }}
-      >
-        {t("content.destek.subtitle")}
-      </motion.p>
+      {/* Premium Hero */}
+      <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+        <div className="mb-4 flex justify-center">
+          <PremiumIcon icon={Wrench} size="xl" variant="glow" />
+        </div>
+        <motion.h1 className="font-display text-3xl md:text-5xl font-extrabold mb-4">
+          <motion.span
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t("content.destek.title")}
+          </motion.span>
+        </motion.h1>
+        <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">{t("content.destek.subtitle")}</p>
+      </motion.div>
 
       {/* Trust Cards */}
       <motion.div
@@ -1151,22 +1144,9 @@ export function DestekPage() {
       </motion.div>
 
       {/* Footer motto */}
-      <motion.div
-        className="text-center mb-8"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        <motion.p
-          className="font-display font-extrabold text-xl md:text-2xl"
-          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          Zorlu Digital Plaza
-        </motion.p>
-        <p className="text-muted-foreground text-sm mt-1">26 Yıllık Güven - Teknoloji - Hizmet</p>
-        <p className="text-muted-foreground text-sm">Samsung ve LG ürünleri için KKTC'de güvenilir teknik servis merkezi.</p>
-      </motion.div>
+      <motion.p className="text-center font-display font-bold text-lg md:text-xl mt-10 mb-8 italic" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
+        Zorlu Digital Plaza | Teknolojiye Premium Dokunuş
+      </motion.p>
 
       {/* Sık Aranan Servis Hizmetleri */}
       <motion.div
@@ -1280,20 +1260,22 @@ export function IadeKosullariPage() {
   const { t } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
-      <motion.h1
-        className="font-display text-3xl md:text-4xl font-extrabold mb-2"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <motion.span
-          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          {t("content.returns.title")}
-        </motion.span>
-      </motion.h1>
-      <p className="text-sm text-muted-foreground mb-8">Son Güncelleme Tarihi: 23.12.2025</p>
+      {/* Premium Hero */}
+      <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+        <div className="mb-4 flex justify-center">
+          <PremiumIcon icon={ScrollText} size="xl" variant="glow" />
+        </div>
+        <motion.h1 className="font-display text-3xl md:text-5xl font-extrabold mb-4">
+          <motion.span
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t("content.returns.title")}
+          </motion.span>
+        </motion.h1>
+        <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">Premium hizmet standartlarımız kapsamında iade, değişim ve iptal koşulları.</p>
+        <p className="text-xs text-muted-foreground mt-2">Son Güncelleme Tarihi: 23.12.2025</p>
+      </motion.div>
 
       <motion.div
         className="prose prose-sm max-w-none text-muted-foreground [&_h2]:text-foreground [&_h2]:font-display [&_h2]:font-bold [&_h2]:text-lg [&_h2]:mt-8 [&_h2]:mb-3 [&_p]:leading-relaxed [&_ul]:list-disc [&_ul]:pl-5 space-y-4"
@@ -1710,19 +1692,21 @@ export function SiparisTakipPage() {
   const { t } = useLanguage();
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
-      <motion.h1
-        className="font-display text-3xl md:text-4xl font-extrabold mb-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <motion.span
-          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          {t("content.orderTracking.title")}
-        </motion.span>
-      </motion.h1>
+      {/* Premium Hero */}
+      <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+        <div className="mb-4 flex justify-center">
+          <PremiumIcon icon={Package} size="xl" variant="glow" />
+        </div>
+        <motion.h1 className="font-display text-3xl md:text-5xl font-extrabold mb-4">
+          <motion.span
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t("content.orderTracking.title")}
+          </motion.span>
+        </motion.h1>
+        <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">Siparişinizin her adımını Premium güvence altında takip edin.</p>
+      </motion.div>
 
       <motion.div
         className="space-y-6 text-muted-foreground leading-relaxed"
@@ -1834,19 +1818,21 @@ export function OdemeYontemleriPage() {
 
   return (
     <div className="container py-12 md:py-16 max-w-3xl">
-      <motion.h1
-        className="font-display text-3xl md:text-4xl font-extrabold mb-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <motion.span
-          animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          {t("content.payment.title")}
-        </motion.span>
-      </motion.h1>
+      {/* Premium Hero */}
+      <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+        <div className="mb-4 flex justify-center">
+          <PremiumIcon icon={Star} size="xl" variant="glow" />
+        </div>
+        <motion.h1 className="font-display text-3xl md:text-5xl font-extrabold mb-4">
+          <motion.span
+            animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {t("content.payment.title")}
+          </motion.span>
+        </motion.h1>
+        <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">Esnek ve güvenilir Premium ödeme yöntemleri ile teknolojiye hızla ulaşın.</p>
+      </motion.div>
 
       <motion.div
         className="space-y-8 text-muted-foreground leading-relaxed"
