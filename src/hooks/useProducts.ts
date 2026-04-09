@@ -83,8 +83,8 @@ async function fetchProductsWithInventory(): Promise<Product[]> {
       category: dbCat?.category || csvP.category,
       subcategory: dbCat?.subcategory || csvP.subcategory,
       description: inv.description || csvP.description,
-      image: inv.image_url || csvP.image,
-      images: inv.image_url ? [inv.image_url, ...csvP.images.filter(i => i !== inv.image_url)] : csvP.images,
+      image: normalizeImageUrl(inv.image_url) || csvP.image,
+      images: inv.image_url ? [normalizeImageUrl(inv.image_url), ...csvP.images.filter(i => i !== normalizeImageUrl(inv.image_url))] : csvP.images,
       price: inv.original_price != null ? Number(inv.original_price) : csvP.price,
       salePrice: inv.sale_price != null && Number(inv.sale_price) > 0
         ? Number(inv.sale_price)
