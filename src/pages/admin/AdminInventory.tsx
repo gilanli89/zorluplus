@@ -1060,6 +1060,34 @@ export default function AdminInventory() {
         </div>
       )}
 
+      {/* ─── Bulk Actions Bar ─── */}
+      {selectedIds.size > 0 && (
+        <div className="sticky top-0 z-30 rounded-xl border-2 border-primary/50 bg-primary/5 dark:bg-primary/10 p-3 flex flex-wrap items-center justify-between gap-2 shadow-lg">
+          <div className="flex items-center gap-2">
+            <CheckSquare className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">
+              {selectedIds.size} ürün seçildi
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => setBulkConfirm({ type: "active" })} className="gap-1 text-xs">
+              <Eye className="h-3.5 w-3.5" /> Aktif Yap
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setBulkConfirm({ type: "inactive" })} className="gap-1 text-xs">
+              <EyeOff className="h-3.5 w-3.5" /> Pasif Yap
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setBulkCategoryOpen(true)} className="gap-1 text-xs">
+              <Filter className="h-3.5 w-3.5" /> Kategori Değiştir
+            </Button>
+            <Button variant="destructive" size="sm" onClick={() => setBulkConfirm({ type: "delete" })} className="gap-1 text-xs">
+              <Trash2 className="h-3.5 w-3.5" /> Sil
+            </Button>
+            <Button variant="ghost" size="sm" onClick={clearSelection} className="gap-1 text-xs text-muted-foreground">
+              <X className="h-3.5 w-3.5" /> Seçimi Temizle
+            </Button>
+          </div>
+        </div>
+      )}
       {/* ─── Filters ─── */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative flex-1 min-w-[200px] max-w-sm">
