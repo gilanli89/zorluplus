@@ -28,8 +28,9 @@ async function verifySuperAdmin(req: Request) {
   if (error || !data?.claims) return null;
 
   const userId = data.claims.sub as string;
-  const { data: isSA } = await anonClient.rpc("is_super_admin", { _user_id: userId });
-  if (!isSA) return null;
+  // Allow super_admin or admin (via check_own_admin_status)
+  const { data: isAdmin } = await anonClient.rpc("check_own_admin_status");
+  if (!isAdmin) return null;
   return userId;
 }
 
