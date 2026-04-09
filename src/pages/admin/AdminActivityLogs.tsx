@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { format, startOfDay, endOfDay } from "date-fns";
@@ -9,7 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ChevronLeft, ChevronRight, Activity, CalendarIcon, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Activity, CalendarIcon, X, Download } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const ENTITY_LABELS: Record<string, string> = {
@@ -89,6 +90,53 @@ export default function AdminActivityLogs() {
     setDateTo(undefined);
     setPage(0);
   };
+
+  const [exporting, setExporting] = useState(false);
+
+  const exportCSV = useCallback(async () => {
+    setExporting(true);
+    try {
+      let query = supabase
+        .from("activity_logs")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(5000);
+
+      if (entityFilter !== "all") query = query.eq("entity_type", entityFilter);
+      if (searchEmail.trim()) query = query.ilike("user_email", `%${searchEmail.trim()}%`);
+      if (dateFrom) query = query.gte("created_at", startOfDay(dateFrom).toISOString());
+      if (dateTo) query = query.lte("created_at", endOfDay(dateTo).toISOString());
+
+      const { data: rows, error } = await query;
+      if (error) throw error;
+      if (!rows?.length) { toast.error("Dışa aktarılacak kayıt bulunamadı"); return; }
+
+      const header = "Tarih,Kullanıcı,İşlem,Modül,Varlık ID,Detay";
+      const csvRows = rows.map((r: any) => {
+        const date = format(new Date(r.created_at), "dd.MM.yyyy HH:mm");
+        const action = ACTION_LABELS[r.action] || r.action;
+        const entity = ENTITY_LABELS[r.entity_type] || r.entity_type;
+        const details = r.details && Object.keys(r.details).length > 0
+          ? JSON.stringify(r.details).replace(/"/g, '""')
+          : "";
+        return `"${date}","${r.user_email}","${action}","${entity}","${r.entity_id || ""}","${details}"`;
+      });
+
+      const bom = "\uFEFF";
+      const blob = new Blob([bom + header + "\n" + csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `aktivite-loglari-${format(new Date(), "yyyy-MM-dd")}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success(`${rows.length} kayıt dışa aktarıldı`);
+    } catch (e: any) {
+      toast.error(e.message || "Dışa aktarma hatası");
+    } finally {
+      setExporting(false);
+    }
+  }, [entityFilter, searchEmail, dateFrom, dateTo]);
 
   return (
     <div>
