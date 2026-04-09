@@ -116,6 +116,11 @@ export function normalizeCategorySlug(raw: string): { category: string; subcateg
     }
   }
 
+  // If input looks like an existing slug (contains hyphens), skip keyword fallback
+  if (raw.includes("-")) {
+    return { category: slugify(raw), subcategory: "" };
+  }
+
   // Fallback: keyword-based matching against full string
   const fullLower = raw.toLowerCase();
   const keywordMap: Array<{ match: string; category: string; subcategory: string }> = [
@@ -134,7 +139,6 @@ export function normalizeCategorySlug(raw: string): { category: string; subcateg
     { match: "ısıtıcı", category: "klima-isitma", subcategory: "isiticilar" },
     { match: "televizyon", category: "tv-goruntu", subcategory: "tv" },
     { match: "kulaklık", category: "ses-sistemleri", subcategory: "kulaklik" },
-    { match: "tv", category: "tv-goruntu", subcategory: "tv" },
     { match: "soundbar", category: "ses-sistemleri", subcategory: "soundbar" },
     { match: "air fryer", category: "mutfak-aletleri", subcategory: "air-fryer" },
     { match: "mikrodalga", category: "mutfak-aletleri", subcategory: "mikrodalga" },
