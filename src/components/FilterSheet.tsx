@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SlidersHorizontal, X, Minus, Bug, Tag, Monitor, Layers, Maximize, Thermometer, Weight, Droplets, Users, PackageCheck } from "lucide-react";
-import { PremiumBadgeIcon } from "@/components/PremiumIcon";
+import { PremiumBadgeIcon, PremiumIconInline } from "@/components/PremiumIcon";
 import { FilterState, SortOption, Product } from "@/lib/types";
 import { useLanguage } from "@/contexts/LanguageContext";
 import BrandLogo from "@/components/BrandLogo";
