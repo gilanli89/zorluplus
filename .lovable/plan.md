@@ -1,25 +1,25 @@
 
 
-## Plan: Kullanıcı Adına Tıklayınca Rol Detay/Düzenleme Dialog'u
+## Fix: Kullanıcı Rol Detay Dialog'u Düzeltme
 
-### Mevcut Durum
-Şu an roller tablo içinde inline Select ile değiştiriliyor. Kullanıcı, email'e tıklayarak bir detay dialog'u açmak ve rolü oradan yönetmek istiyor.
+### Sorun
+Konsol loglarında `DialogFooter` bileşenine ref verilemiyor hatası ve `DialogDescription` eksikliği uyarısı var. Bu, rol düzenleme dialog'unun düzgün render edilmemesine neden oluyor.
 
-### Yapılacaklar
+### Çözüm
 
-**`src/pages/admin/AdminUsers.tsx` güncellemesi:**
+**`src/pages/admin/AdminUsers.tsx` düzeltmeleri:**
 
-1. Kullanıcı email'ini tıklanabilir yap (cursor-pointer, underline, hover efekti)
-2. Tıklandığında bir **Dialog** aç:
-   - Kullanıcı email'i ve kayıt tarihi
-   - Mevcut rol (Badge olarak)
-   - Rol değiştirme Select dropdown'u
-   - "Kaydet" butonu ile rol güncelleme
-3. Tablo içindeki mevcut inline Select'i kaldır, yerine sadece rol Badge'i koy (daha temiz görünüm)
+1. Rol detay dialog'una `DialogDescription` ekle (accessibility uyarısını gider)
+2. "Yeni Kullanıcı" dialog'una da `DialogDescription` ekle
+3. Dialog'ların düzgün çalıştığından emin ol
+
+**`src/components/ui/dialog.tsx` düzeltmesi:**
+
+1. `DialogFooter` bileşenini `React.forwardRef` ile sar (ref hatası çözülür)
+2. `DialogHeader` bileşenini de `React.forwardRef` ile sar (tutarlılık)
 
 ### Teknik Detay
-
-- Yeni state: `selectedUser` (tıklanan kullanıcı) ve `editRole` (seçilen yeni rol)
-- Dialog içinde mevcut `handleRoleChange` fonksiyonu kullanılacak
-- Tek dosya değişikliği: `src/pages/admin/AdminUsers.tsx`
+- `DialogFooter` şu an düz bir function component; Radix Dialog içsel olarak ref geçmeye çalışıyor ve hata veriyor
+- `DialogDescription` eklenmezse Radix erişilebilirlik uyarısı veriyor
+- Her iki sorun da dialog'un düzgün çalışmamasına neden olabiliyor
 
