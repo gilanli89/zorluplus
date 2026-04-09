@@ -861,6 +861,85 @@ export default function AdminInventory() {
     toast.info("Değişiklikler iptal edildi");
   }, []);
 
+  // ─── Selection helpers ───
+  const toggleSelect = useCallback((id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const toggleSelectAll = useCallback(() => {
+    setSelectedIds(prev => {
+      if (prev.size === filtered.length && filtered.length > 0) return new Set();
+      return new Set(filtered.map(i => i.id));
+    });
+  }, [filtered]);
+
+  const clearSelection = useCallback(() => setSelectedIds(new Set()), []);
+
+  // ─── Bulk operations ───
+  const chunkArray = (arr: string[], size: number) => {
+    const chunks: string[][] = [];
+    for (let i = 0; i < arr.length; i += size) chunks.push(arr.slice(i, i + size));
+    return chunks;
+  };
+
+  const bulkDelete = async () => {
+    setBulkProcessing(true);
+    const ids = Array.from(selectedIds);
+    const chunks = chunkArray(ids, 500);
+    let failed = 0;
+    for (const chunk of chunks) {
+      const { error } = await supabase.from("inventory").delete().in("id", chunk);
+      if (error) { failed += chunk.length; console.error(error); }
+    }
+    setBulkProcessing(false);
+    setBulkConfirm(null);
+    if (failed > 0) toast.error(`${failed} ürün silinemedi`);
+    else toast.success(`${ids.length} ürün silindi`);
+    setSelectedIds(new Set());
+    qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+    qc.invalidateQueries({ queryKey: ["products"] });
+  };
+
+  const bulkSetActive = async (active: boolean) => {
+    setBulkProcessing(true);
+    const ids = Array.from(selectedIds);
+    const chunks = chunkArray(ids, 500);
+    let failed = 0;
+    for (const chunk of chunks) {
+      const { error } = await supabase.from("inventory").update({ is_active: active }).in("id", chunk);
+      if (error) { failed += chunk.length; console.error(error); }
+    }
+    setBulkProcessing(false);
+    setBulkConfirm(null);
+    if (failed > 0) toast.error(`${failed} ürün güncellenemedi`);
+    else toast.success(`${ids.length} ürün ${active ? "aktif" : "pasif"} yapıldı`);
+    setSelectedIds(new Set());
+    qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+    qc.invalidateQueries({ queryKey: ["products"] });
+  };
+
+  const bulkSetCategory = async (category: string) => {
+    setBulkProcessing(true);
+    const ids = Array.from(selectedIds);
+    const chunks = chunkArray(ids, 500);
+    let failed = 0;
+    for (const chunk of chunks) {
+      const { error } = await supabase.from("inventory").update({ category }).in("id", chunk);
+      if (error) { failed += chunk.length; console.error(error); }
+    }
+    setBulkProcessing(false);
+    setBulkCategoryOpen(false);
+    if (failed > 0) toast.error(`${failed} ürün güncellenemedi`);
+    else toast.success(`${ids.length} ürünün kategorisi güncellendi`);
+    setSelectedIds(new Set());
+    qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+    qc.invalidateQueries({ queryKey: ["products"] });
+  };
+
   // ─── Publish (batch save) ───
   const publishChanges = async () => {
     if (pendingChanges.size === 0) return;
