@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { logActivity } from "@/lib/activityLogger";
 import { useState, useMemo, useCallback, useRef } from "react";
 import {
   Save, RefreshCw, X, Loader2, Plus, Trash2,
