@@ -1,37 +1,65 @@
 
+Sebep net:
 
-## Veritabanını Birincil Kaynak Yap
+1. Bu ürün hâlâ `public/data/products.csv` içinde duruyor.
+   - `9223,JBL 2.1 Deep Bass Soundbar` kaydı CSV’de mevcut.
+2. Frontend ürünleri iki kaynaktan topluyor:
+   - `fetchProducts()` → CSV
+   - `inventory_public` → veritabanı
+3. `src/hooks/useProducts.ts` içindeki mevcut mantıkta:
+   - Veritabanında ürün varsa onu birincil kabul ediyor
+   - Ama veritabanından ürün fiziksel olarak silinirse, o SKU artık `seenSkus` içine girmiyor
+   - Sonra alttaki “CSV-only ürünler” adımında ürün yeniden listeye ekleniyor
+4. Sonuç:
+   - Admin panelde “silme” işlemi DB kaydını kaldırıyor
+   - Ama CSV aynı ürünü hâlâ yayınladığı için ürün sayfada görünmeye devam ediyor
 
-### Mevcut Durum
-Şu an ürün verileri şu sırayla yükleniyor:
-1. CSV dosyası (`public/data/products.csv`) okunuyor
-2. Veritabanı (`inventory_public`) okunuyor
-3. İkisi birleştiriliyor — DB alanları CSV'yi eziyor
+Bu yüzden şu an sistemde:
+- Pasife alma çalışır
+- Fiziksel silme, CSV’de kayıt varsa görünürlüğü tamamen kaldıramaz
 
-**Sorun:** Admin panelden bir ürün silinse/deaktive edilse bile, CSV'de hâlâ varsa sitede görünmeye devam ediyor. Ayrıca CSV'deki ürünler DB'de yoksa hiçbir admin kontrolü olmadan yayınlanıyor.
+En doğru çözüm planı:
 
-### Yeni Mantık: DB Birincil
+1. “Sil” davranışını hard delete yerine soft delete yap
+   - `bulkDelete()` içindeki `delete()` çağrısını kaldır
+   - Bunun yerine `is_active = false` güncelle
+   - Böylece SKU veritabanında kalır ve frontend bu SKU’yu CSV’den geri eklemez
 
-Merge sırası tersine çevrilecek:
+2. Frontend merge mantığını silinmiş/pasif ürünleri kesin engelleyecek şekilde netleştir
+   - `useProducts.ts` içinde kural açık olmalı:
+     - DB’de SKU varsa tek gerçek kaynak DB
+     - `is_active = false` ise asla gösterme
+     - CSV sadece DB’de hiç izi olmayan geçici ürünler için fallback olsun
 
-1. **DB ürünleri birincil** — veritabanındaki tüm aktif ürünler önce listeye alınır
-2. **CSV sadece tamamlayıcı** — CSV'deki bir ürün DB'de **hiç yoksa** (SKU eşleşmesi yok), CSV'den eklenir. Ama DB'de varsa ve `is_active = false` ise **CSV verisi de gösterilmez**
-3. DB'de olan ürünler için CSV verileri sadece DB'de `null/boş` olan alanları doldurmak için kullanılır (fallback)
+3. Eğer gerçek “kalıcı silme” isteniyorsa ek bir engelleme katmanı kur
+   - Seçenek A: `deleted_skus` gibi bir tablo tutup CSV fallback öncesi bu SKU’ları ele
+   - Seçenek B: CSV fallback’i tamamen kaldır ve siteyi yalnızca veritabanından besle
+   - Seçenek C: Admin panel değişikliklerinde CSV’yi otomatik senkronize eden bir backend akışı ekle
 
-### Davranış Değişikliği
+Önerdiğim uygulama sırası:
 
-| Senaryo | Şu An | Yeni |
-|---------|-------|------|
-| DB'de silindi/deaktive, CSV'de var | Görünür ❌ | Gizli ✓ |
-| DB'de düzenlendi, CSV'de eski | DB ezar ✓ | DB ezar ✓ |
-| CSV'de var, DB'de yok | Görünür | Görünür (fallback) |
-| Sadece DB'de var | Görünür ✓ | Görünür ✓ |
+1. Hızlı ve güvenli çözüm:
+   - Admin’de silmeyi “pasife al”ya çevir
+2. Kalıcı mimari çözüm:
+   - CSV’yi artık sadece import kaynağı yap, canlı katalog kaynağı olmaktan çıkar
+3. Son aşama:
+   - İstersen admin panelden yapılan ekleme/düzenleme/silme işlemlerini CSV export dosyasına da yazan senkron mekanizması kur
 
-### Dosya Değişiklikleri
+Bu özel ürün için teşhis:
+- Sorun ürün sayfasında değil
+- Sorun admin silme akışının DB kaydını kaldırması ve `public/data/products.csv` içinde 9223 satırının hâlâ bulunması
+- Bu nedenle `/urun/9223-jbl-2-1-deep-bass-soundbar` slug’ı merged ürün listesinde yeniden oluşuyor
 
-**`src/hooks/useProducts.ts`** — `fetchProductsWithInventory()` fonksiyonundaki merge mantığı:
-- DB ürünlerini önce işle (birincil)
-- CSV'yi sadece DB'de bulunmayan SKU'lar için fallback olarak kullan
-- DB'de `is_active = false` olan ürünleri CSV'de olsa bile hariç tut
-- CSV-only ürünlerde eksik alanlar (görsel, açıklama) için CSV verisini kullan
+Uygulayacağım değişiklik planı:
+1. `src/pages/admin/AdminInventory.tsx`
+   - `bulkDelete()` fonksiyonunu soft delete yapısına çevirmek
+   - UI metnini “Sil” yerine gerekirse “Pasife Al” / “Yayından Kaldır” yapmak
+2. `src/hooks/useProducts.ts`
+   - CSV fallback mantığını, DB’de izi olan SKU’larda kesinlikle geri ekleme yapmayacak şekilde sertleştirmek
+3. Gerekirse sonraki adımda
+   - Hard delete gerekiyorsa “silinmiş SKU kaydı” tablosu veya CSV senkronu eklemek
 
+Beklenen sonuç:
+- Admin panelden yayından kaldırılan ürün saniyeler içinde siteden kaybolur
+- CSV’de dursa bile tekrar görünmez
+- Aynı problem başka SKU’larda da tekrarlanmaz
