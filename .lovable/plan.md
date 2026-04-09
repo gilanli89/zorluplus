@@ -1,32 +1,38 @@
 
 
-## Plan: Rol Yönetimi Sayfası
+## Plan: Şifre Sıfırlama/Değiştirme Sistemi
 
 ### Yapılacaklar
 
-**1. Yeni sayfa: `src/pages/admin/AdminRoles.tsx`**
+**1. Şifre validasyon kuralı (ortak)**
+- Minimum 8 karakter, en az 1 büyük harf, 1 küçük harf, 1 rakam, 1 özel karakter
+- `src/lib/passwordValidation.ts` dosyası oluştur — hem admin hem kullanıcı tarafında kullanılacak
 
-Her rolün (super_admin, admin, moderator, user) yetkilerini gösteren bir karşılaştırma tablosu:
-- Satırlar: yetki alanları (Siparişler, Stok, Servis, Kullanıcılar, Roller, İzinler, Talepler vb.)
-- Sütunlar: roller
-- Her hücrede ✓ / ✗ ikonu ile hangi rolün neye erişebildiği gösterilir
-- Rol bazlı kullanıcı sayısı (edge function'dan çekilir)
-- Her rolün altında kısa açıklama
+**2. Edge function güncelleme: `supabase/functions/admin-users/index.ts`**
+- PATCH action'a `action: "reset_password"` ekle
+- Admin/super_admin herhangi bir kullanıcının şifresini sıfırlayabilsin (`serviceClient.auth.admin.updateUserById`)
+- Şifre validasyonunu server-side uygula
+- POST (kullanıcı oluşturma) ve PATCH (şifre sıfırlama) için aynı validasyon
 
-Ayrıca sayfanın alt kısmında **kullanıcı rol atama** bölümü:
-- Mevcut kullanıcıları listele (edge function üzerinden)
-- Her kullanıcının yanında rol değiştirme dropdown'u
-- Değişiklik yapınca mevcut `callAdminUsers` PATCH fonksiyonu ile güncelle
+**3. Admin panelinde şifre sıfırlama: `src/pages/admin/AdminUsers.tsx`**
+- Kullanıcı detay dialog'una "Şifre Sıfırla" bölümü ekle
+- Yeni şifre + onay alanları, validasyon göstergeleri
+- Admin ve super_admin rolüne sahip kullanıcılar bu butonu görecek
 
-**2. Routing ve navigasyon**
+**4. Kullanıcının kendi şifresini değiştirmesi**
+- Yeni edge function gereksiz — `supabase.auth.updateUser({ password })` client-side çalışır (login olan kullanıcı kendi şifresini değiştirebilir)
+- `src/pages/admin/AdminLayout.tsx` header'ına profil/şifre değiştir butonu ekle
+- Şifre değiştirme dialog'u: mevcut şifre doğrulama + yeni şifre + onay + validasyon göstergeleri
 
-- `src/App.tsx`: `/admin/roller` route ekle
-- `src/pages/admin/AdminLayout.tsx`: Sidebar'a "Roller" menü öğesi ekle (Shield ikonu ile)
+**5. Yeni kullanıcı oluşturma formuna validasyon ekle**
+- `AdminUsers.tsx` yeni kullanıcı dialog'undaki şifre alanına aynı validasyon kurallarını uygula
 
 ### Teknik Detay
 
-- Yetki matrisi statik veri olarak tanımlanır (DB'de yetki tablosu yok, RLS policy'lere dayalı)
-- Kullanıcı listesi ve rol değişikliği mevcut `admin-users` edge function'ı kullanır
-- Yeni edge function gerekmez
-- 3 dosya değişikliği: 1 yeni sayfa + App.tsx route + AdminLayout.tsx nav item
+- **Validasyon regex**: `/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/`
+- **Dosyalar**: 
+  - `src/lib/passwordValidation.ts` (yeni)
+  - `supabase/functions/admin-users/index.ts` (PATCH güncelleme)
+  - `src/pages/admin/AdminUsers.tsx` (şifre sıfırlama UI)
+  - `src/pages/admin/AdminLayout.tsx` (kendi şifresini değiştirme butonu + dialog)
 
