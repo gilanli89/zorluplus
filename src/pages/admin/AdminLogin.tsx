@@ -8,7 +8,7 @@ import Logo from "@/components/Logo";
 import { toast } from "sonner";
 
 export default function AdminLogin() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -16,8 +16,6 @@ export default function AdminLogin() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    const email = `${username}@zorluplus.com`;
 
     // Try sign in first
     let { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -62,15 +60,15 @@ export default function AdminLogin() {
           </h1>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
-              <Label htmlFor="username">Kullanıcı Adı</Label>
+              <Label htmlFor="email">E-posta</Label>
               <Input
-                id="username"
-                type="text"
-                value={username}
-                onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9]/g, ""))}
+                id="email"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 required
                 className="mt-1"
-                placeholder="zorluadmin"
+                placeholder="admin@zorluplus.com"
               />
             </div>
             <div>
