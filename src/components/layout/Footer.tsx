@@ -223,9 +223,14 @@ export default function Footer() {
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
             />
           </motion.div>
-          <p className="text-sm md:text-base font-bold text-muted-foreground relative z-10">
-            ZorluPlus bir Zorlu Digital Trade &amp; Services Ltd. kuruluşudur. Tüm hakları saklıdır. 2026©
-          </p>
+          <div className="relative z-10">
+            <p className="text-sm md:text-base font-bold text-muted-foreground">
+              ZorluPlus bir Zorlu Digital Trade &amp; Services Ltd. kuruluşudur. Tüm hakları saklıdır. 2026©
+            </p>
+            {formattedUpdate && (
+              <p className="text-xs text-muted-foreground/60 mt-1">{formattedUpdate}</p>
+            )}
+          </div>
         </div>
       </div>
     </footer>
