@@ -1,38 +1,21 @@
 
 
-## Plan: Şifre Sıfırlama/Değiştirme Sistemi
+## Plan: Admin Login E-posta Girişi Düzeltmesi
 
-### Yapılacaklar
+### Sorun
+`AdminLogin.tsx` dosyasında kullanıcı adı alanı yalnızca `[a-z0-9]` karakterlerine izin veriyor ve otomatik olarak `@zorluplus.com` ekliyor. Farklı domainli kullanıcılar (örn. `deniz@zorludigitalplaza.com`) giriş yapamıyor.
 
-**1. Şifre validasyon kuralı (ortak)**
-- Minimum 8 karakter, en az 1 büyük harf, 1 küçük harf, 1 rakam, 1 özel karakter
-- `src/lib/passwordValidation.ts` dosyası oluştur — hem admin hem kullanıcı tarafında kullanılacak
+### Çözüm
+Kullanıcı adı alanını tam e-posta adresi girişine dönüştür.
 
-**2. Edge function güncelleme: `supabase/functions/admin-users/index.ts`**
-- PATCH action'a `action: "reset_password"` ekle
-- Admin/super_admin herhangi bir kullanıcının şifresini sıfırlayabilsin (`serviceClient.auth.admin.updateUserById`)
-- Şifre validasyonunu server-side uygula
-- POST (kullanıcı oluşturma) ve PATCH (şifre sıfırlama) için aynı validasyon
+### Değişiklikler — `src/pages/admin/AdminLogin.tsx`
 
-**3. Admin panelinde şifre sıfırlama: `src/pages/admin/AdminUsers.tsx`**
-- Kullanıcı detay dialog'una "Şifre Sıfırla" bölümü ekle
-- Yeni şifre + onay alanları, validasyon göstergeleri
-- Admin ve super_admin rolüne sahip kullanıcılar bu butonu görecek
+1. `username` state'ini `email` olarak değiştir
+2. Input'u `type="email"` yap, karakter filtresini kaldır
+3. `const email = \`\${username}@zorluplus.com\`` satırını kaldır, doğrudan girilen e-postayı kullan
+4. Placeholder'ı `"admin@zorluplus.com"` gibi bir e-posta örneğine güncelle
+5. Label'ı "Kullanıcı Adı" yerine "E-posta" yap
 
-**4. Kullanıcının kendi şifresini değiştirmesi**
-- Yeni edge function gereksiz — `supabase.auth.updateUser({ password })` client-side çalışır (login olan kullanıcı kendi şifresini değiştirebilir)
-- `src/pages/admin/AdminLayout.tsx` header'ına profil/şifre değiştir butonu ekle
-- Şifre değiştirme dialog'u: mevcut şifre doğrulama + yeni şifre + onay + validasyon göstergeleri
-
-**5. Yeni kullanıcı oluşturma formuna validasyon ekle**
-- `AdminUsers.tsx` yeni kullanıcı dialog'undaki şifre alanına aynı validasyon kurallarını uygula
-
-### Teknik Detay
-
-- **Validasyon regex**: `/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,}$/`
-- **Dosyalar**: 
-  - `src/lib/passwordValidation.ts` (yeni)
-  - `supabase/functions/admin-users/index.ts` (PATCH güncelleme)
-  - `src/pages/admin/AdminUsers.tsx` (şifre sıfırlama UI)
-  - `src/pages/admin/AdminLayout.tsx` (kendi şifresini değiştirme butonu + dialog)
+### Tek dosya değişikliği
+- `src/pages/admin/AdminLogin.tsx`
 
