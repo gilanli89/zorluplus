@@ -1,21 +1,21 @@
 const BRAND_LOGOS: Record<string, string> = {
   samsung: "/brands/samsung-logo.png",
   lg: "/brands/lg-logo.png",
-  midea: "/brands/midea.png",
+  midea: "/brands/midea.svg",
   aux: "/brands/aux.png",
   toshiba: "/brands/toshiba.png",
-  philips: "/brands/philips.png",
-  krups: "/brands/krups.png",
+  philips: "/brands/philips.svg",
+  krups: "/brands/krups.svg",
   sharp: "/brands/sharp.png",
-  bosch: "/brands/bosch.png",
+  bosch: "/brands/bosch.svg",
   sony: "/brands/sony.png",
   xiaomi: "/brands/xiaomi.png",
   tcl: "/brands/tcl.png",
-  jbl: "/brands/jbl.png",
+  jbl: "/brands/jbl.svg",
   tefal: "/brands/tefal.png",
-  indesit: "/brands/indesit.png",
+  indesit: "/brands/indesit.svg",
   adax: "/brands/adax.png",
-  atlantic: "/brands/atlantic.png",
+  atlantic: "/brands/atlantic.svg",
 };
 
 function normalizeBrand(brand: string): string {
