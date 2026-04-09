@@ -109,7 +109,7 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
         quantity: parseInt(form.quantity) || 1,
         image_url: form.image_url.trim() || null,
         attributes: Object.keys(attributes).length > 0 ? attributes : {},
-      } as any), 5000);
+      } as any).select(), 5000);
 
       if (error) { toast.error("Ürün eklenemedi: " + error.message); return; }
       toast.success("Ürün başarıyla eklendi!");
@@ -345,7 +345,7 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
         is_active: form.is_active,
         attributes: Object.keys(attributes).length > 0 ? attributes : {},
         price_updated_at: new Date().toISOString(),
-      } as any).eq("id", item.id), 5000);
+      } as any).eq("id", item.id).select(), 5000);
 
       if (error) { toast.error("Güncellenemedi: " + error.message); return; }
       toast.success("Ürün güncellendi!");
@@ -872,7 +872,7 @@ export default function AdminInventory() {
     try {
       await ensureAdminSession();
       const { error } = await withTimeout(
-        supabase.from("inventory").update({ is_active: value, price_updated_at: new Date().toISOString() }).eq("id", id),
+        supabase.from("inventory").update({ is_active: value, price_updated_at: new Date().toISOString() }).eq("id", id).select(),
         5000
       );
       if (error) {
@@ -928,7 +928,7 @@ export default function AdminInventory() {
       for (const chunk of chunks) {
         try {
           const { error } = await withTimeout(
-            supabase.from("inventory").update({ is_active: false }).in("id", chunk),
+            supabase.from("inventory").update({ is_active: false }).in("id", chunk).select(),
             5000
           );
           if (error) { failed += chunk.length; console.error(error); }
@@ -957,7 +957,7 @@ export default function AdminInventory() {
       for (const chunk of chunks) {
         try {
           const { error } = await withTimeout(
-            supabase.from("inventory").update({ is_active: active }).in("id", chunk),
+            supabase.from("inventory").update({ is_active: active }).in("id", chunk).select(),
             5000
           );
           if (error) { failed += chunk.length; console.error(error); }
@@ -985,7 +985,7 @@ export default function AdminInventory() {
       for (const chunk of chunks) {
         try {
           const { error } = await withTimeout(
-            supabase.from("inventory").update({ category }).in("id", chunk),
+            supabase.from("inventory").update({ category }).in("id", chunk).select(),
             5000
           );
           if (error) { failed += chunk.length; console.error(error); }
@@ -1028,7 +1028,7 @@ export default function AdminInventory() {
 
           try {
             const { error } = await withTimeout(
-              supabase.from("inventory").update(updateData).eq("id", id),
+              supabase.from("inventory").update(updateData).eq("id", id).select(),
               5000
             );
             return { ok: !error, id, error };
