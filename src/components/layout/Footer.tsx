@@ -22,6 +22,24 @@ const fadeItem = {
 export default function Footer() {
   const { t } = useLanguage();
 
+  const { data: lastUpdate } = useQuery({
+    queryKey: ["inventory-last-update"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("inventory_public")
+        .select("updated_at")
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .single();
+      return data?.updated_at ? new Date(data.updated_at) : null;
+    },
+    staleTime: 60_000,
+  });
+
+  const formattedUpdate = lastUpdate
+    ? `Son güncelleme: ${lastUpdate.toLocaleDateString("tr-TR", { day: "2-digit", month: "2-digit", year: "numeric" })} ${lastUpdate.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}`
+    : null;
+
   const trustBadges = [
     { label: t("trust.authorizedService"), desc: t("trust.authorizedServiceDesc") },
     { label: t("trust.warranty"), desc: t("trust.warrantyDesc") },
