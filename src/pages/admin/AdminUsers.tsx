@@ -118,12 +118,18 @@ export default function AdminUsers() {
       setActionLoading(userId);
       await callAdminUsers("PATCH", { user_id: userId, action: "role", role });
       toast.success("Rol güncellendi");
+      setSelectedUser(null);
       fetchUsers();
     } catch (e: any) {
       toast.error(e.message);
     } finally {
       setActionLoading(null);
     }
+  };
+
+  const openUserDetail = (user: UserRow) => {
+    setSelectedUser(user);
+    setEditRole(user.role);
   };
 
   const handleBanToggle = async (user: UserRow) => {
