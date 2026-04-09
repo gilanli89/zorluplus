@@ -114,10 +114,10 @@ export default function TVKanalAyarlamaPage() {
             </motion.p>
             <motion.div variants={fadeUp} custom={3} className="flex flex-wrap gap-3">
               <Button size="lg" className="font-semibold" asChild>
-                <a href="#servis-talebi"><Wrench className="mr-2 h-4 w-4" /> Biz Sizin İçin Yapalım</a>
+                <a href="#servis-talebi"><PremiumIconInline icon={Wrench} size={16} className="mr-2 text-primary-foreground" /> Biz Sizin İçin Yapalım</a>
               </Button>
               <Button size="lg" variant="outline" className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20" asChild>
-                <a href="#rehber"><ArrowRight className="mr-2 h-4 w-4" /> Rehberi Oku</a>
+                <a href="#rehber"><PremiumIconInline icon={ArrowRight} size={16} className="mr-2 text-primary-foreground" /> Rehberi Oku</a>
               </Button>
             </motion.div>
           </motion.div>
@@ -166,7 +166,7 @@ export default function TVKanalAyarlamaPage() {
           {/* ───── 3 Kontrol ───── */}
           <motion.section initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={1}>
             <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
-              <Search className="h-6 w-6 text-primary" />
+              <PremiumIconInline icon={Search} size={24} />
               Kuruluma Başlamadan Önce 3 Kontrol
             </h2>
             <p className="text-muted-foreground mb-4 leading-relaxed">
@@ -212,7 +212,7 @@ export default function TVKanalAyarlamaPage() {
                     "Merkezi sistem mi yoksa bireysel çanak mı kullanıyorsunuz?",
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                      <PremiumIconInline icon={CheckCircle2} size={16} className="mt-0.5 shrink-0" />
                       {item}
                     </li>
                   ))}
@@ -309,7 +309,7 @@ export default function TVKanalAyarlamaPage() {
           {/* ───── Sinyal Yok ───── */}
           <motion.section initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={5}>
             <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
-              <AlertTriangle className="h-6 w-6 text-destructive" />
+              <PremiumIconInline icon={AlertTriangle} size={24} color="text-destructive" />
               "Sinyal Yok" Hatası Nasıl Çözülür?
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -344,7 +344,7 @@ export default function TVKanalAyarlamaPage() {
                     "Yoğun yağmur veya fırtına varsa bekleyin",
                   ].map((t, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" /> {t}
+                      <PremiumIconInline icon={CheckCircle2} size={16} className="mt-0.5 shrink-0" /> {t}
                     </li>
                   ))}
                 </ul>
@@ -357,7 +357,7 @@ export default function TVKanalAyarlamaPage() {
             <Card className="border-muted">
               <CardContent className="p-5">
                 <h3 className="font-semibold text-foreground mb-2 flex items-center gap-2">
-                  <Monitor className="h-5 w-5 text-primary" /> Alternatif: Karasal Yayın (DVB-T2)
+                  <PremiumIconInline icon={Monitor} size={20} /> Alternatif: Karasal Yayın (DVB-T2)
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   Uydu sisteminde sorun varsa basit bir anten ile <strong className="text-foreground">BRT HD</strong> ve bazı yerel kanalları DVB-T2 karasal yayın üzerinden izleyebilirsiniz.
@@ -396,7 +396,7 @@ export default function TVKanalAyarlamaPage() {
               <motion.div variants={fadeUp} custom={2} className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8 max-w-lg mx-auto">
                 {SERVICE_LIST.map((s, i) => (
                   <div key={i} className="flex items-start gap-2 text-left text-sm text-primary-foreground/90">
-                    <CheckCircle2 className="h-4 w-4 mt-0.5 shrink-0 text-accent" />
+                    <PremiumIconInline icon={CheckCircle2} size={16} className="mt-0.5 shrink-0 text-accent" />
                     <span>{s}</span>
                   </div>
                 ))}
@@ -407,7 +407,7 @@ export default function TVKanalAyarlamaPage() {
               <motion.div variants={fadeUp} custom={4} className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Button size="lg" variant="secondary" className="font-semibold text-base w-full sm:w-auto" asChild>
                   <a href="https://servis.zorluplus.com/" target="_blank" rel="noopener noreferrer">
-                    <Wrench className="mr-2 h-5 w-5" /> Servis Talebi Oluştur
+                    <PremiumIconInline icon={Wrench} size={20} className="mr-2" /> Servis Talebi Oluştur
                   </a>
                 </Button>
                 <Button size="lg" variant="outline" className="font-semibold text-base w-full sm:w-auto bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/20" asChild>
@@ -416,7 +416,7 @@ export default function TVKanalAyarlamaPage() {
                     target="_blank" rel="noopener noreferrer"
                     onClick={() => trackWhatsAppClick("tv-kanal-ayarlama-cta")}
                   >
-                    <MessageCircle className="mr-2 h-5 w-5" /> WhatsApp ile Ulaşın
+                    <PremiumIconInline icon={MessageCircle} size={20} className="mr-2 text-primary-foreground" /> WhatsApp ile Ulaşın
                   </a>
                 </Button>
               </motion.div>
