@@ -4,6 +4,8 @@ import { PremiumIconInline } from "@/components/PremiumIcon";
 import { motion } from "framer-motion";
 import { BRAND, FOOTER_LINKS } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import zorluLogo from "@/assets/zorlu-logo.png";
 import zorluDigitalLogo from "@/assets/zorlu-digital-logo.png";
 
@@ -19,6 +21,24 @@ const fadeItem = {
 
 export default function Footer() {
   const { t } = useLanguage();
+
+  const { data: lastUpdate } = useQuery({
+    queryKey: ["inventory-last-update"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("inventory_public")
+        .select("updated_at")
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .single();
+      return data?.updated_at ? new Date(data.updated_at) : null;
+    },
+    staleTime: 60_000,
+  });
+
+  const formattedUpdate = lastUpdate
+    ? `Son güncelleme: ${lastUpdate.toLocaleDateString("tr-TR", { day: "2-digit", month: "2-digit", year: "numeric" })} ${lastUpdate.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}`
+    : null;
 
   const trustBadges = [
     { label: t("trust.authorizedService"), desc: t("trust.authorizedServiceDesc") },
@@ -203,9 +223,14 @@ export default function Footer() {
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
             />
           </motion.div>
-          <p className="text-sm md:text-base font-bold text-muted-foreground relative z-10">
-            ZorluPlus bir Zorlu Digital Trade &amp; Services Ltd. kuruluşudur. Tüm hakları saklıdır. 2026©
-          </p>
+          <div className="relative z-10">
+            <p className="text-sm md:text-base font-bold text-muted-foreground">
+              ZorluPlus bir Zorlu Digital Trade &amp; Services Ltd. kuruluşudur. Tüm hakları saklıdır. 2026©
+            </p>
+            {formattedUpdate && (
+              <p className="text-xs text-muted-foreground/60 mt-1">{formattedUpdate}</p>
+            )}
+          </div>
         </div>
       </div>
     </footer>
