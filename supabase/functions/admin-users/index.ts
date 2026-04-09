@@ -13,6 +13,15 @@ function jsonResponse(body: unknown, status = 200) {
   });
 }
 
+function validatePassword(password: string): string | null {
+  if (password.length < 8) return "Şifre en az 8 karakter olmalı";
+  if (!/[A-Z]/.test(password)) return "Şifre en az 1 büyük harf içermeli";
+  if (!/[a-z]/.test(password)) return "Şifre en az 1 küçük harf içermeli";
+  if (!/\d/.test(password)) return "Şifre en az 1 rakam içermeli";
+  if (!/[^a-zA-Z\d]/.test(password)) return "Şifre en az 1 özel karakter içermeli";
+  return null;
+}
+
 async function verifySuperAdmin(req: Request) {
   const authHeader = req.headers.get("Authorization");
   if (!authHeader?.startsWith("Bearer ")) return null;
@@ -28,7 +37,6 @@ async function verifySuperAdmin(req: Request) {
   if (error || !data?.claims) return null;
 
   const userId = data.claims.sub as string;
-  // Allow super_admin or admin (via check_own_admin_status)
   const { data: isAdmin } = await anonClient.rpc("check_own_admin_status");
   if (!isAdmin) return null;
   return userId;
@@ -78,6 +86,9 @@ Deno.serve(async (req) => {
       const { email, password, role } = body;
       if (!email || !password) return jsonResponse({ error: "email and password required" }, 400);
 
+      const pwError = validatePassword(password);
+      if (pwError) return jsonResponse({ error: pwError }, 400);
+
       const validRoles = ["super_admin", "admin", "moderator", "user"];
       const selectedRole = validRoles.includes(role) ? role : "user";
 
@@ -98,10 +109,10 @@ Deno.serve(async (req) => {
       return jsonResponse({ user: { id: newUser.user.id, email, role: selectedRole } }, 201);
     }
 
-    // PATCH – update role or ban/unban
+    // PATCH – update role, ban/unban, or reset password
     if (req.method === "PATCH") {
       const body = await req.json();
-      const { user_id, action, role, ban } = body;
+      const { user_id, action, role, ban, password } = body;
       if (!user_id) return jsonResponse({ error: "user_id required" }, 400);
 
       // Prevent self-modification
@@ -111,7 +122,6 @@ Deno.serve(async (req) => {
         const validRoles = ["super_admin", "admin", "moderator", "user"];
         if (!validRoles.includes(role)) return jsonResponse({ error: "Invalid role" }, 400);
 
-        // Delete existing role
         await serviceClient.from("user_roles").delete().eq("user_id", user_id);
         if (role !== "user") {
           await serviceClient.from("user_roles").insert({ user_id, role });
@@ -122,7 +132,7 @@ Deno.serve(async (req) => {
       if (action === "ban") {
         if (ban) {
           const { error } = await serviceClient.auth.admin.updateUserById(user_id, {
-            ban_duration: "876000h", // ~100 years
+            ban_duration: "876000h",
           });
           if (error) return jsonResponse({ error: error.message }, 500);
         } else {
@@ -131,6 +141,16 @@ Deno.serve(async (req) => {
           });
           if (error) return jsonResponse({ error: error.message }, 500);
         }
+        return jsonResponse({ success: true });
+      }
+
+      if (action === "reset_password") {
+        if (!password) return jsonResponse({ error: "password required" }, 400);
+        const pwError = validatePassword(password);
+        if (pwError) return jsonResponse({ error: pwError }, 400);
+
+        const { error } = await serviceClient.auth.admin.updateUserById(user_id, { password });
+        if (error) return jsonResponse({ error: error.message }, 500);
         return jsonResponse({ success: true });
       }
 

@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, Link, useLocation } from "react-router-dom";
-import { ShoppingCart, Package, Wrench, LogOut, LayoutDashboard, Users, Shield } from "lucide-react";
+import { ShoppingCart, Package, Wrench, LogOut, LayoutDashboard, Users, Shield, KeyRound, Loader2 } from "lucide-react";
 import { PremiumIconInline } from "@/components/PremiumIcon";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Logo from "@/components/Logo";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { validatePassword } from "@/lib/passwordValidation";
+import PasswordStrengthIndicator from "@/components/admin/PasswordStrengthIndicator";
 
 import {
   Sidebar,
@@ -19,6 +24,9 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import {
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -35,11 +43,56 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Self password change
+  const [pwDialogOpen, setPwDialogOpen] = useState(false);
+  const [currentPw, setCurrentPw] = useState("");
+  const [newPw, setNewPw] = useState("");
+  const [newPwConfirm, setNewPwConfirm] = useState("");
+  const [changingPw, setChangingPw] = useState(false);
+
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) {
       navigate("/admin/giris");
     }
   }, [user, isAdmin, loading, navigate]);
+
+  const handleChangePassword = async () => {
+    if (newPw !== newPwConfirm) {
+      toast.error("Yeni şifreler eşleşmiyor");
+      return;
+    }
+    const checks = validatePassword(newPw);
+    if (!checks.isValid) {
+      toast.error("Şifre güvenlik gereksinimlerini karşılamıyor");
+      return;
+    }
+    try {
+      setChangingPw(true);
+      // Verify current password by re-signing in
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user!.email!,
+        password: currentPw,
+      });
+      if (signInError) {
+        toast.error("Mevcut şifre yanlış");
+        return;
+      }
+      const { error } = await supabase.auth.updateUser({ password: newPw });
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+      toast.success("Şifreniz başarıyla değiştirildi");
+      setPwDialogOpen(false);
+      setCurrentPw("");
+      setNewPw("");
+      setNewPwConfirm("");
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setChangingPw(false);
+    }
+  };
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Yükleniyor...</div>;
@@ -89,6 +142,53 @@ export default function AdminLayout() {
             <SidebarTrigger />
             <div className="flex items-center gap-3">
               <span className="text-sm text-muted-foreground">{user.email}</span>
+
+              <Dialog open={pwDialogOpen} onOpenChange={(open) => {
+                setPwDialogOpen(open);
+                if (!open) { setCurrentPw(""); setNewPw(""); setNewPwConfirm(""); }
+              }}>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-1.5">
+                    <KeyRound className="h-4 w-4" /> Şifre Değiştir
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Şifre Değiştir</DialogTitle>
+                    <DialogDescription>Güvenliğiniz için mevcut şifrenizi doğrulayın ve yeni şifrenizi belirleyin.</DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-2">
+                    <div className="space-y-2">
+                      <Label>Mevcut Şifre</Label>
+                      <Input type="password" value={currentPw} onChange={e => setCurrentPw(e.target.value)} placeholder="••••••••" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Yeni Şifre</Label>
+                      <Input type="password" value={newPw} onChange={e => setNewPw(e.target.value)} placeholder="••••••••" />
+                      <PasswordStrengthIndicator password={newPw} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Yeni Şifre (Tekrar)</Label>
+                      <Input type="password" value={newPwConfirm} onChange={e => setNewPwConfirm(e.target.value)} placeholder="••••••••" />
+                      {newPwConfirm && newPw !== newPwConfirm && (
+                        <p className="text-xs text-destructive">Şifreler eşleşmiyor</p>
+                      )}
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setPwDialogOpen(false)}>İptal</Button>
+                    <Button
+                      onClick={handleChangePassword}
+                      disabled={changingPw || !currentPw || !validatePassword(newPw).isValid || newPw !== newPwConfirm}
+                      className="gap-2"
+                    >
+                      {changingPw && <Loader2 className="h-4 w-4 animate-spin" />}
+                      Şifreyi Değiştir
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+
               <Button variant="ghost" size="sm" onClick={signOut} className="gap-1.5">
                 <LogOut className="h-4 w-4" /> Çıkış
               </Button>
