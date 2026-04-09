@@ -68,25 +68,35 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
     const attributes: Record<string, string> = {};
     attrs.forEach(a => { if (a.key.trim()) attributes[a.key.trim()] = a.value.trim(); });
 
-    const { error } = await supabase.from("inventory").insert({
-      product_name: form.product_name.trim(),
-      brand: form.brand.trim() || null,
-      category: form.category.trim() || null,
-      sku: form.sku.trim() || null,
-      description: form.description.trim() || null,
-      original_price: form.original_price ? parseFloat(form.original_price) : null,
-      sale_price: form.sale_price ? parseFloat(form.sale_price) : null,
-      quantity: parseInt(form.quantity) || 1,
-      image_url: form.image_url.trim() || null,
-      attributes: Object.keys(attributes).length > 0 ? attributes : {},
-    } as any);
+    try {
+      await supabase.auth.getSession();
 
-    setSaving(false);
-    if (error) { toast.error("Ürün eklenemedi: " + error.message); return; }
-    toast.success("Ürün başarıyla eklendi!");
-    reset();
-    setOpen(false);
-    onAdded();
+      const savePromise = supabase.from("inventory").insert({
+        product_name: form.product_name.trim(),
+        brand: form.brand.trim() || null,
+        category: form.category.trim() || null,
+        sku: form.sku.trim() || null,
+        description: form.description.trim() || null,
+        original_price: form.original_price ? parseFloat(form.original_price) : null,
+        sale_price: form.sale_price ? parseFloat(form.sale_price) : null,
+        quantity: parseInt(form.quantity) || 1,
+        image_url: form.image_url.trim() || null,
+        attributes: Object.keys(attributes).length > 0 ? attributes : {},
+      } as any);
+
+      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 15000));
+      const { error } = await Promise.race([savePromise, timeout]) as any;
+
+      setSaving(false);
+      if (error) { toast.error("Ürün eklenemedi: " + error.message); return; }
+      toast.success("Ürün başarıyla eklendi!");
+      reset();
+      setOpen(false);
+      onAdded();
+    } catch (e: any) {
+      setSaving(false);
+      toast.error(e?.message === "timeout" ? "İşlem zaman aşımına uğradı. Oturumunuzu kontrol edin." : "Bir hata oluştu: " + (e?.message || ""));
+    }
   };
 
   return (
@@ -295,26 +305,36 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
     const attributes: Record<string, string> = {};
     attrs.forEach(a => { if (a.key.trim()) attributes[a.key.trim()] = a.value.trim(); });
 
-    const { error } = await supabase.from("inventory").update({
-      product_name: form.product_name.trim(),
-      brand: form.brand.trim() || null,
-      category: form.category.trim() || null,
-      sku: form.sku.trim() || null,
-      description: form.description.trim() || null,
-      original_price: form.original_price ? parseFloat(form.original_price) : null,
-      sale_price: form.sale_price ? parseFloat(form.sale_price) : null,
-      quantity: parseInt(form.quantity) || 0,
-      image_url: form.image_url.trim() || null,
-      is_active: form.is_active,
-      attributes: Object.keys(attributes).length > 0 ? attributes : {},
-      price_updated_at: new Date().toISOString(),
-    } as any).eq("id", item.id);
+    try {
+      await supabase.auth.getSession();
 
-    setSaving(false);
-    if (error) { toast.error("Güncellenemedi: " + error.message); return; }
-    toast.success("Ürün güncellendi!");
-    onOpenChange(false);
-    onSaved();
+      const savePromise = supabase.from("inventory").update({
+        product_name: form.product_name.trim(),
+        brand: form.brand.trim() || null,
+        category: form.category.trim() || null,
+        sku: form.sku.trim() || null,
+        description: form.description.trim() || null,
+        original_price: form.original_price ? parseFloat(form.original_price) : null,
+        sale_price: form.sale_price ? parseFloat(form.sale_price) : null,
+        quantity: parseInt(form.quantity) || 0,
+        image_url: form.image_url.trim() || null,
+        is_active: form.is_active,
+        attributes: Object.keys(attributes).length > 0 ? attributes : {},
+        price_updated_at: new Date().toISOString(),
+      } as any).eq("id", item.id);
+
+      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 15000));
+      const { error } = await Promise.race([savePromise, timeout]) as any;
+
+      setSaving(false);
+      if (error) { toast.error("Güncellenemedi: " + error.message); return; }
+      toast.success("Ürün güncellendi!");
+      onOpenChange(false);
+      onSaved();
+    } catch (e: any) {
+      setSaving(false);
+      toast.error(e?.message === "timeout" ? "İşlem zaman aşımına uğradı. Oturumunuzu kontrol edin." : "Bir hata oluştu: " + (e?.message || ""));
+    }
   };
 
   const imgUrl = normalizeImageUrl(form.image_url);
