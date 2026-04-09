@@ -89,7 +89,7 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
         attributes: Object.keys(attributes).length > 0 ? attributes : {},
       } as any);
 
-      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 15000));
+      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
       const { error } = await Promise.race([savePromise, timeout]) as any;
 
       setSaving(false);
