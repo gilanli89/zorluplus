@@ -86,6 +86,12 @@ async function fetchProductsWithInventory(): Promise<Product[]> {
       dbCat?.category || csvP.category,
       dbCat?.subcategory || csvP.subcategory
     );
+    merged.push({
+      ...csvP,
+      name: mergedName,
+      brand: mergedBrand,
+      category: overridden.category,
+      subcategory: overridden.subcategory,
       description: inv.description || csvP.description,
       image: normalizeImageUrl(inv.image_url) || csvP.image,
       images: inv.image_url ? [normalizeImageUrl(inv.image_url), ...csvP.images.filter(i => i !== normalizeImageUrl(inv.image_url))] : csvP.images,
