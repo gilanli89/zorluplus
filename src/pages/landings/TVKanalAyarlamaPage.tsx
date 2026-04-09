@@ -137,7 +137,7 @@ export default function TVKanalAyarlamaPage() {
               <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={i}
                 className="flex items-center gap-3 p-3 rounded-lg">
                 <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <item.icon className="h-5 w-5 text-primary" />
+                  <PremiumIconInline icon={item.icon} size={20} />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-foreground">{item.label}</p>
@@ -224,7 +224,7 @@ export default function TVKanalAyarlamaPage() {
           {/* ───── TKGS ───── */}
           <motion.section initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={2}>
             <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
-              <RefreshCw className="h-6 w-6 text-primary" />
+              <PremiumIconInline icon={RefreshCw} size={24} />
               TKGS ile Otomatik Kanal Güncelleme
             </h2>
             <p className="text-muted-foreground mb-4 leading-relaxed">
@@ -253,7 +253,7 @@ export default function TVKanalAyarlamaPage() {
           {/* ───── Türksat 4A ───── */}
           <motion.section initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={3}>
             <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
-              <Settings className="h-6 w-6 text-primary" />
+              <PremiumIconInline icon={Settings} size={24} />
               Türksat 4A Manuel Kanal Arama
             </h2>
             <p className="text-muted-foreground mb-4 leading-relaxed">
@@ -280,7 +280,7 @@ export default function TVKanalAyarlamaPage() {
           {/* ───── KKTC Yerel ───── */}
           <motion.section initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={4}>
             <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
-              <Tv className="h-6 w-6 text-accent" />
+              <PremiumIconInline icon={Tv} size={24} color="text-accent" />
               KKTC Yerel Kanalları (BRT, Genç TV vb.)
             </h2>
             <p className="text-muted-foreground mb-4 leading-relaxed">
