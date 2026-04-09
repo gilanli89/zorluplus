@@ -1,32 +1,37 @@
 
 
-## Problem
+## Veritabanını Birincil Kaynak Yap
 
-Admin panelden silinen/deaktive edilen ürünler, `staleTime: 5 dakika` olmasına rağmen 15+ dakika sonra bile sitede görünmeye devam ediyor. Bunun nedeni:
+### Mevcut Durum
+Şu an ürün verileri şu sırayla yükleniyor:
+1. CSV dosyası (`public/data/products.csv`) okunuyor
+2. Veritabanı (`inventory_public`) okunuyor
+3. İkisi birleştiriliyor — DB alanları CSV'yi eziyor
 
-1. **React Query sadece window focus'ta refetch yapar** — kullanıcı sekmeyi değiştirmediyse refetch tetiklenmez
-2. **CSV verileri cache'lenmiş olabilir** — tarayıcı HTTP cache'inden eski CSV dönüyor
-3. **Realtime yok** — veritabanı değişiklikleri istemciye push edilmiyor
+**Sorun:** Admin panelden bir ürün silinse/deaktive edilse bile, CSV'de hâlâ varsa sitede görünmeye devam ediyor. Ayrıca CSV'deki ürünler DB'de yoksa hiçbir admin kontrolü olmadan yayınlanıyor.
 
-## Çözüm: Realtime Subscription ile Anlık Güncelleme
+### Yeni Mantık: DB Birincil
 
-### 1. `inventory` tablosunu Realtime'a ekle (Migration)
-```sql
-ALTER PUBLICATION supabase_realtime ADD TABLE public.inventory;
-```
+Merge sırası tersine çevrilecek:
 
-### 2. `useProducts.ts`'e Realtime dinleyici ekle
-- `useQueryClient` ile query client'a erişim
-- `supabase.channel('inventory-changes')` ile `inventory` tablosundaki `INSERT`, `UPDATE`, `DELETE` olaylarını dinle
-- Değişiklik geldiğinde `queryClient.invalidateQueries({ queryKey: ["products"] })` çağır → anlık refetch
-- Component unmount'ta channel cleanup
+1. **DB ürünleri birincil** — veritabanındaki tüm aktif ürünler önce listeye alınır
+2. **CSV sadece tamamlayıcı** — CSV'deki bir ürün DB'de **hiç yoksa** (SKU eşleşmesi yok), CSV'den eklenir. Ama DB'de varsa ve `is_active = false` ise **CSV verisi de gösterilmez**
+3. DB'de olan ürünler için CSV verileri sadece DB'de `null/boş` olan alanları doldurmak için kullanılır (fallback)
 
-### 3. `staleTime`'ı 2 dakikaya düşür (fallback)
-Realtime bağlantı kopsa bile makul sürede güncelleme gelsin.
+### Davranış Değişikliği
+
+| Senaryo | Şu An | Yeni |
+|---------|-------|------|
+| DB'de silindi/deaktive, CSV'de var | Görünür ❌ | Gizli ✓ |
+| DB'de düzenlendi, CSV'de eski | DB ezar ✓ | DB ezar ✓ |
+| CSV'de var, DB'de yok | Görünür | Görünür (fallback) |
+| Sadece DB'de var | Görünür ✓ | Görünür ✓ |
 
 ### Dosya Değişiklikleri
-1. **Migration** — `ALTER PUBLICATION supabase_realtime ADD TABLE public.inventory`
-2. **`src/hooks/useProducts.ts`** — Realtime subscription + `staleTime` düşürme
 
-Bu sayede admin panelden yapılan her silme/güncelleme işlemi **saniyeler içinde** canlı siteye yansıyacak.
+**`src/hooks/useProducts.ts`** — `fetchProductsWithInventory()` fonksiyonundaki merge mantığı:
+- DB ürünlerini önce işle (birincil)
+- CSV'yi sadece DB'de bulunmayan SKU'lar için fallback olarak kullan
+- DB'de `is_active = false` olan ürünleri CSV'de olsa bile hariç tut
+- CSV-only ürünlerde eksik alanlar (görsel, açıklama) için CSV verisini kullan
 
