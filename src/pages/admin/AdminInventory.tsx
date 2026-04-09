@@ -786,6 +786,10 @@ function ProductRow({
 export default function AdminInventory() {
   const qc = useQueryClient();
   const [pendingChanges, setPendingChanges] = useState<Map<string, PendingChange>>(new Map());
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkConfirm, setBulkConfirm] = useState<{ type: "delete" | "active" | "inactive"; } | null>(null);
+  const [bulkCategoryOpen, setBulkCategoryOpen] = useState(false);
+  const [bulkProcessing, setBulkProcessing] = useState(false);
   
   const [publishing, setPublishing] = useState(false);
   const [search, setSearch] = useState("");
