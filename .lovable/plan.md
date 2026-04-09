@@ -1,53 +1,80 @@
 
 
-## Chrome vs Firefox Fark Raporu
+## Tespit Raporu ve Düzeltme Planı
 
-### Tespit Edilen Sorunlar
+### 1. GÖRSEL UYUŞMAZLIKLARI (Yanlış Fotoğraflar)
 
-#### 1. Footer "Son güncelleme" tarihi Firefox'ta görünmüyor
-**Neden:** Network loglarında `updated_at` sorgusu hiç görünmüyor — bu, sorgunun hata verip sessizce `null` döndürdüğü anlamına geliyor. RLS politikası eklendi ama deployment henüz tam yansımamış olabilir, veya Firefox'un cache'i eski kodu tutuyor.
+Veritabanında bazı ürünlerin görselleri başka modellere ait:
 
-**Çözüm:** Footer'daki `updated_at` sorgusunu daha dayanıklı hale getirmek — hata durumunda `console.warn` ile loglamak ve `retry: 3` ile artırmak.
+| SKU | Ürün | Görsel URL'deki Model | Sorun |
+|-----|------|----------------------|-------|
+| **8758** | LG 43" NanoCell TV | `SKU_55UR8100.webp` | 55" UR8100 görseli 43" NanoCell'e atanmış |
+| **43NANO81T3A** | LG 43" NanoCell TV | `Zorlu-TV-Tempalte.png` | Şablon görsel, gerçek ürün değil |
+| **8745 vs 8759** | Her ikisi de LG 32L063806LC | İki farklı SKU ile aynı ürün, farklı görseller | Mükerrer kayıt |
 
-#### 2. `inventory_public` sorgusu eski sütunları çekiyor
-**Neden:** Network logları `select=sku,quantity,original_price,sale_price,is_active` gösteriyor (sadece 5 sütun), ancak kod `select("*")` yapıyor. Bu, preview'ın henüz yeni kodu deploy etmemiş olduğunu gösteriyor. Types dosyası güncel (13 sütun mevcut) ancak runtime'da eski bundle çalışıyor.
+**Bu bugünkü değişikliklerden kaynaklanmıyor.** Bunlar veritabanına ürünler ilk eklenirken yanlış atanmış görseller. Bugünkü değişiklikler sadece `index.css`, `Footer.tsx` ve `useProducts.ts` dosyalarını etkiledi.
 
-**Çözüm:** Yeni bir deploy tetiklendiğinde bu otomatik düzelecek. Ancak `select("*")` yerine açık sütun listesi kullanmak daha güvenli olacaktır.
+### 2. GÖRSELİ OLMAYAN ÜRÜNLER (`image_url = NULL`)
 
-#### 3. CSS `mask-composite` Firefox uyumsuzluğu
-**Neden:** `index.css`'te `.glass-border::after` ve `.premium-card::after` sınıflarında:
-```css
--webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
--webkit-mask-composite: xor;
-mask-composite: exclude;
-```
-Firefox `mask-composite: exclude` destekler ama `-webkit-mask-composite: xor` yoktur. Sorun şu ki `mask` (prefix'siz) property tanımlanmamış — sadece `-webkit-mask` var. Firefox prefix'siz `mask` kullanır, bu yüzden gradient kenarlık efekti Firefox'ta görünmez.
+9 aktif ürünün görseli yok — bunlar sitede fallback görsellerle gösteriliyor veya gösterilmiyor:
+- Samsung 65" 4K Led TV (UE65U8000F)
+- Samsung 50" 4K QLED TV (QE50Q60D) 
+- Samsung 85" 4K Led TV (UE85U8092U)
+- Samsung 43" 4K QLED TV (QE430Q8F)
+- Samsung 65" 4K QLED TV (QE65Q6F)
+- Samsung 65" OLED TV (QE65S85F)
+- LG GN-B392SMBB Buzdolabı
+- 2x Samsung Buzdolabı
 
-**Çözüm:** Prefix'siz `mask` property'lerini de eklemek:
-```css
--webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
--webkit-mask-composite: xor;
-mask-composite: exclude;
-```
+### 3. TV FİLTRELERDE EKSİK EKRAN BOYUTLARI VE TİPLERİ
 
-#### 4. `backdrop-filter` Firefox desteği
-**Neden:** `backdrop-filter` Firefox'ta varsayılan olarak desteklenir (Firefox 103+), ancak eski Firefox sürümlerinde `layout.css.backdrop-filter.enabled` flag'i gerekir. Kodda `-webkit-backdrop-filter` doğru eklenmiş, bu sorun yok.
+**Kök neden:** Veritabanında `category = "tv-goruntu"` olan ürünlerin çoğu aksesuar (askı aparatı, HDMI kablo, temizleme kiti). Gerçek TV'ler `"Video / Audio > Televizyonlar"` kategorisinde.
 
-**Durum:** Modern Firefox sürümlerinde sorun yok. Sadece çok eski Firefox (<103) kullananlar etkilenir.
+`useProducts.ts`'deki merge mantığı CSV ile DB'yi birleştirirken, DB'deki kategori CSV'yi eziyor. DB'de `category = "tv-goruntu"` olan TV'ler alt kategorisiz kalıyor (`subcategory = ""`), bu yüzden `/kategori/tv-goruntu/tv` sayfasında görünmüyorlar.
+
+**Asıl sorun:** DB'deki TV ürünlerinin kategorisi standartlaştırılmamış:
+- Bazıları `"tv-goruntu"` (ham slug, alt kategori yok)  
+- Bazıları `"Video / Audio > Televizyonlar"` (doğru WooCommerce formatı)
+- `"Diğer Ürünler"` olarak atanmış TV'ler var
+
+`normalizeCategorySlug()` fonksiyonu CSV'deki WooCommerce formatını doğru çözüyor ama `useProducts.ts`'deki DB merge kodu `inv.category` ham değerini doğrudan atıyor — normalize etmiyor.
+
+### 4. FOOTER LİNKLERİ
+
+`src/lib/constants.ts`'deki `FOOTER_LINKS.kategoriler` içinde hatalı linkler:
+- `Televizyon` → `https://zorluplus.com/kategori/tv-goruntu` (dış site linki, kendi sitesine yönlenmeli)
+- `Beyaz Eşya` → `/beyaz-esya` (landing page, `/kategori/beyaz-esya` olmalı)
+- Birçok kategori linki landing page'lere gidiyor, kategori sayfalarına değil
+- `Projeksiyon`, `Ses Sistemi`, `Soundbar`, `Duvar Aparatı`, `Yedek Kumanda` → hepsi `/kategori/elektronik-aksesuar`'a gidiyor (bu kategori yok)
+
+### 5. MÜKERRER ÜRÜNLER
+
+Aynı fiziksel ürün birden fazla SKU ile kayıtlı:
+- LG 32LQ63806LC: SKU `32LQ63806LC`, `32LQ63806LC-1`, `8745`, `8759` (4 kayıt!)
+- LG 43" NanoCell: SKU `43NANO81T3A`, `8758`, `8760` (3 kayıt)
 
 ---
 
-### Yapılacaklar
+### DÜZELTME PLANI
 
-**Dosya: `src/index.css`**
-- `.glass-border::after` ve `.premium-card::after` için prefix'siz `mask` property ekle (2 satır değişiklik)
+#### A. useProducts.ts — DB kategori normalizasyonu (Kritik)
+DB'den gelen `inv.category` değerini `normalizeCategorySlug()` fonksiyonundan geçir. Bu, tüm `"Video / Audio > Televizyonlar"` kategorisindeki TV'lerin doğru `tv-goruntu/tv` alt kategorisine düşmesini sağlayacak ve filtreler çalışacak.
 
-**Dosya: `src/components/layout/Footer.tsx`**
-- Hata loglaması ekle (debug kolaylığı)
+#### B. constants.ts — Footer link düzeltmeleri
+- `Televizyon` linkini `/kategori/tv-goruntu/tv` olarak düzelt
+- Landing page linklerini kategori sayfalarına yönlendir
+- Var olmayan `/kategori/elektronik-aksesuar` linklerini doğru kategorilere yönlendir
 
-**Dosya: `src/hooks/useProducts.ts`**
-- `select("*")` yerine açık sütun listesi kullan (tarayıcı cache uyumsuzluklarını önler)
+#### C. Veritabanı — Görsel ve mükerrer temizliği (Migration)
+- Görseli olmayan 9 ürünü `is_active = false` yap (Production Mode kuralı)
+- Mükerrer SKU'ları deaktive et (her ürün için tek doğru SKU bırak)
+- Yanlış görsel atanmış ürünlerin image_url'lerini düzelt (8758 için doğru NanoCell görseli)
 
-Bu değişiklikler küçük ve low-risk, tüm tarayıcılarda tutarlı görünüm sağlayacak.
+#### D. Bugünkü değişikliklerin etkisi
+Bugünkü 3 değişiklik (CSS mask fix, footer updated_at, explicit select) bu sorunların **hiçbirine** neden olmadı. Tüm sorunlar veritabanına veri girilirken oluşmuş mevcut tutarsızlıklar.
+
+### Dosya Değişiklikleri
+1. `src/hooks/useProducts.ts` — DB kategorilerini normalizeCategorySlug ile normalize et
+2. `src/lib/constants.ts` — Footer linklerini düzelt
+3. DB migration — Mükerrer/görselsiz ürünleri deaktive et, yanlış görselleri düzelt
 
