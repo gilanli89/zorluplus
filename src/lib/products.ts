@@ -42,7 +42,7 @@ export function slugify(text: string): string {
     .replace(/^-|-$/g, "");
 }
 
-function normalizeCategorySlug(raw: string): { category: string; subcategory: string } {
+export function normalizeCategorySlug(raw: string): { category: string; subcategory: string } {
   // Handle multi-category strings like "Video / Audio > Aksesuar, Aksesuarlar > TV Askı Aparatları"
   // Try each part and return the first match (most specific usually listed last, but "Diğer Ürünler" is generic)
   const parts = raw.split(",").map(s => s.trim()).filter(Boolean);

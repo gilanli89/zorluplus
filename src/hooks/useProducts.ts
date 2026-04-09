@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchProducts, slugify } from "@/lib/products";
+import { fetchProducts, slugify, normalizeCategorySlug } from "@/lib/products";
 import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/lib/types";
 
@@ -18,14 +18,16 @@ function parseAttributes(attrs: unknown): Record<string, string> {
 function dbToProduct(inv: Record<string, unknown>): Product {
   const sku = String(inv.sku || "");
   const name = String(inv.product_name || "Ürün");
+  const rawCat = String(inv.category || "diger");
+  const { category, subcategory } = normalizeCategorySlug(rawCat);
   return {
     id: sku || String(inv.id),
     sku,
     slug: `${slugify(sku)}-${slugify(name)}`,
     name,
     brand: String(inv.brand || ""),
-    category: String(inv.category || "diger"),
-    subcategory: "",
+    category,
+    subcategory,
     price: inv.original_price != null ? Number(inv.original_price) : 0,
     salePrice: inv.sale_price != null && Number(inv.sale_price) > 0 ? Number(inv.sale_price) : undefined,
     currency: "TL",
@@ -67,11 +69,14 @@ async function fetchProductsWithInventory(): Promise<Product[]> {
     }
     // DB overrides CSV for all non-null fields
     if (!inv.is_active) continue; // skip deactivated
+    // Normalize DB category through the same function as CSV
+    const dbCat = inv.category ? normalizeCategorySlug(inv.category) : null;
     merged.push({
       ...csvP,
       name: inv.product_name || csvP.name,
       brand: inv.brand || csvP.brand,
-      category: inv.category || csvP.category,
+      category: dbCat?.category || csvP.category,
+      subcategory: dbCat?.subcategory || csvP.subcategory,
       description: inv.description || csvP.description,
       image: inv.image_url || csvP.image,
       images: inv.image_url ? [inv.image_url, ...csvP.images.filter(i => i !== inv.image_url)] : csvP.images,
