@@ -324,6 +324,7 @@ export type Database = {
           quantity: number | null
           sale_price: number | null
           sku: string | null
+          updated_at: string | null
         }
         Insert: {
           attributes?: Json | null
@@ -338,6 +339,7 @@ export type Database = {
           quantity?: number | null
           sale_price?: number | null
           sku?: string | null
+          updated_at?: string | null
         }
         Update: {
           attributes?: Json | null
@@ -352,6 +354,7 @@ export type Database = {
           quantity?: number | null
           sale_price?: number | null
           sku?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
