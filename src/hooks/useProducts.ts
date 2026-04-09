@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchProducts, slugify, normalizeCategorySlug, applyCategoryOverrides } from "@/lib/products";
+import { slugify, normalizeCategorySlug, applyCategoryOverrides } from "@/lib/products";
 import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/lib/types";
 
@@ -51,71 +51,24 @@ function dbToProduct(inv: Record<string, unknown>): Product {
   };
 }
 
-async function fetchProductsWithInventory(): Promise<Product[]> {
-  const [csvProducts, inventoryResult] = await Promise.all([
-    fetchProducts(),
-    supabase.from("inventory_public").select("id,sku,product_name,brand,category,description,original_price,sale_price,quantity,is_active,image_url,attributes,updated_at"),
-  ]);
+async function fetchProductsFromDB(): Promise<Product[]> {
+  const { data: inventory, error } = await supabase
+    .from("inventory_public")
+    .select("id,sku,product_name,brand,category,description,original_price,sale_price,quantity,is_active,image_url,attributes,updated_at");
 
-  const inventory = inventoryResult.data ?? [];
-  if (inventory.length === 0) return csvProducts;
+  if (error) {
+    console.error("Failed to fetch inventory:", error);
+    return [];
+  }
 
-  // Build lookup maps
-  const csvMap = new Map(csvProducts.map(p => [p.sku, p]));
-
-  const merged: Product[] = [];
-  const seenSkus = new Set<string>();
-
-  // 1. DB ürünleri BİRİNCİL — veritabanındaki tüm kayıtları önce işle
-  // SKU DB'de varsa (aktif veya pasif), CSV fallback engellenir
-  for (const inv of inventory) {
-    if (!inv.sku) continue;
-    seenSkus.add(inv.sku); // Pasif olsa bile SKU'yu kaydet — CSV'den geri gelmesini engelle
-    // DB'de deaktive edilen ürünler CSV'de olsa bile gösterilmez
-    if (!inv.is_active) continue;
-
-    const csvP = csvMap.get(inv.sku);
+  const products: Product[] = [];
+  for (const inv of inventory ?? []) {
+    if (!inv.sku || !inv.is_active) continue;
     const p = dbToProduct(inv as Record<string, unknown>);
-
-    if (csvP) {
-      // CSV verileri sadece DB'de boş/null olan alanları doldurmak için kullanılır
-      merged.push({
-        ...csvP,
-        // DB alanları her zaman öncelikli
-        name: inv.product_name || csvP.name,
-        brand: inv.brand || csvP.brand,
-        category: p.category,
-        subcategory: p.subcategory,
-        description: inv.description || csvP.description,
-        image: normalizeImageUrl(inv.image_url) || csvP.image,
-        images: inv.image_url
-          ? [normalizeImageUrl(inv.image_url), ...csvP.images.filter(i => i !== normalizeImageUrl(inv.image_url))]
-          : csvP.images,
-        price: inv.original_price != null ? Number(inv.original_price) : csvP.price,
-        salePrice: inv.sale_price != null && Number(inv.sale_price) > 0
-          ? Number(inv.sale_price)
-          : csvP.salePrice,
-        specs: inv.attributes && Object.keys(inv.attributes as object).length > 0
-          ? { ...csvP.specs, ...parseAttributes(inv.attributes) }
-          : csvP.specs,
-        inStock: (inv.quantity ?? 0) > 0,
-        slug: p.slug || csvP.slug,
-        id: p.id || csvP.id,
-        sku: inv.sku,
-      });
-    } else {
-      // DB-only ürün
-      if (p.price > 0) merged.push(p);
-    }
+    if (p.price > 0) products.push(p);
   }
 
-  // 2. CSV-only ürünler (DB'de hiç bulunmayan SKU'lar) — fallback
-  for (const csvP of csvProducts) {
-    if (seenSkus.has(csvP.sku)) continue;
-    merged.push(csvP);
-  }
-
-  return merged;
+  return products;
 }
 
 export function useProducts() {
@@ -140,7 +93,7 @@ export function useProducts() {
 
   return useQuery({
     queryKey: ["products"],
-    queryFn: fetchProductsWithInventory,
+    queryFn: fetchProductsFromDB,
     staleTime: 2 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
   });
