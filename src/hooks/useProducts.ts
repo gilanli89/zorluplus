@@ -82,7 +82,7 @@ async function fetchProductsWithInventory(): Promise<Product[]> {
       specs: inv.attributes && Object.keys(inv.attributes as object).length > 0
         ? { ...csvP.specs, ...parseAttributes(inv.attributes) }
         : csvP.specs,
-      inStock: inv.is_active !== false && (inv.quantity ?? 0) > 0,
+      inStock: (inv.quantity ?? 0) > 0,
     });
   }
 

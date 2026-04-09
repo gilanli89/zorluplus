@@ -33,7 +33,7 @@ function getFallbackImage(category: string, subcategory: string): string {
   return SUBCATEGORY_FALLBACK_IMAGES[subcategory] || CATEGORY_FALLBACK_IMAGES[category] || "/placeholder.svg";
 }
 
-function slugify(text: string): string {
+export function slugify(text: string): string {
   return text
     .toLowerCase()
     .replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ş/g, "s")
