@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Check, X, Shield, ShieldAlert, ShieldCheck, User } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
@@ -144,7 +145,7 @@ export default function AdminRoles() {
             <Card key={role}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2">
-                  <Icon className={`h-5 w-5 ${info.color}`} />
+                  <PremiumIconInline icon={Icon as any} size={20} color={info.color} />
                   <CardTitle className="text-base">{info.label}</CardTitle>
                 </div>
                 <CardDescription className="text-xs">{info.description}</CardDescription>
@@ -171,7 +172,7 @@ export default function AdminRoles() {
                 {ROLES.map(role => (
                   <TableHead key={role} className="text-center">
                     <span className="flex items-center justify-center gap-1">
-                      {React.createElement(ROLE_INFO[role].icon, { className: `h-4 w-4 ${ROLE_INFO[role].color}` })}
+                      <PremiumIconInline icon={ROLE_INFO[role].icon as any} size={16} color={ROLE_INFO[role].color} />
                       {ROLE_INFO[role].label}
                     </span>
                   </TableHead>
@@ -185,9 +186,9 @@ export default function AdminRoles() {
                   {ROLES.map(role => (
                     <TableCell key={role} className="text-center">
                       {PERMISSION_MATRIX[role][perm.key] ? (
-                        <Check className="h-4 w-4 text-green-500 mx-auto" />
+                        <PremiumIconInline icon={Check} size={16} color="text-green-500" className="mx-auto" />
                       ) : (
-                        <X className="h-4 w-4 text-red-400 mx-auto" />
+                        <PremiumIconInline icon={X} size={16} color="text-red-400" className="mx-auto" />
                       )}
                     </TableCell>
                   ))}
@@ -222,7 +223,7 @@ export default function AdminRoles() {
                     <TableCell className="font-medium">{u.email}</TableCell>
                     <TableCell>
                       <Badge variant="outline" className="gap-1">
-                        {React.createElement(ROLE_INFO[u.role]?.icon || User, { className: `h-3 w-3 ${ROLE_INFO[u.role]?.color || ""}` })}
+                        <PremiumIconInline icon={(ROLE_INFO[u.role]?.icon || User) as any} size={12} color={ROLE_INFO[u.role]?.color || ""} />
                         {ROLE_INFO[u.role]?.label || u.role}
                       </Badge>
                     </TableCell>

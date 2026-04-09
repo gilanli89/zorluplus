@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ChevronLeft, ChevronRight, Activity, CalendarIcon, X, Download } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -141,7 +142,7 @@ export default function AdminActivityLogs() {
   return (
     <div>
       <div className="flex items-center gap-2 mb-6">
-        <Activity className="h-6 w-6 text-primary" />
+        <PremiumIconInline icon={Activity} size={24} />
         <h1 className="font-display text-2xl font-bold text-foreground">Aktivite Logları</h1>
       </div>
 
@@ -172,7 +173,7 @@ export default function AdminActivityLogs() {
               variant="outline"
               className={cn("h-9 w-40 justify-start text-left font-normal", !dateFrom && "text-muted-foreground")}
             >
-              <CalendarIcon className="mr-2 h-4 w-4" />
+              <PremiumIconInline icon={CalendarIcon} size={16} className="mr-2" />
               {dateFrom ? format(dateFrom, "dd.MM.yyyy") : "Başlangıç"}
             </Button>
           </PopoverTrigger>
@@ -195,7 +196,7 @@ export default function AdminActivityLogs() {
               variant="outline"
               className={cn("h-9 w-40 justify-start text-left font-normal", !dateTo && "text-muted-foreground")}
             >
-              <CalendarIcon className="mr-2 h-4 w-4" />
+              <PremiumIconInline icon={CalendarIcon} size={16} className="mr-2" />
               {dateTo ? format(dateTo, "dd.MM.yyyy") : "Bitiş"}
             </Button>
           </PopoverTrigger>
@@ -218,7 +219,7 @@ export default function AdminActivityLogs() {
         )}
 
         <Button variant="outline" size="sm" onClick={exportCSV} disabled={exporting} className="h-9 gap-1.5">
-          <Download className="h-3.5 w-3.5" />
+          <PremiumIconInline icon={Download} size={14} />
           {exporting ? "Aktarılıyor..." : "CSV İndir"}
         </Button>
 

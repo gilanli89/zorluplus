@@ -14,6 +14,7 @@ import { employees } from "@/data/employees";
 import { toast } from "sonner";
 import { logActivity } from "@/lib/activityLogger";
 import { Eye, Check, X, CalendarDays, Clock, Users, AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { format, addDays, isWithinInterval, startOfDay, differenceInCalendarDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, getDay } from "date-fns";
 import { tr } from "date-fns/locale";
 
@@ -144,17 +145,17 @@ export default function AdminLeaveRequests() {
 
       {/* Stat Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard icon={<AlertTriangle className="h-5 w-5 text-amber-500" />} label="Bekleyen" value={pendingCount} />
-        <StatCard icon={<Check className="h-5 w-5 text-green-500" />} label="Onaylanan" value={approvedCount} />
-        <StatCard icon={<Users className="h-5 w-5 text-primary" />} label="Bugün İzinli" value={todayOnLeave.length} />
-        <StatCard icon={<CalendarDays className="h-5 w-5 text-muted-foreground" />} label="Toplam Talep" value={requests.length} />
+        <StatCard icon={<PremiumIconInline icon={AlertTriangle} size={20} color="text-amber-500" />} label="Bekleyen" value={pendingCount} />
+        <StatCard icon={<PremiumIconInline icon={Check} size={20} color="text-green-500" />} label="Onaylanan" value={approvedCount} />
+        <StatCard icon={<PremiumIconInline icon={Users} size={20} />} label="Bugün İzinli" value={todayOnLeave.length} />
+        <StatCard icon={<PremiumIconInline icon={CalendarDays} size={20} color="text-muted-foreground" />} label="Toplam Talep" value={requests.length} />
       </div>
 
       {/* Today on leave */}
       {todayOnLeave.length > 0 && (
         <div className="border border-border rounded-2xl p-4 bg-primary/5 mb-6">
           <h3 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
-            <Users className="h-4 w-4 text-primary" /> Bugün İzinli Olanlar
+            <PremiumIconInline icon={Users} size={16} /> Bugün İzinli Olanlar
           </h3>
           <div className="flex flex-wrap gap-2">
             {todayOnLeave.map((r) => (

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { UserPlus, Ban, Trash2, ShieldCheck, Loader2, KeyRound } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { logActivity } from "@/lib/activityLogger";
 import { validatePassword } from "@/lib/passwordValidation";
 import PasswordStrengthIndicator from "@/components/admin/PasswordStrengthIndicator";
@@ -206,7 +207,7 @@ export default function AdminUsers() {
         <h1 className="text-2xl font-bold">Kullanıcı Yönetimi</h1>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2"><UserPlus className="h-4 w-4" /> Yeni Kullanıcı</Button>
+            <Button className="gap-2"><PremiumIconInline icon={UserPlus} size={16} /> Yeni Kullanıcı</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader><DialogTitle>Yeni Kullanıcı Ekle</DialogTitle><DialogDescription>Sisteme yeni bir kullanıcı ekleyin ve rol atayın.</DialogDescription></DialogHeader>
@@ -295,14 +296,14 @@ export default function AdminUsers() {
                           disabled={actionLoading === u.id}
                           onClick={() => handleBanToggle(u)}
                         >
-                          {isBanned(u) ? <ShieldCheck className="h-3.5 w-3.5" /> : <Ban className="h-3.5 w-3.5" />}
+                          {isBanned(u) ? <PremiumIconInline icon={ShieldCheck} size={14} /> : <PremiumIconInline icon={Ban} size={14} />}
                           {isBanned(u) ? "Aktifleştir" : "Askıya Al"}
                         </Button>
 
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <Button size="sm" variant="destructive" className="gap-1" disabled={actionLoading === u.id}>
-                              <Trash2 className="h-3.5 w-3.5" /> Sil
+                              <PremiumIconInline icon={Trash2} size={14} /> Sil
                             </Button>
                           </AlertDialogTrigger>
                           <AlertDialogContent>
@@ -374,7 +375,7 @@ export default function AdminUsers() {
               {/* Password Reset Section */}
               <div className="space-y-3 border-t pt-4">
                 <Label className="font-semibold flex items-center gap-1.5">
-                  <KeyRound className="h-4 w-4" /> Şifre Sıfırla
+                  <PremiumIconInline icon={KeyRound} size={16} /> Şifre Sıfırla
                 </Label>
                 <div className="space-y-2">
                   <Input
@@ -402,7 +403,7 @@ export default function AdminUsers() {
                   onClick={() => handleResetPassword(selectedUser.id)}
                 >
                   {resetting && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-                  <KeyRound className="h-3.5 w-3.5" /> Şifreyi Sıfırla
+                  <PremiumIconInline icon={KeyRound} size={14} /> Şifreyi Sıfırla
                 </Button>
               </div>
             </div>
