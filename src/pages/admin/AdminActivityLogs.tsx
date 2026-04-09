@@ -217,6 +217,11 @@ export default function AdminActivityLogs() {
           </Button>
         )}
 
+        <Button variant="outline" size="sm" onClick={exportCSV} disabled={exporting} className="h-9 gap-1.5">
+          <Download className="h-3.5 w-3.5" />
+          {exporting ? "Aktarılıyor..." : "CSV İndir"}
+        </Button>
+
         <span className="text-sm text-muted-foreground self-center ml-auto">
           Toplam: {total} kayıt
         </span>
