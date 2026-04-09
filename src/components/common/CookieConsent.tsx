@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { Button } from "@/components/ui/button";
 
 const COOKIE_KEY = "zorlu_cookie_consent";
@@ -32,7 +33,7 @@ export default function CookieConsent() {
         >
           <div className="bg-card border border-border rounded-2xl shadow-xl p-5">
             <div className="flex items-start gap-3">
-              <Cookie className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <PremiumIconInline icon={Cookie} size={20} />
               <div className="flex-1">
                 <p className="text-sm font-semibold text-foreground mb-1">Çerez Kullanımı</p>
                 <p className="text-xs text-muted-foreground mb-3">
@@ -44,7 +45,7 @@ export default function CookieConsent() {
                     Kabul Et
                   </Button>
                   <Button size="sm" variant="ghost" onClick={accept} className="rounded-full text-xs">
-                    <X className="h-3 w-3 mr-1" /> Kapat
+                    <PremiumIconInline icon={X} size={12} className="mr-1" /> Kapat
                   </Button>
                 </div>
               </div>

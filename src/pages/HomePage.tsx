@@ -101,22 +101,22 @@ export default function HomePage() {
                 <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 items-end">
                   {i === 0 && (
                     <Badge className="text-[10px] rounded-full px-3 py-1 gap-1 bg-rose-500 text-white border-0 shadow-lg animate-pulse font-bold">
-                      <Sparkles size={11} /> Yeni Modeller
+                      <PremiumIconInline icon={Sparkles} size={11} className="text-white" /> Yeni Modeller
                     </Badge>
                   )}
                   {i === 1 && (
                     <Badge className="text-[10px] rounded-full px-3 py-1 gap-1 bg-emerald-500 text-white border-0 shadow-lg font-bold">
-                      <Truck size={11} /> Ücretsiz Kurulum
+                      <PremiumIconInline icon={Truck} size={11} className="text-white" /> Ücretsiz Kurulum
                     </Badge>
                   )}
                   {i === 2 && (
                     <Badge className="text-[10px] rounded-full px-3 py-1 gap-1 bg-amber-500 text-white border-0 shadow-lg font-bold">
-                      <ShieldCheck size={11} /> Resmi Garanti
+                      <PremiumIconInline icon={ShieldCheck} size={11} className="text-white" /> Resmi Garanti
                     </Badge>
                   )}
                   {i === 3 && (
                     <Badge className="text-[10px] rounded-full px-3 py-1 gap-1 bg-violet-500 text-white border-0 shadow-lg animate-pulse font-bold">
-                      <Gift size={11} /> Kampanya
+                      <PremiumIconInline icon={Gift} size={11} className="text-white" /> Kampanya
                     </Badge>
                   )}
                 </div>
@@ -135,7 +135,7 @@ export default function HomePage() {
                   )}
                   <div className="mt-4">
                     <span className="inline-flex items-center gap-2 text-sm font-semibold text-white border border-white/30 rounded-full px-5 py-2 backdrop-blur-sm bg-white/10 group-hover:bg-white/20 transition-all duration-300">
-                      {cat.ctaKey ? t(cat.ctaKey) : t("home.explore")} <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      {cat.ctaKey ? t(cat.ctaKey) : t("home.explore")} <PremiumIconInline icon={ArrowRight} size={16} className="text-white transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
                 </div>

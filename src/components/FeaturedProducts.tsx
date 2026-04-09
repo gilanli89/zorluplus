@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Flame, TrendingUp } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useProducts } from "@/hooks/useProducts";
@@ -43,17 +44,17 @@ export default function FeaturedProducts() {
               {t("home.featuredProducts") || "Popüler Ürünler"}
             </h2>
             <Badge className="hidden sm:inline-flex text-[10px] rounded-full px-3 py-1 gap-1 bg-rose-500 hover:bg-rose-600 text-white border-0 shadow-[0_2px_8px_-2px_rgba(244,63,94,0.4)] animate-pulse font-bold">
-              <Flame size={12} /> FIRSATLAR
+              <PremiumIconInline icon={Flame} size={12} className="text-white" /> FIRSATLAR
             </Badge>
           </div>
           <div>
             <p className="text-muted-foreground text-sm mt-1 flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-primary" />
+              <PremiumIconInline icon={TrendingUp} size={16} />
               {t("home.featuredProductsDesc") || "En çok tercih edilen ürünlerimiz"}
             </p>
           </div>
           <Link to="/kategoriler" className="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline underline-offset-4">
-            {t("general.viewAll")} <ArrowRight className="h-3.5 w-3.5" />
+            {t("general.viewAll")} <PremiumIconInline icon={ArrowRight} size={14} />
           </Link>
         </motion.div>
 
