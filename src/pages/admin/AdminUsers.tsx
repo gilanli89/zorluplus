@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { UserPlus, Ban, Trash2, ShieldCheck, Loader2, KeyRound } from "lucide-react";
+import { logActivity } from "@/lib/activityLogger";
 import { validatePassword } from "@/lib/passwordValidation";
 import PasswordStrengthIndicator from "@/components/admin/PasswordStrengthIndicator";
 
@@ -111,6 +112,7 @@ export default function AdminUsers() {
       setCreating(true);
       await callAdminUsers("POST", { email: newEmail, password: newPassword, role: newRole });
       toast.success("Kullanıcı oluşturuldu");
+      logActivity("user_create", "user", undefined, { email: newEmail, role: newRole });
       setDialogOpen(false);
       setNewEmail(""); setNewPassword(""); setNewRole("admin");
       fetchUsers();
@@ -126,6 +128,7 @@ export default function AdminUsers() {
       setActionLoading(userId);
       await callAdminUsers("PATCH", { user_id: userId, action: "role", role });
       toast.success("Rol güncellendi");
+      logActivity("role_change", "user_role", userId, { new_role: role });
       setSelectedUser(null);
       fetchUsers();
     } catch (e: any) {
@@ -149,6 +152,7 @@ export default function AdminUsers() {
       setResetting(true);
       await callAdminUsers("PATCH", { user_id: userId, action: "reset_password", password: resetPassword });
       toast.success("Şifre başarıyla sıfırlandı");
+      logActivity("user_password_reset", "user", userId);
       setResetPassword("");
       setResetPasswordConfirm("");
     } catch (e: any) {
@@ -171,6 +175,7 @@ export default function AdminUsers() {
       setActionLoading(user.id);
       await callAdminUsers("PATCH", { user_id: user.id, action: "ban", ban: !isBanned });
       toast.success(isBanned ? "Kullanıcı aktifleştirildi" : "Kullanıcı askıya alındı");
+      logActivity(isBanned ? "user_unban" : "user_ban", "user", user.id, { email: user.email });
       fetchUsers();
     } catch (e: any) {
       toast.error(e.message);
@@ -184,6 +189,7 @@ export default function AdminUsers() {
       setActionLoading(userId);
       await callAdminUsers("DELETE", { user_id: userId });
       toast.success("Kullanıcı silindi");
+      logActivity("user_delete", "user", userId);
       fetchUsers();
     } catch (e: any) {
       toast.error(e.message);

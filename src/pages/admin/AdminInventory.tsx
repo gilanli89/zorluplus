@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { logActivity } from "@/lib/activityLogger";
 import { useState, useMemo, useCallback, useRef } from "react";
 import {
   Save, RefreshCw, X, Loader2, Plus, Trash2,
@@ -113,6 +114,7 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
 
       if (error) { toast.error("Ürün eklenemedi: " + error.message); return; }
       toast.success("Ürün başarıyla eklendi!");
+      logActivity("inventory_create", "inventory", undefined, { product_name: form.product_name });
       reset();
       setOpen(false);
       onAdded();
@@ -349,6 +351,7 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
 
       if (error) { toast.error("Güncellenemedi: " + error.message); return; }
       toast.success("Ürün güncellendi!");
+      logActivity("inventory_update", "inventory", item.id, { product_name: form.product_name });
       onOpenChange(false);
       onSaved();
     } catch (e: any) {

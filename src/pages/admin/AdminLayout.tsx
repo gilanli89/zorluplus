@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate, Link, useLocation } from "react-router-dom";
-import { ShoppingCart, Package, Wrench, LogOut, LayoutDashboard, Users, Shield, KeyRound, Loader2 } from "lucide-react";
+import { ShoppingCart, Package, Wrench, LogOut, LayoutDashboard, Users, Shield, KeyRound, Loader2, Activity } from "lucide-react";
 import { PremiumIconInline } from "@/components/PremiumIcon";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import Logo from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { validatePassword } from "@/lib/passwordValidation";
+import { logActivity } from "@/lib/activityLogger";
 import PasswordStrengthIndicator from "@/components/admin/PasswordStrengthIndicator";
 
 import {
@@ -36,10 +37,11 @@ const NAV_ITEMS = [
   { title: "Servis Talepleri", url: "/admin/servis", icon: Wrench },
   { title: "Kullanıcılar", url: "/admin/kullanicilar", icon: Users },
   { title: "Roller", url: "/admin/roller", icon: Shield },
-];
+  { title: "Aktivite Logları", url: "/admin/aktivite-loglari", icon: Activity, superAdminOnly: true },
+] as const;
 
 export default function AdminLayout() {
-  const { user, isAdmin, loading, signOut } = useAuth();
+  const { user, isAdmin, isSuperAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -83,6 +85,7 @@ export default function AdminLayout() {
         return;
       }
       toast.success("Şifreniz başarıyla değiştirildi");
+      logActivity("self_password_change", "self");
       setPwDialogOpen(false);
       setCurrentPw("");
       setNewPw("");
@@ -112,7 +115,7 @@ export default function AdminLayout() {
               <SidebarGroupLabel>Yönetim</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {NAV_ITEMS.map(item => {
+                  {NAV_ITEMS.filter(item => !('superAdminOnly' in item && item.superAdminOnly) || isSuperAdmin).map(item => {
                     const active = location.pathname === item.url || (item.url !== "/admin" && location.pathname.startsWith(item.url));
                     return (
                       <SidebarMenuItem key={item.url}>

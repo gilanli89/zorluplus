@@ -5,6 +5,7 @@ import type { User } from "@supabase/supabase-js";
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,8 +15,11 @@ export function useAuth() {
       if (u) {
         const { data } = await supabase.rpc("check_own_admin_status");
         setIsAdmin(!!data);
+        const { data: saData } = await supabase.rpc("is_super_admin", { _user_id: u.id });
+        setIsSuperAdmin(!!saData);
       } else {
         setIsAdmin(false);
+        setIsSuperAdmin(false);
       }
       setLoading(false);
     });
@@ -26,6 +30,8 @@ export function useAuth() {
       if (u) {
         const { data } = await supabase.rpc("check_own_admin_status");
         setIsAdmin(!!data);
+        const { data: saData } = await supabase.rpc("is_super_admin", { _user_id: u.id });
+        setIsSuperAdmin(!!saData);
       }
       setLoading(false);
     });
@@ -42,5 +48,5 @@ export function useAuth() {
     await supabase.auth.signOut();
   };
 
-  return { user, isAdmin, loading, signIn, signOut };
+  return { user, isAdmin, isSuperAdmin, loading, signIn, signOut };
 }
