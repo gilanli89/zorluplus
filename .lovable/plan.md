@@ -1,18 +1,53 @@
 
 
-## Footer'a Veritabanı Son Güncelleme Tarihi Ekleme
+## Chrome vs Firefox Fark Raporu
 
-Footer'ın alt kısmında, telif hakkı yazısının yanına veritabanındaki (inventory tablosu) en son güncelleme tarih-saat-dakikasını göstereceğiz.
+### Tespit Edilen Sorunlar
 
-### Teknik Yaklaşım
+#### 1. Footer "Son güncelleme" tarihi Firefox'ta görünmüyor
+**Neden:** Network loglarında `updated_at` sorgusu hiç görünmüyor — bu, sorgunun hata verip sessizce `null` döndürdüğü anlamına geliyor. RLS politikası eklendi ama deployment henüz tam yansımamış olabilir, veya Firefox'un cache'i eski kodu tutuyor.
 
-1. **Veritabanı sorgusu**: `inventory` tablosundaki `updated_at` sütununun `MAX()` değerini `inventory_public` view'ından çekeceğiz. View'a bu aggregation'ı eklemek yerine, doğrudan frontend'den `supabase.from("inventory_public").select("updated_at").order("updated_at", { ascending: false }).limit(1)` sorgusu yapacağız.
+**Çözüm:** Footer'daki `updated_at` sorgusunu daha dayanıklı hale getirmek — hata durumunda `console.warn` ile loglamak ve `retry: 3` ile artırmak.
 
-2. **Footer bileşeni güncelleme** (`src/components/layout/Footer.tsx`):
-   - `useQuery` ile en son `updated_at` değerini çekecek bir sorgu eklenecek
-   - Tarih Türkçe formatında gösterilecek: `"Son güncelleme: 09.04.2026 14:35"`
-   - Telif hakkı yazısının hemen altına küçük font ile yerleştirilecek
+#### 2. `inventory_public` sorgusu eski sütunları çekiyor
+**Neden:** Network logları `select=sku,quantity,original_price,sale_price,is_active` gösteriyor (sadece 5 sütun), ancak kod `select("*")` yapıyor. Bu, preview'ın henüz yeni kodu deploy etmemiş olduğunu gösteriyor. Types dosyası güncel (13 sütun mevcut) ancak runtime'da eski bundle çalışıyor.
 
-### Dosya Değişiklikleri
-- `src/components/layout/Footer.tsx` — useQuery + supabase import ekle, tarih gösterimi ekle
+**Çözüm:** Yeni bir deploy tetiklendiğinde bu otomatik düzelecek. Ancak `select("*")` yerine açık sütun listesi kullanmak daha güvenli olacaktır.
+
+#### 3. CSS `mask-composite` Firefox uyumsuzluğu
+**Neden:** `index.css`'te `.glass-border::after` ve `.premium-card::after` sınıflarında:
+```css
+-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+-webkit-mask-composite: xor;
+mask-composite: exclude;
+```
+Firefox `mask-composite: exclude` destekler ama `-webkit-mask-composite: xor` yoktur. Sorun şu ki `mask` (prefix'siz) property tanımlanmamış — sadece `-webkit-mask` var. Firefox prefix'siz `mask` kullanır, bu yüzden gradient kenarlık efekti Firefox'ta görünmez.
+
+**Çözüm:** Prefix'siz `mask` property'lerini de eklemek:
+```css
+-webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+-webkit-mask-composite: xor;
+mask-composite: exclude;
+```
+
+#### 4. `backdrop-filter` Firefox desteği
+**Neden:** `backdrop-filter` Firefox'ta varsayılan olarak desteklenir (Firefox 103+), ancak eski Firefox sürümlerinde `layout.css.backdrop-filter.enabled` flag'i gerekir. Kodda `-webkit-backdrop-filter` doğru eklenmiş, bu sorun yok.
+
+**Durum:** Modern Firefox sürümlerinde sorun yok. Sadece çok eski Firefox (<103) kullananlar etkilenir.
+
+---
+
+### Yapılacaklar
+
+**Dosya: `src/index.css`**
+- `.glass-border::after` ve `.premium-card::after` için prefix'siz `mask` property ekle (2 satır değişiklik)
+
+**Dosya: `src/components/layout/Footer.tsx`**
+- Hata loglaması ekle (debug kolaylığı)
+
+**Dosya: `src/hooks/useProducts.ts`**
+- `select("*")` yerine açık sütun listesi kullan (tarayıcı cache uyumsuzluklarını önler)
+
+Bu değişiklikler küçük ve low-risk, tüm tarayıcılarda tutarlı görünüm sağlayacak.
 
