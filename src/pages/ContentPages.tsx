@@ -1945,6 +1945,10 @@ export function OdemeYontemleriPage() {
             </a>
           </div>
         </motion.div>
+
+        <motion.p className="text-center font-display font-bold text-lg md:text-xl mt-10 italic" animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,98%)", "hsl(221,83%,53%)"] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
+          Zorlu Digital Plaza | Teknolojiye Premium Dokunuş
+        </motion.p>
       </motion.div>
     </div>
   );
