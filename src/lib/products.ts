@@ -158,66 +158,62 @@ export function normalizeCategorySlug(raw: string): { category: string; subcateg
   return { category: "diger", subcategory: slugify(raw) };
 }
 
-function parseRow(row: Record<string, string>, index: number): Product {
-  const rawCat = row["Kategoriler"] || row["Kategori"] || row["Category"] || row["category"] || "";
-  let { category, subcategory } = normalizeCategorySlug(rawCat);
-  const name = row["İsim"] || row["Ürün Adı"] || row["Name"] || row["name"] || `Ürün ${index + 1}`;
-  const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
-
-  // Override: name-based routing for accessories that should NOT be in TV category
+/** Shared name/brand-based category overrides — applies to both CSV and DB products */
+export function applyCategoryOverrides(
+  name: string,
+  brand: string,
+  category: string,
+  subcategory: string
+): { category: string; subcategory: string } {
   const nameLower = name.toLowerCase();
   const brandLower = brand.toLowerCase().trim();
 
-  // Kumandalar → tv-goruntu/kumanda
   if (nameLower.includes("kumanda")) {
-    category = "tv-goruntu";
-    subcategory = "kumanda";
+    return { category: "tv-goruntu", subcategory: "kumanda" };
   }
-  // HDMI kablolar → tv-goruntu/tv-aksesuar
-  else if (nameLower.includes("hdmi") && (nameLower.includes("kablo") || nameLower.includes("cable"))) {
-    category = "tv-goruntu";
-    subcategory = "tv-aksesuar";
+  if (nameLower.includes("hdmi") && (nameLower.includes("kablo") || nameLower.includes("cable"))) {
+    return { category: "tv-goruntu", subcategory: "tv-aksesuar" };
   }
-  // Soundbar → ses-sistemleri
-  else if (nameLower.includes("soundbar") && !nameLower.includes("kumanda")) {
-    category = "ses-sistemleri";
-    subcategory = "soundbar";
+  if (nameLower.includes("soundbar") && !nameLower.includes("kumanda")) {
+    return { category: "ses-sistemleri", subcategory: "soundbar" };
   }
-  // Hoparlör / Boombox → ses-sistemleri
-  else if (nameLower.includes("hoparlör") || nameLower.includes("boombox") || nameLower.includes("xboom")) {
-    category = "ses-sistemleri";
-    subcategory = "bluetooth-hoparlor";
+  if (nameLower.includes("hoparlör") || nameLower.includes("boombox") || nameLower.includes("xboom")) {
+    return { category: "ses-sistemleri", subcategory: "bluetooth-hoparlor" };
   }
-  // Kulaklık → ses-sistemleri
-  else if (nameLower.includes("kulaklık") || nameLower.includes("kulaklik")) {
-    category = "ses-sistemleri";
-    subcategory = "kulaklik";
+  if (nameLower.includes("kulaklık") || nameLower.includes("kulaklik")) {
+    return { category: "ses-sistemleri", subcategory: "kulaklik" };
   }
-  // TV Askı Aparatları → tv-goruntu/tv-aski-aparatlari
-  else if (
+  if (
     brandLower === "brateck" || brandLower === "aksesuar" ||
     nameLower.includes("askı aparat") || nameLower.includes("tv askı") ||
     nameLower.includes("duvar aparat") || nameLower.includes("masaüstü aparat") ||
-    nameLower.includes("wall mount") || nameLower.includes("desk mount")
+    nameLower.includes("wall mount") || nameLower.includes("desk mount") ||
+    nameLower.includes("aski aparat") || nameLower.includes("tv aski")
   ) {
-    category = "tv-goruntu";
-    subcategory = "tv-aski-aparatlari";
+    return { category: "tv-goruntu", subcategory: "tv-aski-aparatlari" };
   }
-  // Ütü → kucuk-ev-aletleri
-  else if (nameLower.includes("ütü") || nameLower.includes("utu") || nameLower.includes("iron")) {
-    category = "kucuk-ev-aletleri";
-    subcategory = "utu";
+  if (nameLower.includes("temizleme") || nameLower.includes("cleaning kit")) {
+    return { category: "tv-goruntu", subcategory: "tv-aksesuar" };
   }
-  // Multi cooker / pişirici → kucuk-ev-aletleri
-  else if (nameLower.includes("multi cooker") || nameLower.includes("multicooker") || nameLower.includes("pişirici") || nameLower.includes("çoklu pişirici")) {
-    category = "kucuk-ev-aletleri";
-    subcategory = "pisirici";
+  if (nameLower.includes("ütü") || nameLower.includes("utu") || nameLower.includes("iron")) {
+    return { category: "kucuk-ev-aletleri", subcategory: "utu" };
   }
-  // Su sebili → beyaz-esya ONLY
-  else if (nameLower.includes("su sebil") || nameLower.includes("sebili") || nameLower.includes("damacana")) {
-    category = "beyaz-esya";
-    subcategory = "su-sebili";
+  if (nameLower.includes("multi cooker") || nameLower.includes("multicooker") || nameLower.includes("pişirici") || nameLower.includes("çoklu pişirici")) {
+    return { category: "kucuk-ev-aletleri", subcategory: "pisirici" };
   }
+  if (nameLower.includes("su sebil") || nameLower.includes("sebili") || nameLower.includes("damacana")) {
+    return { category: "beyaz-esya", subcategory: "su-sebili" };
+  }
+
+  return { category, subcategory };
+}
+
+function parseRow(row: Record<string, string>, index: number): Product {
+  const rawCat = row["Kategoriler"] || row["Kategori"] || row["Category"] || row["category"] || "";
+  const normalized = normalizeCategorySlug(rawCat);
+  const name = row["İsim"] || row["Ürün Adı"] || row["Name"] || row["name"] || `Ürün ${index + 1}`;
+  const brand = row["Markalar"] || row["Marka"] || row["Brand"] || row["brand"] || "";
+  const { category, subcategory } = applyCategoryOverrides(name, brand, normalized.category, normalized.subcategory);
   const sku = (row["Stok kodu (SKU)"] || row["SKU"] || row["sku"] || row["Kimlik"] || row["ID"] || row["id"] || `SKU-${index}`).trim();
   const price = parseFloat(row["Normal fiyat"] || row["Fiyat"] || row["Price"] || row["price"] || "0") || 0;
   const salePrice = parseFloat(row["İndirimli satış fiyatı"] || row["İndirimli Fiyat"] || row["Sale Price"] || "0") || undefined;
