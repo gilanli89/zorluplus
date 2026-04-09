@@ -1,33 +1,53 @@
 
 
-## Plan: Kalan Marka Logolarını Güncelle
+## Plan: 5 Sayfayı Sürdürülebilirlik Sayfası Gibi Premium Yap
 
-Kullanıcı 6 marka için yeni logo yükledi. Bunlar mevcut PNG dosyalarının yerine geçecek.
+### Hedef
+B2B, Destek, İade Koşulları, Ödeme Yöntemleri ve Sipariş Takip sayfalarına Sürdürülebilirlik sayfasındaki premium pattern'i uygula: PremiumIcon hero, section kartlarında PremiumIcon, ve alt slogan.
 
-### Dosya Kopyalama
+### Mevcut Durum
+- **Destek**: Hero'da PremiumIcon yok, section kartlarında kısmen PremiumIcon var
+- **İade Koşulları**: Hero'da PremiumIcon yok, prose content — kartlara bölünmemiş
+- **Ödeme Yöntemleri**: Hero'da PremiumIcon yok, inline SVG ikonlar kullanılıyor
+- **Sipariş Takip**: Hero'da PremiumIcon yok
+- **B2B** (`B2BPage.tsx`): Zaten PremiumIcon kullanıyor ama marka logoları eski `.png` uzantılarıyla
 
-| Marka | Kaynak | Hedef |
-|-------|--------|-------|
-| Sharp | `user-uploads://sharp.svg` | `public/brands/sharp.svg` |
-| Sony | `user-uploads://sony.png` | `public/brands/sony.png` |
-| TCL | `user-uploads://tcl-3.svg` | `public/brands/tcl.svg` |
-| Tefal | `user-uploads://tefal-1.svg` | `public/brands/tefal.svg` |
-| Toshiba | `user-uploads://toshiba-3.svg` | `public/brands/toshiba.svg` |
-| Xiaomi | `user-uploads://xiaomi.png` | `public/brands/xiaomi.png` |
+### Yapılacaklar
 
-### Kod Değişiklikleri
+**1. `src/pages/ContentPages.tsx` — DestekPage (satır ~845)**
+- Centered PremiumIcon hero ekleme (icon: `Wrench`, size: `xl`, variant: `glow`)
+- Trust kartlarına PremiumIcon (sm/lg) ekleme
+- Alt slogan ekleme
 
-**`src/components/BrandLogo.tsx`** — 5 markanın uzantısını PNG'den SVG'ye güncelle:
-- `sharp` → `/brands/sharp.svg`
-- `sony` → `/brands/sony.png` (PNG kalır)
-- `tcl` → `/brands/tcl.svg`
-- `tefal` → `/brands/tefal.svg`
-- `toshiba` → `/brands/toshiba.svg`
-- `xiaomi` → `/brands/xiaomi.png` (PNG kalır)
+**2. `src/pages/ContentPages.tsx` — IadeKosullariPage (satır ~1279)**
+- Centered PremiumIcon hero ekleme (icon: `ScrollText`, size: `xl`, variant: `glow`)
+- Prose içeriği section kartlarına bölme, her karta PremiumIcon (lg, glow) ekleme
+- Alt slogan ekleme
 
-### Dosya Listesi
+**3. `src/pages/ContentPages.tsx` — SiparisTakipPage (satır ~1709)**
+- Centered PremiumIcon hero ekleme (icon: `Package`, size: `xl`, variant: `glow`)
+- İletişim kartına PremiumIcon ekleme
+- Alt slogan ekleme
+
+**4. `src/pages/ContentPages.tsx` — OdemeYontemleriPage (satır ~1819)**
+- Centered PremiumIcon hero ekleme (icon: `CreditCard`, size: `xl`, variant: `glow`)
+- Inline SVG ikonları PremiumIcon (sm, glow) ile değiştirme
+- Alt slogan ekleme
+
+**5. `src/pages/B2BPage.tsx` — Marka logoları güncelleme**
+- `.png` uzantılı logo yollarını güncel `.svg` uzantılarına güncelleme (sharp, tcl, tefal, toshiba, bosch, jbl, indesit, atlantic, krups, midea, philips)
+
+### İkon Eşleştirmeleri
+| Sayfa | Hero İkonu |
+|-------|-----------|
+| Destek | `Wrench` |
+| İade Koşulları | `ScrollText` |
+| Sipariş Takip | `Package` |
+| Ödeme Yöntemleri | `CreditCard` |
+
+### Dosya Değişiklikleri
 | Dosya | İşlem |
 |-------|-------|
-| `public/brands/` | 6 logo dosyası kopyala/üzerine yaz |
-| `src/components/BrandLogo.tsx` | Logo yollarını güncelle |
+| `src/pages/ContentPages.tsx` | 4 sayfa fonksiyonunu güncelle |
+| `src/pages/B2BPage.tsx` | Logo yollarını güncelle |
 
