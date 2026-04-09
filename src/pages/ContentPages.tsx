@@ -7,11 +7,12 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import PremiumIcon, { PremiumBadgeIcon, PremiumIconInline } from "@/components/PremiumIcon";
 
 const testimonials = [
-  { name: "Emre Güneş", text: "Yıllardır birçok yerden alışveriş yaptım ama buradaki profesyonellik ve ilgi gerçekten bir başka. Hem fiyatlar hem de hizmet kalitesi beni fazlasıyla memnun etti." },
-  { name: "Mert Yalçın", text: "Zorlu Digital Plaza'dan aldığım hizmetten gerçekten çok memnunum. Ekip her aşamada yardımcı oldu ve ürün seçiminde doğru yönlendirmeler yaptılar. Kesinlikle tavsiye ederim." },
-  { name: "Ayşe Karademir", text: "Satın alma süreci çok kolaydı ve ürün beklediğimden daha hızlı elime ulaştı. Teknik destek ekibi de oldukça ilgiliydi." },
-  { name: "Burak Erdemli", text: "Hem ürün kalitesi hem de satış sonrası destek mükemmel. Bir sorun yaşadığımda anında yardımcı oldular." },
-  { name: "Selin Aras", text: "Mağazaya girdiğim anda güler yüzlü bir karşılama ve samimi bir ortam vardı. Aldığım tavsiyeler sayesinde tam ihtiyacıma uygun ürünü seçtim." },
+  { name: "Derviş Çağay", text: "Elektronik ürünler için başvurulacak yer. Uygun fiyatlar, hızlı ve güvenilir hizmet.", photo: "https://lh3.googleusercontent.com/a/ACg8ocJkdoLk2pREfpp4wL8yuxNtODt1SQ552sttRRjUw_GVY9w2NQ=w128-h128-p-rp-mo-ba2-br100" },
+  { name: "Rifat Muduroğlu", text: "Son teknoloji ürünleri deneyimli ve güler yüzlü personel yardımıyla görüp öğrenebileceğiniz ve ardından gönül rahatlığıyla satın alabileceğiniz modern bir mağaza.", photo: "https://lh3.googleusercontent.com/a-/ALV-UjVs16LOK3bRxZXI_7G-xRHj09fqnbNkPSn6q2m2pae6KELRE-LT=w128-h128-p-rp-mo-ba5-br100" },
+  { name: "Efkan Erdal", text: "İlgili ve samimi bir aile işletmesi. İndirim dönemlerinde harika kampanyaları oluyor, takip etmenizi tavsiye ederim.", photo: "https://lh3.googleusercontent.com/a-/ALV-UjU4k4Ag45VRBOGlE2INet031tLvG9bA8FrgNimVhe3LYiCSFccc=w128-h128-p-rp-mo-ba5-br100" },
+  { name: "Nureddin Zaim", text: "Evin tüm Samsung ürünlerini buradan aldım ve elektrik faturası dahil her şeyden memnunum... KESİNLİKLE TAVSİYE EDERİM...", photo: "https://lh3.googleusercontent.com/a-/ALV-UjUA6wfYhm354anm3FC7NfhX_xm7bq-K9vlCPiNYLZUvqwxdkKxm=w128-h128-p-rp-mo-br100" },
+  { name: "Mesut Kaleli", text: "Güler yüzlü hizmet, çok uygun fiyatlar, kesinlikle tavsiye ederim.", photo: "https://lh3.googleusercontent.com/a-/ALV-UjXiujJGX-G5OpZ1LzgF91UIuKoAONBPgJw8IVmIBY452xec1JGn=w128-h128-p-rp-mo-br100" },
+  { name: "Latif İnce", text: "Beyaz eşya ve televizyon almak için en iyi alternatif.", photo: "https://lh3.googleusercontent.com/a-/ALV-UjX3UJuyIxb2GzPz5k9uJrxBDrkho9u0AsZENaBhMfD_gfS9oEUw8g=w128-h128-p-rp-mo-ba5-br100" },
 ];
 
 const stats = [
@@ -439,16 +440,16 @@ export function HakkimizdaPage() {
                 </motion.div>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4 relative z-10">"{item.text}"</p>
                 <div className="flex items-center gap-3 relative z-10">
-                  <motion.div
-                    className="h-9 w-9 rounded-full flex items-center justify-center font-bold text-sm text-primary-foreground"
+                  <motion.img
+                    src={item.photo}
+                    alt={item.name}
+                    className="h-10 w-10 rounded-full object-cover border-2 border-primary/20"
                     animate={{
-                      backgroundColor: ["hsl(221,83%,53%)", "hsl(221,83%,63%)", "hsl(221,83%,53%)"],
                       boxShadow: ["0 0 0px hsl(221,83%,53%,0)", "0 0 12px hsl(221,83%,53%,0.3)", "0 0 0px hsl(221,83%,53%,0)"],
                     }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 }}
-                  >
-                    {item.name.charAt(0)}
-                  </motion.div>
+                    referrerPolicy="no-referrer"
+                  />
                   <motion.p
                     className="font-semibold text-sm"
                     animate={{ color: ["hsl(221,83%,53%)", "hsl(210,40%,20%)", "hsl(221,83%,53%)"] }}
