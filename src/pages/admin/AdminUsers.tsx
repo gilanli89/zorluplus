@@ -20,7 +20,9 @@ import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { UserPlus, Ban, Trash2, ShieldCheck, Loader2 } from "lucide-react";
+import { UserPlus, Ban, Trash2, ShieldCheck, Loader2, KeyRound } from "lucide-react";
+import { validatePassword } from "@/lib/passwordValidation";
+import PasswordStrengthIndicator from "@/components/admin/PasswordStrengthIndicator";
 
 interface UserRow {
   id: string;
@@ -82,6 +84,11 @@ export default function AdminUsers() {
   const [selectedUser, setSelectedUser] = useState<UserRow | null>(null);
   const [editRole, setEditRole] = useState("");
 
+  // Password reset in detail dialog
+  const [resetPassword, setResetPassword] = useState("");
+  const [resetPasswordConfirm, setResetPasswordConfirm] = useState("");
+  const [resetting, setResetting] = useState(false);
+
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
@@ -98,7 +105,8 @@ export default function AdminUsers() {
 
   const handleCreate = async () => {
     if (!newEmail || !newPassword) { toast.error("Email ve şifre zorunlu"); return; }
-    if (newPassword.length < 6) { toast.error("Şifre en az 6 karakter olmalı"); return; }
+    const checks = validatePassword(newPassword);
+    if (!checks.isValid) { toast.error("Şifre güvenlik gereksinimlerini karşılamıyor"); return; }
     try {
       setCreating(true);
       await callAdminUsers("POST", { email: newEmail, password: newPassword, role: newRole });
@@ -127,9 +135,34 @@ export default function AdminUsers() {
     }
   };
 
+  const handleResetPassword = async (userId: string) => {
+    if (resetPassword !== resetPasswordConfirm) {
+      toast.error("Şifreler eşleşmiyor");
+      return;
+    }
+    const checks = validatePassword(resetPassword);
+    if (!checks.isValid) {
+      toast.error("Şifre güvenlik gereksinimlerini karşılamıyor");
+      return;
+    }
+    try {
+      setResetting(true);
+      await callAdminUsers("PATCH", { user_id: userId, action: "reset_password", password: resetPassword });
+      toast.success("Şifre başarıyla sıfırlandı");
+      setResetPassword("");
+      setResetPasswordConfirm("");
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setResetting(false);
+    }
+  };
+
   const openUserDetail = (user: UserRow) => {
     setSelectedUser(user);
     setEditRole(user.role);
+    setResetPassword("");
+    setResetPasswordConfirm("");
   };
 
   const handleBanToggle = async (user: UserRow) => {
@@ -177,8 +210,9 @@ export default function AdminUsers() {
                 <Input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} placeholder="ornek@email.com" />
               </div>
               <div className="space-y-2">
-                <Label>Şifre (min 6 karakter)</Label>
-                <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="••••••" />
+                <Label>Şifre</Label>
+                <Input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="••••••••" />
+                <PasswordStrengthIndicator password={newPassword} />
               </div>
               <div className="space-y-2">
                 <Label>Rol</Label>
@@ -194,7 +228,7 @@ export default function AdminUsers() {
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleCreate} disabled={creating} className="gap-2">
+              <Button onClick={handleCreate} disabled={creating || !validatePassword(newPassword).isValid} className="gap-2">
                 {creating && <Loader2 className="h-4 w-4 animate-spin" />} Oluştur
               </Button>
             </DialogFooter>
@@ -288,15 +322,15 @@ export default function AdminUsers() {
         </CardContent>
       </Card>
 
-      {/* Role Detail Dialog */}
+      {/* User Detail + Role Change + Password Reset Dialog */}
       <Dialog open={!!selectedUser} onOpenChange={(open) => !open && setSelectedUser(null)}>
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Kullanıcı Detayı</DialogTitle>
-            <DialogDescription>Kullanıcı bilgilerini görüntüleyin ve rolünü değiştirin.</DialogDescription>
+            <DialogDescription>Kullanıcı bilgilerini görüntüleyin, rolünü ve şifresini değiştirin.</DialogDescription>
           </DialogHeader>
           {selectedUser && (
-            <div className="space-y-4 py-2">
+            <div className="space-y-5 py-2">
               <div className="space-y-1">
                 <Label className="text-muted-foreground text-xs">Email</Label>
                 <p className="font-medium">{selectedUser.email}</p>
@@ -305,44 +339,68 @@ export default function AdminUsers() {
                 <Label className="text-muted-foreground text-xs">Kayıt Tarihi</Label>
                 <p className="text-sm">{new Date(selectedUser.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</p>
               </div>
-              <div className="space-y-1">
-                <Label className="text-muted-foreground text-xs">Mevcut Rol</Label>
-                <div>
-                  <Badge className={ROLE_COLORS[selectedUser.role] || ""}>
-                    {ROLE_LABELS[selectedUser.role] || selectedUser.role}
-                  </Badge>
+
+              {/* Role Section */}
+              <div className="space-y-2 border-t pt-4">
+                <Label className="font-semibold">Rol Değiştir</Label>
+                <div className="flex items-center gap-2">
+                  <Select value={editRole} onValueChange={setEditRole}>
+                    <SelectTrigger className="flex-1"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="super_admin">Süper Admin</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                      <SelectItem value="moderator">Moderatör</SelectItem>
+                      <SelectItem value="user">Kullanıcı</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    onClick={() => handleRoleChange(selectedUser.id, editRole)}
+                    disabled={actionLoading === selectedUser.id || editRole === selectedUser.role}
+                    size="sm"
+                    className="gap-1"
+                  >
+                    {actionLoading === selectedUser.id && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                    Kaydet
+                  </Button>
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label>Rol Değiştir</Label>
-                <Select value={editRole} onValueChange={setEditRole}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="super_admin">Süper Admin</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="moderator">Moderatör</SelectItem>
-                    <SelectItem value="user">Kullanıcı</SelectItem>
-                  </SelectContent>
-                </Select>
+
+              {/* Password Reset Section */}
+              <div className="space-y-3 border-t pt-4">
+                <Label className="font-semibold flex items-center gap-1.5">
+                  <KeyRound className="h-4 w-4" /> Şifre Sıfırla
+                </Label>
+                <div className="space-y-2">
+                  <Input
+                    type="password"
+                    placeholder="Yeni şifre"
+                    value={resetPassword}
+                    onChange={e => setResetPassword(e.target.value)}
+                  />
+                  <PasswordStrengthIndicator password={resetPassword} />
+                  <Input
+                    type="password"
+                    placeholder="Yeni şifre (tekrar)"
+                    value={resetPasswordConfirm}
+                    onChange={e => setResetPasswordConfirm(e.target.value)}
+                  />
+                  {resetPasswordConfirm && resetPassword !== resetPasswordConfirm && (
+                    <p className="text-xs text-destructive">Şifreler eşleşmiyor</p>
+                  )}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5"
+                  disabled={resetting || !validatePassword(resetPassword).isValid || resetPassword !== resetPasswordConfirm}
+                  onClick={() => handleResetPassword(selectedUser.id)}
+                >
+                  {resetting && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                  <KeyRound className="h-3.5 w-3.5" /> Şifreyi Sıfırla
+                </Button>
               </div>
             </div>
           )}
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setSelectedUser(null)}
-            >
-              İptal
-            </Button>
-            <Button
-              onClick={() => selectedUser && handleRoleChange(selectedUser.id, editRole)}
-              disabled={actionLoading === selectedUser?.id || editRole === selectedUser?.role}
-              className="gap-2"
-            >
-              {actionLoading === selectedUser?.id && <Loader2 className="h-4 w-4 animate-spin" />}
-              Kaydet
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
