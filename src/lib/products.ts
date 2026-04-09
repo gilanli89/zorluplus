@@ -280,7 +280,8 @@ const LOCAL_CSV = "/data/products.csv";
 
 export async function fetchProducts(): Promise<Product[]> {
   // Try local CSV first (WooCommerce export), then Google Sheets fallback
-  const urls = [LOCAL_CSV, PRODUCT_FEED_URL].filter(Boolean);
+  const cacheBust = `?t=${Math.floor(Date.now() / 60000)}`; // bust per minute
+  const urls = [`${LOCAL_CSV}${cacheBust}`, PRODUCT_FEED_URL].filter(Boolean);
   
   for (const url of urls) {
     try {
