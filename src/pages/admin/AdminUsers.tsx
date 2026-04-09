@@ -78,6 +78,10 @@ export default function AdminUsers() {
   const [newRole, setNewRole] = useState("admin");
   const [creating, setCreating] = useState(false);
 
+  // Role detail dialog
+  const [selectedUser, setSelectedUser] = useState<UserRow | null>(null);
+  const [editRole, setEditRole] = useState("");
+
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
@@ -114,12 +118,18 @@ export default function AdminUsers() {
       setActionLoading(userId);
       await callAdminUsers("PATCH", { user_id: userId, action: "role", role });
       toast.success("Rol güncellendi");
+      setSelectedUser(null);
       fetchUsers();
     } catch (e: any) {
       toast.error(e.message);
     } finally {
       setActionLoading(null);
     }
+  };
+
+  const openUserDetail = (user: UserRow) => {
+    setSelectedUser(user);
+    setEditRole(user.role);
   };
 
   const handleBanToggle = async (user: UserRow) => {
@@ -213,23 +223,18 @@ export default function AdminUsers() {
               <TableBody>
                 {users.map(u => (
                   <TableRow key={u.id} className={isBanned(u) ? "opacity-60" : ""}>
-                    <TableCell className="font-medium">{u.email}</TableCell>
                     <TableCell>
-                      <Select
-                        value={u.role}
-                        onValueChange={val => handleRoleChange(u.id, val)}
-                        disabled={actionLoading === u.id}
+                      <button
+                        onClick={() => openUserDetail(u)}
+                        className="font-medium text-primary underline-offset-4 hover:underline cursor-pointer"
                       >
-                        <SelectTrigger className="w-[140px] h-8">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="super_admin">Süper Admin</SelectItem>
-                          <SelectItem value="admin">Admin</SelectItem>
-                          <SelectItem value="moderator">Moderatör</SelectItem>
-                          <SelectItem value="user">Kullanıcı</SelectItem>
-                        </SelectContent>
-                      </Select>
+                        {u.email}
+                      </button>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={ROLE_COLORS[u.role] || ""}>
+                        {ROLE_LABELS[u.role] || u.role}
+                      </Badge>
                     </TableCell>
                     <TableCell>
                       {isBanned(u) ? (
@@ -282,6 +287,63 @@ export default function AdminUsers() {
           )}
         </CardContent>
       </Card>
+
+      {/* Role Detail Dialog */}
+      <Dialog open={!!selectedUser} onOpenChange={(open) => !open && setSelectedUser(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Kullanıcı Detayı</DialogTitle>
+          </DialogHeader>
+          {selectedUser && (
+            <div className="space-y-4 py-2">
+              <div className="space-y-1">
+                <Label className="text-muted-foreground text-xs">Email</Label>
+                <p className="font-medium">{selectedUser.email}</p>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-muted-foreground text-xs">Kayıt Tarihi</Label>
+                <p className="text-sm">{new Date(selectedUser.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })}</p>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-muted-foreground text-xs">Mevcut Rol</Label>
+                <div>
+                  <Badge className={ROLE_COLORS[selectedUser.role] || ""}>
+                    {ROLE_LABELS[selectedUser.role] || selectedUser.role}
+                  </Badge>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Rol Değiştir</Label>
+                <Select value={editRole} onValueChange={setEditRole}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="super_admin">Süper Admin</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="moderator">Moderatör</SelectItem>
+                    <SelectItem value="user">Kullanıcı</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setSelectedUser(null)}
+            >
+              İptal
+            </Button>
+            <Button
+              onClick={() => selectedUser && handleRoleChange(selectedUser.id, editRole)}
+              disabled={actionLoading === selectedUser?.id || editRole === selectedUser?.role}
+              className="gap-2"
+            >
+              {actionLoading === selectedUser?.id && <Loader2 className="h-4 w-4 animate-spin" />}
+              Kaydet
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
