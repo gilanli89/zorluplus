@@ -6,6 +6,7 @@ import {
   Wrench, Phone, MessageCircle, ChevronRight, ArrowRight,
   Search, Signal, Monitor, Antenna, List, RefreshCw,
 } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
