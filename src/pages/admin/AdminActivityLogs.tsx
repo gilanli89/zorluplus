@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { format } from "date-fns";
+import { format, startOfDay, endOfDay } from "date-fns";
 import { tr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Activity } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ChevronLeft, ChevronRight, Activity, CalendarIcon, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const ENTITY_LABELS: Record<string, string> = {
   order: "Sipariş",
@@ -46,9 +49,11 @@ export default function AdminActivityLogs() {
   const [page, setPage] = useState(0);
   const [entityFilter, setEntityFilter] = useState("all");
   const [searchEmail, setSearchEmail] = useState("");
+  const [dateFrom, setDateFrom] = useState<Date | undefined>();
+  const [dateTo, setDateTo] = useState<Date | undefined>();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["activity-logs", page, entityFilter, searchEmail],
+    queryKey: ["activity-logs", page, entityFilter, searchEmail, dateFrom?.toISOString(), dateTo?.toISOString()],
     queryFn: async () => {
       let query = supabase
         .from("activity_logs")
@@ -62,6 +67,12 @@ export default function AdminActivityLogs() {
       if (searchEmail.trim()) {
         query = query.ilike("user_email", `%${searchEmail.trim()}%`);
       }
+      if (dateFrom) {
+        query = query.gte("created_at", startOfDay(dateFrom).toISOString());
+      }
+      if (dateTo) {
+        query = query.lte("created_at", endOfDay(dateTo).toISOString());
+      }
 
       const { data, error, count } = await query;
       if (error) throw error;
@@ -72,6 +83,12 @@ export default function AdminActivityLogs() {
   const logs = data?.logs || [];
   const total = data?.total || 0;
   const totalPages = Math.ceil(total / PAGE_SIZE);
+
+  const clearDates = () => {
+    setDateFrom(undefined);
+    setDateTo(undefined);
+    setPage(0);
+  };
 
   return (
     <div>
@@ -99,6 +116,59 @@ export default function AdminActivityLogs() {
           onChange={e => { setSearchEmail(e.target.value); setPage(0); }}
           className="w-56 h-9"
         />
+
+        {/* Date From */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn("h-9 w-40 justify-start text-left font-normal", !dateFrom && "text-muted-foreground")}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {dateFrom ? format(dateFrom, "dd.MM.yyyy") : "Başlangıç"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={dateFrom}
+              onSelect={(d) => { setDateFrom(d); setPage(0); }}
+              disabled={(date) => dateTo ? date > dateTo : false}
+              initialFocus
+              className={cn("p-3 pointer-events-auto")}
+            />
+          </PopoverContent>
+        </Popover>
+
+        {/* Date To */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn("h-9 w-40 justify-start text-left font-normal", !dateTo && "text-muted-foreground")}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {dateTo ? format(dateTo, "dd.MM.yyyy") : "Bitiş"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={dateTo}
+              onSelect={(d) => { setDateTo(d); setPage(0); }}
+              disabled={(date) => dateFrom ? date < dateFrom : false}
+              initialFocus
+              className={cn("p-3 pointer-events-auto")}
+            />
+          </PopoverContent>
+        </Popover>
+
+        {(dateFrom || dateTo) && (
+          <Button variant="ghost" size="sm" onClick={clearDates} className="h-9 gap-1 text-muted-foreground">
+            <X className="h-3.5 w-3.5" /> Temizle
+          </Button>
+        )}
+
         <span className="text-sm text-muted-foreground self-center ml-auto">
           Toplam: {total} kayıt
         </span>
