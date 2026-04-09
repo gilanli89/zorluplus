@@ -1,0 +1,177 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
+import { tr } from "date-fns/locale";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, Activity } from "lucide-react";
+
+const ENTITY_LABELS: Record<string, string> = {
+  order: "Sipariş",
+  inventory: "Stok",
+  user: "Kullanıcı",
+  user_role: "Rol",
+  service_request: "Servis",
+  lead: "Talep",
+  leave_request: "İzin",
+  self: "Hesap",
+};
+
+const ACTION_LABELS: Record<string, string> = {
+  order_status_update: "Sipariş durumu güncellendi",
+  inventory_create: "Ürün eklendi",
+  inventory_update: "Ürün güncellendi",
+  inventory_delete: "Ürün silindi",
+  inventory_batch_publish: "Toplu yayınlama",
+  inventory_batch_unpublish: "Toplu gizleme",
+  user_create: "Kullanıcı oluşturuldu",
+  user_ban: "Kullanıcı askıya alındı",
+  user_unban: "Kullanıcı aktifleştirildi",
+  user_delete: "Kullanıcı silindi",
+  user_password_reset: "Şifre sıfırlandı",
+  role_change: "Rol değiştirildi",
+  service_status_update: "Servis durumu güncellendi",
+  lead_status_update: "Talep durumu güncellendi",
+  leave_approve: "İzin onaylandı",
+  leave_reject: "İzin reddedildi",
+  self_password_change: "Şifre değiştirildi",
+};
+
+const PAGE_SIZE = 25;
+
+export default function AdminActivityLogs() {
+  const [page, setPage] = useState(0);
+  const [entityFilter, setEntityFilter] = useState("all");
+  const [searchEmail, setSearchEmail] = useState("");
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["activity-logs", page, entityFilter, searchEmail],
+    queryFn: async () => {
+      let query = supabase
+        .from("activity_logs")
+        .select("*", { count: "exact" })
+        .order("created_at", { ascending: false })
+        .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+
+      if (entityFilter !== "all") {
+        query = query.eq("entity_type", entityFilter);
+      }
+      if (searchEmail.trim()) {
+        query = query.ilike("user_email", `%${searchEmail.trim()}%`);
+      }
+
+      const { data, error, count } = await query;
+      if (error) throw error;
+      return { logs: data || [], total: count || 0 };
+    },
+  });
+
+  const logs = data?.logs || [];
+  const total = data?.total || 0;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-6">
+        <Activity className="h-6 w-6 text-primary" />
+        <h1 className="font-display text-2xl font-bold text-foreground">Aktivite Logları</h1>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-3 mb-4">
+        <Select value={entityFilter} onValueChange={v => { setEntityFilter(v); setPage(0); }}>
+          <SelectTrigger className="w-44 h-9">
+            <SelectValue placeholder="Tüm Modüller" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tüm Modüller</SelectItem>
+            {Object.entries(ENTITY_LABELS).map(([k, v]) => (
+              <SelectItem key={k} value={k}>{v}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Input
+          placeholder="E-posta ara..."
+          value={searchEmail}
+          onChange={e => { setSearchEmail(e.target.value); setPage(0); }}
+          className="w-56 h-9"
+        />
+        <span className="text-sm text-muted-foreground self-center ml-auto">
+          Toplam: {total} kayıt
+        </span>
+      </div>
+
+      {/* Table */}
+      <div className="card-premium card-premium-border rounded-2xl overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border bg-muted/50">
+                <th className="text-left px-4 py-3 font-semibold">Tarih</th>
+                <th className="text-left px-4 py-3 font-semibold">Kullanıcı</th>
+                <th className="text-left px-4 py-3 font-semibold">İşlem</th>
+                <th className="text-left px-4 py-3 font-semibold">Modül</th>
+                <th className="text-left px-4 py-3 font-semibold">Detay</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
+                <tr><td colSpan={5} className="text-center py-8 text-muted-foreground">Yükleniyor...</td></tr>
+              ) : logs.length === 0 ? (
+                <tr><td colSpan={5} className="text-center py-8 text-muted-foreground">Henüz log kaydı yok</td></tr>
+              ) : logs.map((log: any) => (
+                <tr key={log.id} className="border-b border-border last:border-0 hover:bg-muted/30">
+                  <td className="px-4 py-3 text-muted-foreground text-xs whitespace-nowrap">
+                    {format(new Date(log.created_at), "dd.MM.yyyy HH:mm", { locale: tr })}
+                  </td>
+                  <td className="px-4 py-3 text-xs">{log.user_email}</td>
+                  <td className="px-4 py-3">
+                    <Badge variant="secondary" className="text-xs">
+                      {ACTION_LABELS[log.action] || log.action}
+                    </Badge>
+                  </td>
+                  <td className="px-4 py-3 text-xs text-muted-foreground">
+                    {ENTITY_LABELS[log.entity_type] || log.entity_type}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-muted-foreground max-w-[300px] truncate">
+                    {log.details && Object.keys(log.details).length > 0
+                      ? JSON.stringify(log.details)
+                      : "—"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 mt-4">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page === 0}
+            onClick={() => setPage(p => p - 1)}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm text-muted-foreground">
+            {page + 1} / {totalPages}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page >= totalPages - 1}
+            onClick={() => setPage(p => p + 1)}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
