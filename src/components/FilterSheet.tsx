@@ -170,7 +170,7 @@ export function MobileFilterTrigger({ products, filters, onFiltersChange, catego
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="outline" size="sm" className="gap-2 md:hidden">
-          <SlidersHorizontal className="h-4 w-4" />
+          <PremiumIconInline icon={SlidersHorizontal} size={16} />
           {t("filter.filterBtn")}
           {activeCount > 0 && (
             <Badge variant="default" className="ml-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-[10px]">{activeCount}</Badge>
