@@ -25,15 +25,18 @@ export default function Footer() {
   const { data: lastUpdate } = useQuery({
     queryKey: ["inventory-last-update"],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("inventory_public")
         .select("updated_at")
+        .not("updated_at", "is", null)
         .order("updated_at", { ascending: false })
         .limit(1)
-        .single();
-      return data?.updated_at ? new Date(data.updated_at) : null;
+        .maybeSingle();
+      if (error || !data?.updated_at) return null;
+      return new Date(data.updated_at);
     },
     staleTime: 60_000,
+    retry: 2,
   });
 
   const formattedUpdate = lastUpdate
