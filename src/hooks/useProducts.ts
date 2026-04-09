@@ -3,6 +3,11 @@ import { fetchProducts, slugify, normalizeCategorySlug } from "@/lib/products";
 import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/lib/types";
 
+function normalizeImageUrl(url: string | null | undefined): string {
+  if (!url) return "";
+  return url.replace("https://zorluplus.com/wp-content/", "https://cms.zorluplus.com/wp-content/");
+}
+
 function parseAttributes(attrs: unknown): Record<string, string> {
   if (!attrs || typeof attrs !== "object") return {};
   const result: Record<string, string> = {};
@@ -31,8 +36,8 @@ function dbToProduct(inv: Record<string, unknown>): Product {
     price: inv.original_price != null ? Number(inv.original_price) : 0,
     salePrice: inv.sale_price != null && Number(inv.sale_price) > 0 ? Number(inv.sale_price) : undefined,
     currency: "TL",
-    image: String(inv.image_url || "/placeholder.svg"),
-    images: inv.image_url ? [String(inv.image_url)] : ["/placeholder.svg"],
+    image: normalizeImageUrl(inv.image_url as string) || "/placeholder.svg",
+    images: inv.image_url ? [normalizeImageUrl(inv.image_url as string)] : ["/placeholder.svg"],
     description: String(inv.description || ""),
     specs: parseAttributes(inv.attributes),
     inStock: Boolean(inv.is_active) && Number(inv.quantity) > 0,
@@ -78,8 +83,8 @@ async function fetchProductsWithInventory(): Promise<Product[]> {
       category: dbCat?.category || csvP.category,
       subcategory: dbCat?.subcategory || csvP.subcategory,
       description: inv.description || csvP.description,
-      image: inv.image_url || csvP.image,
-      images: inv.image_url ? [inv.image_url, ...csvP.images.filter(i => i !== inv.image_url)] : csvP.images,
+      image: normalizeImageUrl(inv.image_url) || csvP.image,
+      images: inv.image_url ? [normalizeImageUrl(inv.image_url), ...csvP.images.filter(i => i !== normalizeImageUrl(inv.image_url))] : csvP.images,
       price: inv.original_price != null ? Number(inv.original_price) : csvP.price,
       salePrice: inv.sale_price != null && Number(inv.sale_price) > 0
         ? Number(inv.sale_price)
