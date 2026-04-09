@@ -23,14 +23,16 @@ function parseAttributes(attrs: unknown): Record<string, string> {
 function dbToProduct(inv: Record<string, unknown>): Product {
   const sku = String(inv.sku || "");
   const name = String(inv.product_name || "Ürün");
+  const brand = String(inv.brand || "");
   const rawCat = String(inv.category || "diger");
-  const { category, subcategory } = normalizeCategorySlug(rawCat);
+  const normalized = normalizeCategorySlug(rawCat);
+  const { category, subcategory } = applyCategoryOverrides(name, brand, normalized.category, normalized.subcategory);
   return {
     id: sku || String(inv.id),
     sku,
     slug: `${slugify(sku)}-${slugify(name)}`,
     name,
-    brand: String(inv.brand || ""),
+    brand,
     category,
     subcategory,
     price: inv.original_price != null ? Number(inv.original_price) : 0,
