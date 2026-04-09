@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchProducts, slugify, normalizeCategorySlug } from "@/lib/products";
+import { fetchProducts, slugify, normalizeCategorySlug, applyCategoryOverrides } from "@/lib/products";
 import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/lib/types";
 
@@ -23,14 +23,16 @@ function parseAttributes(attrs: unknown): Record<string, string> {
 function dbToProduct(inv: Record<string, unknown>): Product {
   const sku = String(inv.sku || "");
   const name = String(inv.product_name || "Ürün");
+  const brand = String(inv.brand || "");
   const rawCat = String(inv.category || "diger");
-  const { category, subcategory } = normalizeCategorySlug(rawCat);
+  const normalized = normalizeCategorySlug(rawCat);
+  const { category, subcategory } = applyCategoryOverrides(name, brand, normalized.category, normalized.subcategory);
   return {
     id: sku || String(inv.id),
     sku,
     slug: `${slugify(sku)}-${slugify(name)}`,
     name,
-    brand: String(inv.brand || ""),
+    brand,
     category,
     subcategory,
     price: inv.original_price != null ? Number(inv.original_price) : 0,
@@ -74,14 +76,22 @@ async function fetchProductsWithInventory(): Promise<Product[]> {
     }
     // DB overrides CSV for all non-null fields
     if (!inv.is_active) continue; // skip deactivated
-    // Normalize DB category through the same function as CSV
+    // Normalize DB category through the same function as CSV, then apply name-based overrides
     const dbCat = inv.category ? normalizeCategorySlug(inv.category) : null;
+    const mergedName = inv.product_name || csvP.name;
+    const mergedBrand = inv.brand || csvP.brand;
+    const overridden = applyCategoryOverrides(
+      mergedName,
+      mergedBrand,
+      dbCat?.category || csvP.category,
+      dbCat?.subcategory || csvP.subcategory
+    );
     merged.push({
       ...csvP,
-      name: inv.product_name || csvP.name,
-      brand: inv.brand || csvP.brand,
-      category: dbCat?.category || csvP.category,
-      subcategory: dbCat?.subcategory || csvP.subcategory,
+      name: mergedName,
+      brand: mergedBrand,
+      category: overridden.category,
+      subcategory: overridden.subcategory,
       description: inv.description || csvP.description,
       image: normalizeImageUrl(inv.image_url) || csvP.image,
       images: inv.image_url ? [normalizeImageUrl(inv.image_url), ...csvP.images.filter(i => i !== normalizeImageUrl(inv.image_url))] : csvP.images,
