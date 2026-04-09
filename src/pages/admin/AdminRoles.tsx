@@ -145,7 +145,7 @@ export default function AdminRoles() {
             <Card key={role}>
               <CardHeader className="pb-2">
                 <div className="flex items-center gap-2">
-                  <PremiumIconInline icon={Icon} size={20} color={info.color} />
+                  <PremiumIconInline icon={Icon as any} size={20} color={info.color} />
                   <CardTitle className="text-base">{info.label}</CardTitle>
                 </div>
                 <CardDescription className="text-xs">{info.description}</CardDescription>
@@ -172,7 +172,7 @@ export default function AdminRoles() {
                 {ROLES.map(role => (
                   <TableHead key={role} className="text-center">
                     <span className="flex items-center justify-center gap-1">
-                      <PremiumIconInline icon={ROLE_INFO[role].icon} size={16} color={ROLE_INFO[role].color} />
+                      <PremiumIconInline icon={ROLE_INFO[role].icon as any} size={16} color={ROLE_INFO[role].color} />
                       {ROLE_INFO[role].label}
                     </span>
                   </TableHead>
@@ -223,7 +223,7 @@ export default function AdminRoles() {
                     <TableCell className="font-medium">{u.email}</TableCell>
                     <TableCell>
                       <Badge variant="outline" className="gap-1">
-                        <PremiumIconInline icon={ROLE_INFO[u.role]?.icon || User} size={12} color={ROLE_INFO[u.role]?.color || ""} />
+                        <PremiumIconInline icon={(ROLE_INFO[u.role]?.icon || User) as any} size={12} color={ROLE_INFO[u.role]?.color || ""} />
                         {ROLE_INFO[u.role]?.label || u.role}
                       </Badge>
                     </TableCell>
