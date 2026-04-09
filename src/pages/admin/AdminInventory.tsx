@@ -1139,6 +1139,12 @@ export default function AdminInventory() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/50">
+                <th className="px-2 py-2.5 w-[40px]">
+                  <Checkbox
+                    checked={filtered.length > 0 && selectedIds.size === filtered.length}
+                    onCheckedChange={toggleSelectAll}
+                  />
+                </th>
                 <th className="text-left px-3 py-2.5 font-semibold text-xs w-[80px]">Görsel</th>
                 <th className="text-left px-3 py-2.5 font-semibold text-xs">Ürün / SKU</th>
                 <th className="text-left px-3 py-2.5 font-semibold text-xs w-[90px]">Marka</th>
