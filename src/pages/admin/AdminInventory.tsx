@@ -4,17 +4,22 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { useState, useMemo, useCallback, useRef } from "react";
 import {
   Save, RefreshCw, X, Loader2, Plus, Trash2,
   Search, ImageIcon, Upload, Check, ChevronDown, ChevronUp,
-  Filter, Package, AlertTriangle, Eye, EyeOff
+  Filter, Package, AlertTriangle, Eye, EyeOff, CheckSquare, XSquare
 } from "lucide-react";
 
 import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
@@ -616,6 +621,8 @@ function ProductRow({
   onToggleActive,
   onSaved,
   categories,
+  isSelected,
+  onToggleSelect,
 }: {
   item: InventoryItem;
   pending: PendingChange | undefined;
@@ -623,6 +630,8 @@ function ProductRow({
   onToggleActive: (id: string, value: boolean) => void;
   onSaved: () => void;
   categories: string[];
+  isSelected: boolean;
+  onToggleSelect: (id: string) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -646,7 +655,11 @@ function ProductRow({
 
   return (
     <>
-      <tr className={`border-b border-border/50 transition-colors ${hasChanges ? "bg-amber-50/50 dark:bg-amber-950/20" : "hover:bg-muted/30"}`}>
+      <tr className={`border-b border-border/50 transition-colors ${isSelected ? "bg-primary/5" : hasChanges ? "bg-amber-50/50 dark:bg-amber-950/20" : "hover:bg-muted/30"}`}>
+        {/* Checkbox */}
+        <td className="px-2 py-2 w-[40px]">
+          <Checkbox checked={isSelected} onCheckedChange={() => onToggleSelect(item.id)} />
+        </td>
         {/* Image */}
         <td className="px-3 py-2">
           <ImageCell
@@ -773,6 +786,10 @@ function ProductRow({
 export default function AdminInventory() {
   const qc = useQueryClient();
   const [pendingChanges, setPendingChanges] = useState<Map<string, PendingChange>>(new Map());
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkConfirm, setBulkConfirm] = useState<{ type: "delete" | "active" | "inactive"; } | null>(null);
+  const [bulkCategoryOpen, setBulkCategoryOpen] = useState(false);
+  const [bulkProcessing, setBulkProcessing] = useState(false);
   
   const [publishing, setPublishing] = useState(false);
   const [search, setSearch] = useState("");
@@ -843,6 +860,85 @@ export default function AdminInventory() {
     setPendingChanges(new Map());
     toast.info("Değişiklikler iptal edildi");
   }, []);
+
+  // ─── Selection helpers ───
+  const toggleSelect = useCallback((id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const toggleSelectAll = useCallback(() => {
+    setSelectedIds(prev => {
+      if (prev.size === filtered.length && filtered.length > 0) return new Set();
+      return new Set(filtered.map(i => i.id));
+    });
+  }, [filtered]);
+
+  const clearSelection = useCallback(() => setSelectedIds(new Set()), []);
+
+  // ─── Bulk operations ───
+  const chunkArray = (arr: string[], size: number) => {
+    const chunks: string[][] = [];
+    for (let i = 0; i < arr.length; i += size) chunks.push(arr.slice(i, i + size));
+    return chunks;
+  };
+
+  const bulkDelete = async () => {
+    setBulkProcessing(true);
+    const ids = Array.from(selectedIds);
+    const chunks = chunkArray(ids, 500);
+    let failed = 0;
+    for (const chunk of chunks) {
+      const { error } = await supabase.from("inventory").delete().in("id", chunk);
+      if (error) { failed += chunk.length; console.error(error); }
+    }
+    setBulkProcessing(false);
+    setBulkConfirm(null);
+    if (failed > 0) toast.error(`${failed} ürün silinemedi`);
+    else toast.success(`${ids.length} ürün silindi`);
+    setSelectedIds(new Set());
+    qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+    qc.invalidateQueries({ queryKey: ["products"] });
+  };
+
+  const bulkSetActive = async (active: boolean) => {
+    setBulkProcessing(true);
+    const ids = Array.from(selectedIds);
+    const chunks = chunkArray(ids, 500);
+    let failed = 0;
+    for (const chunk of chunks) {
+      const { error } = await supabase.from("inventory").update({ is_active: active }).in("id", chunk);
+      if (error) { failed += chunk.length; console.error(error); }
+    }
+    setBulkProcessing(false);
+    setBulkConfirm(null);
+    if (failed > 0) toast.error(`${failed} ürün güncellenemedi`);
+    else toast.success(`${ids.length} ürün ${active ? "aktif" : "pasif"} yapıldı`);
+    setSelectedIds(new Set());
+    qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+    qc.invalidateQueries({ queryKey: ["products"] });
+  };
+
+  const bulkSetCategory = async (category: string) => {
+    setBulkProcessing(true);
+    const ids = Array.from(selectedIds);
+    const chunks = chunkArray(ids, 500);
+    let failed = 0;
+    for (const chunk of chunks) {
+      const { error } = await supabase.from("inventory").update({ category }).in("id", chunk);
+      if (error) { failed += chunk.length; console.error(error); }
+    }
+    setBulkProcessing(false);
+    setBulkCategoryOpen(false);
+    if (failed > 0) toast.error(`${failed} ürün güncellenemedi`);
+    else toast.success(`${ids.length} ürünün kategorisi güncellendi`);
+    setSelectedIds(new Set());
+    qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+    qc.invalidateQueries({ queryKey: ["products"] });
+  };
 
   // ─── Publish (batch save) ───
   const publishChanges = async () => {
@@ -964,6 +1060,34 @@ export default function AdminInventory() {
         </div>
       )}
 
+      {/* ─── Bulk Actions Bar ─── */}
+      {selectedIds.size > 0 && (
+        <div className="sticky top-0 z-30 rounded-xl border-2 border-primary/50 bg-primary/5 dark:bg-primary/10 p-3 flex flex-wrap items-center justify-between gap-2 shadow-lg">
+          <div className="flex items-center gap-2">
+            <CheckSquare className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">
+              {selectedIds.size} ürün seçildi
+            </span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => setBulkConfirm({ type: "active" })} className="gap-1 text-xs">
+              <Eye className="h-3.5 w-3.5" /> Aktif Yap
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setBulkConfirm({ type: "inactive" })} className="gap-1 text-xs">
+              <EyeOff className="h-3.5 w-3.5" /> Pasif Yap
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setBulkCategoryOpen(true)} className="gap-1 text-xs">
+              <Filter className="h-3.5 w-3.5" /> Kategori Değiştir
+            </Button>
+            <Button variant="destructive" size="sm" onClick={() => setBulkConfirm({ type: "delete" })} className="gap-1 text-xs">
+              <Trash2 className="h-3.5 w-3.5" /> Sil
+            </Button>
+            <Button variant="ghost" size="sm" onClick={clearSelection} className="gap-1 text-xs text-muted-foreground">
+              <X className="h-3.5 w-3.5" /> Seçimi Temizle
+            </Button>
+          </div>
+        </div>
+      )}
       {/* ─── Filters ─── */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative flex-1 min-w-[200px] max-w-sm">
@@ -1015,6 +1139,12 @@ export default function AdminInventory() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/50">
+                <th className="px-2 py-2.5 w-[40px]">
+                  <Checkbox
+                    checked={filtered.length > 0 && selectedIds.size === filtered.length}
+                    onCheckedChange={toggleSelectAll}
+                  />
+                </th>
                 <th className="text-left px-3 py-2.5 font-semibold text-xs w-[80px]">Görsel</th>
                 <th className="text-left px-3 py-2.5 font-semibold text-xs">Ürün / SKU</th>
                 <th className="text-left px-3 py-2.5 font-semibold text-xs w-[90px]">Marka</th>
@@ -1036,12 +1166,14 @@ export default function AdminInventory() {
                   onToggleActive={handleToggleActive}
                   onSaved={() => { qc.invalidateQueries({ queryKey: ["admin-inventory"] }); qc.invalidateQueries({ queryKey: ["products"] }); }}
                   categories={categories}
+                  isSelected={selectedIds.has(item.id)}
+                  onToggleSelect={toggleSelect}
                 />
               ))}
               {paged.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="text-center py-12 text-muted-foreground">
-                    {items.length === 0 ? "Henüz ürün yok — CSV'den senkronize edin" : "Sonuç bulunamadı"}
+                  <td colSpan={10} className="text-center py-12 text-muted-foreground">
+                    {items.length === 0 ? "Henüz ürün yok" : "Sonuç bulunamadı"}
                   </td>
                 </tr>
               )}
@@ -1056,28 +1188,67 @@ export default function AdminInventory() {
               Sayfa {page + 1} / {totalPages}
             </span>
             <div className="flex gap-1">
-              <Button
-                size="sm"
-                variant="outline"
-                disabled={page === 0}
-                onClick={() => setPage(p => p - 1)}
-                className="h-7 text-xs"
-              >
-                ← Önceki
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                disabled={page >= totalPages - 1}
-                onClick={() => setPage(p => p + 1)}
-                className="h-7 text-xs"
-              >
-                Sonraki →
-              </Button>
+              <Button size="sm" variant="outline" disabled={page === 0} onClick={() => setPage(p => p - 1)} className="h-7 text-xs">← Önceki</Button>
+              <Button size="sm" variant="outline" disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)} className="h-7 text-xs">Sonraki →</Button>
             </div>
           </div>
         )}
       </div>
+
+      {/* ─── Bulk Confirm Dialog ─── */}
+      <AlertDialog open={!!bulkConfirm} onOpenChange={(v) => { if (!v) setBulkConfirm(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {bulkConfirm?.type === "delete" && `${selectedIds.size} ürünü silmek istediğinize emin misiniz?`}
+              {bulkConfirm?.type === "active" && `${selectedIds.size} ürünü aktif yapmak istediğinize emin misiniz?`}
+              {bulkConfirm?.type === "inactive" && `${selectedIds.size} ürünü pasif yapmak istediğinize emin misiniz?`}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {bulkConfirm?.type === "delete"
+                ? "Bu işlem geri alınamaz. Seçili ürünler kalıcı olarak silinecektir."
+                : "Seçili ürünlerin durumu güncellenecektir."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={bulkProcessing}>İptal</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={bulkProcessing}
+              onClick={(e) => {
+                e.preventDefault();
+                if (bulkConfirm?.type === "delete") bulkDelete();
+                else if (bulkConfirm?.type === "active") bulkSetActive(true);
+                else if (bulkConfirm?.type === "inactive") bulkSetActive(false);
+              }}
+              className={bulkConfirm?.type === "delete" ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : ""}
+            >
+              {bulkProcessing ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
+              {bulkConfirm?.type === "delete" ? "Sil" : "Onayla"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* ─── Bulk Category Dialog ─── */}
+      <Dialog open={bulkCategoryOpen} onOpenChange={setBulkCategoryOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Kategori Değiştir</DialogTitle>
+            <DialogDescription>{selectedIds.size} ürünün kategorisini değiştirin.</DialogDescription>
+          </DialogHeader>
+          <Select onValueChange={(v) => bulkSetCategory(v)}>
+            <SelectTrigger><SelectValue placeholder="Kategori seçin" /></SelectTrigger>
+            <SelectContent>
+              {allCategories(categories).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          {bulkProcessing && (
+            <div className="flex items-center justify-center py-2">
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
