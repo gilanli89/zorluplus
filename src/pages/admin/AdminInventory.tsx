@@ -328,7 +328,7 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
         price_updated_at: new Date().toISOString(),
       } as any).eq("id", item.id);
 
-      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 15000));
+      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
       const { error } = await Promise.race([savePromise, timeout]) as any;
 
       setSaving(false);
@@ -852,9 +852,23 @@ export default function AdminInventory() {
     });
   }, []);
 
-  const handleToggleActive = useCallback((id: string, value: boolean) => {
-    handleFieldChange(id, "is_active", value);
-  }, [handleFieldChange]);
+  const handleToggleActive = useCallback(async (id: string, value: boolean) => {
+    try {
+      await supabase.auth.getSession();
+      const updatePromise = supabase.from("inventory").update({ is_active: value, price_updated_at: new Date().toISOString() }).eq("id", id);
+      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
+      const { error } = await Promise.race([updatePromise, timeout]) as any;
+      if (error) {
+        toast.error("Durum güncellenemedi: " + error.message);
+      } else {
+        toast.success(value ? "Ürün aktif yapıldı" : "Ürün pasife alındı");
+        qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+        qc.invalidateQueries({ queryKey: ["products"] });
+      }
+    } catch (e: any) {
+      toast.error(e?.message === "timeout" ? "İşlem zaman aşımına uğradı (5s). Oturumunuzu kontrol edin." : "Ağ hatası: " + (e?.message || "Bağlantı sorunu"));
+    }
+  }, [qc]);
 
   const discardChanges = useCallback(() => {
     setPendingChanges(new Map());
@@ -888,12 +902,20 @@ export default function AdminInventory() {
 
   const bulkDelete = async () => {
     setBulkProcessing(true);
+    try { await supabase.auth.getSession(); } catch {
+      setBulkProcessing(false); setBulkConfirm(null);
+      toast.error("Oturum süresi dolmuş. Lütfen tekrar giriş yapın."); return;
+    }
     const ids = Array.from(selectedIds);
     const chunks = chunkArray(ids, 500);
     let failed = 0;
     for (const chunk of chunks) {
-      const { error } = await supabase.from("inventory").update({ is_active: false }).in("id", chunk);
-      if (error) { failed += chunk.length; console.error(error); }
+      try {
+        const op = supabase.from("inventory").update({ is_active: false }).in("id", chunk);
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
+        const { error } = await Promise.race([op, timeout]) as any;
+        if (error) { failed += chunk.length; console.error(error); }
+      } catch { failed += chunk.length; }
     }
     setBulkProcessing(false);
     setBulkConfirm(null);
@@ -906,12 +928,20 @@ export default function AdminInventory() {
 
   const bulkSetActive = async (active: boolean) => {
     setBulkProcessing(true);
+    try { await supabase.auth.getSession(); } catch {
+      setBulkProcessing(false); setBulkConfirm(null);
+      toast.error("Oturum süresi dolmuş. Lütfen tekrar giriş yapın."); return;
+    }
     const ids = Array.from(selectedIds);
     const chunks = chunkArray(ids, 500);
     let failed = 0;
     for (const chunk of chunks) {
-      const { error } = await supabase.from("inventory").update({ is_active: active }).in("id", chunk);
-      if (error) { failed += chunk.length; console.error(error); }
+      try {
+        const op = supabase.from("inventory").update({ is_active: active }).in("id", chunk);
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
+        const { error } = await Promise.race([op, timeout]) as any;
+        if (error) { failed += chunk.length; console.error(error); }
+      } catch { failed += chunk.length; }
     }
     setBulkProcessing(false);
     setBulkConfirm(null);
@@ -924,12 +954,20 @@ export default function AdminInventory() {
 
   const bulkSetCategory = async (category: string) => {
     setBulkProcessing(true);
+    try { await supabase.auth.getSession(); } catch {
+      setBulkProcessing(false); setBulkCategoryOpen(false);
+      toast.error("Oturum süresi dolmuş. Lütfen tekrar giriş yapın."); return;
+    }
     const ids = Array.from(selectedIds);
     const chunks = chunkArray(ids, 500);
     let failed = 0;
     for (const chunk of chunks) {
-      const { error } = await supabase.from("inventory").update({ category }).in("id", chunk);
-      if (error) { failed += chunk.length; console.error(error); }
+      try {
+        const op = supabase.from("inventory").update({ category }).in("id", chunk);
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
+        const { error } = await Promise.race([op, timeout]) as any;
+        if (error) { failed += chunk.length; console.error(error); }
+      } catch { failed += chunk.length; }
     }
     setBulkProcessing(false);
     setBulkCategoryOpen(false);
