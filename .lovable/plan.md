@@ -1,70 +1,39 @@
 
 
-## Admin Stok Yönetimi — Toplu Seçim, Silme ve Değişiklik
+## Sorun Analizi
 
-### Mevcut Durum
-Admin envanter sayfası tek tek ürün düzenleme, aktif/pasif toggle ve batch publish destekliyor. Ancak checkbox ile ürün seçme, toplu silme ve toplu değişiklik (kategori, aktiflik, fiyat vb.) özellikleri yok.
+### Kök Neden
+`normalizeCategorySlug("tv-goruntu")` fonksiyonu, veritabanında `category = "tv-goruntu"` olan **tüm** ürünleri (askı aparatları, HDMI kablolar, temizleme kiti dahil) keyword fallback'ten geçirip `subcategory: "tv"` olarak atıyor. Çünkü `"tv-goruntu".includes("tv")` → `true` döner ve hepsi televizyon alt kategorisine düşer.
 
-### Yapılacaklar
+Bu durum sadece CSV'deki ürünleri etkilemiyor (onlar `parseRow()`'daki isim bazlı override'lardan geçiyor), ama **veritabanından gelen ürünler** bu override'lardan geçmiyor.
 
-#### 1. Checkbox ile Seçim Sistemi
-- Tabloya ilk sütun olarak checkbox ekle (thead'de "tümünü seç" checkbox'ı)
-- `selectedIds: Set<string>` state'i ekle
-- Sayfadaki tüm ürünleri seçme/kaldırma toggle'ı
-- Seçili ürün sayısını gösteren bilgi barı
+### Etkilenen Ürünler (DB'de `category = "tv-goruntu"`)
 
-#### 2. Toplu İşlem Barı (Bulk Actions Bar)
-Seçili ürün varken ekranın üstünde sticky bar göster:
-- **Toplu Sil**: Seçili ürünleri veritabanından kalıcı sil (onay dialog'u ile)
-- **Toplu Pasif Yap**: Seçili ürünleri `is_active = false` yap
-- **Toplu Aktif Yap**: Seçili ürünleri `is_active = true` yap
-- **Toplu Kategori Değiştir**: Dropdown ile kategori seç, seçili ürünlere uygula
-- Seçimi temizle butonu
+| Ürün Tipi | Adet | Olması Gereken Subcategory | Şu An |
+|-----------|------|---------------------------|-------|
+| TV Askı Aparatları | 14 | `tv-aski-aparatlari` | `tv` |
+| HDMI Kablolar | 3 | `tv-aksesuar` | `tv` |
+| Ekran Temizleme Kiti | 1 | `tv-aksesuar` | `tv` |
+| Gerçek TV'ler | 1 | `tv` | `tv` ✓ |
 
-#### 3. Onay Dialog'u
-Silme ve toplu değişiklik işlemlerinden önce AlertDialog ile onay iste:
-- Kaç ürünün etkileneceğini göster
-- İşlem türünü belirt (silme geri alınamaz uyarısı)
+Ayrıca `"Video / Audio > Aksesuar, Diğer Ürünler"` kategorisindeki 27 kumanda da kontrol edildi — bunlar `normalizeCategorySlug`'dan `tv-goruntu/kumanda` olarak geçiyor (isim bazlı override CSV'de çalışıyor ama DB merge'de çalışmıyor).
 
-#### 4. RLS Kontrolü
-Mevcut `"Admins can manage inventory"` ALL politikası DELETE dahil tüm işlemleri kapsıyor — ek migration gerekmez.
+### Çözüm Planı
 
-### Teknik Detaylar
+#### 1. İsim bazlı override'ları paylaşılan fonksiyona çıkar
+`src/lib/products.ts`'de `parseRow()` içindeki isim+marka bazlı kategori override mantığını ayrı bir `export function applyCategoryOverrides(name, brand, category, subcategory)` fonksiyonuna taşı.
 
-**Dosya:** `src/pages/admin/AdminInventory.tsx`
+#### 2. DB merge ve dbToProduct'ta override uygula
+`src/hooks/useProducts.ts`'de:
+- `dbToProduct()` fonksiyonunda `normalizeCategorySlug` sonrası `applyCategoryOverrides` çağır
+- CSV+DB merge bloğunda da aynı override'ı uygula
 
-Yeni state'ler:
-```typescript
-const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-```
+Bu sayede askı aparatları → `tv-aski-aparatlari`, HDMI kablolar → `tv-aksesuar`, kumandalar → `kumanda`, soundbar kumandaları → `kumanda`, temizleme kiti → `tv-aksesuar`, klima kumandaları → doğru kategoriye atanacak.
 
-Toplu silme fonksiyonu:
-```typescript
-const bulkDelete = async () => {
-  const ids = Array.from(selectedIds);
-  const { error } = await supabase.from("inventory").delete().in("id", ids);
-  // ...
-};
-```
+#### 3. `normalizeCategorySlug` keyword fallback düzeltmesi
+`"tv"` keyword'ünün `"tv-goruntu"` slug'ını yanlışlıkla yakalamasını önlemek için, keyword kontrolüne word-boundary koruması veya slug-format kontrolü ekle — eğer giriş zaten bir slug ise (`-` içeriyorsa) keyword fallback'e düşmesin.
 
-Toplu güncelleme fonksiyonu:
-```typescript
-const bulkUpdate = async (fields: Partial<InventoryItem>) => {
-  const ids = Array.from(selectedIds);
-  const { error } = await supabase.from("inventory").update(fields).in("id", ids);
-  // ...
-};
-```
-
-Tablo header'ına checkbox:
-```tsx
-<th className="w-[40px] px-2">
-  <Checkbox checked={allSelected} onCheckedChange={toggleAll} />
-</th>
-```
-
-### Olası Riskler
-- Toplu silme geri alınamaz — onay dialog'u ile korunacak
-- 1000+ ürün seçilirse Supabase `.in()` limiti aşılabilir — chunk'lara bölme uygulanacak
-- Mevcut pending changes barı ile bulk actions barı çakışabilir — ayrı z-index ve konum ile düzenlenecek
+### Dosya Değişiklikleri
+1. **`src/lib/products.ts`** — `applyCategoryOverrides()` fonksiyonu çıkar ve export et; `parseRow()`'da bu fonksiyonu çağır; `normalizeCategorySlug`'da slug formatı girişlerde keyword fallback'i atla
+2. **`src/hooks/useProducts.ts`** — `applyCategoryOverrides`'ı import et; `dbToProduct()` ve merge bloğunda uygula
 
