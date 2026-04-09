@@ -70,6 +70,7 @@ const AdminLeads = lazy(() => import("@/pages/admin/AdminLeads"));
 const AdminService = lazy(() => import("@/pages/admin/AdminService"));
 const AdminLeaveRequests = lazy(() => import("@/pages/admin/AdminLeaveRequests"));
 const AdminUsers = lazy(() => import("@/pages/admin/AdminUsers"));
+const AdminRoles = lazy(() => import("@/pages/admin/AdminRoles"));
 
 const queryClient = new QueryClient();
 
@@ -145,6 +146,7 @@ const App = () => (
                 <Route path="servis" element={<AdminService />} />
                 <Route path="izinler" element={<AdminLeaveRequests />} />
                 <Route path="kullanicilar" element={<AdminUsers />} />
+                <Route path="roller" element={<AdminRoles />} />
               </Route>
             </Routes>
           </Suspense>
