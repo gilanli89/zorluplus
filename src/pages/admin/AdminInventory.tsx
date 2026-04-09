@@ -36,6 +36,28 @@ function allCategories(dbCats: string[]): string[] {
   return Array.from(set).sort();
 }
 
+// ─── Timeout & Session Helpers ───
+const withTimeout = <T,>(promise: Promise<T> | PromiseLike<T>, ms = 5000): Promise<T> =>
+  Promise.race([
+    Promise.resolve(promise),
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("timeout")), ms)
+    ),
+  ]);
+
+const ensureAdminSession = async () => {
+  const { data, error } = await withTimeout(supabase.auth.getSession(), 3000);
+  if (error || !data.session) throw new Error("session");
+  return data.session;
+};
+
+const getErrorMessage = (e: any): string => {
+  if (e?.message === "timeout") return "İşlem zaman aşımına uğradı. Oturum veya ağ bağlantısını kontrol edin.";
+  if (e?.message === "session") return "Oturum doğrulanamadı. Lütfen tekrar giriş yapın.";
+  if (e?.message === "not-admin") return "Bu işlem için admin yetkisi doğrulanamadı.";
+  return e?.message || "Bilinmeyen bir hata oluştu.";
+};
+
 // ─── Add Product Dialog ───
 function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; categories?: string[] }) {
   const [open, setOpen] = useState(false);
@@ -74,9 +96,9 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
     attrs.forEach(a => { if (a.key.trim()) attributes[a.key.trim()] = a.value.trim(); });
 
     try {
-      await supabase.auth.getSession();
+      await ensureAdminSession();
 
-      const savePromise = supabase.from("inventory").insert({
+      const { error } = await withTimeout(supabase.from("inventory").insert({
         product_name: form.product_name.trim(),
         brand: form.brand.trim() || null,
         category: form.category.trim() || null,
@@ -87,20 +109,17 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
         quantity: parseInt(form.quantity) || 1,
         image_url: form.image_url.trim() || null,
         attributes: Object.keys(attributes).length > 0 ? attributes : {},
-      } as any);
+      } as any).select(), 5000);
 
-      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
-      const { error } = await Promise.race([savePromise, timeout]) as any;
-
-      setSaving(false);
       if (error) { toast.error("Ürün eklenemedi: " + error.message); return; }
       toast.success("Ürün başarıyla eklendi!");
       reset();
       setOpen(false);
       onAdded();
     } catch (e: any) {
+      toast.error(getErrorMessage(e));
+    } finally {
       setSaving(false);
-      toast.error(e?.message === "timeout" ? "İşlem zaman aşımına uğradı. Oturumunuzu kontrol edin." : "Bir hata oluştu: " + (e?.message || ""));
     }
   };
 
@@ -311,9 +330,9 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
     attrs.forEach(a => { if (a.key.trim()) attributes[a.key.trim()] = a.value.trim(); });
 
     try {
-      await supabase.auth.getSession();
+      await ensureAdminSession();
 
-      const savePromise = supabase.from("inventory").update({
+      const { error } = await withTimeout(supabase.from("inventory").update({
         product_name: form.product_name.trim(),
         brand: form.brand.trim() || null,
         category: form.category.trim() || null,
@@ -326,19 +345,16 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
         is_active: form.is_active,
         attributes: Object.keys(attributes).length > 0 ? attributes : {},
         price_updated_at: new Date().toISOString(),
-      } as any).eq("id", item.id);
+      } as any).eq("id", item.id).select(), 5000);
 
-      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
-      const { error } = await Promise.race([savePromise, timeout]) as any;
-
-      setSaving(false);
       if (error) { toast.error("Güncellenemedi: " + error.message); return; }
       toast.success("Ürün güncellendi!");
       onOpenChange(false);
       onSaved();
     } catch (e: any) {
+      toast.error(getErrorMessage(e));
+    } finally {
       setSaving(false);
-      toast.error(e?.message === "timeout" ? "İşlem zaman aşımına uğradı. Oturumunuzu kontrol edin." : "Bir hata oluştu: " + (e?.message || ""));
     }
   };
 
@@ -854,10 +870,11 @@ export default function AdminInventory() {
 
   const handleToggleActive = useCallback(async (id: string, value: boolean) => {
     try {
-      await supabase.auth.getSession();
-      const updatePromise = supabase.from("inventory").update({ is_active: value, price_updated_at: new Date().toISOString() }).eq("id", id);
-      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
-      const { error } = await Promise.race([updatePromise, timeout]) as any;
+      await ensureAdminSession();
+      const { error } = await withTimeout(
+        supabase.from("inventory").update({ is_active: value, price_updated_at: new Date().toISOString() }).eq("id", id).select(),
+        5000
+      );
       if (error) {
         toast.error("Durum güncellenemedi: " + error.message);
       } else {
@@ -866,7 +883,7 @@ export default function AdminInventory() {
         qc.invalidateQueries({ queryKey: ["products"] });
       }
     } catch (e: any) {
-      toast.error(e?.message === "timeout" ? "İşlem zaman aşımına uğradı (5s). Oturumunuzu kontrol edin." : "Ağ hatası: " + (e?.message || "Bağlantı sorunu"));
+      toast.error(getErrorMessage(e));
     }
   }, [qc]);
 
@@ -902,80 +919,89 @@ export default function AdminInventory() {
 
   const bulkDelete = async () => {
     setBulkProcessing(true);
-    try { await supabase.auth.getSession(); } catch {
-      setBulkProcessing(false); setBulkConfirm(null);
-      toast.error("Oturum süresi dolmuş. Lütfen tekrar giriş yapın."); return;
-    }
-    const ids = Array.from(selectedIds);
-    const chunks = chunkArray(ids, 500);
-    let failed = 0;
-    for (const chunk of chunks) {
-      try {
-        const op = supabase.from("inventory").update({ is_active: false }).in("id", chunk);
-        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
-        const { error } = await Promise.race([op, timeout]) as any;
-        if (error) { failed += chunk.length; console.error(error); }
-      } catch { failed += chunk.length; }
-    }
-    setBulkProcessing(false);
     setBulkConfirm(null);
-    if (failed > 0) toast.error(`${failed} ürün pasife alınamadı`);
-    else toast.success(`${ids.length} ürün yayından kaldırıldı`);
-    setSelectedIds(new Set());
-    qc.invalidateQueries({ queryKey: ["admin-inventory"] });
-    qc.invalidateQueries({ queryKey: ["products"] });
+    try {
+      await ensureAdminSession();
+      const ids = Array.from(selectedIds);
+      const chunks = chunkArray(ids, 500);
+      let failed = 0;
+      for (const chunk of chunks) {
+        try {
+          const { error } = await withTimeout(
+            supabase.from("inventory").update({ is_active: false }).in("id", chunk).select(),
+            5000
+          );
+          if (error) { failed += chunk.length; console.error(error); }
+        } catch { failed += chunk.length; }
+      }
+      if (failed > 0) toast.error(`${failed} ürün pasife alınamadı`);
+      else toast.success(`${ids.length} ürün yayından kaldırıldı`);
+      setSelectedIds(new Set());
+      qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+      qc.invalidateQueries({ queryKey: ["products"] });
+    } catch (e: any) {
+      toast.error(getErrorMessage(e));
+    } finally {
+      setBulkProcessing(false);
+    }
   };
 
   const bulkSetActive = async (active: boolean) => {
     setBulkProcessing(true);
-    try { await supabase.auth.getSession(); } catch {
-      setBulkProcessing(false); setBulkConfirm(null);
-      toast.error("Oturum süresi dolmuş. Lütfen tekrar giriş yapın."); return;
-    }
-    const ids = Array.from(selectedIds);
-    const chunks = chunkArray(ids, 500);
-    let failed = 0;
-    for (const chunk of chunks) {
-      try {
-        const op = supabase.from("inventory").update({ is_active: active }).in("id", chunk);
-        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
-        const { error } = await Promise.race([op, timeout]) as any;
-        if (error) { failed += chunk.length; console.error(error); }
-      } catch { failed += chunk.length; }
-    }
-    setBulkProcessing(false);
     setBulkConfirm(null);
-    if (failed > 0) toast.error(`${failed} ürün güncellenemedi`);
-    else toast.success(`${ids.length} ürün ${active ? "aktif" : "pasif"} yapıldı`);
-    setSelectedIds(new Set());
-    qc.invalidateQueries({ queryKey: ["admin-inventory"] });
-    qc.invalidateQueries({ queryKey: ["products"] });
+    try {
+      await ensureAdminSession();
+      const ids = Array.from(selectedIds);
+      const chunks = chunkArray(ids, 500);
+      let failed = 0;
+      for (const chunk of chunks) {
+        try {
+          const { error } = await withTimeout(
+            supabase.from("inventory").update({ is_active: active }).in("id", chunk).select(),
+            5000
+          );
+          if (error) { failed += chunk.length; console.error(error); }
+        } catch { failed += chunk.length; }
+      }
+      if (failed > 0) toast.error(`${failed} ürün güncellenemedi`);
+      else toast.success(`${ids.length} ürün ${active ? "aktif" : "pasif"} yapıldı`);
+      setSelectedIds(new Set());
+      qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+      qc.invalidateQueries({ queryKey: ["products"] });
+    } catch (e: any) {
+      toast.error(getErrorMessage(e));
+    } finally {
+      setBulkProcessing(false);
+    }
   };
 
   const bulkSetCategory = async (category: string) => {
     setBulkProcessing(true);
-    try { await supabase.auth.getSession(); } catch {
-      setBulkProcessing(false); setBulkCategoryOpen(false);
-      toast.error("Oturum süresi dolmuş. Lütfen tekrar giriş yapın."); return;
+    try {
+      await ensureAdminSession();
+      const ids = Array.from(selectedIds);
+      const chunks = chunkArray(ids, 500);
+      let failed = 0;
+      for (const chunk of chunks) {
+        try {
+          const { error } = await withTimeout(
+            supabase.from("inventory").update({ category }).in("id", chunk).select(),
+            5000
+          );
+          if (error) { failed += chunk.length; console.error(error); }
+        } catch { failed += chunk.length; }
+      }
+      if (failed > 0) toast.error(`${failed} ürün güncellenemedi`);
+      else toast.success(`${ids.length} ürünün kategorisi güncellendi`);
+      setSelectedIds(new Set());
+      qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+      qc.invalidateQueries({ queryKey: ["products"] });
+    } catch (e: any) {
+      toast.error(getErrorMessage(e));
+    } finally {
+      setBulkProcessing(false);
+      setBulkCategoryOpen(false);
     }
-    const ids = Array.from(selectedIds);
-    const chunks = chunkArray(ids, 500);
-    let failed = 0;
-    for (const chunk of chunks) {
-      try {
-        const op = supabase.from("inventory").update({ category }).in("id", chunk);
-        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
-        const { error } = await Promise.race([op, timeout]) as any;
-        if (error) { failed += chunk.length; console.error(error); }
-      } catch { failed += chunk.length; }
-    }
-    setBulkProcessing(false);
-    setBulkCategoryOpen(false);
-    if (failed > 0) toast.error(`${failed} ürün güncellenemedi`);
-    else toast.success(`${ids.length} ürünün kategorisi güncellendi`);
-    setSelectedIds(new Set());
-    qc.invalidateQueries({ queryKey: ["admin-inventory"] });
-    qc.invalidateQueries({ queryKey: ["products"] });
   };
 
   // ─── Publish (batch save) ───
@@ -984,54 +1010,53 @@ export default function AdminInventory() {
     setPublishing(true);
 
     try {
-      await supabase.auth.getSession();
-    } catch {
+      await ensureAdminSession();
+
+      const entries = Array.from(pendingChanges.entries());
+      const results = await Promise.all(
+        entries.map(async ([id, changes]) => {
+          const updateData: Record<string, any> = {};
+          if ("product_name" in changes) updateData.product_name = changes.product_name;
+          if ("brand" in changes) updateData.brand = changes.brand || null;
+          if ("category" in changes) updateData.category = changes.category || null;
+          if ("quantity" in changes) updateData.quantity = changes.quantity;
+          if ("original_price" in changes) updateData.original_price = changes.original_price || null;
+          if ("sale_price" in changes) updateData.sale_price = changes.sale_price || null;
+          if ("image_url" in changes) updateData.image_url = changes.image_url || null;
+          if ("is_active" in changes) updateData.is_active = changes.is_active;
+          updateData.price_updated_at = new Date().toISOString();
+
+          try {
+            const { error } = await withTimeout(
+              supabase.from("inventory").update(updateData).eq("id", id).select(),
+              5000
+            );
+            return { ok: !error, id, error };
+          } catch (e: any) {
+            return { ok: false, id, error: e };
+          }
+        })
+      );
+
+      const success = results.filter(r => r.ok).length;
+      const failed = results.filter(r => !r.ok).length;
+
+      if (failed > 0 && success === 0) {
+        toast.error("Hiçbir güncelleme yapılamadı. Oturumunuzu kontrol edin.");
+      } else if (failed > 0) {
+        toast.error(`${failed} ürün güncellenemedi`);
+      }
+      if (success > 0) {
+        toast.success(`${success} ürün başarıyla güncellendi`);
+        setPendingChanges(new Map());
+        qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+        qc.invalidateQueries({ queryKey: ["products"] });
+      }
+    } catch (e: any) {
+      toast.error(getErrorMessage(e));
+    } finally {
       setPublishing(false);
-      toast.error("Oturum yenilenemedi. Lütfen tekrar giriş yapın.");
-      return;
     }
-
-    // Build all update promises in parallel
-    const entries = Array.from(pendingChanges.entries());
-    const results = await Promise.all(
-      entries.map(async ([id, changes]) => {
-        const updateData: Record<string, any> = {};
-        if ("product_name" in changes) updateData.product_name = changes.product_name;
-        if ("brand" in changes) updateData.brand = changes.brand || null;
-        if ("category" in changes) updateData.category = changes.category || null;
-        if ("quantity" in changes) updateData.quantity = changes.quantity;
-        if ("original_price" in changes) updateData.original_price = changes.original_price || null;
-        if ("sale_price" in changes) updateData.sale_price = changes.sale_price || null;
-        if ("image_url" in changes) updateData.image_url = changes.image_url || null;
-        if ("is_active" in changes) updateData.is_active = changes.is_active;
-        updateData.price_updated_at = new Date().toISOString();
-
-        try {
-          const savePromise = supabase.from("inventory").update(updateData).eq("id", id);
-          const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
-          const { error } = await Promise.race([savePromise, timeout]) as any;
-          return { ok: !error, id, error };
-        } catch (e: any) {
-          return { ok: false, id, error: e };
-        }
-      })
-    );
-
-    const success = results.filter(r => r.ok).length;
-    const failed = results.filter(r => !r.ok).length;
-
-    if (failed > 0 && success === 0) {
-      toast.error("Hiçbir güncelleme yapılamadı. Oturumunuzu kontrol edin.");
-    } else if (failed > 0) {
-      toast.error(`${failed} ürün güncellenemedi`);
-    }
-    if (success > 0) {
-      toast.success(`${success} ürün başarıyla güncellendi`);
-      setPendingChanges(new Map());
-      qc.invalidateQueries({ queryKey: ["admin-inventory"] });
-      qc.invalidateQueries({ queryKey: ["products"] });
-    }
-    setPublishing(false);
   };
 
   // ─── Refresh from DB ───
