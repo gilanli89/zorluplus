@@ -1,4 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProducts, slugify, normalizeCategorySlug, applyCategoryOverrides } from "@/lib/products";
 import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/lib/types";
