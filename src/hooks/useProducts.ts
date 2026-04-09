@@ -3,6 +3,11 @@ import { fetchProducts, slugify, normalizeCategorySlug } from "@/lib/products";
 import { supabase } from "@/integrations/supabase/client";
 import type { Product } from "@/lib/types";
 
+function normalizeImageUrl(url: string | null | undefined): string {
+  if (!url) return "";
+  return url.replace("https://zorluplus.com/wp-content/", "https://cms.zorluplus.com/wp-content/");
+}
+
 function parseAttributes(attrs: unknown): Record<string, string> {
   if (!attrs || typeof attrs !== "object") return {};
   const result: Record<string, string> = {};
