@@ -984,7 +984,6 @@ export default function AdminInventory() {
     setPublishing(true);
 
     try {
-      // Oturumu yenile
       await supabase.auth.getSession();
     } catch {
       setPublishing(false);
@@ -992,34 +991,38 @@ export default function AdminInventory() {
       return;
     }
 
-    let success = 0;
-    let failed = 0;
+    // Build all update promises in parallel
+    const entries = Array.from(pendingChanges.entries());
+    const results = await Promise.all(
+      entries.map(async ([id, changes]) => {
+        const updateData: Record<string, any> = {};
+        if ("product_name" in changes) updateData.product_name = changes.product_name;
+        if ("brand" in changes) updateData.brand = changes.brand || null;
+        if ("category" in changes) updateData.category = changes.category || null;
+        if ("quantity" in changes) updateData.quantity = changes.quantity;
+        if ("original_price" in changes) updateData.original_price = changes.original_price || null;
+        if ("sale_price" in changes) updateData.sale_price = changes.sale_price || null;
+        if ("image_url" in changes) updateData.image_url = changes.image_url || null;
+        if ("is_active" in changes) updateData.is_active = changes.is_active;
+        updateData.price_updated_at = new Date().toISOString();
 
-    for (const [id, changes] of pendingChanges) {
-      const updateData: Record<string, any> = {};
-      if ("product_name" in changes) updateData.product_name = changes.product_name;
-      if ("brand" in changes) updateData.brand = changes.brand || null;
-      if ("category" in changes) updateData.category = changes.category || null;
-      if ("quantity" in changes) updateData.quantity = changes.quantity;
-      if ("original_price" in changes) updateData.original_price = changes.original_price || null;
-      if ("sale_price" in changes) updateData.sale_price = changes.sale_price || null;
-      if ("image_url" in changes) updateData.image_url = changes.image_url || null;
-      if ("is_active" in changes) updateData.is_active = changes.is_active;
-      updateData.price_updated_at = new Date().toISOString();
+        try {
+          const savePromise = supabase.from("inventory").update(updateData).eq("id", id);
+          const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 5000));
+          const { error } = await Promise.race([savePromise, timeout]) as any;
+          return { ok: !error, id, error };
+        } catch (e: any) {
+          return { ok: false, id, error: e };
+        }
+      })
+    );
 
-      try {
-        const savePromise = supabase.from("inventory").update(updateData).eq("id", id);
-        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), 15000));
-        const { error } = await Promise.race([savePromise, timeout]) as any;
-        if (error) { failed++; console.error("Update error:", id, error); }
-        else success++;
-      } catch (e: any) {
-        failed++;
-        console.error("Update exception:", id, e?.message);
-      }
-    }
+    const success = results.filter(r => r.ok).length;
+    const failed = results.filter(r => !r.ok).length;
 
-    if (failed > 0) {
+    if (failed > 0 && success === 0) {
+      toast.error("Hiçbir güncelleme yapılamadı. Oturumunuzu kontrol edin.");
+    } else if (failed > 0) {
       toast.error(`${failed} ürün güncellenemedi`);
     }
     if (success > 0) {
@@ -1027,9 +1030,6 @@ export default function AdminInventory() {
       setPendingChanges(new Map());
       qc.invalidateQueries({ queryKey: ["admin-inventory"] });
       qc.invalidateQueries({ queryKey: ["products"] });
-    }
-    if (failed > 0 && success === 0) {
-      toast.error("Hiçbir güncelleme yapılamadı. Oturumunuzu kontrol edin ve tekrar deneyin.");
     }
     setPublishing(false);
   };
