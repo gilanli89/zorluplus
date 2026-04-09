@@ -78,6 +78,10 @@ export default function AdminUsers() {
   const [newRole, setNewRole] = useState("admin");
   const [creating, setCreating] = useState(false);
 
+  // Role detail dialog
+  const [selectedUser, setSelectedUser] = useState<UserRow | null>(null);
+  const [editRole, setEditRole] = useState("");
+
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
