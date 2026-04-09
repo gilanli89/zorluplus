@@ -312,8 +312,10 @@ export type Database = {
     Views: {
       inventory_public: {
         Row: {
+          attributes: Json | null
           brand: string | null
           category: string | null
+          description: string | null
           id: string | null
           image_url: string | null
           is_active: boolean | null
@@ -324,8 +326,10 @@ export type Database = {
           sku: string | null
         }
         Insert: {
+          attributes?: Json | null
           brand?: string | null
           category?: string | null
+          description?: string | null
           id?: string | null
           image_url?: string | null
           is_active?: boolean | null
@@ -336,8 +340,10 @@ export type Database = {
           sku?: string | null
         }
         Update: {
+          attributes?: Json | null
           brand?: string | null
           category?: string | null
+          description?: string | null
           id?: string | null
           image_url?: string | null
           is_active?: boolean | null
