@@ -621,6 +621,8 @@ function ProductRow({
   onToggleActive,
   onSaved,
   categories,
+  isSelected,
+  onToggleSelect,
 }: {
   item: InventoryItem;
   pending: PendingChange | undefined;
@@ -628,6 +630,8 @@ function ProductRow({
   onToggleActive: (id: string, value: boolean) => void;
   onSaved: () => void;
   categories: string[];
+  isSelected: boolean;
+  onToggleSelect: (id: string) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
