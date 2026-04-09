@@ -17,7 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter,
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { UserPlus, Ban, Trash2, ShieldCheck, Loader2 } from "lucide-react";
@@ -170,7 +170,7 @@ export default function AdminUsers() {
             <Button className="gap-2"><UserPlus className="h-4 w-4" /> Yeni Kullanıcı</Button>
           </DialogTrigger>
           <DialogContent>
-            <DialogHeader><DialogTitle>Yeni Kullanıcı Ekle</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle>Yeni Kullanıcı Ekle</DialogTitle><DialogDescription>Sisteme yeni bir kullanıcı ekleyin ve rol atayın.</DialogDescription></DialogHeader>
             <div className="space-y-4 py-2">
               <div className="space-y-2">
                 <Label>Email</Label>
@@ -293,6 +293,7 @@ export default function AdminUsers() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Kullanıcı Detayı</DialogTitle>
+            <DialogDescription>Kullanıcı bilgilerini görüntüleyin ve rolünü değiştirin.</DialogDescription>
           </DialogHeader>
           {selectedUser && (
             <div className="space-y-4 py-2">
