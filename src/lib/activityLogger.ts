@@ -10,14 +10,14 @@ export async function logActivity(
     const { data: { session } } = await supabase.auth.getSession();
     if (!session?.user) return;
 
-    await supabase.from("activity_logs").insert({
+    await supabase.from("activity_logs").insert([{
       user_id: session.user.id,
       user_email: session.user.email || "unknown",
       action,
       entity_type: entityType,
       entity_id: entityId || null,
-      details: details || {},
-    });
+      details: (details || {}) as any,
+    }]);
   } catch {
     // Silent fail — don't break user flow
   }
