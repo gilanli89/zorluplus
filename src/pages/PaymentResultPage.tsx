@@ -1,5 +1,7 @@
 import { useSearchParams, Link } from "react-router-dom";
 import { CheckCircle2, XCircle, ArrowLeft, Phone } from "lucide-react";
+import { PremiumIconInline } from "@/components/PremiumIcon";
+import PremiumIcon from "@/components/PremiumIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { BRAND } from "@/lib/constants";
@@ -21,7 +23,9 @@ export default function PaymentResultPage() {
         <CardContent className="pt-8 pb-8">
           {isSuccess ? (
             <>
-              <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
+              <div className="flex justify-center mb-4">
+                <PremiumIcon icon={CheckCircle2} size="xl" variant="glow" containerClassName="[&_.premium-icon-inner]:from-emerald-500/15 [&_.premium-icon-inner]:to-emerald-500/10 [&_.premium-icon-inner]:border-emerald-500/20 [&_svg]:text-emerald-500" />
+              </div>
               <h1 className="heading-2 text-foreground mb-2">{t("payment.success")}</h1>
               <p className="text-muted-foreground mb-6">{t("payment.successDesc")}</p>
               <div className="bg-muted/50 rounded-xl p-4 text-left space-y-2 mb-6">
@@ -47,7 +51,9 @@ export default function PaymentResultPage() {
             </>
           ) : (
             <>
-              <XCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
+              <div className="flex justify-center mb-4">
+                <PremiumIcon icon={XCircle} size="xl" variant="glow" containerClassName="[&_.premium-icon-inner]:from-destructive/15 [&_.premium-icon-inner]:to-destructive/10 [&_.premium-icon-inner]:border-destructive/20 [&_svg]:text-destructive" />
+              </div>
               <h1 className="heading-2 text-foreground mb-2">{t("payment.failed")}</h1>
               <p className="text-muted-foreground mb-4">{errorMessage || t("payment.failedDesc")}</p>
               <p className="text-sm text-muted-foreground mb-6">{t("payment.retryDesc")}</p>
@@ -57,12 +63,12 @@ export default function PaymentResultPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/">
               <Button variant="outline" className="rounded-full gap-1.5 w-full sm:w-auto">
-                <ArrowLeft className="h-4 w-4" /> {t("payment.backToStore")}
+                <PremiumIconInline icon={ArrowLeft} size={16} /> {t("payment.backToStore")}
               </Button>
             </Link>
             <a href={`tel:${BRAND.phone}`}>
               <Button variant="ghost" className="rounded-full gap-1.5 w-full sm:w-auto">
-                <Phone className="h-4 w-4" /> {BRAND.phoneDisplay}
+                <PremiumIconInline icon={Phone} size={16} /> {BRAND.phoneDisplay}
               </Button>
             </a>
           </div>

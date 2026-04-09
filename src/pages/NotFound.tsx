@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Home, Grid3X3 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import PremiumIcon from "@/components/PremiumIcon";
+import { PremiumIconInline } from "@/components/PremiumIcon";
 
 const NotFound = () => {
   const { t } = useLanguage();
@@ -84,13 +84,13 @@ const NotFound = () => {
         >
           <Link to="/">
             <Button size="lg" className="rounded-full gap-2 pulse-btn tap-scale w-full sm:w-auto">
-              <Home className="w-4 h-4 drop-shadow-[0_1px_2px_hsl(var(--primary-foreground)/0.3)]" />
+              <PremiumIconInline icon={Home} size={16} className="text-primary-foreground" />
               {t("general.homePage")}
             </Button>
           </Link>
           <Link to="/kategoriler">
             <Button size="lg" variant="outline" className="rounded-full gap-2 tap-scale w-full sm:w-auto">
-              <Grid3X3 className="w-4 h-4 drop-shadow-[0_1px_2px_hsl(var(--primary)/0.3)]" />
+              <PremiumIconInline icon={Grid3X3} size={16} />
               {t("nav.categories")}
             </Button>
           </Link>

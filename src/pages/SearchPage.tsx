@@ -165,7 +165,7 @@ export default function SearchPage() {
       <h1 className="heading-2 mb-4 text-foreground pulse-heading">{t("search.title")}</h1>
       <div className="relative mb-4 flex items-center gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <PremiumIconInline icon={Search} size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={query}
             onChange={e => handleSearch(e.target.value)}
