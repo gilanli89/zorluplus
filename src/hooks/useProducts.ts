@@ -61,58 +61,57 @@ async function fetchProductsWithInventory(): Promise<Product[]> {
   if (inventory.length === 0) return csvProducts;
 
   // Build lookup maps
-  const invMap = new Map(inventory.filter(i => i.sku).map(i => [i.sku!, i]));
   const csvMap = new Map(csvProducts.map(p => [p.sku, p]));
 
   const merged: Product[] = [];
   const seenSkus = new Set<string>();
 
-  // 1. Process all CSV products, override with DB where available
-  for (const csvP of csvProducts) {
-    seenSkus.add(csvP.sku);
-    const inv = invMap.get(csvP.sku);
-    if (!inv) {
-      merged.push(csvP);
-      continue;
+  // 1. DB ürünleri BİRİNCİL — veritabanındaki tüm kayıtları önce işle
+  for (const inv of inventory) {
+    if (!inv.sku) continue;
+    seenSkus.add(inv.sku);
+    // DB'de deaktive edilen ürünler CSV'de olsa bile gösterilmez
+    if (!inv.is_active) continue;
+
+    const csvP = csvMap.get(inv.sku);
+    const p = dbToProduct(inv as Record<string, unknown>);
+
+    if (csvP) {
+      // CSV verileri sadece DB'de boş/null olan alanları doldurmak için kullanılır
+      merged.push({
+        ...csvP,
+        // DB alanları her zaman öncelikli
+        name: inv.product_name || csvP.name,
+        brand: inv.brand || csvP.brand,
+        category: p.category,
+        subcategory: p.subcategory,
+        description: inv.description || csvP.description,
+        image: normalizeImageUrl(inv.image_url) || csvP.image,
+        images: inv.image_url
+          ? [normalizeImageUrl(inv.image_url), ...csvP.images.filter(i => i !== normalizeImageUrl(inv.image_url))]
+          : csvP.images,
+        price: inv.original_price != null ? Number(inv.original_price) : csvP.price,
+        salePrice: inv.sale_price != null && Number(inv.sale_price) > 0
+          ? Number(inv.sale_price)
+          : csvP.salePrice,
+        specs: inv.attributes && Object.keys(inv.attributes as object).length > 0
+          ? { ...csvP.specs, ...parseAttributes(inv.attributes) }
+          : csvP.specs,
+        inStock: (inv.quantity ?? 0) > 0,
+        slug: p.slug || csvP.slug,
+        id: p.id || csvP.id,
+        sku: inv.sku,
+      });
+    } else {
+      // DB-only ürün
+      if (p.price > 0) merged.push(p);
     }
-    // DB overrides CSV for all non-null fields
-    if (!inv.is_active) continue; // skip deactivated
-    // Normalize DB category through the same function as CSV, then apply name-based overrides
-    const dbCat = inv.category ? normalizeCategorySlug(inv.category) : null;
-    const mergedName = inv.product_name || csvP.name;
-    const mergedBrand = inv.brand || csvP.brand;
-    const overridden = applyCategoryOverrides(
-      mergedName,
-      mergedBrand,
-      dbCat?.category || csvP.category,
-      dbCat?.subcategory || csvP.subcategory
-    );
-    merged.push({
-      ...csvP,
-      name: mergedName,
-      brand: mergedBrand,
-      category: overridden.category,
-      subcategory: overridden.subcategory,
-      description: inv.description || csvP.description,
-      image: normalizeImageUrl(inv.image_url) || csvP.image,
-      images: inv.image_url ? [normalizeImageUrl(inv.image_url), ...csvP.images.filter(i => i !== normalizeImageUrl(inv.image_url))] : csvP.images,
-      price: inv.original_price != null ? Number(inv.original_price) : csvP.price,
-      salePrice: inv.sale_price != null && Number(inv.sale_price) > 0
-        ? Number(inv.sale_price)
-        : csvP.salePrice,
-      specs: inv.attributes && Object.keys(inv.attributes as object).length > 0
-        ? { ...csvP.specs, ...parseAttributes(inv.attributes) }
-        : csvP.specs,
-      inStock: (inv.quantity ?? 0) > 0,
-    });
   }
 
-  // 2. DB-only products (not in CSV)
-  for (const inv of inventory) {
-    if (!inv.sku || seenSkus.has(inv.sku)) continue;
-    if (!inv.is_active) continue;
-    const p = dbToProduct(inv as Record<string, unknown>);
-    if (p.price > 0) merged.push(p);
+  // 2. CSV-only ürünler (DB'de hiç bulunmayan SKU'lar) — fallback
+  for (const csvP of csvProducts) {
+    if (seenSkus.has(csvP.sku)) continue;
+    merged.push(csvP);
   }
 
   return merged;
