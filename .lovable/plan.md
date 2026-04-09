@@ -1,65 +1,49 @@
 
-Sebep net:
 
-1. Bu ürün hâlâ `public/data/products.csv` içinde duruyor.
-   - `9223,JBL 2.1 Deep Bass Soundbar` kaydı CSV’de mevcut.
-2. Frontend ürünleri iki kaynaktan topluyor:
-   - `fetchProducts()` → CSV
-   - `inventory_public` → veritabanı
-3. `src/hooks/useProducts.ts` içindeki mevcut mantıkta:
-   - Veritabanında ürün varsa onu birincil kabul ediyor
-   - Ama veritabanından ürün fiziksel olarak silinirse, o SKU artık `seenSkus` içine girmiyor
-   - Sonra alttaki “CSV-only ürünler” adımında ürün yeniden listeye ekleniyor
-4. Sonuç:
-   - Admin panelde “silme” işlemi DB kaydını kaldırıyor
-   - Ama CSV aynı ürünü hâlâ yayınladığı için ürün sayfada görünmeye devam ediyor
+## Sorun Analizi
 
-Bu yüzden şu an sistemde:
-- Pasife alma çalışır
-- Fiziksel silme, CSV’de kayıt varsa görünürlüğü tamamen kaldıramaz
+Admin paneldeki tüm işlemler iki farklı yaklaşım kullanıyor:
 
-En doğru çözüm planı:
+| İşlem | Mevcut Davranış | Sorun |
+|-------|----------------|-------|
+| Switch toggle (tekil) | `pendingChanges` Map'e ekler → "Yayınla" butonuna basılmalı → sıralı 15s timeout | Uzun bekleme |
+| Fiyat/stok düzenleme | `pendingChanges` Map'e ekler → "Yayınla" → sıralı 15s timeout | Uzun bekleme |
+| Bulk delete (checkbox) | Session yenilemesi yok, timeout koruması yok | Takılma riski |
+| Bulk aktif/pasif (checkbox) | Session yenilemesi yok, timeout koruması yok | Takılma riski |
+| Bulk kategori | Session yenilemesi yok, timeout koruması yok | Takılma riski |
 
-1. “Sil” davranışını hard delete yerine soft delete yap
-   - `bulkDelete()` içindeki `delete()` çağrısını kaldır
-   - Bunun yerine `is_active = false` güncelle
-   - Böylece SKU veritabanında kalır ve frontend bu SKU’yu CSV’den geri eklemez
+**Kök neden**: Tüm timeout'lar 15 saniye, session yenilemesi eksik, ve değişiklikler sıralı (sequential) işleniyor.
 
-2. Frontend merge mantığını silinmiş/pasif ürünleri kesin engelleyecek şekilde netleştir
-   - `useProducts.ts` içinde kural açık olmalı:
-     - DB’de SKU varsa tek gerçek kaynak DB
-     - `is_active = false` ise asla gösterme
-     - CSV sadece DB’de hiç izi olmayan geçici ürünler için fallback olsun
+---
 
-3. Eğer gerçek “kalıcı silme” isteniyorsa ek bir engelleme katmanı kur
-   - Seçenek A: `deleted_skus` gibi bir tablo tutup CSV fallback öncesi bu SKU’ları ele
-   - Seçenek B: CSV fallback’i tamamen kaldır ve siteyi yalnızca veritabanından besle
-   - Seçenek C: Admin panel değişikliklerinde CSV’yi otomatik senkronize eden bir backend akışı ekle
+## Çözüm Planı
 
-Önerdiğim uygulama sırası:
+Tek dosya değişecek: `src/pages/admin/AdminInventory.tsx`
 
-1. Hızlı ve güvenli çözüm:
-   - Admin’de silmeyi “pasife al”ya çevir
-2. Kalıcı mimari çözüm:
-   - CSV’yi artık sadece import kaynağı yap, canlı katalog kaynağı olmaktan çıkar
-3. Son aşama:
-   - İstersen admin panelden yapılan ekleme/düzenleme/silme işlemlerini CSV export dosyasına da yazan senkron mekanizması kur
+### 1. Switch toggle → Anında DB güncelleme
+- `handleToggleActive` fonksiyonunu `pendingChanges`'a eklemekten çıkar
+- Doğrudan `supabase.from("inventory").update({ is_active }).eq("id", id)` çağrısı yap
+- 5 saniye timeout + session yenilemesi ekle
+- Hata durumunda 3 saniye içinde açıklayıcı toast göster
 
-Bu özel ürün için teşhis:
-- Sorun ürün sayfasında değil
-- Sorun admin silme akışının DB kaydını kaldırması ve `public/data/products.csv` içinde 9223 satırının hâlâ bulunması
-- Bu nedenle `/urun/9223-jbl-2-1-deep-bass-soundbar` slug’ı merged ürün listesinde yeniden oluşuyor
+### 2. publishChanges → Paralel toplu güncelleme, 5s timeout
+- Tüm pending değişiklikleri `Promise.all` ile paralel gönder (sıralı değil)
+- Her birinde 5 saniye timeout
+- Session yenilemesi başta bir kez yapılsın
+- 3 saniye sonra hata mesajı gösterilsin
 
-Uygulayacağım değişiklik planı:
-1. `src/pages/admin/AdminInventory.tsx`
-   - `bulkDelete()` fonksiyonunu soft delete yapısına çevirmek
-   - UI metnini “Sil” yerine gerekirse “Pasife Al” / “Yayından Kaldır” yapmak
-2. `src/hooks/useProducts.ts`
-   - CSV fallback mantığını, DB’de izi olan SKU’larda kesinlikle geri ekleme yapmayacak şekilde sertleştirmek
-3. Gerekirse sonraki adımda
-   - Hard delete gerekiyorsa “silinmiş SKU kaydı” tablosu veya CSV senkronu eklemek
+### 3. Tüm bulk operasyonlara (delete, aktif/pasif, kategori) koruma ekle
+- Her fonksiyonun başına `await supabase.auth.getSession()` ekle
+- Timeout'ları 15s → 5s'e düşür
+- Hata durumunda açıklayıcı mesaj: "Oturum süresi dolmuş olabilir" veya "Ağ hatası"
 
-Beklenen sonuç:
-- Admin panelden yayından kaldırılan ürün saniyeler içinde siteden kaybolur
-- CSV’de dursa bile tekrar görünmez
-- Aynı problem başka SKU’larda da tekrarlanmaz
+### 4. AddProduct ve EditProduct dialog timeout'larını 5s'e düşür
+- Mevcut 15s timeout'ları 5s'e çek
+- Hata mesajlarını 3 saniye içinde net göster
+
+### Beklenen Sonuç
+- Hiçbir işlem 5 saniyeden uzun sürmez
+- Hata varsa 3 saniye içinde kullanıcıya açıklayıcı mesaj verilir
+- Switch toggle anında çalışır (Yayınla butonuna gerek kalmaz)
+- Fiyat/stok değişiklikleri paralel gönderilir
+
