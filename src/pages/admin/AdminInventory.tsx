@@ -892,13 +892,13 @@ export default function AdminInventory() {
     const chunks = chunkArray(ids, 500);
     let failed = 0;
     for (const chunk of chunks) {
-      const { error } = await supabase.from("inventory").delete().in("id", chunk);
+      const { error } = await supabase.from("inventory").update({ is_active: false }).in("id", chunk);
       if (error) { failed += chunk.length; console.error(error); }
     }
     setBulkProcessing(false);
     setBulkConfirm(null);
-    if (failed > 0) toast.error(`${failed} ürün silinemedi`);
-    else toast.success(`${ids.length} ürün silindi`);
+    if (failed > 0) toast.error(`${failed} ürün pasife alınamadı`);
+    else toast.success(`${ids.length} ürün yayından kaldırıldı`);
     setSelectedIds(new Set());
     qc.invalidateQueries({ queryKey: ["admin-inventory"] });
     qc.invalidateQueries({ queryKey: ["products"] });
@@ -1200,13 +1200,13 @@ export default function AdminInventory() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {bulkConfirm?.type === "delete" && `${selectedIds.size} ürünü silmek istediğinize emin misiniz?`}
+              {bulkConfirm?.type === "delete" && `${selectedIds.size} ürünü yayından kaldırmak istediğinize emin misiniz?`}
               {bulkConfirm?.type === "active" && `${selectedIds.size} ürünü aktif yapmak istediğinize emin misiniz?`}
               {bulkConfirm?.type === "inactive" && `${selectedIds.size} ürünü pasif yapmak istediğinize emin misiniz?`}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {bulkConfirm?.type === "delete"
-                ? "Bu işlem geri alınamaz. Seçili ürünler kalıcı olarak silinecektir."
+                ? "Seçili ürünler pasife alınarak siteden kaldırılacaktır. Tekrar aktif edebilirsiniz."
                 : "Seçili ürünlerin durumu güncellenecektir."}
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -1223,7 +1223,7 @@ export default function AdminInventory() {
               className={bulkConfirm?.type === "delete" ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : ""}
             >
               {bulkProcessing ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
-              {bulkConfirm?.type === "delete" ? "Sil" : "Onayla"}
+              {bulkConfirm?.type === "delete" ? "Yayından Kaldır" : "Onayla"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

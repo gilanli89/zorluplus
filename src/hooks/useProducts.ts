@@ -67,9 +67,10 @@ async function fetchProductsWithInventory(): Promise<Product[]> {
   const seenSkus = new Set<string>();
 
   // 1. DB ürünleri BİRİNCİL — veritabanındaki tüm kayıtları önce işle
+  // SKU DB'de varsa (aktif veya pasif), CSV fallback engellenir
   for (const inv of inventory) {
     if (!inv.sku) continue;
-    seenSkus.add(inv.sku);
+    seenSkus.add(inv.sku); // Pasif olsa bile SKU'yu kaydet — CSV'den geri gelmesini engelle
     // DB'de deaktive edilen ürünler CSV'de olsa bile gösterilmez
     if (!inv.is_active) continue;
 
