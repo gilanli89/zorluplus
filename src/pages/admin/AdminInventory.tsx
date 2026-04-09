@@ -1166,12 +1166,14 @@ export default function AdminInventory() {
                   onToggleActive={handleToggleActive}
                   onSaved={() => { qc.invalidateQueries({ queryKey: ["admin-inventory"] }); qc.invalidateQueries({ queryKey: ["products"] }); }}
                   categories={categories}
+                  isSelected={selectedIds.has(item.id)}
+                  onToggleSelect={toggleSelect}
                 />
               ))}
               {paged.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="text-center py-12 text-muted-foreground">
-                    {items.length === 0 ? "Henüz ürün yok — CSV'den senkronize edin" : "Sonuç bulunamadı"}
+                  <td colSpan={10} className="text-center py-12 text-muted-foreground">
+                    {items.length === 0 ? "Henüz ürün yok" : "Sonuç bulunamadı"}
                   </td>
                 </tr>
               )}
@@ -1186,28 +1188,67 @@ export default function AdminInventory() {
               Sayfa {page + 1} / {totalPages}
             </span>
             <div className="flex gap-1">
-              <Button
-                size="sm"
-                variant="outline"
-                disabled={page === 0}
-                onClick={() => setPage(p => p - 1)}
-                className="h-7 text-xs"
-              >
-                ← Önceki
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                disabled={page >= totalPages - 1}
-                onClick={() => setPage(p => p + 1)}
-                className="h-7 text-xs"
-              >
-                Sonraki →
-              </Button>
+              <Button size="sm" variant="outline" disabled={page === 0} onClick={() => setPage(p => p - 1)} className="h-7 text-xs">← Önceki</Button>
+              <Button size="sm" variant="outline" disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)} className="h-7 text-xs">Sonraki →</Button>
             </div>
           </div>
         )}
       </div>
+
+      {/* ─── Bulk Confirm Dialog ─── */}
+      <AlertDialog open={!!bulkConfirm} onOpenChange={(v) => { if (!v) setBulkConfirm(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {bulkConfirm?.type === "delete" && `${selectedIds.size} ürünü silmek istediğinize emin misiniz?`}
+              {bulkConfirm?.type === "active" && `${selectedIds.size} ürünü aktif yapmak istediğinize emin misiniz?`}
+              {bulkConfirm?.type === "inactive" && `${selectedIds.size} ürünü pasif yapmak istediğinize emin misiniz?`}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {bulkConfirm?.type === "delete"
+                ? "Bu işlem geri alınamaz. Seçili ürünler kalıcı olarak silinecektir."
+                : "Seçili ürünlerin durumu güncellenecektir."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={bulkProcessing}>İptal</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={bulkProcessing}
+              onClick={(e) => {
+                e.preventDefault();
+                if (bulkConfirm?.type === "delete") bulkDelete();
+                else if (bulkConfirm?.type === "active") bulkSetActive(true);
+                else if (bulkConfirm?.type === "inactive") bulkSetActive(false);
+              }}
+              className={bulkConfirm?.type === "delete" ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : ""}
+            >
+              {bulkProcessing ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
+              {bulkConfirm?.type === "delete" ? "Sil" : "Onayla"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* ─── Bulk Category Dialog ─── */}
+      <Dialog open={bulkCategoryOpen} onOpenChange={setBulkCategoryOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Kategori Değiştir</DialogTitle>
+            <DialogDescription>{selectedIds.size} ürünün kategorisini değiştirin.</DialogDescription>
+          </DialogHeader>
+          <Select onValueChange={(v) => bulkSetCategory(v)}>
+            <SelectTrigger><SelectValue placeholder="Kategori seçin" /></SelectTrigger>
+            <SelectContent>
+              {allCategories(categories).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          {bulkProcessing && (
+            <div className="flex items-center justify-center py-2">
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
