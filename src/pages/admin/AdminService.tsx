@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { logActivity } from "@/lib/activityLogger";
 import { format } from "date-fns";
 import { Constants } from "@/integrations/supabase/types";
 import type { Database } from "@/integrations/supabase/types";
@@ -39,7 +40,7 @@ export default function AdminService() {
       const { error } = await supabase.from("service_requests").update({ status }).eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin-service"] }); toast.success("Durum güncellendi"); },
+    onSuccess: (_data, variables) => { qc.invalidateQueries({ queryKey: ["admin-service"] }); toast.success("Durum güncellendi"); logActivity("service_status_update", "service_request", variables.id, { new_status: variables.status }); },
     onError: (e: Error) => toast.error(e.message),
   });
 

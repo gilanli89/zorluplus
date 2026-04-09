@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { logActivity } from "@/lib/activityLogger";
 
 const ROLES = ["super_admin", "admin", "moderator", "user"] as const;
 
@@ -118,6 +119,7 @@ export default function AdminRoles() {
         toast.error(res.error);
       } else {
         toast.success("Rol güncellendi");
+        logActivity("role_change", "user_role", userId, { new_role: newRole });
         fetchUsers();
       }
     } catch {

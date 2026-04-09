@@ -12,6 +12,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { employees } from "@/data/employees";
 import { toast } from "sonner";
+import { logActivity } from "@/lib/activityLogger";
 import { Eye, Check, X, CalendarDays, Clock, Users, AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
 import { format, addDays, isWithinInterval, startOfDay, differenceInCalendarDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval, getDay } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -128,6 +129,7 @@ export default function AdminLeaveRequests() {
 
   const decide = (id: string, status: RequestStatus) => {
     updateMutation.mutate({ id, status, admin_note: adminNote });
+    logActivity(status === "Onaylandı" ? "leave_approve" : "leave_reject", "leave_request", id, { status });
   };
 
   const fmt = (d: string) => {
