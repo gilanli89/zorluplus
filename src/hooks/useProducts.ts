@@ -44,7 +44,7 @@ function dbToProduct(inv: Record<string, unknown>): Product {
 async function fetchProductsWithInventory(): Promise<Product[]> {
   const [csvProducts, inventoryResult] = await Promise.all([
     fetchProducts(),
-    supabase.from("inventory_public").select("*"),
+    supabase.from("inventory_public").select("id,sku,product_name,brand,category,description,original_price,sale_price,quantity,is_active,image_url,attributes,updated_at"),
   ]);
 
   const inventory = inventoryResult.data ?? [];

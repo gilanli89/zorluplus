@@ -32,11 +32,15 @@ export default function Footer() {
         .order("updated_at", { ascending: false })
         .limit(1)
         .maybeSingle();
-      if (error || !data?.updated_at) return null;
+      if (error) {
+        console.warn("[Footer] updated_at query error:", error.message);
+        return null;
+      }
+      if (!data?.updated_at) return null;
       return new Date(data.updated_at);
     },
     staleTime: 60_000,
-    retry: 2,
+    retry: 3,
   });
 
   const formattedUpdate = lastUpdate
