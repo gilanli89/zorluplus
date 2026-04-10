@@ -487,6 +487,10 @@ type InventoryItem = {
   price_updated_at: string | null;
   description?: string | null;
   attributes?: Record<string, string> | null;
+  model?: string | null;
+  images?: string[] | null;
+  title_en?: string | null;
+  description_en?: string | null;
 };
 
 type EditableFields = {
@@ -513,23 +517,33 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
   const [form, setForm] = useState({
     product_name: item.product_name,
     brand: item.brand || "",
+    model: (item as any).model || "",
     category: item.category || "",
-    sku: item.sku || "",
     description: (item as any).description || "",
     original_price: item.original_price ? String(item.original_price) : "",
     sale_price: item.sale_price ? String(item.sale_price) : "",
     quantity: String(item.quantity),
-    image_url: item.image_url || "",
     is_active: item.is_active,
   });
+
+  // Initialize images from item
+  const existingImages = ((item as any).images as string[] || []).map((url: string, i: number) => ({
+    url,
+    iscover: url === item.image_url || (i === 0 && !item.image_url),
+  }));
+  // If item has image_url but not in images array, add it
+  if (item.image_url && !existingImages.some(img => img.url === item.image_url)) {
+    existingImages.unshift({ url: item.image_url, iscover: true });
+  }
+  const [images, setImages] = useState<{ url: string; path?: string; iscover?: boolean }[]>(
+    existingImages.length > 0 ? existingImages : []
+  );
+  const [imgOptions, setImgOptions] = useState({ removeBg: false, autoScale: false, center: false });
 
   const existingAttrs = (item as any).attributes || {};
   const [attrs, setAttrs] = useState<{ key: string; value: string }[]>(
     Object.entries(existingAttrs).map(([k, v]) => ({ key: k, value: String(v) }))
   );
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState(false);
 
   const set = (field: string, value: string | boolean) => setForm(p => ({ ...p, [field]: value }));
 
@@ -539,23 +553,24 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
     setAttrs(p => p.map((a, idx) => idx === i ? { ...a, [field]: value } : a));
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !file.type.startsWith("image/")) return;
-    if (file.size > 5 * 1024 * 1024) { toast.error("Dosya 5MB'dan küçük olmalı"); return; }
-    setUploading(true);
-    const ext = file.name.split(".").pop() || "jpg";
-    const fileName = `${item.sku || item.id}_${Date.now()}.${ext}`;
-    const { data, error } = await supabase.storage.from("product-images").upload(fileName, file, { upsert: true });
-    if (error) { toast.error("Yükleme hatası"); setUploading(false); return; }
-    const { data: pub } = supabase.storage.from("product-images").getPublicUrl(data.path);
-    set("image_url", pub.publicUrl);
-    setUploading(false);
-    toast.success("Görsel yüklendi!");
+  const processImages = async (imageList: { url: string; path?: string }[]) => {
+    if (!imgOptions.removeBg && !imgOptions.autoScale && !imgOptions.center) return imageList;
+    const processed = [];
+    for (const img of imageList) {
+      if (!img.path) { processed.push(img); continue; }
+      try {
+        const { data, error } = await supabase.functions.invoke("process-product-image", {
+          body: { imagePath: img.path, ...imgOptions },
+        });
+        if (error || !data?.url) { processed.push(img); continue; }
+        processed.push({ ...img, url: data.url, path: data.path });
+      } catch { processed.push(img); }
+    }
+    return processed;
   };
 
   const handleSave = async () => {
-    if (!form.product_name.trim()) { toast.error("Ürün adı zorunludur"); return; }
+    if (!form.product_name.trim()) { toast.error("İlan başlığı zorunludur"); return; }
     setSaving(true);
 
     const attributes: Record<string, string> = {};
@@ -564,22 +579,45 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
     try {
       await ensureAdminSession();
 
+      const processedImages = await processImages(images);
+      const coverImage = processedImages.find(i => i.iscover) || processedImages[0];
+      const imageUrls = processedImages.map(i => i.url);
+
       const { error } = await withTimeout(supabase.from("inventory").update({
         product_name: form.product_name.trim(),
         brand: form.brand.trim() || null,
+        model: form.model.trim() || null,
         category: form.category.trim() || null,
-        sku: form.sku.trim() || null,
         description: form.description.trim() || null,
         original_price: form.original_price ? parseFloat(form.original_price) : null,
         sale_price: form.sale_price ? parseFloat(form.sale_price) : null,
         quantity: parseInt(form.quantity) || 0,
-        image_url: form.image_url.trim() || null,
+        image_url: coverImage?.url || null,
+        images: imageUrls.length > 0 ? imageUrls : [],
         is_active: form.is_active,
         attributes: Object.keys(attributes).length > 0 ? attributes : {},
         price_updated_at: new Date().toISOString(),
-      } as any).eq("id", item.id).select(), 5000);
+      } as any).eq("id", item.id).select(), 8000);
 
       if (error) { toast.error("Güncellenemedi: " + error.message); return; }
+
+      // Async translation
+      const textsToTranslate = [form.product_name.trim(), form.description.trim()].filter(Boolean);
+      if (textsToTranslate.length > 0) {
+        supabase.functions.invoke("ai-translate", {
+          body: { texts: textsToTranslate, targetLang: "en" },
+        }).then(({ data }) => {
+          if (data?.translations) {
+            const updateData: any = {};
+            if (form.product_name.trim()) updateData.title_en = data.translations[0];
+            if (form.description.trim()) updateData.description_en = data.translations[form.product_name.trim() ? 1 : 0];
+            if (Object.keys(updateData).length > 0) {
+              supabase.from("inventory").update(updateData).eq("id", item.id).select().then(() => {});
+            }
+          }
+        }).catch(() => {});
+      }
+
       toast.success("Ürün güncellendi!");
       logActivity("inventory_update", "inventory", item.id, { product_name: form.product_name });
       onOpenChange(false);
@@ -591,125 +629,117 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
     }
   };
 
-  const imgUrl = normalizeImageUrl(form.image_url);
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Ürün Düzenle</DialogTitle>
-          <DialogDescription>Ürün bilgilerini düzenleyin.</DialogDescription>
-        </DialogHeader>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0">
+        <div className="bg-[hsl(var(--muted)/0.3)] p-6 space-y-5">
+          <DialogHeader className="p-0">
+            <DialogTitle className="text-xl font-bold">Ürün Düzenle</DialogTitle>
+            <DialogDescription>Ürün bilgilerini düzenleyin.</DialogDescription>
+          </DialogHeader>
 
-        <div className="space-y-3 mt-2">
-          {/* Image preview */}
-          <div className="flex items-center gap-3">
-            <div className="h-16 w-16 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden flex-shrink-0">
-              {imgUrl ? (
-                <img src={imgUrl} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
-              ) : (
-                <ImageIcon className="h-6 w-6 text-muted-foreground" />
-              )}
-            </div>
-            <div className="flex-1 space-y-1">
-              <Input value={form.image_url} onChange={e => set("image_url", e.target.value)} placeholder="Görsel URL'si" className="h-8 text-xs" />
-              <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
-              <Button type="button" variant="outline" size="sm" className="h-7 text-xs gap-1" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
-                {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
-                {uploading ? "Yükleniyor..." : "Görsel Yükle"}
-              </Button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label className="text-xs">Ürün Adı *</Label>
-              <Input value={form.product_name} onChange={e => set("product_name", e.target.value)} className="mt-1" />
-            </div>
-            <div>
-              <Label className="text-xs">Marka</Label>
-              <Input value={form.brand} onChange={e => set("brand", e.target.value)} className="mt-1" />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label className="text-xs">Stok Kodu (SKU)</Label>
-              <Input value={form.sku} onChange={e => set("sku", e.target.value)} className="mt-1" />
-            </div>
-            <div>
-              <Label className="text-xs">Kategori</Label>
-              <Select value={form.category} onValueChange={v => set("category", v)}>
-                <SelectTrigger className="mt-1"><SelectValue placeholder="Kategori seçin" /></SelectTrigger>
-                <SelectContent>
-                  {allCategories(categories).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div>
-            <Label className="text-xs">Açıklama</Label>
-            <Textarea value={form.description} onChange={e => set("description", e.target.value)} rows={2} className="mt-1 text-sm" />
-          </div>
-
-          <div className="grid grid-cols-3 gap-3">
-            <div>
-              <Label className="text-xs">Fiyat (₺)</Label>
-              <Input type="number" value={form.original_price} onChange={e => set("original_price", e.target.value)} className="mt-1" />
-            </div>
-            <div>
-              <Label className="text-xs">İndirimli Fiyat (₺)</Label>
-              <Input type="number" value={form.sale_price} onChange={e => set("sale_price", e.target.value)} className="mt-1" />
-            </div>
-            <div>
-              <Label className="text-xs">Stok Adeti</Label>
-              <Input type="number" value={form.quantity} onChange={e => set("quantity", e.target.value)} className="mt-1" />
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Switch checked={form.is_active as boolean} onCheckedChange={v => set("is_active", v)} />
-            <Label className="text-xs">{form.is_active ? "Aktif" : "Pasif"}</Label>
-          </div>
-
-          {/* Attributes */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <Label className="text-xs font-semibold">Özellikler (Değişkenler)</Label>
-              <Button type="button" size="sm" variant="outline" onClick={addAttr} className="h-7 text-xs gap-1">
-                <Plus className="h-3 w-3" /> Özellik Ekle
-              </Button>
-            </div>
-            {attrs.length === 0 && (
-              <p className="text-xs text-muted-foreground">Henüz özellik eklenmedi.</p>
+          {/* Image Upload Section */}
+          <div className="bg-background rounded-xl border border-border p-4 space-y-3">
+            <Label className="text-sm font-semibold">Görseller</Label>
+            <ImageDropzone images={images} onImagesChange={setImages} productId={item.id} />
+            {images.length > 0 && (
+              <ImageProcessingOptions options={imgOptions} onChange={setImgOptions} />
             )}
-            <div className="space-y-2">
-              {attrs.map((a, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <Input value={a.key} onChange={e => updateAttr(i, "key", e.target.value)} placeholder="Özellik" className="h-8 text-xs flex-1" />
-                  <Input value={a.value} onChange={e => updateAttr(i, "value", e.target.value)} placeholder="Değer" className="h-8 text-xs flex-1" />
-                  <Button type="button" size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={() => removeAttr(i)}>
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
+          </div>
+
+          {/* Product Info Card */}
+          <div className="bg-background rounded-xl border border-border p-4 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <Label className="text-xs font-semibold">İlan Başlığı *</Label>
+                <p className="text-[10px] text-muted-foreground mb-1">(Otomatik EN çeviri yapılır)</p>
+                <Input value={form.product_name} onChange={e => set("product_name", e.target.value)} />
+              </div>
+              <div>
+                <Label className="text-xs font-semibold">Marka</Label>
+                <Input value={form.brand} onChange={e => set("brand", e.target.value)} className="mt-1" />
+              </div>
+              <div>
+                <Label className="text-xs font-semibold">Model</Label>
+                <Input value={form.model} onChange={e => set("model", e.target.value)} className="mt-1" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-xs font-semibold">Kategori</Label>
+                <Select value={form.category} onValueChange={v => set("category", v)}>
+                  <SelectTrigger className="mt-1"><SelectValue placeholder="Kategori seçin" /></SelectTrigger>
+                  <SelectContent>
+                    {allCategories(categories).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs font-semibold">Fiyat (₺)</Label>
+                  <Input type="number" value={form.original_price} onChange={e => set("original_price", e.target.value)} className="mt-1" />
                 </div>
-              ))}
+                <div>
+                  <Label className="text-xs font-semibold">İndirimli (₺)</Label>
+                  <Input type="number" value={form.sale_price} onChange={e => set("sale_price", e.target.value)} className="mt-1" />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-xs font-semibold">Stok Adeti</Label>
+                <Input type="number" value={form.quantity} onChange={e => set("quantity", e.target.value)} className="mt-1" />
+              </div>
+              <div className="flex items-center gap-2 pt-5">
+                <Switch checked={form.is_active as boolean} onCheckedChange={v => set("is_active", v)} />
+                <Label className="text-xs">{form.is_active ? "Aktif" : "Pasif"}</Label>
+              </div>
+            </div>
+
+            {/* Attributes */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <Label className="text-xs font-semibold">Özellikler</Label>
+                <Button type="button" size="sm" variant="outline" onClick={addAttr} className="h-7 text-xs gap-1">
+                  <Plus className="h-3 w-3" /> Özellik Ekle
+                </Button>
+              </div>
+              {attrs.length === 0 && (
+                <p className="text-xs text-muted-foreground">Henüz özellik eklenmedi.</p>
+              )}
+              <div className="space-y-2">
+                {attrs.map((a, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Input value={a.key} onChange={e => updateAttr(i, "key", e.target.value)} placeholder="Özellik" className="h-8 text-xs flex-1" />
+                    <Input value={a.value} onChange={e => updateAttr(i, "value", e.target.value)} placeholder="Değer" className="h-8 text-xs flex-1" />
+                    <Button type="button" size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={() => removeAttr(i)}>
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Description */}
+            <div>
+              <Label className="text-xs font-semibold">Açıklama</Label>
+              <p className="text-[10px] text-muted-foreground mb-1">(Otomatik EN çeviri yapılır)</p>
+              <Textarea value={form.description} onChange={e => set("description", e.target.value)} rows={3} className="text-sm" />
             </div>
           </div>
-        </div>
 
-        <div className="flex justify-end gap-2 mt-4">
-          <Button variant="outline" size="sm" onClick={() => onOpenChange(false)}>İptal</Button>
-          <Button size="sm" onClick={handleSave} disabled={saving} className="gap-1.5">
-            {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
-            {saving ? "Kaydediliyor..." : "Güncelle"}
+          {/* Save button */}
+          <Button className="w-full h-11 gap-2 text-base font-semibold" onClick={handleSave} disabled={saving}>
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            {saving ? "Kaydediliyor..." : "Güncelle ve Yayınla"}
           </Button>
         </div>
       </DialogContent>
     </Dialog>
   );
 }
-
 function ImagePreviewDialog({ item, onChangeUrl }: { item: InventoryItem; onChangeUrl: (url: string) => void }) {
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState(normalizeImageUrl(item.image_url));
