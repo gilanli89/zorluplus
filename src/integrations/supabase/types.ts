@@ -125,6 +125,30 @@ export type Database = {
         }
         Relationships: []
       }
+      inventory_snapshots: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          product_count: number
+          snapshot_at: string
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id?: string
+          product_count?: number
+          snapshot_at?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          product_count?: number
+          snapshot_at?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           created_at: string
@@ -394,6 +418,8 @@ export type Database = {
     }
     Functions: {
       check_own_admin_status: { Args: never; Returns: boolean }
+      cleanup_old_snapshots: { Args: never; Returns: undefined }
+      create_inventory_snapshot: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
