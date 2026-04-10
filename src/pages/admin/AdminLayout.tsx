@@ -204,6 +204,7 @@ export default function AdminLayout() {
           <main className="flex-1 p-4 md:p-6 overflow-auto bg-muted/20">
             <Outlet />
           </main>
+          <IdleTimeoutWarning isVisible={isWarningVisible} countdown={countdown} onExtend={resetTimer} />
         </div>
       </div>
     </SidebarProvider>
