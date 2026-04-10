@@ -58,9 +58,18 @@ export default function AdminLayout() {
 
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) {
-      navigate("/admin/giris");
+      navigate("/admin/giris", { replace: true });
+      return;
     }
-  }, [user, isAdmin, loading, navigate]);
+    // Re-verify session on every route change (prevents back-button bypass)
+    if (!loading && user && isAdmin) {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (!session) {
+          navigate("/admin/giris", { replace: true });
+        }
+      });
+    }
+  }, [user, isAdmin, loading, navigate, location.pathname]);
 
   const handleChangePassword = async () => {
     if (newPw !== newPwConfirm) {
