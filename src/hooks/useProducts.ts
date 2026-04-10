@@ -43,7 +43,7 @@ function dbToProduct(inv: Record<string, unknown>): Product {
     images: inv.image_url ? [normalizeImageUrl(inv.image_url as string)] : ["/placeholder.svg"],
     description: String(inv.description || ""),
     specs: parseAttributes(inv.attributes),
-    inStock: Boolean(inv.is_active) && Number(inv.quantity) > 0,
+    inStock: Boolean(inv.is_active),
     isNew: false,
     isFeatured: false,
     tags: [],
