@@ -1,0 +1,1 @@
+ALTER VIEW public.inventory_public SET (security_invoker = on);
