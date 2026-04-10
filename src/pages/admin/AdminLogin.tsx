@@ -17,24 +17,10 @@ export default function AdminLogin() {
     e.preventDefault();
     setLoading(true);
 
-    // Try sign in first
-    let { error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error && error.message.includes("Invalid login credentials")) {
-      // First time: create the account, then sign in
-      const { error: signUpError } = await supabase.auth.signUp({ email, password });
-      if (signUpError) {
-        toast.error("Giriş başarısız: " + signUpError.message);
-        setLoading(false);
-        return;
-      }
-      // Sign in after signup
-      const result = await supabase.auth.signInWithPassword({ email, password });
-      error = result.error;
-    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      toast.error("Giriş başarısız: " + error.message);
+      toast.error("E-posta veya şifre hatalı");
     } else {
       // Verify admin status
       const { data } = await supabase.rpc("check_own_admin_status");
