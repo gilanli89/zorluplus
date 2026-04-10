@@ -12,6 +12,8 @@ import { toast } from "sonner";
 import { validatePassword } from "@/lib/passwordValidation";
 import { logActivity } from "@/lib/activityLogger";
 import PasswordStrengthIndicator from "@/components/admin/PasswordStrengthIndicator";
+import { useIdleTimeout } from "@/hooks/useIdleTimeout";
+import IdleTimeoutWarning from "@/components/admin/IdleTimeoutWarning";
 
 import {
   Sidebar,
@@ -45,6 +47,7 @@ export default function AdminLayout() {
   const { user, isAdmin, isSuperAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { isWarningVisible, countdown, resetTimer } = useIdleTimeout(!loading && !!user && isAdmin);
 
   // Self password change
   const [pwDialogOpen, setPwDialogOpen] = useState(false);
@@ -201,6 +204,7 @@ export default function AdminLayout() {
           <main className="flex-1 p-4 md:p-6 overflow-auto bg-muted/20">
             <Outlet />
           </main>
+          <IdleTimeoutWarning isVisible={isWarningVisible} countdown={countdown} onExtend={resetTimer} />
         </div>
       </div>
     </SidebarProvider>
