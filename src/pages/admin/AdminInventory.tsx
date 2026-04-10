@@ -321,7 +321,7 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
       const coverImage = processedImages.find(i => i.iscover) || processedImages[0];
       const imageUrls = processedImages.map(i => i.url);
 
-      const { error } = await withTimeout(supabase.from("inventory").insert({
+      const { data: insertedRows, error } = await withTimeout(supabase.from("inventory").insert({
         product_name: form.product_name.trim(),
         brand: form.brand.trim() || null,
         model: form.model.trim() || null,
@@ -332,21 +332,24 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
         image_url: coverImage?.url || null,
         images: imageUrls.length > 0 ? imageUrls : [],
         attributes: Object.keys(attributes).length > 0 ? attributes : {},
-      } as any).select(), 8000);
+      }).select("id"), 8000);
 
       if (error) { toast.error("Ürün eklenemedi: " + error.message); return; }
 
-      // Async translation (don't block save)
-      if (form.product_name.trim() || form.description.trim()) {
+      // Async translation — now we have the inserted product ID
+      const insertedId = insertedRows?.[0]?.id;
+      if (insertedId && (form.product_name.trim() || form.description.trim())) {
         const textsToTranslate = [form.product_name.trim(), form.description.trim()].filter(Boolean);
         supabase.functions.invoke("ai-translate", {
           body: { texts: textsToTranslate, targetLang: "en" },
         }).then(({ data }) => {
           if (data?.translations) {
-            const updateData: any = {};
+            const updateData: Record<string, string> = {};
             if (form.product_name.trim()) updateData.title_en = data.translations[0];
             if (form.description.trim()) updateData.description_en = data.translations[form.product_name.trim() ? 1 : 0];
-            // We'd need the product ID to update — for now, translations will be done on next edit
+            if (Object.keys(updateData).length > 0) {
+              supabase.from("inventory").update(updateData).eq("id", insertedId).select().then(() => {});
+            }
           }
         }).catch(() => {});
       }
@@ -502,6 +505,12 @@ type EditableFields = {
   sale_price: number;
   image_url: string;
   is_active: boolean;
+  model: string;
+  description: string;
+  images: string[];
+  title_en: string;
+  description_en: string;
+  attributes: Record<string, string>;
 };
 
 type PendingChange = Partial<EditableFields> & { id: string };
@@ -517,9 +526,9 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
   const [form, setForm] = useState({
     product_name: item.product_name,
     brand: item.brand || "",
-    model: (item as any).model || "",
+    model: item.model || "",
     category: item.category || "",
-    description: (item as any).description || "",
+    description: item.description || "",
     original_price: item.original_price ? String(item.original_price) : "",
     sale_price: item.sale_price ? String(item.sale_price) : "",
     quantity: String(item.quantity),
@@ -527,7 +536,7 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
   });
 
   // Initialize images from item
-  const existingImages = ((item as any).images as string[] || []).map((url: string, i: number) => ({
+  const existingImages = (item.images as string[] || []).map((url: string, i: number) => ({
     url,
     iscover: url === item.image_url || (i === 0 && !item.image_url),
   }));
@@ -540,7 +549,7 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
   );
   const [imgOptions, setImgOptions] = useState({ removeBg: false, autoScale: false, center: false });
 
-  const existingAttrs = (item as any).attributes || {};
+  const existingAttrs = item.attributes || {};
   const [attrs, setAttrs] = useState<{ key: string; value: string }[]>(
     Object.entries(existingAttrs).map(([k, v]) => ({ key: k, value: String(v) }))
   );
