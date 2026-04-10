@@ -1,0 +1,77 @@
+import { useState, useEffect, useRef, useCallback } from "react";
+
+const IDLE_MS = 5 * 60 * 1000; // 5 minutes
+const COUNTDOWN_SEC = 10;
+
+export function useIdleTimeout(enabled = true) {
+  const [isWarningVisible, setIsWarningVisible] = useState(false);
+  const [countdown, setCountdown] = useState(COUNTDOWN_SEC);
+  const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const clearAllTimers = useCallback(() => {
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    if (countdownTimer.current) clearInterval(countdownTimer.current);
+    idleTimer.current = null;
+    countdownTimer.current = null;
+  }, []);
+
+  const startIdleTimer = useCallback(() => {
+    if (!enabled) return;
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    idleTimer.current = setTimeout(() => {
+      setIsWarningVisible(true);
+      setCountdown(COUNTDOWN_SEC);
+    }, IDLE_MS);
+  }, [enabled]);
+
+  const resetTimer = useCallback(() => {
+    clearAllTimers();
+    setIsWarningVisible(false);
+    setCountdown(COUNTDOWN_SEC);
+    startIdleTimer();
+  }, [clearAllTimers, startIdleTimer]);
+
+  // Activity listeners
+  useEffect(() => {
+    if (!enabled) return;
+
+    const onActivity = () => {
+      // Only reset if warning is NOT visible
+      if (!isWarningVisible) {
+        if (idleTimer.current) clearTimeout(idleTimer.current);
+        startIdleTimer();
+      }
+    };
+
+    const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
+    events.forEach((e) => window.addEventListener(e, onActivity, { passive: true }));
+    startIdleTimer();
+
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, onActivity));
+      clearAllTimers();
+    };
+  }, [enabled, isWarningVisible, startIdleTimer, clearAllTimers]);
+
+  // Countdown when warning is visible
+  useEffect(() => {
+    if (!isWarningVisible) return;
+
+    countdownTimer.current = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          if (countdownTimer.current) clearInterval(countdownTimer.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      if (countdownTimer.current) clearInterval(countdownTimer.current);
+    };
+  }, [isWarningVisible]);
+
+  return { isWarningVisible, countdown, resetTimer };
+}
