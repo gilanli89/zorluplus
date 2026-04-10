@@ -251,6 +251,30 @@ export type Database = {
         }
         Relationships: []
       }
+      order_snapshots: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          order_count: number
+          snapshot_at: string
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id?: string
+          order_count?: number
+          snapshot_at?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          order_count?: number
+          snapshot_at?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           created_at: string
@@ -356,6 +380,30 @@ export type Database = {
         }
         Relationships: []
       }
+      service_snapshots: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          request_count: number
+          snapshot_at: string
+        }
+        Insert: {
+          created_at?: string
+          data: Json
+          id?: string
+          request_count?: number
+          snapshot_at?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          request_count?: number
+          snapshot_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -443,7 +491,10 @@ export type Database = {
     Functions: {
       check_own_admin_status: { Args: never; Returns: boolean }
       cleanup_old_snapshots: { Args: never; Returns: undefined }
+      create_full_backup: { Args: never; Returns: undefined }
       create_inventory_snapshot: { Args: never; Returns: undefined }
+      create_order_snapshot: { Args: never; Returns: undefined }
+      create_service_snapshot: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
