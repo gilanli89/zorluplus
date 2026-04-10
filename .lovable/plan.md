@@ -1,50 +1,85 @@
 
 
-## Sorun Analizi
+## Mevcut Durum
 
-Admin panelindeki yavaşlığın birden fazla kaynağı var:
-
-### 1. useAuth — Çift RPC çağrısı
-`useAuth.ts` hem `onAuthStateChange` hem de `getSession` içinde aynı iki RPC fonksiyonunu (`check_own_admin_status` + `is_super_admin`) çağırıyor. Bu, her sayfa yüklemesinde **4 ayrı veritabanı çağrısı** demek (olması gereken 2 yerine). Ayrıca bu çağrılarda timeout yok — RPC yavaş yanıt verirse sayfa sonsuza kadar "Yükleniyor..." durumunda kalıyor.
-
-### 2. React Query — staleTime ve timeout eksikliği
-Tüm admin sayfalarındaki `useQuery` çağrıları (Dashboard'da 6 adet, Orders, Service, Leads, Users, Activity Logs) hiçbirinde `staleTime` yok. Sekme değiştirip geri dönünce her seferinde tüm sorgular yeniden çalışıyor. Ayrıca hiçbirinde timeout yok — AdminInventory hariç.
-
-### 3. AdminUsers — Edge Function timeout'suz
-`callAdminUsers` fonksiyonu `fetch` kullanarak edge function çağırıyor ama `AbortController` ile timeout koruması yok.
+Yedekleme sistemi **sadece `inventory` (envanter)** tablosunu kapsıyor. `orders` (siparişler) ve `service_requests` (servis talepleri) tabloları yedeklenmiyor.
 
 ## Çözüm Planı
 
-### Adım 1: useAuth'a timeout ve dedup ekleme
-- `getSession` bloğunu ana auth kontrol noktası olarak tutup, `onAuthStateChange` içindeki RPC çağrılarını sadece `SIGNED_IN` / `SIGNED_OUT` event'lerinde çalıştır (her token yenilemesinde değil)
-- Her iki RPC çağrısına 5 saniyelik `Promise.race` timeout ekle
-- Timeout durumunda `loading: false` olarak fallback yap
+### Adım 1: Yeni snapshot tabloları oluştur (migration)
 
-### Adım 2: Global React Query ayarları
-- `queryClient` default options'a `staleTime: 30_000` (30 saniye) ekle — bu sayede kısa sürede aynı veriler tekrar çekilmez
-- Tüm admin sorgularında veri çekme süresini sınırlamak için bir yardımcı `withTimeout` wrapper kullan (5 saniye)
+```sql
+-- Sipariş yedekleri
+CREATE TABLE public.order_snapshots (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  snapshot_at timestamptz NOT NULL DEFAULT now(),
+  data jsonb NOT NULL,
+  order_count integer NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.order_snapshots ENABLE ROW LEVEL SECURITY;
+-- Aynı RLS: admin okuma/yazma
+CREATE POLICY "Admins can read order snapshots" ON public.order_snapshots
+  FOR SELECT TO authenticated USING (check_own_admin_status());
+CREATE POLICY "Admins can insert order snapshots" ON public.order_snapshots
+  FOR INSERT TO authenticated WITH CHECK (check_own_admin_status());
 
-### Adım 3: Admin sayfalarına timeout ekleme
-- `AdminDashboard`, `AdminOrders`, `AdminService`, `AdminLeads`, `AdminActivityLogs` query fonksiyonlarına `withTimeout(promise, 5000)` wrapper'ı ekle
-- `AdminUsers` `callAdminUsers` fonksiyonuna `AbortController` ile 5 saniyelik timeout ekle
-
-### Adım 4: Loading state iyileştirmesi
-- Tüm admin sayfalarında timeout sonrası kullanıcıya "Veri yüklenemedi, tekrar deneyin" mesajı göster (sonsuz spinner yerine)
-
-### Teknik Detay
-
-```text
-Değişecek dosyalar:
-├── src/hooks/useAuth.ts          → Timeout + dedup
-├── src/main.tsx veya App.tsx     → QueryClient staleTime
-├── src/pages/admin/AdminDashboard.tsx  → withTimeout
-├── src/pages/admin/AdminOrders.tsx     → withTimeout  
-├── src/pages/admin/AdminService.tsx    → withTimeout
-├── src/pages/admin/AdminLeads.tsx      → withTimeout
-├── src/pages/admin/AdminActivityLogs.tsx → withTimeout
-├── src/pages/admin/AdminUsers.tsx      → AbortController timeout
-└── src/lib/adminQueryHelpers.ts  → Yeni: paylaşılan withTimeout util
+-- Servis talepleri yedekleri
+CREATE TABLE public.service_snapshots (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  snapshot_at timestamptz NOT NULL DEFAULT now(),
+  data jsonb NOT NULL,
+  request_count integer NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.service_snapshots ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Admins can read service snapshots" ON public.service_snapshots
+  FOR SELECT TO authenticated USING (check_own_admin_status());
+CREATE POLICY "Admins can insert service snapshots" ON public.service_snapshots
+  FOR INSERT TO authenticated WITH CHECK (check_own_admin_status());
 ```
 
-Mevcut AdminInventory'deki `withTimeout` pattern'i zaten doğru çalışıyor; aynı yaklaşım diğer tüm admin sayfalarına genelleştirilecek.
+### Adım 2: Snapshot RPC fonksiyonları oluştur (migration)
+
+```sql
+CREATE OR REPLACE FUNCTION public.create_order_snapshot() RETURNS void ...
+-- orders tablosunu jsonb olarak order_snapshots'a kaydet
+
+CREATE OR REPLACE FUNCTION public.create_service_snapshot() RETURNS void ...
+-- service_requests tablosunu jsonb olarak service_snapshots'a kaydet
+
+-- Mevcut create_inventory_snapshot'u güncelleyerek hepsini tek seferde çağıran
+-- bir create_full_backup() fonksiyonu ekle
+CREATE OR REPLACE FUNCTION public.create_full_backup() RETURNS void ...
+
+-- Cleanup fonksiyonlarını da güncelle (5 gün retention)
+```
+
+### Adım 3: pg_cron zamanlamalarını güncelle (migration)
+
+Mevcut saatlik envanter yedeklemesine ek olarak sipariş ve servis yedeklemelerini de ekle. Ya da `create_full_backup()` ile hepsini tek cron job'da birleştir.
+
+### Adım 4: Restore edge function'ları oluştur
+
+- `restore-orders` — sipariş snapshot'ından geri yükleme
+- `restore-services` — servis snapshot'ından geri yükleme
+- Mevcut `restore-inventory` pattern'ini takip edecekler
+
+### Adım 5: AdminBackups.tsx UI güncellemesi
+
+Sayfaya **sekmeler (Tabs)** ekle:
+- **Envanter** (mevcut)
+- **Siparişler** (yeni — `order_snapshots` tablosunu gösterir)
+- **Servis Talepleri** (yeni — `service_snapshots` tablosunu gösterir)
+
+Her sekme aynı kart yapısını kullanır (güne göre gruplu, geri yükleme butonu). "Manuel Yedek Al" butonu `create_full_backup()` çağırarak üç tabloyu birden yedekler.
+
+### Değişecek dosyalar
+
+```text
+├── supabase/migrations/...       → Yeni tablolar, fonksiyonlar, cron
+├── supabase/functions/restore-orders/index.ts    → Yeni edge function
+├── supabase/functions/restore-services/index.ts  → Yeni edge function
+└── src/pages/admin/AdminBackups.tsx               → Tabs UI
+```
 
