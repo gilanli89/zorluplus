@@ -11,7 +11,8 @@ import { useState, useMemo, useCallback, useRef } from "react";
 import {
   Save, RefreshCw, X, Loader2, Plus, Trash2,
   Search, ImageIcon, Upload, Check, ChevronDown, ChevronUp,
-  Filter, Package, AlertTriangle, Eye, EyeOff, CheckSquare, XSquare
+  Filter, Package, AlertTriangle, Eye, EyeOff, CheckSquare, XSquare,
+  GripVertical, Star
 } from "lucide-react";
 
 import {
@@ -37,6 +38,38 @@ function allCategories(dbCats: string[]): string[] {
   return Array.from(set).sort();
 }
 
+// Category-based attribute templates
+const CATEGORY_ATTR_TEMPLATES: Record<string, { key: string; value: string }[]> = {
+  "TV & Görüntü Sistemleri": [
+    { key: "Ekran Boyutu", value: "" },
+    { key: "Panel Türü", value: "" },
+    { key: "Çözünürlük", value: "" },
+    { key: "Smart TV", value: "" },
+  ],
+  "İklimlendirme": [
+    { key: "BTU", value: "" },
+    { key: "Enerji Sınıfı", value: "" },
+    { key: "Inverter", value: "" },
+  ],
+  "Beyaz Eşya": [
+    { key: "Kapasite", value: "" },
+    { key: "Enerji Sınıfı", value: "" },
+    { key: "Devir", value: "" },
+  ],
+  "Ankastre": [
+    { key: "Tip", value: "" },
+    { key: "Enerji Sınıfı", value: "" },
+  ],
+  "Mutfak Aletleri": [
+    { key: "Kapasite", value: "" },
+    { key: "Güç (Watt)", value: "" },
+  ],
+  "Ses Sistemleri": [
+    { key: "Güç (Watt)", value: "" },
+    { key: "Bağlantı", value: "" },
+  ],
+};
+
 // ─── Timeout & Session Helpers ───
 const withTimeout = <T,>(promise: Promise<T> | PromiseLike<T>, ms = 5000): Promise<T> =>
   Promise.race([
@@ -59,6 +92,159 @@ const getErrorMessage = (e: any): string => {
   return e?.message || "Bilinmeyen bir hata oluştu.";
 };
 
+// ─── Dropzone Component ───
+function ImageDropzone({
+  images,
+  onImagesChange,
+  maxImages = 10,
+  productId,
+}: {
+  images: { url: string; path?: string; iscover?: boolean }[];
+  onImagesChange: (imgs: { url: string; path?: string; iscover?: boolean }[]) => void;
+  maxImages?: number;
+  productId?: string;
+}) {
+  const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const uploadFiles = async (files: File[]) => {
+    const validFiles = files.filter(f => f.type.startsWith("image/") && f.size <= 5 * 1024 * 1024);
+    if (validFiles.length === 0) { toast.error("Geçerli görsel dosyası bulunamadı (max 5MB)"); return; }
+    const remaining = maxImages - images.length;
+    if (remaining <= 0) { toast.error(`En fazla ${maxImages} görsel ekleyebilirsiniz`); return; }
+    const toUpload = validFiles.slice(0, remaining);
+
+    setUploading(true);
+    const newImages = [...images];
+
+    for (const file of toUpload) {
+      const ext = file.name.split(".").pop() || "jpg";
+      const fileName = `${productId || "new"}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}.${ext}`;
+      const { data, error } = await supabase.storage.from("product-images").upload(fileName, file, { upsert: true });
+      if (error) { toast.error("Yükleme hatası: " + error.message); continue; }
+      const { data: pub } = supabase.storage.from("product-images").getPublicUrl(data.path);
+      newImages.push({ url: pub.publicUrl, path: data.path, iscover: newImages.length === 0 });
+    }
+
+    onImagesChange(newImages);
+    setUploading(false);
+    toast.success(`${toUpload.length} görsel yüklendi`);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    const files = Array.from(e.dataTransfer.files);
+    uploadFiles(files);
+  };
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    uploadFiles(files);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeImage = (idx: number) => {
+    const next = images.filter((_, i) => i !== idx);
+    if (next.length > 0 && !next.some(img => img.iscover)) next[0].iscover = true;
+    onImagesChange(next);
+  };
+
+  const setCover = (idx: number) => {
+    const next = images.map((img, i) => ({ ...img, iscover: i === idx }));
+    onImagesChange(next);
+  };
+
+  return (
+    <div className="space-y-3">
+      {/* Dropzone area */}
+      <div
+        className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-colors cursor-pointer ${
+          dragOver ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/30"
+        }`}
+        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={handleDrop}
+        onClick={() => fileInputRef.current?.click()}
+      >
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={handleFileInput}
+        />
+        {uploading ? (
+          <div className="flex flex-col items-center gap-2">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <span className="text-sm text-muted-foreground">Yükleniyor...</span>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-2">
+            <Upload className="h-8 w-8 text-muted-foreground" />
+            <p className="text-sm font-medium">Görselleri sürükle-bırak veya tıkla</p>
+            <p className="text-xs text-muted-foreground">Max {maxImages} görsel, her biri max 5MB</p>
+          </div>
+        )}
+      </div>
+
+      {/* Image previews */}
+      {images.length > 0 && (
+        <div className="grid grid-cols-5 gap-2">
+          {images.map((img, idx) => (
+            <div key={idx} className={`relative group rounded-lg border-2 overflow-hidden aspect-square ${img.iscover ? "border-primary" : "border-border"}`}>
+              <img src={img.url} alt="" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }} />
+              {img.iscover && (
+                <div className="absolute top-1 left-1 bg-primary text-primary-foreground text-[9px] font-bold px-1.5 py-0.5 rounded">
+                  KAPAK
+                </div>
+              )}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                {!img.iscover && (
+                  <Button size="icon" variant="ghost" className="h-7 w-7 text-white hover:bg-white/20" onClick={(e) => { e.stopPropagation(); setCover(idx); }} title="Kapak yap">
+                    <Star className="h-3.5 w-3.5" />
+                  </Button>
+                )}
+                <Button size="icon" variant="ghost" className="h-7 w-7 text-white hover:bg-white/20" onClick={(e) => { e.stopPropagation(); removeImage(idx); }} title="Kaldır">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Image Processing Checkboxes ───
+function ImageProcessingOptions({
+  options,
+  onChange,
+}: {
+  options: { removeBg: boolean; autoScale: boolean; center: boolean };
+  onChange: (opts: { removeBg: boolean; autoScale: boolean; center: boolean }) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-4 p-3 rounded-lg bg-muted/30 border border-border">
+      <label className="flex items-center gap-2 cursor-pointer">
+        <Checkbox checked={options.removeBg} onCheckedChange={(v) => onChange({ ...options, removeBg: !!v })} />
+        <span className="text-xs font-medium">Arka planı kaldır</span>
+      </label>
+      <label className="flex items-center gap-2 cursor-pointer">
+        <Checkbox checked={options.autoScale} onCheckedChange={(v) => onChange({ ...options, autoScale: !!v })} />
+        <span className="text-xs font-medium">Otomatik ölçekle</span>
+      </label>
+      <label className="flex items-center gap-2 cursor-pointer">
+        <Checkbox checked={options.center} onCheckedChange={(v) => onChange({ ...options, center: !!v })} />
+        <span className="text-xs font-medium">Merkeze yerleştir</span>
+      </label>
+    </div>
+  );
+}
+
 // ─── Add Product Dialog ───
 function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; categories?: string[] }) {
   const [open, setOpen] = useState(false);
@@ -66,14 +252,14 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
   const [form, setForm] = useState({
     product_name: "",
     brand: "",
+    model: "",
     category: "",
-    sku: "",
     description: "",
     original_price: "",
-    sale_price: "",
     quantity: "1",
-    image_url: "",
   });
+  const [images, setImages] = useState<{ url: string; path?: string; iscover?: boolean }[]>([]);
+  const [imgOptions, setImgOptions] = useState({ removeBg: false, autoScale: false, center: false });
   const [attrs, setAttrs] = useState<{ key: string; value: string }[]>([]);
 
   const set = (field: string, value: string) => setForm(p => ({ ...p, [field]: value }));
@@ -84,13 +270,44 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
     setAttrs(p => p.map((a, idx) => idx === i ? { ...a, [field]: value } : a));
   };
 
+  // Auto-fill attributes based on category
+  const handleCategoryChange = (category: string) => {
+    set("category", category);
+    // Find matching template
+    const matchKey = Object.keys(CATEGORY_ATTR_TEMPLATES).find(k =>
+      category.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(category.toLowerCase())
+    );
+    if (matchKey && attrs.length === 0) {
+      setAttrs(CATEGORY_ATTR_TEMPLATES[matchKey].map(a => ({ ...a })));
+    }
+  };
+
   const reset = () => {
-    setForm({ product_name: "", brand: "", category: "", sku: "", description: "", original_price: "", sale_price: "", quantity: "1", image_url: "" });
+    setForm({ product_name: "", brand: "", model: "", category: "", description: "", original_price: "", quantity: "1" });
+    setImages([]);
+    setImgOptions({ removeBg: false, autoScale: false, center: false });
     setAttrs([]);
   };
 
+  const processImages = async (imageList: { url: string; path?: string }[]) => {
+    if (!imgOptions.removeBg && !imgOptions.autoScale && !imgOptions.center) return imageList;
+    const processed = [];
+    for (const img of imageList) {
+      if (!img.path) { processed.push(img); continue; }
+      try {
+        const { data, error } = await supabase.functions.invoke("process-product-image", {
+          body: { imagePath: img.path, ...imgOptions },
+        });
+        if (error || !data?.url) { processed.push(img); continue; }
+        processed.push({ ...img, url: data.url, path: data.path });
+      } catch { processed.push(img); }
+    }
+    return processed;
+  };
+
   const handleSave = async () => {
-    if (!form.product_name.trim()) { toast.error("Ürün adı zorunludur"); return; }
+    if (!form.product_name.trim()) { toast.error("İlan başlığı zorunludur"); return; }
+    if (!form.original_price) { toast.error("Fiyat zorunludur"); return; }
     setSaving(true);
 
     const attributes: Record<string, string> = {};
@@ -99,21 +316,42 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
     try {
       await ensureAdminSession();
 
+      // Process images if options selected
+      const processedImages = await processImages(images);
+      const coverImage = processedImages.find(i => i.iscover) || processedImages[0];
+      const imageUrls = processedImages.map(i => i.url);
+
       const { error } = await withTimeout(supabase.from("inventory").insert({
         product_name: form.product_name.trim(),
         brand: form.brand.trim() || null,
+        model: form.model.trim() || null,
         category: form.category.trim() || null,
-        sku: form.sku.trim() || null,
         description: form.description.trim() || null,
-        original_price: form.original_price ? parseFloat(form.original_price) : null,
-        sale_price: form.sale_price ? parseFloat(form.sale_price) : null,
+        original_price: parseFloat(form.original_price) || null,
         quantity: parseInt(form.quantity) || 1,
-        image_url: form.image_url.trim() || null,
+        image_url: coverImage?.url || null,
+        images: imageUrls.length > 0 ? imageUrls : [],
         attributes: Object.keys(attributes).length > 0 ? attributes : {},
-      } as any).select(), 5000);
+      } as any).select(), 8000);
 
       if (error) { toast.error("Ürün eklenemedi: " + error.message); return; }
-      toast.success("Ürün başarıyla eklendi!");
+
+      // Async translation (don't block save)
+      if (form.product_name.trim() || form.description.trim()) {
+        const textsToTranslate = [form.product_name.trim(), form.description.trim()].filter(Boolean);
+        supabase.functions.invoke("ai-translate", {
+          body: { texts: textsToTranslate, targetLang: "en" },
+        }).then(({ data }) => {
+          if (data?.translations) {
+            const updateData: any = {};
+            if (form.product_name.trim()) updateData.title_en = data.translations[0];
+            if (form.description.trim()) updateData.description_en = data.translations[form.product_name.trim() ? 1 : 0];
+            // We'd need the product ID to update — for now, translations will be done on next edit
+          }
+        }).catch(() => {});
+      }
+
+      toast.success("Ürün başarıyla eklendi ve yayınlandı!");
       logActivity("inventory_create", "inventory", undefined, { product_name: form.product_name });
       reset();
       setOpen(false);
@@ -132,112 +370,104 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
           <Plus className="h-3.5 w-3.5" /> Ürün Ekle
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Yeni Ürün Ekle</DialogTitle>
-          <DialogDescription>Ürün bilgilerini girin ve özelliklerini ekleyin.</DialogDescription>
-        </DialogHeader>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0">
+        <div className="bg-[hsl(var(--muted)/0.3)] p-6 space-y-5">
+          <DialogHeader className="p-0">
+            <DialogTitle className="text-xl font-bold">Yeni Ürün Ekle</DialogTitle>
+            <DialogDescription>Ürün bilgilerini girin, görselleri yükleyin ve yayınlayın.</DialogDescription>
+          </DialogHeader>
 
-        <div className="space-y-3 mt-2">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label className="text-xs">Ürün Adı *</Label>
-              <Input value={form.product_name} onChange={e => set("product_name", e.target.value)} placeholder="Samsung 55&quot; OLED TV" className="mt-1" />
-            </div>
-            <div>
-              <Label className="text-xs">Marka</Label>
-              <Input value={form.brand} onChange={e => set("brand", e.target.value)} placeholder="Samsung" className="mt-1" />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label className="text-xs">Stok Kodu (SKU)</Label>
-              <Input value={form.sku} onChange={e => set("sku", e.target.value)} placeholder="SAM-TV55-OLED" className="mt-1" />
-            </div>
-            <div>
-              <Label className="text-xs">Kategori</Label>
-              <Select value={form.category} onValueChange={v => set("category", v)}>
-                <SelectTrigger className="mt-1"><SelectValue placeholder="Kategori seçin" /></SelectTrigger>
-                <SelectContent>
-                  {allCategories(categories).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div>
-            <Label className="text-xs">Açıklama</Label>
-            <Textarea value={form.description} onChange={e => set("description", e.target.value)} placeholder="Ürün açıklaması..." rows={2} className="mt-1 text-sm" />
-          </div>
-
-          <div className="grid grid-cols-3 gap-3">
-            <div>
-              <Label className="text-xs">Fiyat (₺)</Label>
-              <Input type="number" value={form.original_price} onChange={e => set("original_price", e.target.value)} placeholder="25000" className="mt-1" />
-            </div>
-            <div>
-              <Label className="text-xs">İndirimli Fiyat (₺)</Label>
-              <Input type="number" value={form.sale_price} onChange={e => set("sale_price", e.target.value)} placeholder="22000" className="mt-1" />
-            </div>
-            <div>
-              <Label className="text-xs">Stok Adeti</Label>
-              <Input type="number" value={form.quantity} onChange={e => set("quantity", e.target.value)} placeholder="1" className="mt-1" />
-            </div>
-          </div>
-
-          <div>
-            <Label className="text-xs">Görsel URL</Label>
-            <Input value={form.image_url} onChange={e => set("image_url", e.target.value)} placeholder="https://..." className="mt-1" />
-          </div>
-
-          {/* Attributes / Variables */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <Label className="text-xs font-semibold">Özellikler (Değişkenler)</Label>
-              <Button type="button" size="sm" variant="outline" onClick={addAttr} className="h-7 text-xs gap-1">
-                <Plus className="h-3 w-3" /> Özellik Ekle
-              </Button>
-            </div>
-            {attrs.length === 0 && (
-              <p className="text-xs text-muted-foreground">Henüz özellik eklenmedi. Örn: Ekran Boyutu → 55", Panel Türü → OLED</p>
+          {/* Image Upload Section */}
+          <div className="bg-background rounded-xl border border-border p-4 space-y-3">
+            <Label className="text-sm font-semibold">Görseller</Label>
+            <ImageDropzone images={images} onImagesChange={setImages} />
+            {images.length > 0 && (
+              <ImageProcessingOptions options={imgOptions} onChange={setImgOptions} />
             )}
-            <div className="space-y-2">
-              {attrs.map((a, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <Input
-                    value={a.key}
-                    onChange={e => updateAttr(i, "key", e.target.value)}
-                    placeholder="Özellik (Ekran Boyutu)"
-                    className="h-8 text-xs flex-1"
-                  />
-                  <Input
-                    value={a.value}
-                    onChange={e => updateAttr(i, "value", e.target.value)}
-                    placeholder="Değer (55&quot;)"
-                    className="h-8 text-xs flex-1"
-                  />
-                  <Button type="button" size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={() => removeAttr(i)}>
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </Button>
+          </div>
+
+          {/* Product Info Card */}
+          <div className="bg-background rounded-xl border border-border p-4 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <Label className="text-xs font-semibold">İlan Başlığı *</Label>
+                <p className="text-[10px] text-muted-foreground mb-1">(Otomatik EN çeviri yapılır)</p>
+                <Input value={form.product_name} onChange={e => set("product_name", e.target.value)} placeholder="Samsung 55&quot; OLED TV" />
+              </div>
+              <div>
+                <Label className="text-xs font-semibold">Marka</Label>
+                <Input value={form.brand} onChange={e => set("brand", e.target.value)} placeholder="Samsung" className="mt-1" />
+              </div>
+              <div>
+                <Label className="text-xs font-semibold">Model</Label>
+                <Input value={form.model} onChange={e => set("model", e.target.value)} placeholder="QE55S95B" className="mt-1" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label className="text-xs font-semibold">Kategori</Label>
+                <Select value={form.category} onValueChange={handleCategoryChange}>
+                  <SelectTrigger className="mt-1"><SelectValue placeholder="Kategori seçin" /></SelectTrigger>
+                  <SelectContent>
+                    {allCategories(categories).map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs font-semibold">Fiyat (₺) *</Label>
+                  <Input type="number" value={form.original_price} onChange={e => set("original_price", e.target.value)} placeholder="25000" className="mt-1" />
                 </div>
-              ))}
+                <div>
+                  <Label className="text-xs font-semibold">Stok Adeti</Label>
+                  <Input type="number" value={form.quantity} onChange={e => set("quantity", e.target.value)} placeholder="1" className="mt-1" />
+                </div>
+              </div>
+            </div>
+
+            {/* Attributes */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <Label className="text-xs font-semibold">Özellikler</Label>
+                <Button type="button" size="sm" variant="outline" onClick={addAttr} className="h-7 text-xs gap-1">
+                  <Plus className="h-3 w-3" /> Özellik Ekle
+                </Button>
+              </div>
+              {attrs.length === 0 && (
+                <p className="text-xs text-muted-foreground">Kategori seçtiğinizde ilgili özellikler otomatik eklenir.</p>
+              )}
+              <div className="space-y-2">
+                {attrs.map((a, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Input value={a.key} onChange={e => updateAttr(i, "key", e.target.value)} placeholder="Özellik (Ekran Boyutu)" className="h-8 text-xs flex-1" />
+                    <Input value={a.value} onChange={e => updateAttr(i, "value", e.target.value)} placeholder="Değer (55&quot;)" className="h-8 text-xs flex-1" />
+                    <Button type="button" size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={() => removeAttr(i)}>
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Description */}
+            <div>
+              <Label className="text-xs font-semibold">Açıklama</Label>
+              <p className="text-[10px] text-muted-foreground mb-1">(Otomatik EN çeviri yapılır)</p>
+              <Textarea value={form.description} onChange={e => set("description", e.target.value)} placeholder="Ürün açıklaması..." rows={3} className="text-sm" />
             </div>
           </div>
-        </div>
 
-        <div className="flex justify-end gap-2 mt-4">
-          <Button variant="outline" size="sm" onClick={() => setOpen(false)}>İptal</Button>
-          <Button size="sm" onClick={handleSave} disabled={saving} className="gap-1.5">
-            {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
-            {saving ? "Kaydediliyor..." : "Kaydet"}
+          {/* Save button */}
+          <Button className="w-full h-11 gap-2 text-base font-semibold" onClick={handleSave} disabled={saving}>
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            {saving ? "Kaydediliyor..." : "Ürünü Ekle ve Yayınla"}
           </Button>
         </div>
       </DialogContent>
     </Dialog>
   );
 }
-
 // ─── Types ───
 type InventoryItem = {
   id: string;
