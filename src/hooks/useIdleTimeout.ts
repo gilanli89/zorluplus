@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
-const IDLE_MS = 5 * 60 * 1000; // 5 minutes
+const IDLE_MS = 20 * 60 * 1000; // 20 minutes
 const COUNTDOWN_SEC = 10;
 
 export function useIdleTimeout(enabled = true) {
