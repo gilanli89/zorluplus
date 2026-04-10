@@ -12,7 +12,7 @@ import {
   Save, RefreshCw, X, Loader2, Plus, Trash2,
   Search, ImageIcon, Upload, Check, ChevronDown, ChevronUp,
   Filter, Package, AlertTriangle, Eye, EyeOff, CheckSquare, XSquare,
-  GripVertical, Star
+  Star
 } from "lucide-react";
 
 import {
