@@ -617,7 +617,7 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
           body: { texts: textsToTranslate, targetLang: "en" },
         }).then(({ data }) => {
           if (data?.translations) {
-            const updateData: any = {};
+            const updateData: Record<string, string> = {};
             if (form.product_name.trim()) updateData.title_en = data.translations[0];
             if (form.description.trim()) updateData.description_en = data.translations[form.product_name.trim() ? 1 : 0];
             if (Object.keys(updateData).length > 0) {
