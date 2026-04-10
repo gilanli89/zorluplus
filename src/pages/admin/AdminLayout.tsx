@@ -12,6 +12,8 @@ import { toast } from "sonner";
 import { validatePassword } from "@/lib/passwordValidation";
 import { logActivity } from "@/lib/activityLogger";
 import PasswordStrengthIndicator from "@/components/admin/PasswordStrengthIndicator";
+import { useIdleTimeout } from "@/hooks/useIdleTimeout";
+import IdleTimeoutWarning from "@/components/admin/IdleTimeoutWarning";
 
 import {
   Sidebar,
