@@ -2,49 +2,49 @@
 
 ## Sorun Analizi
 
-**Kök neden:** Sipariş ve servis talepleri tablolarının RLS politikaları `is_admin()` fonksiyonunu kullanıyor. Bu fonksiyon **sadece `admin_emails` tablosunu** kontrol ediyor, `user_roles` tablosunu dikkate almıyor.
+Admin panelindeki yavaşlığın birden fazla kaynağı var:
 
-- `admin@zorluplus.com` → `admin_emails` tablosunda VAR → veri görebiliyor ✓
-- `deniz@zorludigitalplaza.com` → `admin_emails` tablosunda YOK → veri göremiyor ✗
-- `halilkavaz@gmail.com` → `admin_emails` tablosunda VAR → veri görebilir ✓
-- `gilanli89@gmail.com` → `admin_emails` tablosunda VAR ama `user_roles`'da YOK
-- `info@zorludigitalplaza.com` → `admin_emails` tablosunda VAR ama `user_roles`'da YOK
+### 1. useAuth — Çift RPC çağrısı
+`useAuth.ts` hem `onAuthStateChange` hem de `getSession` içinde aynı iki RPC fonksiyonunu (`check_own_admin_status` + `is_super_admin`) çağırıyor. Bu, her sayfa yüklemesinde **4 ayrı veritabanı çağrısı** demek (olması gereken 2 yerine). Ayrıca bu çağrılarda timeout yok — RPC yavaş yanıt verirse sayfa sonsuza kadar "Yükleniyor..." durumunda kalıyor.
 
-**Etkilenen tablolar:** `orders`, `service_requests`, `leads`, `leave_requests`, `inventory` (yazma), `admin_emails` — hepsi `is_admin()` kullanıyor.
+### 2. React Query — staleTime ve timeout eksikliği
+Tüm admin sayfalarındaki `useQuery` çağrıları (Dashboard'da 6 adet, Orders, Service, Leads, Users, Activity Logs) hiçbirinde `staleTime` yok. Sekme değiştirip geri dönünce her seferinde tüm sorgular yeniden çalışıyor. Ayrıca hiçbirinde timeout yok — AdminInventory hariç.
+
+### 3. AdminUsers — Edge Function timeout'suz
+`callAdminUsers` fonksiyonu `fetch` kullanarak edge function çağırıyor ama `AbortController` ile timeout koruması yok.
 
 ## Çözüm Planı
 
-Mevcut `is_admin()` fonksiyonunu, `admin_emails` tablosuna **ek olarak** `user_roles` tablosunu da kontrol edecek şekilde güncelleyeceğiz. Bu sayede `check_own_admin_status()` fonksiyonuyla tutarlı hale gelecek.
+### Adım 1: useAuth'a timeout ve dedup ekleme
+- `getSession` bloğunu ana auth kontrol noktası olarak tutup, `onAuthStateChange` içindeki RPC çağrılarını sadece `SIGNED_IN` / `SIGNED_OUT` event'lerinde çalıştır (her token yenilemesinde değil)
+- Her iki RPC çağrısına 5 saniyelik `Promise.race` timeout ekle
+- Timeout durumunda `loading: false` olarak fallback yap
 
-### Adım 1: `is_admin` fonksiyonunu güncelle
+### Adım 2: Global React Query ayarları
+- `queryClient` default options'a `staleTime: 30_000` (30 saniye) ekle — bu sayede kısa sürede aynı veriler tekrar çekilmez
+- Tüm admin sorgularında veri çekme süresini sınırlamak için bir yardımcı `withTimeout` wrapper kullan (5 saniye)
 
-```sql
-CREATE OR REPLACE FUNCTION public.is_admin(check_email text)
-RETURNS boolean
-LANGUAGE plpgsql
-STABLE SECURITY DEFINER
-SET search_path TO 'public'
-AS $$
-BEGIN
-  IF auth.uid() IS NULL THEN
-    RETURN FALSE;
-  END IF;
-  RETURN EXISTS (
-    SELECT 1 FROM public.admin_emails ae
-    JOIN auth.users u ON u.email = ae.email
-    WHERE u.id = auth.uid() AND ae.email = check_email
-  ) OR EXISTS (
-    SELECT 1 FROM public.user_roles
-    WHERE user_id = auth.uid()
-      AND role IN ('super_admin', 'admin')
-  );
-END;
-$$;
+### Adım 3: Admin sayfalarına timeout ekleme
+- `AdminDashboard`, `AdminOrders`, `AdminService`, `AdminLeads`, `AdminActivityLogs` query fonksiyonlarına `withTimeout(promise, 5000)` wrapper'ı ekle
+- `AdminUsers` `callAdminUsers` fonksiyonuna `AbortController` ile 5 saniyelik timeout ekle
+
+### Adım 4: Loading state iyileştirmesi
+- Tüm admin sayfalarında timeout sonrası kullanıcıya "Veri yüklenemedi, tekrar deneyin" mesajı göster (sonsuz spinner yerine)
+
+### Teknik Detay
+
+```text
+Değişecek dosyalar:
+├── src/hooks/useAuth.ts          → Timeout + dedup
+├── src/main.tsx veya App.tsx     → QueryClient staleTime
+├── src/pages/admin/AdminDashboard.tsx  → withTimeout
+├── src/pages/admin/AdminOrders.tsx     → withTimeout  
+├── src/pages/admin/AdminService.tsx    → withTimeout
+├── src/pages/admin/AdminLeads.tsx      → withTimeout
+├── src/pages/admin/AdminActivityLogs.tsx → withTimeout
+├── src/pages/admin/AdminUsers.tsx      → AbortController timeout
+└── src/lib/adminQueryHelpers.ts  → Yeni: paylaşılan withTimeout util
 ```
 
-### Adım 2: `deniz@zorludigitalplaza.com`'u `admin_emails` tablosuna ekle
-
-Tutarlılık için bu e-postayı da `admin_emails` tablosuna ekleyeceğiz.
-
-Bu iki adım, hem `deniz@zorludigitalplaza.com` hem de gelecekte `user_roles` üzerinden admin/super_admin atanan tüm kullanıcıların verilere erişebilmesini sağlar. Mevcut RLS politikalarında başka değişiklik gerekmez.
+Mevcut AdminInventory'deki `withTimeout` pattern'i zaten doğru çalışıyor; aynı yaklaşım diğer tüm admin sayfalarına genelleştirilecek.
 
