@@ -9,7 +9,7 @@ import { formatPrice } from "@/lib/products";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
 import { useCart } from "@/contexts/CartContext";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { useRef, useState, useCallback } from "react";
 import BrandLogo from "@/components/BrandLogo";
 

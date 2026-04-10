@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { employees } from "@/data/employees";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { logActivity } from "@/lib/activityLogger";
 import { Eye, Check, X, CalendarDays, Clock, Users, AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
 import { PremiumIconInline } from "@/components/PremiumIcon";

@@ -19,7 +19,7 @@ import {
 import {
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter,
 } from "@/components/ui/dialog";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { UserPlus, Ban, Trash2, ShieldCheck, Loader2, KeyRound } from "lucide-react";
 import { PremiumIconInline } from "@/components/PremiumIcon";
 import { logActivity } from "@/lib/activityLogger";

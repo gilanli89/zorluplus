@@ -7,7 +7,7 @@ import { formatPrice } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { PremiumIconInline } from "@/components/PremiumIcon";
 
 interface Props {

@@ -8,7 +8,7 @@ import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { Database, RefreshCw, RotateCcw, Loader2, Clock, Package, ShoppingCart, Wrench } from "lucide-react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
