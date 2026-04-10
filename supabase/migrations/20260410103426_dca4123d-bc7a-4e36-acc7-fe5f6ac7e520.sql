@@ -1,0 +1,1 @@
+INSERT INTO public.admin_emails (email) VALUES ('test@zorluplus.com') ON CONFLICT DO NOTHING;
