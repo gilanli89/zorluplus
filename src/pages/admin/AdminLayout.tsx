@@ -47,6 +47,7 @@ export default function AdminLayout() {
   const { user, isAdmin, isSuperAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { isWarningVisible, countdown, resetTimer } = useIdleTimeout(!loading && !!user && isAdmin);
 
   // Self password change
   const [pwDialogOpen, setPwDialogOpen] = useState(false);
