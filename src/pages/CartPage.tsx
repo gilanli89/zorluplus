@@ -14,7 +14,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 import { useState, useMemo } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { BRAND } from "@/lib/constants";
 import { formatPrice } from "@/lib/products";
 

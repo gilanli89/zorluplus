@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { logActivity } from "@/lib/activityLogger";
 import { useState, useMemo, useCallback, useRef } from "react";
 import {

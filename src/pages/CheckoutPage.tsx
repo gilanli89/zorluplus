@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { z } from "zod";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 export default function CheckoutPage() {
   const { t } = useLanguage();

@@ -18,7 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProductTranslation } from "@/hooks/useProductTranslation";
 import { useCart } from "@/contexts/CartContext";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 const SPEC_LABELS: Record<string, { tr: string; en: string }> = {
   "Screen size": { tr: "Ekran Boyutu", en: "Screen Size" },

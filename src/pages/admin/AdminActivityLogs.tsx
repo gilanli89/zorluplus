@@ -12,7 +12,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ChevronLeft, ChevronRight, Activity, CalendarIcon, X, Download } from "lucide-react";
 import { PremiumIconInline } from "@/components/PremiumIcon";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
 const ENTITY_LABELS: Record<string, string> = {

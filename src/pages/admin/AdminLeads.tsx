@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { withTimeout } from "@/lib/adminQueryHelpers";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { logActivity } from "@/lib/activityLogger";
 import { format } from "date-fns";
 import { Constants } from "@/integrations/supabase/types";

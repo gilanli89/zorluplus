@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Logo from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 import { validatePassword } from "@/lib/passwordValidation";
 import { logActivity } from "@/lib/activityLogger";
 import PasswordStrengthIndicator from "@/components/admin/PasswordStrengthIndicator";

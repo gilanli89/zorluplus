@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import Logo from "@/components/Logo";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
