@@ -606,7 +606,7 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
         is_active: form.is_active,
         attributes: Object.keys(attributes).length > 0 ? attributes : {},
         price_updated_at: new Date().toISOString(),
-      } as any).eq("id", item.id).select(), 8000);
+      }).eq("id", item.id).select(), 8000);
 
       if (error) { toast.error("Güncellenemedi: " + error.message); return; }
 
