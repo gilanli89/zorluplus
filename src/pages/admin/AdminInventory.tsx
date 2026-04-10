@@ -343,7 +343,7 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
         supabase.functions.invoke("ai-translate", {
           body: { texts: textsToTranslate, targetLang: "en" },
         }).then(({ data }) => {
-          if (data?.translations) {
+          if (data?.translations && !data.fallback) {
             const updateData: Record<string, string> = {};
             if (form.product_name.trim()) updateData.title_en = data.translations[0];
             if (form.description.trim()) updateData.description_en = data.translations[form.product_name.trim() ? 1 : 0];
