@@ -1,7 +1,9 @@
 /**
- * Wraps a promise with a timeout. Rejects if the promise doesn't resolve within `ms` milliseconds.
+ * Wraps a Supabase query builder (or any PromiseLike/Promise) with a timeout.
+ * Supabase query builders are thenables, so we convert them to a real Promise first.
  */
-export function withTimeout<T>(promise: Promise<T>, ms = 5000): Promise<T> {
+export function withTimeout<T>(promiseOrThenable: PromiseLike<T>, ms = 5000): Promise<T> {
+  const promise = Promise.resolve(promiseOrThenable);
   return Promise.race([
     promise,
     new Promise<never>((_, reject) =>
