@@ -74,7 +74,14 @@ const AdminRoles = lazy(() => import("@/pages/admin/AdminRoles"));
 const AdminActivityLogs = lazy(() => import("@/pages/admin/AdminActivityLogs"));
 const AdminBackups = lazy(() => import("@/pages/admin/AdminBackups"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      retry: 1,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

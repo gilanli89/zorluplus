@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { withTimeout } from "@/lib/adminQueryHelpers";
 import { format, startOfDay, endOfDay } from "date-fns";
 import { tr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
@@ -76,7 +77,7 @@ export default function AdminActivityLogs() {
         query = query.lte("created_at", endOfDay(dateTo).toISOString());
       }
 
-      const { data, error, count } = await query;
+      const { data, error, count } = await withTimeout(query);
       if (error) throw error;
       return { logs: data || [], total: count || 0 };
     },

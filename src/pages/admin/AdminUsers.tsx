@@ -56,18 +56,29 @@ async function callAdminUsers(method: string, body?: unknown) {
   const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
   const url = `https://${projectId}.supabase.co/functions/v1/admin-users`;
 
-  const res = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${session.access_token}`,
-    },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-  const json = await res.json();
-  if (!res.ok) throw new Error(json.error || "Request failed");
-  return json;
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.access_token}`,
+      },
+      signal: controller.signal,
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    });
+
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || "Request failed");
+    return json;
+  } catch (e: any) {
+    if (e.name === "AbortError") throw new Error("İstek zaman aşımına uğradı (5s)");
+    throw e;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 export default function AdminUsers() {

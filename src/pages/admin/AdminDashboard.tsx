@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { withTimeout } from "@/lib/adminQueryHelpers";
 import { ShoppingCart, Package, Wrench, TrendingUp, LucideIcon } from "lucide-react";
 import { useCountUp } from "@/hooks/useCountUp";
 import { format } from "date-fns";
@@ -39,7 +40,7 @@ export default function AdminDashboard() {
   const { data: orderCount = 0 } = useQuery({
     queryKey: ["admin-orders-count"],
     queryFn: async () => {
-      const { count } = await supabase.from("orders").select("*", { count: "exact", head: true });
+      const { count } = await withTimeout(supabase.from("orders").select("*", { count: "exact", head: true }));
       return count ?? 0;
     },
   });
@@ -47,7 +48,7 @@ export default function AdminDashboard() {
   const { data: inventoryCount = 0 } = useQuery({
     queryKey: ["admin-inventory-count"],
     queryFn: async () => {
-      const { count } = await supabase.from("inventory").select("*", { count: "exact", head: true });
+      const { count } = await withTimeout(supabase.from("inventory").select("*", { count: "exact", head: true }));
       return count ?? 0;
     },
   });
@@ -55,7 +56,7 @@ export default function AdminDashboard() {
   const { data: serviceCount = 0 } = useQuery({
     queryKey: ["admin-service-count"],
     queryFn: async () => {
-      const { count } = await supabase.from("service_requests").select("*", { count: "exact", head: true });
+      const { count } = await withTimeout(supabase.from("service_requests").select("*", { count: "exact", head: true }));
       return count ?? 0;
     },
   });
@@ -63,7 +64,7 @@ export default function AdminDashboard() {
   const { data: lowStockCount = 0 } = useQuery({
     queryKey: ["admin-lowstock-count"],
     queryFn: async () => {
-      const { data } = await supabase.from("inventory").select("id").lte("quantity", 5).eq("is_active", true);
+      const { data } = await withTimeout(supabase.from("inventory").select("id").lte("quantity", 5).eq("is_active", true));
       return data?.length ?? 0;
     },
   });
@@ -71,7 +72,7 @@ export default function AdminDashboard() {
   const { data: recentOrders = [] } = useQuery({
     queryKey: ["admin-recent-orders"],
     queryFn: async () => {
-      const { data } = await supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(5);
+      const { data } = await withTimeout(supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(5));
       return data ?? [];
     },
   });
@@ -79,7 +80,7 @@ export default function AdminDashboard() {
   const { data: recentServices = [] } = useQuery({
     queryKey: ["admin-recent-services"],
     queryFn: async () => {
-      const { data } = await supabase.from("service_requests").select("*").order("created_at", { ascending: false }).limit(5);
+      const { data } = await withTimeout(supabase.from("service_requests").select("*").order("created_at", { ascending: false }).limit(5));
       return data ?? [];
     },
   });
