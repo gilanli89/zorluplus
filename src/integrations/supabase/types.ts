@@ -72,16 +72,20 @@ export type Database = {
           category: string | null
           created_at: string
           description: string | null
+          description_en: string | null
           id: string
           image_url: string | null
+          images: Json | null
           is_active: boolean
           min_quantity: number
+          model: string | null
           original_price: number | null
           price_updated_at: string | null
           product_name: string
           quantity: number
           sale_price: number | null
           sku: string | null
+          title_en: string | null
           unit_price: number | null
           updated_at: string
         }
@@ -91,16 +95,20 @@ export type Database = {
           category?: string | null
           created_at?: string
           description?: string | null
+          description_en?: string | null
           id?: string
           image_url?: string | null
+          images?: Json | null
           is_active?: boolean
           min_quantity?: number
+          model?: string | null
           original_price?: number | null
           price_updated_at?: string | null
           product_name: string
           quantity?: number
           sale_price?: number | null
           sku?: string | null
+          title_en?: string | null
           unit_price?: number | null
           updated_at?: string
         }
@@ -110,16 +118,20 @@ export type Database = {
           category?: string | null
           created_at?: string
           description?: string | null
+          description_en?: string | null
           id?: string
           image_url?: string | null
+          images?: Json | null
           is_active?: boolean
           min_quantity?: number
+          model?: string | null
           original_price?: number | null
           price_updated_at?: string | null
           product_name?: string
           quantity?: number
           sale_price?: number | null
           sku?: string | null
+          title_en?: string | null
           unit_price?: number | null
           updated_at?: string
         }
@@ -373,14 +385,18 @@ export type Database = {
           brand: string | null
           category: string | null
           description: string | null
+          description_en: string | null
           id: string | null
           image_url: string | null
+          images: Json | null
           is_active: boolean | null
+          model: string | null
           original_price: number | null
           product_name: string | null
           quantity: number | null
           sale_price: number | null
           sku: string | null
+          title_en: string | null
           updated_at: string | null
         }
         Insert: {
@@ -388,14 +404,18 @@ export type Database = {
           brand?: string | null
           category?: string | null
           description?: string | null
+          description_en?: string | null
           id?: string | null
           image_url?: string | null
+          images?: Json | null
           is_active?: boolean | null
+          model?: string | null
           original_price?: number | null
           product_name?: string | null
           quantity?: number | null
           sale_price?: number | null
           sku?: string | null
+          title_en?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -403,14 +423,18 @@ export type Database = {
           brand?: string | null
           category?: string | null
           description?: string | null
+          description_en?: string | null
           id?: string | null
           image_url?: string | null
+          images?: Json | null
           is_active?: boolean | null
+          model?: string | null
           original_price?: number | null
           product_name?: string | null
           quantity?: number | null
           sale_price?: number | null
           sku?: string | null
+          title_en?: string | null
           updated_at?: string | null
         }
         Relationships: []
