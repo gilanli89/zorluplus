@@ -59,17 +59,8 @@ export default function AdminLayout() {
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) {
       navigate("/admin/giris", { replace: true });
-      return;
     }
-    // Re-verify session on every route change (prevents back-button bypass)
-    if (!loading && user && isAdmin) {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (!session) {
-          navigate("/admin/giris", { replace: true });
-        }
-      });
-    }
-  }, [user, isAdmin, loading, navigate, location.pathname]);
+  }, [user, isAdmin, loading, navigate]);
 
   const translateAuthError = (msg: string): string => {
     const map: Record<string, string> = {
