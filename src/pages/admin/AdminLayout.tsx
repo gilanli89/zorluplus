@@ -71,6 +71,19 @@ export default function AdminLayout() {
     }
   }, [user, isAdmin, loading, navigate, location.pathname]);
 
+  const translateAuthError = (msg: string): string => {
+    const map: Record<string, string> = {
+      "New password should be different from the old password": "Yeni şifre mevcut şifreden farklı olmalıdır",
+      "Password should be at least 6 characters": "Şifre en az 6 karakter olmalıdır",
+      "Auth session missing": "Oturum süresi dolmuş, tekrar giriş yapın",
+      "Invalid login credentials": "Mevcut şifre yanlış",
+    };
+    for (const [eng, tr] of Object.entries(map)) {
+      if (msg.toLowerCase().includes(eng.toLowerCase())) return tr;
+    }
+    return "Şifre değiştirme sırasında bir hata oluştu. Lütfen tekrar deneyin.";
+  };
+
   const handleChangePassword = async () => {
     if (newPw !== newPwConfirm) {
       toast.error("Yeni şifreler eşleşmiyor");
@@ -83,18 +96,30 @@ export default function AdminLayout() {
     }
     try {
       setChangingPw(true);
-      // Verify current password by re-signing in
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: user!.email!,
-        password: currentPw,
-      });
-      if (signInError) {
-        toast.error("Mevcut şifre yanlış");
+      // Verify current password
+      try {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: user!.email!,
+          password: currentPw,
+        });
+        if (signInError) {
+          toast.error("Mevcut şifre yanlış", { duration: Infinity, closeButton: true });
+          return;
+        }
+      } catch {
+        // Ensure session is still valid after failed verification
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          toast.error("Oturum süresi dolmuş, tekrar giriş yapın", { duration: Infinity, closeButton: true });
+          navigate("/admin/giris", { replace: true });
+          return;
+        }
+        toast.error("Mevcut şifre doğrulanamadı. Lütfen tekrar deneyin.", { duration: Infinity, closeButton: true });
         return;
       }
       const { error } = await supabase.auth.updateUser({ password: newPw });
       if (error) {
-        toast.error(error.message);
+        toast.error(translateAuthError(error.message), { duration: Infinity, closeButton: true });
         return;
       }
       toast.success("Şifreniz başarıyla değiştirildi");
@@ -104,7 +129,7 @@ export default function AdminLayout() {
       setNewPw("");
       setNewPwConfirm("");
     } catch (e: any) {
-      toast.error(e.message);
+      toast.error(translateAuthError(e.message || ""), { duration: Infinity, closeButton: true });
     } finally {
       setChangingPw(false);
     }
