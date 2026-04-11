@@ -1,28 +1,25 @@
 
 
-## Problem
-Idle timeout sonrası `supabase.auth.signOut()` çağrılıyor ancak tarayıcıda `navigate("/admin/giris")` kullanılıyor. Kullanıcı browser back butonu ile önceki admin sayfasına dönebiliyor ve localStorage'daki eski session token'ı ile oturuma devam edebiliyor.
+## Problem Analizi
 
-## Root Cause
-- `navigate()` tarayıcı geçmişine yeni kayıt ekler, back ile geri dönülebilir
-- `signOut()` async olduğundan, session temizlenmeden sayfa geçişi olabilir
-- AdminLayout sadece ilk yüklemede auth kontrolü yapıyor, back ile gelince mevcut state ile render edebilir
+Şifre değiştirme akışında iki kritik sorun var:
 
-## Plan
+1. **Hata mesajları İngilizce**: `supabase.auth.updateUser()` hata döndüğünde ham Supabase mesajı gösteriliyor (örn. "New password should be different from the old password", "Password should be at least 6 characters"). `catch` bloğu da aynı şekilde ham `e.message` gösteriyor.
 
-### 1. IdleTimeoutWarning - `navigate` yerine `replace` kullan
-- Timeout logout sonrası `navigate("/admin/giris", { replace: true })` kullanarak browser history'den admin sayfalarını temizle
-- "Şimdi Çıkış Yap" butonunda da aynı şekilde `replace: true`
+2. **Mevcut şifre doğrulama yöntemi session bozuyor**: Mevcut şifre doğrulamak için `signInWithPassword` çağrılıyor. Bu, auth state change tetikliyor ve `useAuth` hook'undaki listener devreye giriyor. Eğer bir hata olursa session tutarsız hale gelebilir.
 
-### 2. AdminLayout - Her route değişiminde session doğrulama
-- `useEffect` içinde `location.pathname` değiştiğinde aktif session'ı `supabase.auth.getSession()` ile tekrar kontrol et
-- Session yoksa veya geçersizse `navigate("/admin/giris", { replace: true })` ile yönlendir
-- Bu sayede back butonu ile gelinen sayfalarda da oturum doğrulanır
+## Çözüm Planı
 
-### 3. AdminLogin - Mevcut session'ı temizle
-- Login sayfası mount olduğunda `supabase.auth.getSession()` kontrol et
-- Eğer aktif session varsa ve admin değilse, `signOut()` çağır (eski/geçersiz session temizliği)
-- Login sayfasına `replace` ile yönlendirme yaparak back butonuyla admin paneline dönüşü engelle
+### 1. AdminLayout.tsx - `handleChangePassword` fonksiyonunu düzelt
 
-**Dosyalar:** `IdleTimeoutWarning.tsx`, `AdminLayout.tsx`, `AdminLogin.tsx`
+- Supabase'den gelen İngilizce hata mesajlarını Türkçe karşılıklarına çeviren bir `translateAuthError` yardımcı fonksiyonu ekle
+- Yaygın hatalar:
+  - "New password should be different from the old password" → "Yeni şifre mevcut şifreden farklı olmalıdır"
+  - "Password should be at least 6 characters" → "Şifre en az 6 karakter olmalıdır"
+  - "Auth session missing" → "Oturum süresi dolmuş, tekrar giriş yapın"
+  - Bilinmeyen hatalar → "Şifre değiştirme sırasında bir hata oluştu. Lütfen tekrar deneyin."
+- `catch` bloğundaki `e.message` yerine de aynı çeviri fonksiyonunu kullan
+- `signInWithPassword` ile mevcut şifre doğrulama adımında hata olursa session'ın bozulmaması için try/catch ile sarmalayıp, hata durumunda mevcut session'ı korumak için `getSession()` kontrolü ekle
+
+**Dosya:** `src/pages/admin/AdminLayout.tsx`
 
