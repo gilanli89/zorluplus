@@ -96,27 +96,42 @@ export default function AdminLayout() {
     }
     try {
       setChangingPw(true);
-      // Verify current password
-      try {
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email: user!.email!,
-          password: currentPw,
-        });
-        if (signInError) {
-          toast.error("Mevcut şifre yanlış", { duration: Infinity, closeButton: true });
-          return;
-        }
-      } catch {
-        // Ensure session is still valid after failed verification
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          toast.error("Oturum süresi dolmuş, tekrar giriş yapın", { duration: Infinity, closeButton: true });
-          navigate("/admin/giris", { replace: true });
-          return;
-        }
-        toast.error("Mevcut şifre doğrulanamadı. Lütfen tekrar deneyin.", { duration: Infinity, closeButton: true });
+      
+      // First verify current password using reauthentication (no session change)
+      const { error: reauthError } = await supabase.rpc('check_own_admin_status');
+      if (reauthError) {
+        toast.error("Oturum süresi dolmuş, tekrar giriş yapın", { duration: Infinity, closeButton: true });
+        navigate("/admin/giris", { replace: true });
         return;
       }
+
+      // Verify current password by attempting a sign-in in a separate flow
+      // We use fetch directly to avoid triggering onAuthStateChange
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      
+      const verifyRes = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': supabaseKey,
+        },
+        body: JSON.stringify({ email: user!.email!, password: currentPw }),
+      });
+      
+      if (!verifyRes.ok) {
+        const errBody = await verifyRes.json().catch(() => ({}));
+        if (verifyRes.status === 400 || verifyRes.status === 401) {
+          toast.error("Mevcut şifre yanlış", { duration: Infinity, closeButton: true });
+        } else if (verifyRes.status === 429) {
+          toast.error("Çok fazla deneme yaptınız. Lütfen birkaç dakika bekleyip tekrar deneyin.", { duration: Infinity, closeButton: true });
+        } else {
+          toast.error(translateAuthError(errBody?.error_description || errBody?.msg || ""), { duration: Infinity, closeButton: true });
+        }
+        return;
+      }
+
+      // Now update password using existing session
       const { error } = await supabase.auth.updateUser({ password: newPw });
       if (error) {
         toast.error(translateAuthError(error.message), { duration: Infinity, closeButton: true });
@@ -129,7 +144,11 @@ export default function AdminLayout() {
       setNewPw("");
       setNewPwConfirm("");
     } catch (e: any) {
-      toast.error(translateAuthError(e.message || ""), { duration: Infinity, closeButton: true });
+      if (e.message === "Failed to fetch") {
+        toast.error("Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edip tekrar deneyin.", { duration: Infinity, closeButton: true });
+      } else {
+        toast.error(translateAuthError(e.message || ""), { duration: Infinity, closeButton: true });
+      }
     } finally {
       setChangingPw(false);
     }
