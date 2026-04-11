@@ -51,13 +51,12 @@ const ROLE_COLORS: Record<string, string> = {
 
 async function callAdminUsers(method: string, body?: unknown) {
   const { data: { session } } = await supabase.auth.getSession();
-  if (!session) throw new Error("No session");
+  if (!session) throw new Error("Oturum bulunamadı");
 
-  const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-  const url = `https://${projectId}.supabase.co/functions/v1/admin-users`;
+  const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users`;
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
   try {
     const res = await fetch(url, {
@@ -65,16 +64,22 @@ async function callAdminUsers(method: string, body?: unknown) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${session.access_token}`,
+        apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
       },
       signal: controller.signal,
       ...(body ? { body: JSON.stringify(body) } : {}),
     });
 
-    const json = await res.json();
-    if (!res.ok) throw new Error(json.error || "Request failed");
+    const text = await res.text();
+    const json = text ? JSON.parse(text) : {};
+
+    if (!res.ok) throw new Error(json.error || "İstek başarısız oldu");
     return json;
   } catch (e: any) {
-    if (e.name === "AbortError") throw new Error("İstek zaman aşımına uğradı (5s)");
+    if (e.name === "AbortError") throw new Error("İstek zaman aşımına uğradı (10sn)");
+    if (e.message === "Failed to fetch") {
+      throw new Error("Sunucuya bağlanılamadı. Ağ bağlantınızı veya tarayıcı engelleyicilerini kontrol edin.");
+    }
     throw e;
   } finally {
     clearTimeout(timeoutId);
