@@ -17,8 +17,14 @@ export default function AdminLogin() {
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
-        const { data: isAdmin } = await supabase.rpc("check_own_admin_status");
-        if (!isAdmin) {
+        const { data: isAdmin, error } = await supabase.rpc("check_own_admin_status");
+        if (error) {
+          console.error("Admin check error on mount:", error);
+          return; // Don't sign out on RPC/network failure
+        }
+        if (isAdmin === true) {
+          navigate("/admin", { replace: true });
+        } else if (isAdmin === false) {
           await supabase.auth.signOut();
         }
       }
@@ -35,8 +41,11 @@ export default function AdminLogin() {
       toast.error("E-posta veya şifre hatalı");
     } else {
       // Verify admin status
-      const { data } = await supabase.rpc("check_own_admin_status");
-      if (data) {
+      const { data, error: rpcError } = await supabase.rpc("check_own_admin_status");
+      if (rpcError) {
+        console.error("Admin status RPC error:", rpcError);
+        toast.error("Yetki kontrolü yapılamadı. Lütfen tekrar deneyin.");
+      } else if (data) {
         navigate("/admin");
       } else {
         await supabase.auth.signOut();
