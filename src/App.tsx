@@ -50,11 +50,6 @@ const BlogPage = lazy(() => import("@/pages/BlogPage"));
 const BlogPostPage = lazy(() => import("@/pages/BlogPostPage"));
 const WPPageDetail = lazy(() => import("@/pages/WPPageDetail"));
 
-// Content pages
-const ContentPages = lazy(() => import("@/pages/ContentPages").then(m => ({
-  default: () => null // placeholder, we import individually below
-})));
-
 import {
   HakkimizdaPage, KunyePage, EkibimizPage, DestekPage,
   KullanimKosullariPage, IadeKosullariPage, GizlilikPolitikasiPage,
