@@ -10,6 +10,8 @@ import Layout from "@/components/layout/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
 import { lazy, Suspense } from "react";
 import PageLoader from "@/components/PageLoader";
+import { COMING_SOON } from "@/lib/featureFlags";
+import ComingSoonPage from "@/pages/ComingSoonPage";
 
 // Eager load: HomePage (above the fold)
 import HomePage from "@/pages/HomePage";
