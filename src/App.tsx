@@ -10,6 +10,8 @@ import Layout from "@/components/layout/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
 import { lazy, Suspense } from "react";
 import PageLoader from "@/components/PageLoader";
+import { COMING_SOON } from "@/lib/featureFlags";
+import ComingSoonPage from "@/pages/ComingSoonPage";
 
 // Eager load: HomePage (above the fold)
 import HomePage from "@/pages/HomePage";
@@ -96,57 +98,6 @@ const App = () => (
           <ScrollToTop />
           <Suspense fallback={<PageLoader />}>
             <Routes>
-              <Route element={<Layout />}>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/kategoriler" element={<CategoriesPage />} />
-                <Route path="/kategori/:categorySlug" element={<CategoryPage />} />
-                <Route path="/kategori/:categorySlug/:subSlug" element={<CategoryPage />} />
-                <Route path="/urun/:slug" element={<ProductPage />} />
-                <Route path="/landing/:categorySlug" element={<CategoryLandingPage />} />
-                <Route path="/televizyon" element={<TVLandingPage />} />
-                <Route path="/beyaz-esya" element={<BeyazEsyaLandingPage />} />
-                <Route path="/ankastre" element={<AnkastreLandingPage />} />
-                <Route path="/klima" element={<KlimaLandingPage />} />
-                <Route path="/camasir-makinesi" element={<CamasirMakinesiLandingPage />} />
-                <Route path="/bulasik-makinesi" element={<BulasikMakinesiLandingPage />} />
-                <Route path="/kurutma-makinesi" element={<KurutmaMakinesiLandingPage />} />
-                <Route path="/mikrodalga" element={<MikrodalgaLandingPage />} />
-                <Route path="/kahve-makinesi" element={<KahveMakinesiLandingPage />} />
-                <Route path="/ev-aletleri" element={<EvAletleriLandingPage />} />
-                <Route path="/airfryer" element={<AirfryerLandingPage />} />
-                <Route path="/firin" element={<FirinLandingPage />} />
-                <Route path="/televizyon-kanal-ayarlama" element={<TVKanalAyarlamaPage />} />
-                <Route path="/arama" element={<SearchPage />} />
-                <Route path="/e-katalog" element={<ECataloguePage />} />
-                <Route path="/subelerimiz" element={<BranchesPage />} />
-                <Route path="/iletisim" element={<ContactPage />} />
-                <Route path="/teklif-al" element={<QuotePage />} />
-                <Route path="/magaza" element={<Navigate to="/kategori/tv-goruntu/tv" replace />} />
-                <Route path="/hakkimizda" element={<HakkimizdaPage />} />
-                <Route path="/kunye" element={<KunyePage />} />
-                <Route path="/ekibimiz" element={<EkibimizPage />} />
-                <Route path="/destek" element={<DestekPage />} />
-                <Route path="/kullanim-kosullari" element={<KullanimKosullariPage />} />
-                <Route path="/iade-kosullari" element={<IadeKosullariPage />} />
-                <Route path="/gizlilik-politikasi" element={<GizlilikPolitikasiPage />} />
-                <Route path="/kvkk" element={<KvkkPage />} />
-                <Route path="/cerez-politikasi" element={<CerezPolitikasiPage />} />
-                <Route path="/mesafeli-satis-sozlesmesi" element={<MesafeliSatisSozlesmesiPage />} />
-                <Route path="/surdurulebilirlik" element={<SurdurulebilirlikPage />} />
-                <Route path="/b2b" element={<B2BPage />} />
-                <Route path="/siparis-takip" element={<SiparisTakipPage />} />
-                <Route path="/odeme-yontemleri" element={<OdemeYontemleriPage />} />
-                <Route path="/havale-ile-odeme" element={<HavaleOdemePage />} />
-                <Route path="/odeme" element={<CheckoutPage />} />
-                <Route path="/odeme/sonuc" element={<PaymentResultPage />} />
-                <Route path="/sepet" element={<CartPage />} />
-                <Route path="/blog" element={<BlogPage />} />
-                <Route path="/blog/:slug" element={<BlogPostPage />} />
-                <Route path="/sayfa/:slug" element={<WPPageDetail />} />
-                <Route path="/blog/kktc-televizyon-fiyatlari-2026" element={<KktcTelevizyon2026 />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-
               {/* Admin */}
               <Route path="/admin/giris" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminLayout />}>
@@ -161,6 +112,61 @@ const App = () => (
                 <Route path="aktivite-loglari" element={<AdminActivityLogs />} />
                 <Route path="yedekler" element={<AdminBackups />} />
               </Route>
+
+              {COMING_SOON ? (
+                <Route path="*" element={<ComingSoonPage />} />
+              ) : (
+                <Route element={<Layout />}>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/kategoriler" element={<CategoriesPage />} />
+                  <Route path="/kategori/:categorySlug" element={<CategoryPage />} />
+                  <Route path="/kategori/:categorySlug/:subSlug" element={<CategoryPage />} />
+                  <Route path="/urun/:slug" element={<ProductPage />} />
+                  <Route path="/landing/:categorySlug" element={<CategoryLandingPage />} />
+                  <Route path="/televizyon" element={<TVLandingPage />} />
+                  <Route path="/beyaz-esya" element={<BeyazEsyaLandingPage />} />
+                  <Route path="/ankastre" element={<AnkastreLandingPage />} />
+                  <Route path="/klima" element={<KlimaLandingPage />} />
+                  <Route path="/camasir-makinesi" element={<CamasirMakinesiLandingPage />} />
+                  <Route path="/bulasik-makinesi" element={<BulasikMakinesiLandingPage />} />
+                  <Route path="/kurutma-makinesi" element={<KurutmaMakinesiLandingPage />} />
+                  <Route path="/mikrodalga" element={<MikrodalgaLandingPage />} />
+                  <Route path="/kahve-makinesi" element={<KahveMakinesiLandingPage />} />
+                  <Route path="/ev-aletleri" element={<EvAletleriLandingPage />} />
+                  <Route path="/airfryer" element={<AirfryerLandingPage />} />
+                  <Route path="/firin" element={<FirinLandingPage />} />
+                  <Route path="/televizyon-kanal-ayarlama" element={<TVKanalAyarlamaPage />} />
+                  <Route path="/arama" element={<SearchPage />} />
+                  <Route path="/e-katalog" element={<ECataloguePage />} />
+                  <Route path="/subelerimiz" element={<BranchesPage />} />
+                  <Route path="/iletisim" element={<ContactPage />} />
+                  <Route path="/teklif-al" element={<QuotePage />} />
+                  <Route path="/magaza" element={<Navigate to="/kategori/tv-goruntu/tv" replace />} />
+                  <Route path="/hakkimizda" element={<HakkimizdaPage />} />
+                  <Route path="/kunye" element={<KunyePage />} />
+                  <Route path="/ekibimiz" element={<EkibimizPage />} />
+                  <Route path="/destek" element={<DestekPage />} />
+                  <Route path="/kullanim-kosullari" element={<KullanimKosullariPage />} />
+                  <Route path="/iade-kosullari" element={<IadeKosullariPage />} />
+                  <Route path="/gizlilik-politikasi" element={<GizlilikPolitikasiPage />} />
+                  <Route path="/kvkk" element={<KvkkPage />} />
+                  <Route path="/cerez-politikasi" element={<CerezPolitikasiPage />} />
+                  <Route path="/mesafeli-satis-sozlesmesi" element={<MesafeliSatisSozlesmesiPage />} />
+                  <Route path="/surdurulebilirlik" element={<SurdurulebilirlikPage />} />
+                  <Route path="/b2b" element={<B2BPage />} />
+                  <Route path="/siparis-takip" element={<SiparisTakipPage />} />
+                  <Route path="/odeme-yontemleri" element={<OdemeYontemleriPage />} />
+                  <Route path="/havale-ile-odeme" element={<HavaleOdemePage />} />
+                  <Route path="/odeme" element={<CheckoutPage />} />
+                  <Route path="/odeme/sonuc" element={<PaymentResultPage />} />
+                  <Route path="/sepet" element={<CartPage />} />
+                  <Route path="/blog" element={<BlogPage />} />
+                  <Route path="/blog/:slug" element={<BlogPostPage />} />
+                  <Route path="/sayfa/:slug" element={<WPPageDetail />} />
+                  <Route path="/blog/kktc-televizyon-fiyatlari-2026" element={<KktcTelevizyon2026 />} />
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+              )}
             </Routes>
           </Suspense>
         </AuthProvider>
