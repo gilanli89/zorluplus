@@ -99,9 +99,7 @@ const App = () => (
           <Suspense fallback={<PageLoader />}>
             <Routes>
               {COMING_SOON ? (
-                <Route element={<Layout />}>
-                  <Route path="*" element={<ComingSoonPage />} />
-                </Route>
+                <Route path="*" element={<ComingSoonPage />} />
               ) : (
                 <Route element={<Layout />}>
                   <Route path="/" element={<HomePage />} />
