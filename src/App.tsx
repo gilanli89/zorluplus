@@ -98,6 +98,21 @@ const App = () => (
           <ScrollToTop />
           <Suspense fallback={<PageLoader />}>
             <Routes>
+              {/* Admin */}
+              <Route path="/admin/giris" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="siparisler" element={<AdminOrders />} />
+                <Route path="stok" element={<AdminInventory />} />
+                <Route path="talepler" element={<AdminLeads />} />
+                <Route path="servis" element={<AdminService />} />
+                <Route path="izinler" element={<AdminLeaveRequests />} />
+                <Route path="kullanicilar" element={<AdminUsers />} />
+                <Route path="roller" element={<AdminRoles />} />
+                <Route path="aktivite-loglari" element={<AdminActivityLogs />} />
+                <Route path="yedekler" element={<AdminBackups />} />
+              </Route>
+
               {COMING_SOON ? (
                 <Route path="*" element={<ComingSoonPage />} />
               ) : (
@@ -152,21 +167,6 @@ const App = () => (
                   <Route path="*" element={<NotFound />} />
                 </Route>
               )}
-
-              {/* Admin */}
-              <Route path="/admin/giris" element={<AdminLogin />} />
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<AdminDashboard />} />
-                <Route path="siparisler" element={<AdminOrders />} />
-                <Route path="stok" element={<AdminInventory />} />
-                <Route path="talepler" element={<AdminLeads />} />
-                <Route path="servis" element={<AdminService />} />
-                <Route path="izinler" element={<AdminLeaveRequests />} />
-                <Route path="kullanicilar" element={<AdminUsers />} />
-                <Route path="roller" element={<AdminRoles />} />
-                <Route path="aktivite-loglari" element={<AdminActivityLogs />} />
-                <Route path="yedekler" element={<AdminBackups />} />
-              </Route>
             </Routes>
           </Suspense>
         </AuthProvider>
