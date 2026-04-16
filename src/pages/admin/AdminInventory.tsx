@@ -1127,7 +1127,8 @@ export default function AdminInventory() {
         const q = search.toLowerCase();
         const match = item.product_name.toLowerCase().includes(q) ||
           (item.sku || "").toLowerCase().includes(q) ||
-          (item.brand || "").toLowerCase().includes(q);
+          (item.brand || "").toLowerCase().includes(q) ||
+          (item.model || "").toLowerCase().includes(q);
         if (!match) return false;
       }
       // Category
