@@ -40,7 +40,7 @@ function dbToProduct(inv: Record<string, unknown>): Product {
   return {
     id: sku || String(inv.id),
     sku,
-    slug: `${slugify(sku)}-${slugify(name)}`,
+    slug: sku ? `${slugify(sku)}-${slugify(name)}` : slugify(name),
     name,
     brand,
     category,
@@ -71,11 +71,12 @@ async function fetchProductsFromDB(): Promise<Product[]> {
   }
 
   const products: Product[] = [];
-  const seenSkus = new Set<string>();
+  const seenKeys = new Set<string>();
   for (const inv of inventory ?? []) {
-    if (!inv.sku || !inv.is_active) continue;
-    if (seenSkus.has(inv.sku as string)) continue; // deduplicate by SKU
-    seenSkus.add(inv.sku as string);
+    if (!inv.is_active) continue;
+    const dedupeKey = (inv.sku as string) || (inv.id as string);
+    if (seenKeys.has(dedupeKey)) continue; // deduplicate by SKU or ID
+    seenKeys.add(dedupeKey);
     const p = dbToProduct(inv as Record<string, unknown>);
     if (p.price > 0) products.push(p);
   }
