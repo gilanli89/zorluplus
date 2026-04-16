@@ -120,7 +120,7 @@ export default function ProductPage() {
             <BrandLogo brand={product.brand} size="lg" />
             <h1 className="heading-2 text-foreground">{translateProduct(product.name)}</h1>
             {product.sku && (
-              <p className="text-xs font-mono text-muted-foreground">{t("product.modelNo") || "Model No"}: {product.sku}</p>
+              <p className="text-xs font-mono text-muted-foreground">Model: {product.sku}</p>
             )}
             {product.price > 0 ? (
               <div className="flex items-center gap-3 flex-wrap">
