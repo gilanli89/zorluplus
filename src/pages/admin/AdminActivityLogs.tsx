@@ -24,6 +24,7 @@ const ENTITY_LABELS: Record<string, string> = {
   lead: "Talep",
   leave_request: "İzin",
   self: "Hesap",
+  session: "Oturum",
 };
 
 const ACTION_LABELS: Record<string, string> = {
@@ -44,6 +45,7 @@ const ACTION_LABELS: Record<string, string> = {
   leave_approve: "İzin onaylandı",
   leave_reject: "İzin reddedildi",
   self_password_change: "Şifre değiştirildi",
+  idle_timeout_logout: "Hareketsizlik nedeniyle oturum kapatıldı",
 };
 
 const PAGE_SIZE = 25;
