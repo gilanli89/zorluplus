@@ -251,7 +251,6 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
     product_name: "",
-    sku: "",
     brand: "",
     model: "",
     category: "",
@@ -284,7 +283,7 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
   };
 
   const reset = () => {
-    setForm({ product_name: "", sku: "", brand: "", model: "", category: "", description: "", original_price: "", quantity: "1" });
+    setForm({ product_name: "", brand: "", model: "", category: "", description: "", original_price: "", quantity: "1" });
     setImages([]);
     setImgOptions({ removeBg: false, autoScale: false, center: false });
     setAttrs([]);
@@ -324,7 +323,7 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
 
       const { data: insertedRows, error } = await withTimeout(supabase.from("inventory").insert({
         product_name: form.product_name.trim(),
-        sku: form.sku.trim() || null,
+        sku: form.model.trim() || null,
         brand: form.brand.trim() || null,
         model: form.model.trim() || null,
         category: form.category.trim() || null,
@@ -398,10 +397,6 @@ function AddProductDialog({ onAdded, categories = [] }: { onAdded: () => void; c
                 <Label className="text-xs font-semibold">İlan Başlığı *</Label>
                 <p className="text-[10px] text-muted-foreground mb-1">(Otomatik EN çeviri yapılır)</p>
                 <Input value={form.product_name} onChange={e => set("product_name", e.target.value)} placeholder="Samsung 55&quot; OLED TV" />
-              </div>
-              <div className="col-span-2">
-                <Label className="text-xs font-semibold">Ürün Kodu</Label>
-                <Input value={form.sku} onChange={e => set("sku", e.target.value)} placeholder="ZP-12345" className="mt-1" />
               </div>
               <div>
                 <Label className="text-xs font-semibold">Marka</Label>
@@ -600,6 +595,7 @@ function EditProductDialog({ item, open, onOpenChange, onSaved, categories = [] 
 
       const { error } = await withTimeout(supabase.from("inventory").update({
         product_name: form.product_name.trim(),
+        sku: form.model.trim() || null,
         brand: form.brand.trim() || null,
         model: form.model.trim() || null,
         category: form.category.trim() || null,
