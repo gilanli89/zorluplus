@@ -50,8 +50,13 @@ const ROLE_COLORS: Record<string, string> = {
 };
 
 async function callAdminUsers(method: string, body?: unknown) {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) throw new Error("Oturum bulunamadı");
+  // Always get a fresh token — getSession() can return an expired cached token
+  let session = (await supabase.auth.getSession()).data.session;
+  if (session && session.expires_at && session.expires_at * 1000 < Date.now() + 10000) {
+    const { data } = await supabase.auth.refreshSession();
+    session = data.session;
+  }
+  if (!session) throw new Error("Oturum bulunamadı. Lütfen tekrar giriş yapın.");
 
   const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-users`;
 
@@ -71,9 +76,10 @@ async function callAdminUsers(method: string, body?: unknown) {
     });
 
     const text = await res.text();
-    const json = text ? JSON.parse(text) : {};
+    let json: Record<string, any> = {};
+    try { json = text ? JSON.parse(text) : {}; } catch { /* non-JSON response */ }
 
-    if (!res.ok) throw new Error(json.error || "İstek başarısız oldu");
+    if (!res.ok) throw new Error(json.error || `Sunucu hatası (${res.status})`);
     return json;
   } catch (e: any) {
     if (e.name === "AbortError") throw new Error("İstek zaman aşımına uğradı (10sn)");

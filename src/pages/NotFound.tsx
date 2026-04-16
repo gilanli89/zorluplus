@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Home, Grid3X3 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PremiumIconInline } from "@/components/PremiumIcon";
+import SEOHead from "@/components/common/SEOHead";
 
 const NotFound = () => {
   const { t } = useLanguage();
@@ -25,6 +26,13 @@ const NotFound = () => {
   }, []);
 
   return (
+    <>
+    <SEOHead
+      title="404 - Sayfa Bulunamadı"
+      description="Aradığınız sayfa mevcut değil veya taşınmış olabilir."
+      canonical="https://zorluplus.com/404"
+      noindex={true}
+    />
     <div className="min-h-[80vh] flex items-center justify-center relative overflow-hidden">
       {/* Animated background particles */}
       <div className="absolute inset-0 pointer-events-none">
@@ -112,6 +120,7 @@ const NotFound = () => {
         </motion.p>
       </div>
     </div>
+    </>
   );
 };
 

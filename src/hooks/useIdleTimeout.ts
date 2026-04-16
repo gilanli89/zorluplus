@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-const IDLE_MS = 20 * 60 * 1000; // 20 minutes
+const IDLE_MS = 4 * 60 * 60 * 1000; // 4 hours
+const MAX_SESSION_MS = 8 * 60 * 60 * 1000; // 8 hours hard limit
 const COUNTDOWN_SEC = 10;
 
 export function useIdleTimeout(enabled = true) {
@@ -31,6 +33,13 @@ export function useIdleTimeout(enabled = true) {
     setCountdown(COUNTDOWN_SEC);
     startIdleTimer();
   }, [clearAllTimers, startIdleTimer]);
+
+  // Hard max session limit — force logout after 8h regardless of activity
+  useEffect(() => {
+    if (!enabled) return;
+    const maxTimer = setTimeout(() => supabase.auth.signOut(), MAX_SESSION_MS);
+    return () => clearTimeout(maxTimer);
+  }, [enabled]);
 
   // Activity listeners
   useEffect(() => {

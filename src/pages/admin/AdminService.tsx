@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { withTimeout } from "@/lib/adminQueryHelpers";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +28,17 @@ const STATUS_COLORS: Record<ServiceStatus, string> = {
 
 export default function AdminService() {
   const qc = useQueryClient();
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("admin-service-sync")
+      .on("postgres_changes", { event: "*", schema: "public", table: "service_requests" }, () => {
+        qc.invalidateQueries({ queryKey: ["admin-service"] });
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [qc]);
+
   const { data: requests = [], isLoading } = useQuery({
     queryKey: ["admin-service"],
     queryFn: async () => {

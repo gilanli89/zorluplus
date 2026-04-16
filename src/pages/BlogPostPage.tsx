@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import DOMPurify from "dompurify";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { ArrowLeft, Calendar } from "lucide-react";
@@ -47,6 +48,8 @@ export default function BlogPostPage() {
 
   const image = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url || FALLBACK_IMAGES[slug || ""] || null;
   const cats = post._embedded?.["wp:term"]?.[0] || [];
+  const safeTitle = DOMPurify.sanitize(post.title.rendered, { ALLOWED_TAGS: [] });
+  const safeContent = DOMPurify.sanitize(post.content.rendered);
 
   return (
     <article className="container py-8 max-w-3xl">
@@ -79,7 +82,7 @@ export default function BlogPostPage() {
 
       <h1
         className="heading-1 text-foreground mb-6"
-        dangerouslySetInnerHTML={{ __html: post.title.rendered }}
+        dangerouslySetInnerHTML={{ __html: safeTitle }}
       />
 
       <div
@@ -92,7 +95,7 @@ export default function BlogPostPage() {
           [&_ul]:list-disc [&_ul]:pl-5
           [&_ol]:list-decimal [&_ol]:pl-5
           [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:pl-4 [&_blockquote]:italic"
-        dangerouslySetInnerHTML={{ __html: post.content.rendered }}
+        dangerouslySetInnerHTML={{ __html: safeContent }}
       />
     </article>
   );

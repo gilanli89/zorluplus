@@ -36,8 +36,11 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (!orderId) { setLoadingOrder(false); return; }
-    supabase.from("orders").select("total_amount").eq("order_number", orderId).single().then(({ data }) => {
+    supabase.from("orders").select("total_amount").eq("order_number", orderId).maybeSingle().then(({ data, error }) => {
+      if (error) console.error("Order fetch error:", error);
       if (data) setOrderAmount(data.total_amount);
+      setLoadingOrder(false);
+    }).catch(() => {
       setLoadingOrder(false);
     });
   }, [orderId]);
@@ -66,7 +69,17 @@ export default function CheckoutPage() {
       setErrors(fieldErrors);
       return;
     }
-    if (!orderId) { toast.error("Invalid order"); return; }
+    if (!orderId || orderAmount === null) { toast.error("Geçersiz sipariş. Lütfen sepetten tekrar deneyin."); return; }
+    // Validate expiry date is not in the past
+    const now = new Date();
+    const currentYear = now.getFullYear() % 100;
+    const currentMonth = now.getMonth() + 1;
+    const expY = parseInt(form.expYear, 10);
+    const expM = parseInt(form.expMonth, 10);
+    if (expY < currentYear || (expY === currentYear && expM < currentMonth)) {
+      setErrors(e => ({ ...e, expMonth: "Kartın son kullanma tarihi geçmiş", expYear: "" }));
+      return;
+    }
     setLoading(true);
     try {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -78,8 +91,7 @@ export default function CheckoutPage() {
       if (data?.error) throw new Error(data.error);
       setGatewayData(data);
     } catch (err: any) {
-      console.error("Payment initiation error:", err);
-      toast.error(err.message || "Unknown error");
+      toast.error("Ödeme başlatılamadı. Lütfen tekrar deneyin veya destek ile iletişime geçin.");
       setLoading(false);
     }
   };
@@ -134,7 +146,7 @@ export default function CheckoutPage() {
                 {errors.cvv && <p className="text-xs text-destructive mt-1">{errors.cvv}</p>}
               </div>
             </div>
-            <Button type="submit" className="w-full rounded-full gap-2" size="lg" disabled={loading || !orderId}>
+            <Button type="submit" className="w-full rounded-full gap-2" size="lg" disabled={loading || !orderId || loadingOrder || orderAmount === null}>
               {loading ? (<><PremiumIconInline icon={Loader2} size={16} className="animate-spin text-primary-foreground" /> {t("checkout.processing")}</>) : (<><PremiumIconInline icon={ShieldCheck} size={16} className="text-primary-foreground" /> {t("checkout.completePayment")}</>)}
             </Button>
           </form>

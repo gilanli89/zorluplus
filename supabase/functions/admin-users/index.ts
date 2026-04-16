@@ -34,14 +34,12 @@ async function verifySuperAdmin(req: Request) {
     { global: { headers: { Authorization: authHeader } } }
   );
 
-  const token = authHeader.replace("Bearer ", "");
-  const { data, error } = await anonClient.auth.getClaims(token);
-  if (error || !data?.claims) return null;
+  const { data: { user }, error } = await anonClient.auth.getUser();
+  if (error || !user) return null;
 
-  const userId = data.claims.sub as string;
   const { data: isAdmin } = await anonClient.rpc("check_own_admin_status");
   if (!isAdmin) return null;
-  return userId;
+  return user.id;
 }
 
 Deno.serve(async (req) => {
@@ -49,9 +47,14 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
-  const callerId = await verifySuperAdmin(req);
+  let callerId: string | null = null;
+  try {
+    callerId = await verifySuperAdmin(req);
+  } catch (e) {
+    return jsonResponse({ error: "Auth check failed: " + e.message }, 500);
+  }
   if (!callerId) {
-    return jsonResponse({ error: "Unauthorized – super_admin required" }, 403);
+    return jsonResponse({ error: "Bu işlem için yetkiniz yok" }, 403);
   }
 
   const serviceClient = createClient(

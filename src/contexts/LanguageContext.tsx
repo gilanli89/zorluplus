@@ -241,6 +241,10 @@ const translations: Record<string, Record<Lang, string>> = {
   "quote.sending": { tr: "Gönderiliyor...", en: "Sending..." },
   "quote.success": { tr: "Talebiniz alındı! En kısa sürede sizinle iletişime geçeceğiz.", en: "Your request has been received! We'll contact you soon." },
   "quote.error": { tr: "Lütfen adınızı ve telefon numaranızı girin.", en: "Please enter your name and phone number." },
+  "quote.errorName": { tr: "İsim en az 2 karakter olmalıdır", en: "Name must be at least 2 characters" },
+  "quote.errorPhone": { tr: "Geçerli bir telefon numarası giriniz", en: "Please enter a valid phone number" },
+  "quote.errorEmail": { tr: "Geçerli bir e-posta adresi giriniz", en: "Please enter a valid email address" },
+  "quote.submitError": { tr: "Gönderim başarısız. Lütfen tekrar deneyin.", en: "Submission failed. Please try again." },
 
   // E-Catalogue
   "ecatalogue.title": { tr: "E-Katalog", en: "E-Catalogue" },

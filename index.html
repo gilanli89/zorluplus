@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
   <head>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -18,9 +18,14 @@
     </script>
     <!-- /Yandex.Metrika counter -->
     <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://mc.yandex.ru" />
+    <link rel="dns-prefetch" href="https://mc.yandex.ru" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zorlu Digital Plaza | KKTC'nin #1 Elektronik & Beyaz Eşya Mağazası</title>
-    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
     <link rel="canonical" href="https://zorluplus.com/" />
     <meta name="description" content="KKTC'de Samsung, LG, Bosch yetkili bayi ve servis. Televizyon, beyaz eşya, klima, ankastre ve küçük ev aletlerinde en geniş ürün yelpazesi. Lefkoşa & Mağusa mağazaları.">
     <meta name="author" content="Zorlu Digital Plaza" />
@@ -32,12 +37,12 @@
     <meta property="og:locale" content="tr_TR" />
     <meta property="og:title" content="Zorlu Digital Plaza | KKTC'nin #1 Elektronik & Beyaz Eşya Mağazası">
     <meta property="og:description" content="KKTC'de Samsung, LG, Bosch yetkili bayi ve servis. Televizyon, beyaz eşya, klima, ankastre ve küçük ev aletlerinde en geniş ürün yelpazesi.">
-    <meta property="og:image" content="https://zorluplus.com/favicon.png">
+    <meta property="og:image" content="https://zorluplus.com/og-image.png">
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Zorlu Digital Plaza | KKTC'nin #1 Elektronik & Beyaz Eşya Mağazası">
     <meta name="twitter:description" content="KKTC'de Samsung, LG, Bosch yetkili bayi ve servis. Televizyon, beyaz eşya, klima, ankastre ve küçük ev aletlerinde en geniş ürün yelpazesi.">
-    <meta name="twitter:image" content="https://zorluplus.com/favicon.png">
+    <meta name="twitter:image" content="https://zorluplus.com/og-image.png">
 
     <!-- Structured Data: Organization + WebSite + SiteNavigationElement -->
     <script type="application/ld+json">
@@ -50,7 +55,7 @@
           "name": "Zorlu Digital Plaza",
           "alternateName": "ZorluPlus",
           "url": "https://zorluplus.com",
-          "logo": "https://zorluplus.com/favicon.png",
+          "logo": "https://zorluplus.com/og-image.png",
           "contactPoint": [
             {
               "@type": "ContactPoint",
@@ -119,9 +124,9 @@
     <!-- Yandex.Metrika noscript -->
     <noscript><div><img src="https://mc.yandex.ru/watch/106295459" style="position:absolute;left:-9999px;" alt="" /></div></noscript>
     <!-- Global loading screen -->
-    <div id="global-loader" style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,hsl(222,47%,6%),hsl(221,83%,15%));transition:opacity 0.5s ease">
+    <div id="global-loader" role="status" aria-label="Yükleniyor..." style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,hsl(222,47%,6%),hsl(221,83%,15%));transition:opacity 0.5s ease">
       <div style="text-align:center">
-        <div style="width:48px;height:48px;margin:0 auto 16px;border:3px solid rgba(59,130,246,0.2);border-top-color:rgb(59,130,246);border-radius:50%;animation:spin 1s linear infinite"></div>
+        <div aria-hidden="true" style="width:48px;height:48px;margin:0 auto 16px;border:3px solid rgba(59,130,246,0.2);border-top-color:rgb(59,130,246);border-radius:50%;animation:spin 1s linear infinite"></div>
         <p style="color:rgba(255,255,255,0.7);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600">Zorlu Digital Plaza</p>
       </div>
     </div>
@@ -138,10 +143,20 @@
             if (loader) { loader.style.opacity = '0'; setTimeout(function() { loader.remove(); }, 500); }
           }
         }, 100);
-        // Fallback: remove after 5s regardless
+        // Fallback: remove after 5s; show error message if root is still empty (app failed to boot)
         setTimeout(function() {
           var loader = document.getElementById('global-loader');
-          if (loader) { loader.style.opacity = '0'; setTimeout(function() { loader.remove(); }, 500); }
+          var root = document.getElementById('root');
+          if (loader) {
+            var appLoaded = root && root.children.length > 0;
+            if (!appLoaded) {
+              // App failed to mount — show a user-facing error rather than blank page
+              loader.innerHTML = '<div style="text-align:center;padding:24px"><p style="color:rgba(255,255,255,0.9);font-family:sans-serif;font-size:16px;margin-bottom:12px">Sayfa yüklenemedi.</p><button onclick="location.reload()" style="background:#3b82f6;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;cursor:pointer">Tekrar Dene</button></div>';
+            } else {
+              loader.style.opacity = '0';
+              setTimeout(function() { loader.remove(); }, 500);
+            }
+          }
         }, 5000);
       });
     </script>

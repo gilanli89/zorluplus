@@ -9,11 +9,10 @@ import { Label } from "@/components/ui/label";
 import Logo from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
-import { validatePassword } from "@/lib/passwordValidation";
 import { logActivity } from "@/lib/activityLogger";
-import PasswordStrengthIndicator from "@/components/admin/PasswordStrengthIndicator";
 import { useIdleTimeout } from "@/hooks/useIdleTimeout";
 import IdleTimeoutWarning from "@/components/admin/IdleTimeoutWarning";
+import { AdminErrorBoundary } from "@/components/admin/AdminErrorBoundary";
 
 import {
   Sidebar,
@@ -33,18 +32,19 @@ import {
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  { title: "Özet", url: "/admin", icon: LayoutDashboard },
-  { title: "Siparişler", url: "/admin/siparisler", icon: ShoppingCart },
-  { title: "Stok Yönetimi", url: "/admin/stok", icon: Package },
-  { title: "Servis Talepleri", url: "/admin/servis", icon: Wrench },
-  { title: "Kullanıcılar", url: "/admin/kullanicilar", icon: Users },
-  { title: "Roller", url: "/admin/roller", icon: Shield },
-  { title: "Aktivite Logları", url: "/admin/aktivite-loglari", icon: Activity, superAdminOnly: true },
-  { title: "Yedekler", url: "/admin/yedekler", icon: Database, superAdminOnly: true },
+  { title: "Özet",            url: "/admin",                    icon: LayoutDashboard },
+  { title: "Siparişler",      url: "/admin/siparisler",         icon: ShoppingCart,   adminOnly: true },
+  { title: "Stok Yönetimi",   url: "/admin/stok",               icon: Package },
+  { title: "Servis Talepleri",url: "/admin/servis",             icon: Wrench,         adminOnly: true },
+  { title: "Kullanıcılar",    url: "/admin/kullanicilar",       icon: Users,          adminOnly: true },
+  { title: "Roller",          url: "/admin/roller",             icon: Shield,         adminOnly: true },
+  { title: "Aktivite Logları",url: "/admin/aktivite-loglari",   icon: Activity,       superAdminOnly: true },
+  { title: "Yedekler",        url: "/admin/yedekler",           icon: Database,       superAdminOnly: true },
 ] as const;
 
 export default function AdminLayout() {
-  const { user, isAdmin, isSuperAdmin, loading, signOut } = useAuth();
+  const { user, isAdmin, isSuperAdmin, userRole, loading, signOut } = useAuth();
+  const isModerator = userRole === "moderator";
   const navigate = useNavigate();
   const location = useLocation();
   const { isWarningVisible, countdown, resetTimer } = useIdleTimeout(!loading && !!user && isAdmin);
@@ -57,10 +57,13 @@ export default function AdminLayout() {
   const [changingPw, setChangingPw] = useState(false);
 
   useEffect(() => {
-    if (!loading && (!user || !isAdmin)) {
-      navigate("/admin/giris", { replace: true });
+    // AdminGate handles unauthenticated users — AdminLayout only needs to handle moderator restriction
+    if (!loading && isModerator) {
+      const allowed = ["/admin/stok"];
+      const isAllowed = allowed.some(p => location.pathname === p || location.pathname.startsWith(p + "/"));
+      if (!isAllowed) navigate("/admin/stok", { replace: true });
     }
-  }, [user, isAdmin, loading, navigate]);
+  }, [isModerator, loading, navigate, location.pathname]);
 
   const translateAuthError = (msg: string): string => {
     const map: Record<string, string> = {
@@ -76,70 +79,21 @@ export default function AdminLayout() {
   };
 
   const handleChangePassword = async () => {
-    if (newPw !== newPwConfirm) {
-      toast.error("Yeni şifreler eşleşmiyor");
-      return;
-    }
-    const checks = validatePassword(newPw);
-    if (!checks.isValid) {
-      toast.error("Şifre güvenlik gereksinimlerini karşılamıyor");
-      return;
-    }
+    if (newPw.length < 6) { toast.error("Yeni şifre en az 6 karakter olmalıdır"); return; }
+    if (newPw !== newPwConfirm) { toast.error("Yeni şifreler eşleşmiyor"); return; }
+    setChangingPw(true);
     try {
-      setChangingPw(true);
-      
-      // First verify current password using reauthentication (no session change)
-      const { error: reauthError } = await supabase.rpc('check_own_admin_status');
-      if (reauthError) {
-        toast.error("Oturum süresi dolmuş, tekrar giriş yapın", { duration: Infinity, closeButton: true });
-        navigate("/admin/giris", { replace: true });
-        return;
-      }
-
-      // Verify current password by attempting a sign-in in a separate flow
-      // We use fetch directly to avoid triggering onAuthStateChange
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-      
-      const verifyRes = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': supabaseKey,
-        },
-        body: JSON.stringify({ email: user!.email!, password: currentPw }),
-      });
-      
-      if (!verifyRes.ok) {
-        const errBody = await verifyRes.json().catch(() => ({}));
-        if (verifyRes.status === 400 || verifyRes.status === 401) {
-          toast.error("Mevcut şifre yanlış", { duration: Infinity, closeButton: true });
-        } else if (verifyRes.status === 429) {
-          toast.error("Çok fazla deneme yaptınız. Lütfen birkaç dakika bekleyip tekrar deneyin.", { duration: Infinity, closeButton: true });
-        } else {
-          toast.error(translateAuthError(errBody?.error_description || errBody?.msg || ""), { duration: Infinity, closeButton: true });
-        }
-        return;
-      }
-
-      // Now update password using existing session
       const { error } = await supabase.auth.updateUser({ password: newPw });
       if (error) {
-        toast.error(translateAuthError(error.message), { duration: Infinity, closeButton: true });
-        return;
-      }
-      toast.success("Şifreniz başarıyla değiştirildi");
-      logActivity("self_password_change", "self");
-      setPwDialogOpen(false);
-      setCurrentPw("");
-      setNewPw("");
-      setNewPwConfirm("");
-    } catch (e: any) {
-      if (e.message === "Failed to fetch") {
-        toast.error("Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edip tekrar deneyin.", { duration: Infinity, closeButton: true });
+        toast.error(translateAuthError(error.message));
       } else {
-        toast.error(translateAuthError(e.message || ""), { duration: Infinity, closeButton: true });
+        toast.success("Şifreniz başarıyla değiştirildi");
+        logActivity("self_password_change", "self");
+        setPwDialogOpen(false);
+        setCurrentPw(""); setNewPw(""); setNewPwConfirm("");
       }
+    } catch {
+      toast.error("Bağlantı hatası, tekrar deneyin.");
     } finally {
       setChangingPw(false);
     }
@@ -163,7 +117,11 @@ export default function AdminLayout() {
               <SidebarGroupLabel>Yönetim</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {NAV_ITEMS.filter(item => !('superAdminOnly' in item && item.superAdminOnly) || isSuperAdmin).map(item => {
+                  {NAV_ITEMS.filter(item => {
+                    if ('superAdminOnly' in item && item.superAdminOnly && !isSuperAdmin) return false;
+                    if ('adminOnly' in item && item.adminOnly && isModerator) return false;
+                    return true;
+                  }).map(item => {
                     const active = location.pathname === item.url || (item.url !== "/admin" && location.pathname.startsWith(item.url));
                     return (
                       <SidebarMenuItem key={item.url}>
@@ -210,13 +168,8 @@ export default function AdminLayout() {
                   </DialogHeader>
                   <div className="space-y-4 py-2">
                     <div className="space-y-2">
-                      <Label>Mevcut Şifre</Label>
-                      <Input type="password" value={currentPw} onChange={e => setCurrentPw(e.target.value)} placeholder="••••••••" />
-                    </div>
-                    <div className="space-y-2">
                       <Label>Yeni Şifre</Label>
                       <Input type="password" value={newPw} onChange={e => setNewPw(e.target.value)} placeholder="••••••••" />
-                      <PasswordStrengthIndicator password={newPw} />
                     </div>
                     <div className="space-y-2">
                       <Label>Yeni Şifre (Tekrar)</Label>
@@ -230,7 +183,7 @@ export default function AdminLayout() {
                     <Button variant="outline" onClick={() => setPwDialogOpen(false)}>İptal</Button>
                     <Button
                       onClick={handleChangePassword}
-                      disabled={changingPw || !currentPw || !validatePassword(newPw).isValid || newPw !== newPwConfirm}
+                      disabled={changingPw || newPw.length < 6 || newPw !== newPwConfirm}
                       className="gap-2"
                     >
                       {changingPw && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -246,7 +199,9 @@ export default function AdminLayout() {
             </div>
           </header>
           <main className="flex-1 p-4 md:p-6 overflow-auto bg-muted/20">
-            <Outlet />
+            <AdminErrorBoundary>
+              <Outlet />
+            </AdminErrorBoundary>
           </main>
           <IdleTimeoutWarning isVisible={isWarningVisible} countdown={countdown} onExtend={resetTimer} />
         </div>

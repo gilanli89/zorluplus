@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,6 +25,7 @@ export default function QuoteForm({ productId, productSku, productName, productP
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const lastSubmitRef = useRef(0);
   const [form, setForm] = useState<Partial<LeadFormData & { address: string }>>({
     name: "", phone: "", email: "", address: "", branch: "", notes: "",
   });
@@ -68,6 +69,11 @@ export default function QuoteForm({ productId, productSku, productName, productP
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
+    if (Date.now() - lastSubmitRef.current < 5000) {
+      toast.error("Lütfen birkaç saniye bekleyip tekrar deneyin.");
+      return;
+    }
+    lastSubmitRef.current = Date.now();
 
     setLoading(true);
     const payload = {

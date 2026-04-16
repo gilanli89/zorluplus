@@ -1,4 +1,5 @@
 import { useSearchParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { CheckCircle2, XCircle, ArrowLeft, Phone } from "lucide-react";
 import { PremiumIconInline } from "@/components/PremiumIcon";
 import PremiumIcon from "@/components/PremiumIcon";
@@ -6,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { BRAND } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function PaymentResultPage() {
   const { t } = useLanguage();
@@ -15,7 +17,23 @@ export default function PaymentResultPage() {
   const authCode = searchParams.get("authCode") || "";
   const transId = searchParams.get("transId") || "";
   const errorMessage = searchParams.get("errorMessage") || "";
-  const isSuccess = status === "success";
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [verified, setVerified] = useState(false);
+
+  useEffect(() => {
+    if (!orderId) { setVerified(true); return; }
+    supabase
+      .from("orders")
+      .select("status")
+      .eq("order_number", orderId)
+      .single()
+      .then(({ data }) => {
+        setIsSuccess(data?.status === "paid");
+        setVerified(true);
+      });
+  }, [orderId]);
+
+  if (!verified) return null;
 
   return (
     <div className="container max-w-lg py-12 md:py-20">

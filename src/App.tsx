@@ -12,6 +12,16 @@ import { lazy, Suspense } from "react";
 import PageLoader from "@/components/PageLoader";
 import { COMING_SOON } from "@/lib/featureFlags";
 import ComingSoonPage from "@/pages/ComingSoonPage";
+import { useAuth } from "@/hooks/useAuth";
+import AdminLogin from "@/pages/admin/AdminLogin";
+
+// /admin and all sub-routes: show login if not authenticated, panel if authenticated
+function AdminGate({ children }: { children: React.ReactNode }) {
+  const { isAdmin, loading } = useAuth();
+  if (loading) return <PageLoader />;
+  if (!isAdmin) return <AdminLogin />;
+  return <>{children}</>;
+}
 
 // Eager load: HomePage (above the fold)
 import HomePage from "@/pages/HomePage";
@@ -59,7 +69,6 @@ import {
 } from "@/pages/ContentPages";
 
 // Admin (separate bundle)
-const AdminLogin = lazy(() => import("@/pages/admin/AdminLogin"));
 const AdminLayout = lazy(() => import("@/pages/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
 const AdminOrders = lazy(() => import("@/pages/admin/AdminOrders"));
@@ -94,8 +103,7 @@ const App = () => (
           <Suspense fallback={<PageLoader />}>
             <Routes>
               {/* Admin */}
-              <Route path="/admin/giris" element={<AdminLogin />} />
-              <Route path="/admin" element={<AdminLayout />}>
+              <Route path="/admin" element={<AdminGate><AdminLayout /></AdminGate>}>
                 <Route index element={<AdminDashboard />} />
                 <Route path="siparisler" element={<AdminOrders />} />
                 <Route path="stok" element={<AdminInventory />} />

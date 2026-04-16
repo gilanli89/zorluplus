@@ -25,9 +25,8 @@ export default function IdleTimeoutWarning({ isVisible, countdown, onExtend }: P
   useEffect(() => {
     if (isVisible && countdown <= 0) {
       logActivity("idle_timeout_logout", "session").then(() => {
-        supabase.auth.signOut().then(() => {
-          navigate("/admin/giris", { replace: true });
-        });
+        supabase.auth.signOut();
+        // AdminGate will automatically show login after signOut
       });
     }
   }, [isVisible, countdown, navigate]);
@@ -57,7 +56,7 @@ export default function IdleTimeoutWarning({ isVisible, countdown, onExtend }: P
         <DialogFooter className="flex-col gap-2 sm:flex-row">
           <Button variant="outline" className="gap-2" onClick={() => {
             logActivity("idle_timeout_logout", "session");
-            supabase.auth.signOut().then(() => navigate("/admin/giris", { replace: true }));
+            supabase.auth.signOut();
           }}>
             <LogOut className="h-4 w-4" /> Şimdi Çıkış Yap
           </Button>

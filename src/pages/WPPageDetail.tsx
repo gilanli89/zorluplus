@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { useWPPageBySlug } from "@/hooks/useWordPress";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import DOMPurify from "dompurify";
 
 export default function WPPageDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -36,6 +37,8 @@ export default function WPPageDetail() {
   }
 
   const image = page._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
+  const safeTitle = DOMPurify.sanitize(page.title.rendered, { ALLOWED_TAGS: [] });
+  const safeContent = DOMPurify.sanitize(page.content.rendered);
 
   return (
     <article className="container py-8 max-w-3xl">
@@ -49,14 +52,14 @@ export default function WPPageDetail() {
       {image && (
         <img
           src={image}
-          alt={page.title.rendered}
+          alt={safeTitle}
           className="w-full rounded-2xl mb-6 object-cover max-h-[400px]"
         />
       )}
 
       <h1
         className="heading-1 text-foreground mb-6"
-        dangerouslySetInnerHTML={{ __html: page.title.rendered }}
+        dangerouslySetInnerHTML={{ __html: safeTitle }}
       />
 
       <div
@@ -68,7 +71,7 @@ export default function WPPageDetail() {
           [&_a]:text-primary [&_a]:underline
           [&_ul]:list-disc [&_ul]:pl-5
           [&_ol]:list-decimal [&_ol]:pl-5"
-        dangerouslySetInnerHTML={{ __html: page.content.rendered }}
+        dangerouslySetInnerHTML={{ __html: safeContent }}
       />
     </article>
   );

@@ -20,3 +20,5 @@ BEGIN
   );
 END;
 $function$;
+
+GRANT EXECUTE ON FUNCTION public.check_own_admin_status() TO authenticated;

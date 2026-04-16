@@ -1,3 +1,9 @@
+# robots.txt for zorluplus.com
+# NOTE: zorluplus.vercel.app is the staging/deployment domain.
+# Traffic to zorluplus.vercel.app is 301-redirected to zorluplus.com via vercel.json redirects.
+# If Googlebot ever reaches zorluplus.vercel.app directly, the redirect will handle it.
+# To be safe, add this domain to Google Search Console and request removal if it gets indexed.
+
 User-agent: Googlebot
 Allow: /
 

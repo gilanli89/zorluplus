@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export default function PageLoader() {
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
+    <div className="flex items-center justify-center min-h-[60vh]" role="status" aria-label="Yükleniyor...">
       <motion.div
         className="flex flex-col items-center gap-4"
         initial={{ opacity: 0 }}
@@ -10,7 +10,7 @@ export default function PageLoader() {
         transition={{ duration: 0.3 }}
       >
         {/* Orbital spinner */}
-        <div className="relative w-12 h-12">
+        <div className="relative w-12 h-12" aria-hidden="true">
           <motion.div
             className="absolute inset-0 rounded-full border-2 border-primary/20"
           />

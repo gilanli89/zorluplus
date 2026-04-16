@@ -2,7 +2,16 @@ import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { slugify, normalizeCategorySlug, applyCategoryOverrides } from "@/lib/products";
 import { supabase } from "@/integrations/supabase/client";
+import { createClient } from "@supabase/supabase-js";
 import type { Product } from "@/lib/types";
+
+// Dedicated anon-only client for public product fetching.
+// Never sends an auth token — prevents 401 errors when admin session JWT is expired.
+const anonClient = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+  { auth: { persistSession: false, autoRefreshToken: false, storageKey: "sb-anon-products" } }
+);
 
 function normalizeImageUrl(url: string | null | undefined): string {
   if (!url) return "";
@@ -52,18 +61,21 @@ function dbToProduct(inv: Record<string, unknown>): Product {
 }
 
 async function fetchProductsFromDB(): Promise<Product[]> {
-  const { data: inventory, error } = await supabase
+  const { data: inventory, error } = await anonClient
     .from("inventory_public")
     .select("id,sku,product_name,brand,category,description,original_price,sale_price,quantity,is_active,image_url,attributes,updated_at");
 
   if (error) {
     console.error("Failed to fetch inventory:", error);
-    return [];
+    throw error;
   }
 
   const products: Product[] = [];
+  const seenSkus = new Set<string>();
   for (const inv of inventory ?? []) {
     if (!inv.sku || !inv.is_active) continue;
+    if (seenSkus.has(inv.sku as string)) continue; // deduplicate by SKU
+    seenSkus.add(inv.sku as string);
     const p = dbToProduct(inv as Record<string, unknown>);
     if (p.price > 0) products.push(p);
   }
@@ -96,5 +108,7 @@ export function useProducts() {
     queryFn: fetchProductsFromDB,
     staleTime: 2 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
+    retry: 3,
+    placeholderData: (prev) => prev,
   });
 }
