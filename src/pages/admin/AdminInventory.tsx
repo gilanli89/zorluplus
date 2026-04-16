@@ -1226,6 +1226,7 @@ export default function AdminInventory() {
       }
       if (failed > 0) toast.error(`${failed} ürün silinemedi`);
       else toast.success(`${ids.length} ürün silindi`);
+      logActivity("inventory_delete", "inventory", undefined, { deleted_ids: ids, count: ids.length });
       setSelectedIds(new Set());
       qc.invalidateQueries({ queryKey: ["admin-inventory"] });
       qc.invalidateQueries({ queryKey: ["products"] });
