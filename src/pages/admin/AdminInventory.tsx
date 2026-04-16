@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/components/ui/sonner";
 import { logActivity } from "@/lib/activityLogger";
-import { useState, useMemo, useCallback, useRef } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import {
   Save, RefreshCw, X, Loader2, Plus, Trash2,
   Search, ImageIcon, Upload, Check, ChevronDown, ChevronUp,
@@ -929,6 +929,7 @@ function ProductRow({
     if (pending && field in pending) return (pending as any)[field];
     if (field === "product_name") return item.product_name as any;
     if (field === "brand") return (item.brand || "") as any;
+    if (field === "model") return (item.model || "") as any;
     if (field === "category") return (item.category || "") as any;
     if (field === "quantity") return item.quantity as any;
     if (field === "original_price") return (item.original_price || 0) as any;
@@ -970,6 +971,9 @@ function ProductRow({
               <p className="font-medium text-sm leading-tight truncate max-w-[220px] hover:text-primary transition-colors" title={item.product_name}>
                 {getValue("product_name") as string}
               </p>
+              {(getValue("model") as string) && (
+                <p className="text-[11px] text-primary/70 font-medium mt-0.5 truncate max-w-[220px]">{getValue("model") as string}</p>
+              )}
               <p className="text-[11px] text-muted-foreground font-mono mt-0.5">{item.sku || "—"}</p>
             </div>
           )}
@@ -1096,6 +1100,18 @@ export default function AdminInventory() {
     },
   });
 
+  // Realtime sync — invalidate when another admin changes inventory
+  useEffect(() => {
+    const channel = supabase
+      .channel("admin-inventory-sync")
+      .on("postgres_changes", { event: "*", schema: "public", table: "inventory" }, () => {
+        qc.invalidateQueries({ queryKey: ["admin-inventory"] });
+        qc.invalidateQueries({ queryKey: ["products"] });
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [qc]);
+
   // ─── Derived data ───
   const categories = useMemo(() => {
     const cats = new Set(items.map(i => i.category).filter(Boolean));
@@ -1200,14 +1216,14 @@ export default function AdminInventory() {
       for (const chunk of chunks) {
         try {
           const { error } = await withTimeout(
-            supabase.from("inventory").update({ is_active: false }).in("id", chunk).select(),
+            supabase.from("inventory").delete().in("id", chunk),
             5000
           );
           if (error) { failed += chunk.length; console.error(error); }
         } catch { failed += chunk.length; }
       }
-      if (failed > 0) toast.error(`${failed} ürün pasife alınamadı`);
-      else toast.success(`${ids.length} ürün yayından kaldırıldı`);
+      if (failed > 0) toast.error(`${failed} ürün silinemedi`);
+      else toast.success(`${ids.length} ürün silindi`);
       setSelectedIds(new Set());
       qc.invalidateQueries({ queryKey: ["admin-inventory"] });
       qc.invalidateQueries({ queryKey: ["products"] });
@@ -1290,10 +1306,11 @@ export default function AdminInventory() {
           const updateData: Record<string, any> = {};
           if ("product_name" in changes) updateData.product_name = changes.product_name;
           if ("brand" in changes) updateData.brand = changes.brand || null;
+          if ("model" in changes) updateData.model = changes.model || null;
           if ("category" in changes) updateData.category = changes.category || null;
           if ("quantity" in changes) updateData.quantity = changes.quantity;
-          if ("original_price" in changes) updateData.original_price = changes.original_price || null;
-          if ("sale_price" in changes) updateData.sale_price = changes.sale_price || null;
+          if ("original_price" in changes) updateData.original_price = (changes.original_price != null && changes.original_price > 0) ? changes.original_price : null;
+          if ("sale_price" in changes) updateData.sale_price = (changes.sale_price != null && changes.sale_price > 0) ? changes.sale_price : null;
           if ("image_url" in changes) updateData.image_url = changes.image_url || null;
           if ("is_active" in changes) updateData.is_active = changes.is_active;
           updateData.price_updated_at = new Date().toISOString();
@@ -1554,13 +1571,13 @@ export default function AdminInventory() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {bulkConfirm?.type === "delete" && `${selectedIds.size} ürünü yayından kaldırmak istediğinize emin misiniz?`}
+              {bulkConfirm?.type === "delete" && `${selectedIds.size} ürünü kalıcı olarak silmek istediğinize emin misiniz?`}
               {bulkConfirm?.type === "active" && `${selectedIds.size} ürünü aktif yapmak istediğinize emin misiniz?`}
               {bulkConfirm?.type === "inactive" && `${selectedIds.size} ürünü pasif yapmak istediğinize emin misiniz?`}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {bulkConfirm?.type === "delete"
-                ? "Seçili ürünler pasife alınarak siteden kaldırılacaktır. Tekrar aktif edebilirsiniz."
+                ? "Seçili ürünler kalıcı olarak silinecektir. Bu işlem geri alınamaz."
                 : "Seçili ürünlerin durumu güncellenecektir."}
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -1577,7 +1594,7 @@ export default function AdminInventory() {
               className={bulkConfirm?.type === "delete" ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : ""}
             >
               {bulkProcessing ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
-              {bulkConfirm?.type === "delete" ? "Yayından Kaldır" : "Onayla"}
+              {bulkConfirm?.type === "delete" ? "Kalıcı Sil" : "Onayla"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
