@@ -140,13 +140,6 @@ export default function ProductPage() {
               <p className="text-sm font-medium text-primary">{t("product.callForPrice")}</p>
             )}
 
-            {product.price > 0 && (
-              <p className="text-xs text-muted-foreground">
-                {t("product.installment") || "12 aya varan taksit seçenekleri mevcuttur."}
-              </p>
-            )}
-
-
             <Badge variant={product.inStock ? "success" : "secondary"} className="w-fit gap-1.5">
               {product.inStock ? <><PremiumBadgeIcon icon={Shield} size={12} /> {t("product.inStock")}</> : t("product.outOfStock")}
             </Badge>
