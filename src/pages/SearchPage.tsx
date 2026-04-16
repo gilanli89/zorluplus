@@ -106,7 +106,8 @@ export default function SearchPage() {
       p.name.toLowerCase().includes(lower) ||
       p.brand.toLowerCase().includes(lower) ||
       p.description.toLowerCase().includes(lower) ||
-      (p.sku || "").toLowerCase().includes(lower)
+      (p.sku || "").toLowerCase().includes(lower) ||
+      (p.model || "").toLowerCase().includes(lower)
     );
 
     if (!aiResult) return textResults;
@@ -123,7 +124,7 @@ export default function SearchPage() {
       if (aiResult.brand && p.brand.toLowerCase() === aiResult.brand.toLowerCase()) score += 12;
       
       // Keyword match
-      const pLower = `${p.name} ${p.description} ${p.brand} ${p.sku || ""}`.toLowerCase();
+      const pLower = `${p.name} ${p.description} ${p.brand} ${p.sku || ""} ${p.model || ""}`.toLowerCase();
       for (const kw of aiResult.keywords) {
         if (pLower.includes(kw.toLowerCase())) score += 5;
       }

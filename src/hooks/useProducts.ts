@@ -40,6 +40,7 @@ function dbToProduct(inv: Record<string, unknown>): Product {
   return {
     id: sku || String(inv.id),
     sku,
+    model: inv.model ? String(inv.model) : undefined,
     slug: sku ? `${slugify(sku)}-${slugify(name)}` : slugify(name),
     name,
     brand,
@@ -63,7 +64,7 @@ function dbToProduct(inv: Record<string, unknown>): Product {
 async function fetchProductsFromDB(): Promise<Product[]> {
   const { data: inventory, error } = await anonClient
     .from("inventory_public")
-    .select("id,sku,product_name,brand,category,description,original_price,sale_price,quantity,is_active,image_url,attributes,updated_at");
+    .select("id,sku,model,product_name,brand,category,description,original_price,sale_price,quantity,is_active,image_url,attributes,updated_at");
 
   if (error) {
     console.error("Failed to fetch inventory:", error);
