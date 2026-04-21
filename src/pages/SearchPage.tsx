@@ -21,6 +21,99 @@ interface AISearchResult {
 
 const SMART_SEARCH_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-smart-search`;
 
+// -------------------- Search matching helpers --------------------
+
+// KKTC/TR domain synonyms: key token → [alternative tokens]
+// Bidirectional; her iki yönde eşleşme için her iki girdi de eklenmeli
+const TR_SYNONYMS: Record<string, string[]> = {
+  "buzluk": ["buzdolabı", "buzdolapları", "dondurucu"],
+  "buzdolabı": ["buzluk"],
+  "buzdolapları": ["buzluk"],
+  "dondurucu": ["buzluk"],
+  "tv": ["televizyon"],
+  "televizyon": ["tv"],
+  "çamaşır": ["camasir"],
+  "camasir": ["çamaşır"],
+  "bulaşık": ["bulasik"],
+  "bulasik": ["bulaşık"],
+  "fırın": ["firin", "ocak"],
+  "firin": ["fırın", "ocak"],
+  "ocak": ["fırın"],
+  "klima": ["ac", "air conditioner"],
+  "ac": ["klima"],
+  "airfryer": ["hava fritözü", "air fryer"],
+  "kurutucu": ["kurutma makinesi"],
+  "mikrodalga": ["microwave"],
+};
+
+// Aksan/Türkçe karakter sadeleştirme (gevşek eşleşme için)
+const stripAccents = (s: string): string =>
+  s
+    .replace(/ı/g, "i")
+    .replace(/İ/g, "i")
+    .replace(/ş/g, "s")
+    .replace(/Ş/g, "s")
+    .replace(/ğ/g, "g")
+    .replace(/Ğ/g, "g")
+    .replace(/ü/g, "u")
+    .replace(/Ü/g, "u")
+    .replace(/ö/g, "o")
+    .replace(/Ö/g, "o")
+    .replace(/ç/g, "c")
+    .replace(/Ç/g, "c");
+
+// Boşlukları kaldır (birleşik/ayrık yazım toleransı için)
+const compact = (s: string): string => s.replace(/\s+/g, "");
+
+const expandToken = (token: string): string[] => {
+  const t = token.toLowerCase();
+  return [t, ...(TR_SYNONYMS[t] || [])];
+};
+
+interface SearchableProduct {
+  name: string;
+  brand: string;
+  description: string;
+  sku?: string;
+  model?: string;
+  category?: string;
+  subcategory?: string;
+  tags?: string[];
+}
+
+// Ürünü sorguyla eşleştir: AND(tokens), OR(synonyms within token),
+// raw + compact + accent-stripped variants üzerinden kontrol
+const matchesQuery = (p: SearchableProduct, query: string): boolean => {
+  const q = query.toLowerCase().trim();
+  if (!q) return false;
+  const tokens = q.split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return false;
+
+  const haystack = [
+    p.name, p.brand, p.description, p.sku || "", p.model || "",
+    p.category || "", p.subcategory || "", ...(p.tags || []),
+  ].join(" ").toLowerCase();
+
+  const haystackCompact = compact(haystack);
+  const haystackStripped = stripAccents(haystack);
+  const haystackCompactStripped = stripAccents(haystackCompact);
+
+  return tokens.every(token => {
+    const variants = expandToken(token);
+    return variants.some(v => {
+      const vStripped = stripAccents(v);
+      return (
+        haystack.includes(v) ||
+        haystackCompact.includes(compact(v)) ||
+        haystackStripped.includes(vStripped) ||
+        haystackCompactStripped.includes(compact(vStripped))
+      );
+    });
+  });
+};
+
+// -------------------- Component --------------------
+
 export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get("q") || "";
@@ -105,16 +198,9 @@ export default function SearchPage() {
   // Combined search: AI-enhanced + basic text match
   const results = useMemo(() => {
     if (!query.trim()) return [];
-    const lower = query.toLowerCase();
-    
-    // Basic text search
-    const textResults = products.filter(p =>
-      p.name.toLowerCase().includes(lower) ||
-      p.brand.toLowerCase().includes(lower) ||
-      p.description.toLowerCase().includes(lower) ||
-      (p.sku || "").toLowerCase().includes(lower) ||
-      (p.model || "").toLowerCase().includes(lower)
-    );
+
+    // Token-based search: space-insensitive, synonym-aware, accent-tolerant
+    const textResults = products.filter(p => matchesQuery(p, query));
 
     if (!aiResult) return textResults;
 
