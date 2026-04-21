@@ -144,10 +144,13 @@ export default function AdminActivityLogs() {
 
   return (
     <div>
-      <div className="flex items-center gap-2 mb-6">
+      <div className="flex items-center gap-2">
         <PremiumIconInline icon={Activity} size={24} />
         <h1 className="font-display text-2xl font-bold text-foreground">Aktivite Logları</h1>
       </div>
+      <p className="text-sm text-muted-foreground mb-6 ml-8">
+        Sistem kullanıcılarının son işlem geçmişi
+      </p>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-4">
