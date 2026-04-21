@@ -3,6 +3,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import MobileBottomBar from "./MobileBottomBar";
 import FloatingLinktree from "@/components/FloatingLinktree";
+import FloatingCartButton from "@/components/FloatingCartButton";
 import AIChatbot from "@/components/AIChatbot";
 import SpecialDayBanner from "@/components/SpecialDayBanner";
 import CookieConsent from "@/components/common/CookieConsent";
@@ -18,6 +19,7 @@ export default function Layout() {
       <Footer />
       <MobileBottomBar />
       <FloatingLinktree />
+      <FloatingCartButton />
       <AIChatbot />
       <CookieConsent />
     </div>
