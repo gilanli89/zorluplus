@@ -21,7 +21,7 @@ import { formatPrice } from "@/lib/products";
 const EXPRESS_FEE = 2000;
 
 export default function CartPage() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const {
     items, removeItem, updateQuantity, clearCart, addItem,
     toggleWarranty, toggleExpressDelivery,
