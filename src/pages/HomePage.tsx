@@ -8,6 +8,7 @@ import { BRANCHES } from "@/lib/constants";
 import TrustSection from "@/components/TrustSection";
 import HeroBanner from "@/components/HeroBanner";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import CategoryIconBar from "@/components/CategoryIconBar";
 import CategoryGrid from "@/components/home/CategoryGrid";
 import BrandShowcase from "@/components/home/BrandShowcase";
 import StoreLocator from "@/components/store/StoreLocator";
@@ -70,6 +71,11 @@ export default function HomePage() {
           <span className="hidden md:flex items-center gap-1.5 whitespace-nowrap"><PremiumIconInline icon={Gift} size={15} className="text-primary-foreground" /> Taksit Seçenekleri Mevcut</span>
         </div>
       </motion.div>
+
+      {/* Category Icon Bar — hızlı kategori navigasyonu */}
+      <section className="container pt-6 md:pt-8">
+        <CategoryIconBar sticky={false} />
+      </section>
 
       <FeaturedProducts />
 

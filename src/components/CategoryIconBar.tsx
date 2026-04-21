@@ -4,7 +4,12 @@ import { CATEGORIES } from "@/lib/constants";
 import { CATEGORY_3D_ICONS } from "@/lib/categoryIcons";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-export default function CategoryIconBar() {
+interface CategoryIconBarProps {
+  /** Sticky header altında sabitleyici davranış. Category sayfası için true (default), HomePage gibi yerlerde false. */
+  sticky?: boolean;
+}
+
+export default function CategoryIconBar({ sticky = true }: CategoryIconBarProps = {}) {
   const { t } = useLanguage();
   const { categorySlug } = useParams();
   const getCatName = (slug: string) => {
@@ -14,7 +19,10 @@ export default function CategoryIconBar() {
   };
 
   return (
-    <div className="sticky top-[88px] z-30 bg-background/95 backdrop-blur-sm -mx-4 px-4 py-2 mb-3">
+    <div className={sticky
+      ? "sticky top-[88px] z-30 bg-background/95 backdrop-blur-sm -mx-4 px-4 py-2 mb-3"
+      : "py-2"
+    }>
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         {CATEGORIES.map((cat, i) => {
           const icon3d = CATEGORY_3D_ICONS[cat.slug];
