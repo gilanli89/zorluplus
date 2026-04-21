@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Search, Phone, Menu, X, FileText, Wrench, Shield, Award, Mic, MicOff, Globe, MapPin, MessageCircle } from "lucide-react";
 import { PremiumIconInline, PremiumBadgeIcon } from "@/components/PremiumIcon";
 import { CATEGORY_3D_ICONS } from "@/lib/categoryIcons";
@@ -44,6 +44,7 @@ export default function Header() {
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const { lang, setLang, t, greeting } = useLanguage();
 
   const hasSpeechSupport = typeof window !== "undefined" && ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
@@ -54,10 +55,24 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Live search: her keystroke'ta URL güncellenir, SearchPage canlı sonuç gösterir
+  const onSearchChange = (val: string) => {
+    setSearchQuery(val);
+    const trimmed = val.trim();
+    const isOnSearchPage = location.pathname === "/arama";
+    if (trimmed) {
+      // İlk giriş /arama'ya push, oradaki güncellemeler replace (history kirliliği önleme)
+      navigate(`/arama?q=${encodeURIComponent(trimmed)}`, { replace: isOnSearchPage });
+    } else if (isOnSearchPage) {
+      // Search page'deyiz ve input boşaldı: ?q= parametresini kaldır
+      navigate("/arama", { replace: true });
+    }
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    // Navigation zaten onSearchChange ile oldu; Enter sadece bar'ı kapatır
     if (searchQuery.trim()) {
-      navigate(`/arama?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
       setSearchQuery("");
       stopListening();
@@ -228,7 +243,7 @@ export default function Header() {
                   <Input
                     ref={searchInputRef}
                     value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
+                    onChange={e => onSearchChange(e.target.value)}
                     placeholder={t("header.search")}
                     className={cn(
                       "w-40 sm:w-64 h-9 rounded-full pl-9 border-primary/30 focus-visible:ring-primary/20",
@@ -239,7 +254,7 @@ export default function Header() {
                   {searchQuery && (
                     <button
                       type="button"
-                      onClick={() => { setSearchQuery(""); searchInputRef.current?.focus(); }}
+                      onClick={() => { onSearchChange(""); searchInputRef.current?.focus(); }}
                       className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded-full hover:bg-muted"
                       aria-label={lang === "tr" ? "Aramayı temizle" : "Clear search"}
                     >

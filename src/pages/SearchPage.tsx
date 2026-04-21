@@ -66,6 +66,11 @@ export default function SearchPage() {
 
   useEffect(() => () => { recognitionRef.current?.stop(); }, []);
 
+  // URL'deki ?q= parametresi değişince (örn: Header'dan live search) query state'ini sync et
+  useEffect(() => {
+    setQuery(q);
+  }, [q]);
+
   // AI smart search with debounce
   useEffect(() => {
     if (aiDebounce.current) clearTimeout(aiDebounce.current);
