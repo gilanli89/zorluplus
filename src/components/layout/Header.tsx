@@ -42,6 +42,7 @@ export default function Header() {
   const [isListening, setIsListening] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { lang, setLang, t, greeting } = useLanguage();
 
@@ -225,12 +226,26 @@ export default function Header() {
                 <div className="relative">
                   <PremiumIconInline icon={Search} size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <Input
+                    ref={searchInputRef}
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     placeholder={t("header.search")}
-                    className="w-40 sm:w-64 h-9 rounded-full pl-9 pr-3 border-primary/30 focus-visible:ring-primary/20"
+                    className={cn(
+                      "w-40 sm:w-64 h-9 rounded-full pl-9 border-primary/30 focus-visible:ring-primary/20",
+                      searchQuery ? "pr-9" : "pr-3"
+                    )}
                     autoFocus
                   />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => { setSearchQuery(""); searchInputRef.current?.focus(); }}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded-full hover:bg-muted"
+                      aria-label={lang === "tr" ? "Aramayı temizle" : "Clear search"}
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
                 </div>
                 {hasSpeechSupport && (
                   <Button
@@ -247,7 +262,7 @@ export default function Header() {
                     {isListening ? <PremiumIconInline icon={MicOff} size={16} /> : <PremiumIconInline icon={Mic} size={16} />}
                   </Button>
                 )}
-                <Button type="button" variant="ghost" size="icon" className="rounded-full shrink-0 tap-scale" onClick={() => { setSearchOpen(false); stopListening(); }}>
+                <Button type="button" variant="ghost" size="icon" className="rounded-full shrink-0 tap-scale" onClick={() => { setSearchOpen(false); setSearchQuery(""); stopListening(); }}>
                   <PremiumIconInline icon={X} size={16} />
                 </Button>
               </motion.form>
