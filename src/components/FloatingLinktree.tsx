@@ -12,7 +12,7 @@ export default function FloatingLinktree() {
   const { t } = useLanguage();
 
   return (
-    <div className="fixed bottom-24 right-4 z-50 lg:bottom-6 lg:right-6 flex flex-col items-end gap-2">
+    <div className="fixed bottom-24 right-4 z-50 lg:right-6 flex flex-col items-end gap-2">
       <AnimatePresence>
         {showTooltip && (
           <motion.div
