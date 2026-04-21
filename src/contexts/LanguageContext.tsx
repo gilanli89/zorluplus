@@ -1088,6 +1088,16 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
 export function useLanguage() {
   const context = useContext(LanguageContext);
-  if (!context) throw new Error("useLanguage must be used within LanguageProvider");
+  if (!context) {
+    // Defensive: return default Turkish values instead of throwing
+    // This prevents crashes when called outside LanguageProvider
+    console.warn("useLanguage called outside LanguageProvider - using Turkish defaults");
+    return {
+      lang: "tr" as Lang,
+      setLang: () => {},
+      t: (key: string) => translations[key]?.tr || key,
+      greeting: "Merhaba! 👋",
+    };
+  }
   return context;
 }
