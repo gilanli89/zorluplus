@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Package, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
 import { Product } from "@/lib/types";
-import { getTVCrossSellItems, CrossSellItem } from "@/lib/crossSell";
+import { getProductCrossSellItems, CrossSellItem } from "@/lib/crossSell";
 import { formatPrice } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,13 +19,27 @@ interface Props {
   maxItems?: number;
 }
 
+// Dynamic description text based on product type
+function getCrossSellDescription(subcategory: string): string {
+  const descriptions: Record<string, string> = {
+    "tv": "Televizyonunuz için uyumlu aksesuar önerileri",
+    "buzdolabi": "Buzdolabınız için önerilen koruma ve bakım ürünleri",
+    "mini-buzdolabi": "Mini buzdolabınız için önerilen ürünler",
+    "camasir-makinesi": "Çamaşır makineniz için önerilen koruma ve bakım ürünleri",
+    "klima": "Klimanız için önerilen koruma ürünleri",
+    "mikrodalga": "Mikrodalganız için önerilen ürünler",
+    "firin": "Fırınınız için önerilen ürünler",
+  };
+  return descriptions[subcategory] || "Bu ürünle birlikte alınabilecek aksesuar önerileri";
+}
+
 export default function FrequentlyBoughtTogether({ currentProduct, allProducts, maxItems = 6 }: Props) {
   const { addItem } = useCart();
   const { translateProduct } = useProductTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const crossSellItems = useMemo(
-    () => getTVCrossSellItems(currentProduct, allProducts, maxItems),
+    () => getProductCrossSellItems(currentProduct, allProducts, maxItems),
     [currentProduct, allProducts, maxItems]
   );
 
@@ -34,6 +48,8 @@ export default function FrequentlyBoughtTogether({ currentProduct, allProducts, 
   const scroll = (dir: "left" | "right") => {
     scrollRef.current?.scrollBy({ left: dir === "left" ? -280 : 280, behavior: "smooth" });
   };
+
+  const description = getCrossSellDescription(currentProduct.subcategory);
 
   return (
     <section className="mt-10">
@@ -51,7 +67,7 @@ export default function FrequentlyBoughtTogether({ currentProduct, allProducts, 
           </Button>
         </div>
       </div>
-      <p className="text-sm text-muted-foreground mb-4">Televizyonunuz için uyumlu aksesuar önerileri</p>
+      <p className="text-sm text-muted-foreground mb-4">{description}</p>
 
       <div
         ref={scrollRef}
