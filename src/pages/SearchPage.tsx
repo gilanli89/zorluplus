@@ -2,7 +2,7 @@ import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useProducts } from "@/hooks/useProducts";
 import { Input } from "@/components/ui/input";
-import { Search, Mic, MicOff, Sparkles, Loader2 } from "lucide-react";
+import { Search, Mic, MicOff, Sparkles, Loader2, X } from "lucide-react";
 import { PremiumIconInline } from "@/components/PremiumIcon";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -31,6 +31,7 @@ export default function SearchPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const recognitionRef = useRef<any>(null);
   const aiDebounce = useRef<ReturnType<typeof setTimeout>>();
+  const inputRef = useRef<HTMLInputElement>(null);
   const { data: products = [] } = useProducts();
   const { t, lang } = useLanguage();
 
@@ -162,6 +163,13 @@ export default function SearchPage() {
     setSearchParams(val ? { q: val } : {});
   };
 
+  const clearSearch = () => {
+    setQuery("");
+    setSearchParams({});
+    setAiResult(null);
+    inputRef.current?.focus();
+  };
+
   return (
     <div className="container py-6">
       <h1 className="heading-2 mb-4 text-foreground pulse-heading">{t("search.title")}</h1>
@@ -169,12 +177,23 @@ export default function SearchPage() {
         <div className="relative flex-1">
           <PremiumIconInline icon={Search} size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input
+            ref={inputRef}
             value={query}
             onChange={e => handleSearch(e.target.value)}
             placeholder={lang === "tr" ? "Doğal dilde arayın... örn: 'büyük aile için buzdolabı'" : "Search naturally... e.g. 'large TV for living room'"}
-            className="pl-10 h-11"
+            className="pl-10 pr-10 h-11"
             autoFocus
           />
+          {query && (
+            <button
+              type="button"
+              onClick={clearSearch}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded-full hover:bg-muted"
+              aria-label={lang === "tr" ? "Aramayı temizle" : "Clear search"}
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
         {hasSpeechSupport && (
           <Button
