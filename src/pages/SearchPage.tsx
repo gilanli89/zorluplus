@@ -302,13 +302,27 @@ export default function SearchPage() {
 
     if (detectedIntent) {
       // Primary = bu intent'in subcategory'sine tam uyan ürünler
-      const strictPrimary = products.filter(p => p.subcategory === detectedIntent);
+      primary = products.filter(p => p.subcategory === detectedIntent);
 
-      // Query'de marka/model geçiyorsa onları da filtrele (örn "samsung tv")
-      const brandFiltered = strictPrimary.filter(p => matchesQuery(p, query));
+      // Eğer query'de intent kelimesinden BAŞKA kelime varsa (marka/model/boyut),
+      // o zaman ek filtre uygula. Yoksa tüm subcategory ürünlerini göster.
+      const queryTokensLower = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      const intentKeywords = INTENT_KEYWORDS[detectedIntent] || [];
+      const hasNonIntentTokens = queryTokensLower.some(token => {
+        // Bu token intent keyword'ü DEĞİLse (marka/model vb. ek terim)
+        return !intentKeywords.some(kw => {
+          const kwLower = stripAccents(kw.toLowerCase());
+          const tokenStripped = stripAccents(token);
+          return tokenStripped === kwLower || kwLower.includes(tokenStripped) || tokenStripped.includes(kwLower);
+        });
+      });
 
-      // Primary: önce brand-filtered (varsa), değilse tüm subcategory ürünleri
-      primary = brandFiltered.length > 0 ? brandFiltered : strictPrimary;
+      if (hasNonIntentTokens) {
+        // Ek terim var (örn "samsung televizyon", "75 inç tv") → text match filtresi uygula
+        const filtered = primary.filter(p => matchesQuery(p, query));
+        if (filtered.length > 0) primary = filtered;
+      }
+      // Yoksa (sadece "televizyon", "tv", "klima" gibi tek kelime) → tüm subcategory göster
 
       // Related: accessory map'ten ilgili alt kategorileri çek
       const accessorySubcats = ACCESSORY_SUBCATS[detectedIntent] || [];
