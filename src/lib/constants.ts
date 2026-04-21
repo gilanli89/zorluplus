@@ -8,7 +8,7 @@ export const BRAND = {
   social: {
     facebook: "https://www.facebook.com/ZorluDigitalPlaza/",
     instagram: "https://www.instagram.com/zorludigitalplaza/",
-    youtube: "https://www.youtube.com/@zorludigitalplaza6273",
+    youtube: "https://www.youtube.com/@ZorluDigitalPlaza",
     tiktok: "https://www.tiktok.com/@zorludigitalplaza",
   },
 };

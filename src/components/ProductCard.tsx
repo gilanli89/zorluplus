@@ -130,24 +130,24 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
       </Link>
 
-      {/* Action Buttons */}
-      <div className="mx-3.5 mb-3.5 flex gap-2">
+      {/* Action Buttons — mobilde dikey stack, sm+'da yatay */}
+      <div className="mx-3.5 mb-3.5 flex flex-col sm:flex-row gap-2">
         <Link
           to={`/urun/${product.slug}`}
           onClick={(e) => e.stopPropagation()}
-          className="flex items-center justify-center gap-1.5 flex-1 py-2.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-all duration-200 tap-scale"
+          className="flex items-center justify-center gap-1.5 flex-1 min-w-0 py-2.5 rounded-xl border border-border bg-card text-foreground text-xs font-bold hover:bg-muted transition-all duration-200 tap-scale"
         >
           <PremiumIconInline icon={Eye} size={14} />
-          {t("product.view")}
+          <span className="truncate">{t("product.view")}</span>
         </Link>
         {product.inStock && product.price > 0 && (
           <Button
             size="sm"
-            className="flex-1 rounded-xl text-xs font-bold gap-1.5 tap-scale"
+            className="flex-1 min-w-0 rounded-xl text-xs font-bold gap-1.5 tap-scale"
             onClick={handleAddToCart}
           >
             <PremiumIconInline icon={ShoppingCart} size={14} className="text-primary-foreground" />
-            {t("cart.addToCart")}
+            <span className="truncate">{t("cart.addToCart")}</span>
           </Button>
         )}
       </div>
