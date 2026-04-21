@@ -810,8 +810,8 @@ export function DestekPage() {
     "LG software update and system maintenance",
   ];
 
-  const servisBolgeleri = lang === "tr" ? ["Lefkoşa", "Girne", "Gazimağusa", "Güzelyurt", "İskele"]
-    : ["Nicosia", "Kyrenia", "Famagusta", "Guzelyurt", "Iskele"];
+  const servisBolgeleri = lang === "tr" ? ["Lefkoşa", "Gazimağusa", "Güzelyurt", "İskele"]
+    : ["Nicosia", "Famagusta", "Guzelyurt", "Iskele"];
 
   const garantiItems = lang === "tr" ? [
     "Arıza tespiti", "Garanti kontrolü", "Parça değişimi",
@@ -834,7 +834,7 @@ export function DestekPage() {
   const sikAranan = lang === "tr" ? [
     "Samsung TV Servisi", "LG TV Servisi", "Samsung Klima Servisi",
     "LG Klima Servisi", "KKTC Elektronik Teknik Servis", "Lefkoşa Televizyon Servisi",
-    "Girne TV Servisi", "Samsung Yetkili Servis KKTC", "LG Yetkili Servis KKTC",
+    "Mağusa TV Servisi", "Samsung Yetkili Servis KKTC", "LG Yetkili Servis KKTC",
   ] : [
     "Samsung TV Service", "LG TV Service", "Samsung AC Service",
     "LG AC Service", "N.Cyprus Electronics Service", "Nicosia TV Service",

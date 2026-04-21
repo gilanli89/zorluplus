@@ -156,7 +156,7 @@ export default function TVKanalAyarlamaPage() {
           {/* Giriş */}
           <motion.section initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0}>
             <p className="text-muted-foreground leading-relaxed">
-              Yeni bir eve taşındınız, televizyonu açtınız ama ekranda hiçbir kanal yok mu? Lefkoşa veya Girne'de yeni bir eve yerleşen birçok kişi aynı durumla karşılaşıyor. Özellikle rüzgârlı havalarda ya da uydu güncellemeleri sonrası televizyonlarda <strong className="text-foreground">"Sinyal Yok"</strong> uyarısı görmek oldukça yaygındır.
+              Yeni bir eve taşındınız, televizyonu açtınız ama ekranda hiçbir kanal yok mu? Lefkoşa veya Mağusa'da yeni bir eve yerleşen birçok kişi aynı durumla karşılaşıyor. Özellikle rüzgârlı havalarda ya da uydu güncellemeleri sonrası televizyonlarda <strong className="text-foreground">"Sinyal Yok"</strong> uyarısı görmek oldukça yaygındır.
             </p>
             <p className="text-muted-foreground leading-relaxed mt-3">
               Frekansları birer adres gibi düşünebilirsiniz. Yayıncılar frekans değiştirirse televizyonunuzun bu yeni adresi öğrenmesi gerekir. Bu rehberde güncel <strong className="text-foreground">Türksat ve KKTC kanal frekansları</strong> ile kanalları nasıl kolayca ayarlayabileceğinizi adım adım anlatıyoruz.

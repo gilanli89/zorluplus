@@ -147,7 +147,7 @@ export default function QuoteForm({ productId, productSku, productName, productP
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="lefkosa">Lefkoşa</SelectItem>
-              <SelectItem value="girne">Girne</SelectItem>
+              <SelectItem value="magusa">Mağusa</SelectItem>
             </SelectContent>
           </Select>
           <Textarea placeholder={t("quote.notes")} value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={3} maxLength={1000} />
