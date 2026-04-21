@@ -23,3 +23,18 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+
+# Claude/Agent metadata
+.claude/
+.agents/
+skills/
+skills-lock.json
+supabase/.temp/
+
+# Vercel local
+.vercel/
