@@ -35,7 +35,8 @@ function saveCache(cache: TranslationCache) {
 }
 
 export function useProductTranslation() {
-  const { lang } = useLanguage();
+  const languageContext = useLanguage();
+  const lang = languageContext?.lang || "tr"; // Defensive: default to Turkish
   const [cache, setCache] = useState<TranslationCache>(loadCache);
   const pendingRef = useRef<Set<string>>(new Set());
   const batchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -64,7 +65,7 @@ export function useProductTranslation() {
           saveCache(fallbackCache);
           return;
         }
-        console.error("Translation error:", error);
+        // Silently fail - don't spam console with translation errors
         toTranslate.forEach(t => pendingRef.current.delete(t));
         return;
       }
@@ -88,7 +89,7 @@ export function useProductTranslation() {
         saveCache(fallbackCache);
         return;
       }
-      console.error("Translation fetch error:", e);
+      // Silently fail - translation is not critical
       toTranslate.forEach(t => pendingRef.current.delete(t));
     }
   }, [cache]);
