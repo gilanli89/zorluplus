@@ -112,6 +112,97 @@ const matchesQuery = (p: SearchableProduct, query: string): boolean => {
   });
 };
 
+// -------------------- Intent & accessory mapping --------------------
+
+// Kullanıcı sorgusundan hangi ürün alt-kategorisini aradığını tespit eder.
+// Keyword prefix match'e izin verir: "telev" → tv, "buzdol" → buzdolabi
+const INTENT_KEYWORDS: Record<string, string[]> = {
+  "tv": ["tv", "televizyon", "television", "smart tv", "led tv", "qled", "oled", "neo qled", "4k tv", "ekran", "monitor"],
+  "buzdolabi": ["buzdolabı", "buzdolabi", "buzluk", "no frost", "dondurucu", "refrigerator", "fridge"],
+  "mini-buzdolabi": ["mini buzdolabı", "mini buzdolabi", "mini bar", "minibar"],
+  "derin-dondurucu": ["derin dondurucu", "freezer"],
+  "camasir-makinesi": ["çamaşır makinesi", "çamaşır makinası", "camasir makinesi", "camasir makinasi", "washing machine"],
+  "kurutma-makinesi": ["kurutma makinesi", "kurutucu", "dryer", "tumble dryer"],
+  "bulasik-makinesi": ["bulaşık makinesi", "bulasik makinesi", "bulaşık makinası", "dishwasher"],
+  "klima": ["klima", "split klima", "air conditioner", "ac unit", "inverter klima"],
+  "portatif-klima": ["portatif klima", "taşınabilir klima", "portable ac"],
+  "isiticilar": ["ısıtıcı", "isitici", "konvektör", "konvektor", "heater", "radyatör"],
+  "firin": ["fırın", "firin", "ankastre fırın", "oven"],
+  "ocak": ["ocak", "ankastre ocak", "cooktop", "stove"],
+  "davlumbaz": ["davlumbaz", "aspiratör", "hood"],
+  "mikrodalga": ["mikrodalga", "microwave"],
+  "air-fryer": ["air fryer", "airfryer", "hava fritözü", "hava fritozu"],
+  "kahve-makinesi": ["kahve makinesi", "coffee machine", "espresso"],
+  "pisirici": ["pişirici", "multicooker", "düdüklü"],
+  "su-sebili": ["su sebili", "water dispenser", "sebil"],
+  "bluetooth-hoparlor": ["bluetooth hoparlör", "bluetooth hoparlor", "taşınabilir hoparlör", "speaker", "hoparlör", "hoparlor"],
+  "kulaklik": ["kulaklık", "kulaklik", "headphone", "earphone", "earbud", "airpods"],
+  "soundbar": ["soundbar", "sound bar"],
+  "hdmi-kablo": ["hdmi", "hdmi kablo"],
+  "kumanda": ["kumanda", "remote", "kumandalar"],
+  "tv-aski-aparatlari": ["tv askı", "tv aski", "duvar askı", "duvar aski", "tv tutucu", "tv mount", "askı aparatı"],
+  "voltaj-regulatoru": ["voltaj regülatörü", "voltaj regulatoru", "regülatör", "voltage regulator"],
+  "utu": ["ütü", "utu", "iron"],
+  "supurge": ["süpürge", "supurge", "vacuum", "vakum"],
+  "ventilator": ["vantilatör", "vantilator", "fan"],
+  "temizlik-urunleri": ["temizlik", "temizleme", "ekran temizleme", "cleaning"],
+};
+
+/**
+ * Sorgudan subcategory niyetini çıkarır.
+ * "telev" gibi yarım yazımlar da yakalanır (prefix bidirectional match).
+ * Döner: subcategory slug veya null.
+ */
+const detectIntent = (query: string): string | null => {
+  const q = stripAccents(query.toLowerCase().trim());
+  const tokens = q.split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return null;
+
+  // Full query match ("smart tv" gibi çok-kelimeli keyword için)
+  const qCompact = compact(q);
+
+  for (const [subcategory, keywords] of Object.entries(INTENT_KEYWORDS)) {
+    for (const kw of keywords) {
+      const kwStripped = stripAccents(kw.toLowerCase());
+      const kwCompact = compact(kwStripped);
+
+      // 1) Full query tam match (multi-word keyword için)
+      if (q === kwStripped || qCompact === kwCompact) return subcategory;
+      // 2) Full query keyword'ü içeriyor (örn "samsung televizyon" query'sinde "televizyon")
+      if (q.includes(kwStripped) || qCompact.includes(kwCompact)) return subcategory;
+      // 3) Token-level prefix match (örn "telev" → "televizyon"; min 3 karakter)
+      for (const t of tokens) {
+        if (t === kwStripped) return subcategory;
+        if (t.length >= 3 && (kwStripped.startsWith(t) || t.startsWith(kwStripped))) {
+          return subcategory;
+        }
+      }
+    }
+  }
+  return null;
+};
+
+// İlgili aksesuarlar: primary subcategory → liste of accessory subcategories
+// Kullanıcı "televizyon" aradığında TV'lerin altında bunlar "İlgili Aksesuarlar" olarak görünür
+const ACCESSORY_SUBCATS: Record<string, string[]> = {
+  "tv": ["tv-aski-aparatlari", "kumanda", "tv-aksesuar", "hdmi-kablo", "temizlik-urunleri", "voltaj-regulatoru"],
+  "buzdolabi": ["voltaj-regulatoru", "temizlik-urunleri"],
+  "mini-buzdolabi": ["voltaj-regulatoru"],
+  "derin-dondurucu": ["voltaj-regulatoru"],
+  "camasir-makinesi": ["voltaj-regulatoru", "temizlik-urunleri"],
+  "kurutma-makinesi": ["voltaj-regulatoru"],
+  "bulasik-makinesi": ["voltaj-regulatoru", "temizlik-urunleri"],
+  "klima": ["voltaj-regulatoru"],
+  "portatif-klima": ["voltaj-regulatoru"],
+  "firin": ["voltaj-regulatoru", "temizlik-urunleri"],
+  "ocak": ["temizlik-urunleri"],
+  "mikrodalga": ["voltaj-regulatoru", "temizlik-urunleri"],
+  "air-fryer": ["temizlik-urunleri"],
+  "kahve-makinesi": ["temizlik-urunleri"],
+  "bluetooth-hoparlor": ["kulaklik"],
+  "soundbar": ["hdmi-kablo"],
+};
+
 // -------------------- Component --------------------
 
 export default function SearchPage() {
@@ -195,49 +286,58 @@ export default function SearchPage() {
     return () => { if (aiDebounce.current) clearTimeout(aiDebounce.current); };
   }, [query]);
 
-  // Combined search: AI-enhanced + basic text match
-  const results = useMemo(() => {
-    if (!query.trim()) return [];
+  // Intent-aware search: ürün tipi tespit edilirse primary + related olarak ayır
+  const { primary: results, related: relatedResults } = useMemo(() => {
+    if (!query.trim()) return { primary: [], related: [] };
 
-    // Token-based search: space-insensitive, synonym-aware, accent-tolerant
-    const textResults = products.filter(p => matchesQuery(p, query));
+    // 1) Intent (ne aradığı) tespiti
+    const detectedIntent = detectIntent(query);
 
-    if (!aiResult) return textResults;
+    // 2) Token-based broad match (synonym + accent + space tolerant)
+    const allMatched = products.filter(p => matchesQuery(p, query));
 
-    // AI-enhanced: score products
-    const scored = products.map(p => {
-      let score = 0;
-      
-      // Category match
-      if (aiResult.category && p.category === aiResult.category) score += 10;
-      if (aiResult.subcategory && p.subcategory === aiResult.subcategory) score += 15;
-      
-      // Brand match
-      if (aiResult.brand && p.brand.toLowerCase() === aiResult.brand.toLowerCase()) score += 12;
-      
-      // Keyword match
-      const pLower = `${p.name} ${p.description} ${p.brand} ${p.sku || ""} ${p.model || ""}`.toLowerCase();
-      for (const kw of aiResult.keywords) {
-        if (pLower.includes(kw.toLowerCase())) score += 5;
+    // 3) Intent varsa: subcategory'e göre sıkı filtre
+    let primary = allMatched;
+    let related: typeof allMatched = [];
+
+    if (detectedIntent) {
+      // Primary = bu intent'in subcategory'sine tam uyan ürünler
+      const strictPrimary = products.filter(p => p.subcategory === detectedIntent);
+
+      // Query'de marka/model geçiyorsa onları da filtrele (örn "samsung tv")
+      const brandFiltered = strictPrimary.filter(p => matchesQuery(p, query));
+
+      // Primary: önce brand-filtered (varsa), değilse tüm subcategory ürünleri
+      primary = brandFiltered.length > 0 ? brandFiltered : strictPrimary;
+
+      // Related: accessory map'ten ilgili alt kategorileri çek
+      const accessorySubcats = ACCESSORY_SUBCATS[detectedIntent] || [];
+      if (accessorySubcats.length > 0) {
+        const primaryIds = new Set(primary.map(p => p.id));
+        related = products
+          .filter(p => accessorySubcats.includes(p.subcategory) && !primaryIds.has(p.id))
+          .slice(0, 12); // max 12 aksesuar, UI şişmesin
       }
-      
-      // Basic text match bonus
-      if (textResults.some(tr => tr.id === p.id)) score += 3;
-      
-      return { product: p, score };
-    });
 
-    const aiResults = scored
-      .filter(s => s.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .map(s => s.product);
+      // Eğer primary'de hiç ürün yoksa (kategori boş), fallback: tüm token matches
+      if (primary.length === 0) {
+        primary = allMatched;
+        related = [];
+      }
+    } else if (aiResult && (aiResult.category || aiResult.subcategory || aiResult.brand)) {
+      // Intent yoksa ve AI sonucu varsa: AI-enhanced scoring
+      const scored = allMatched.map(p => {
+        let score = 1; // token match'i zaten geçti
+        if (aiResult.category && p.category === aiResult.category) score += 10;
+        if (aiResult.subcategory && p.subcategory === aiResult.subcategory) score += 15;
+        if (aiResult.brand && p.brand.toLowerCase() === aiResult.brand.toLowerCase()) score += 12;
+        return { product: p, score };
+      });
+      primary = scored.sort((a, b) => b.score - a.score).map(s => s.product);
+    }
 
-    // Merge: AI results first, then text results not in AI
-    const aiIds = new Set(aiResults.map(p => p.id));
-    const merged = [...aiResults, ...textResults.filter(p => !aiIds.has(p.id))];
-    
-    // Apply sort
-    let sorted = [...merged];
+    // 4) Sort primary
+    const sorted = [...primary];
     switch (sortBy) {
       case "price-asc": sorted.sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price)); break;
       case "price-desc": sorted.sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price)); break;
@@ -246,7 +346,8 @@ export default function SearchPage() {
       case "name-asc": sorted.sort((a, b) => a.name.localeCompare(b.name, "tr")); break;
       case "name-desc": sorted.sort((a, b) => b.name.localeCompare(a.name, "tr")); break;
     }
-    return sorted;
+
+    return { primary: sorted, related };
   }, [products, query, aiResult, sortBy]);
 
   const handleSearch = (val: string) => {
@@ -346,7 +447,25 @@ export default function SearchPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {results.map(p => <ProductCard key={p.id} product={p} />)}
       </div>
-      
+
+      {/* İlgili Aksesuarlar — intent tespit edildiyse ve aksesuar eşleşmesi varsa */}
+      {relatedResults.length > 0 && (
+        <section className="mt-10 pt-8 border-t border-border">
+          <div className="flex items-center gap-2 mb-4">
+            <PremiumIconInline icon={Sparkles} size={18} className="text-primary" />
+            <h2 className="font-display text-xl font-bold text-foreground">
+              {lang === "tr" ? "İlgili Aksesuarlar" : "Related Accessories"}
+            </h2>
+            <span className="text-xs text-muted-foreground">
+              ({relatedResults.length})
+            </span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {relatedResults.map(p => <ProductCard key={p.id} product={p} />)}
+          </div>
+        </section>
+      )}
+
       {query.trim() && results.length === 0 && !aiLoading && (
         <div className="text-center py-12">
           <p className="text-muted-foreground">{lang === "tr" ? "Sonuç bulunamadı. Farklı kelimelerle tekrar deneyin." : "No results found. Try different keywords."}</p>
