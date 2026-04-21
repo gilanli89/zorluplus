@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ShoppingCart, Trash2, Plus, Minus, ShieldPlus, Zap, ArrowLeft, CreditCard, Banknote, Package, Building2 } from "lucide-react";
+import { ShoppingCart, Trash2, Plus, Minus, ShieldPlus, Zap, ArrowLeft, CreditCard, Banknote, Package, Building2, MessageCircle } from "lucide-react";
 import { PremiumIconInline } from "@/components/PremiumIcon";
 import BrandLogo from "@/components/BrandLogo";
 import { supabase } from "@/integrations/supabase/client";
@@ -107,20 +107,32 @@ export default function CartPage() {
       const params = new URLSearchParams({ orderId, product: items.map(i => i.product.name).join(", ") });
       window.location.href = `/odeme?${params.toString()}`;
     } else {
-      const methodLabel = paymentMethod === "transfer" ? "Havale/EFT" : "Kapıda Ödeme";
-      const orderLines = items.map(i => {
-        let line = `• ${i.product.name} x${i.quantity}`;
-        if (i.extendedWarranty) line += ` (+2 Yıl Garanti)`;
-        if (i.expressDelivery) line += ` (Express Kurulum)`;
-        return line;
-      }).join("\n");
-
-      const message = `🛒 Yeni Sipariş (${methodLabel})\n\nSipariş No: ${orderId}\n\n${orderLines}\n\n👤 ${customerInfo.name}\n📱 ${customerInfo.phone}\n📧 ${customerInfo.email}\n📍 ${customerInfo.address}`;
-
-      window.open(`https://wa.me/${BRAND.phone.replace(/\s/g, "")}?text=${encodeURIComponent(message)}`, "_blank");
-      toast.success(paymentMethod === "transfer" ? t("cart.transferNote") : t("cart.orderCreated"));
+      // Havale/kapıda ödeme: site üzerinde sipariş onayı, WhatsApp'a otomatik yönlendirme YOK.
+      // WhatsApp ayrı bir opsiyon olarak sepetin altında duruyor.
+      toast.success(
+        paymentMethod === "transfer"
+          ? `${t("cart.transferNote")} (Sipariş No: ${orderId})`
+          : `${t("cart.orderCreated")} Sipariş No: ${orderId}`,
+        { duration: 8000 }
+      );
       clearCart();
     }
+  };
+
+  // Ayrı WhatsApp opsiyonu: kullanıcı formu doldurmadan direkt WhatsApp'tan
+  // sipariş vermek isterse (canlı sohbet tercih eden müşteriler için).
+  const handleWhatsAppOrder = () => {
+    const orderLines = items.map(i => {
+      const price = i.product.salePrice || i.product.price;
+      let line = `• ${i.product.name} x${i.quantity} — ${formatPrice(price * i.quantity)}`;
+      if (i.extendedWarranty) line += ` (+2 Yıl Garanti)`;
+      if (i.expressDelivery) line += ` (Express Kurulum)`;
+      return line;
+    }).join("\n");
+
+    const message = `🛒 Sepetim Hakkında Bilgi\n\n${orderLines}\n\n💰 Toplam: ${formatPrice(grandTotal)}\n\nMerhaba, bu ürünler hakkında bilgi almak istiyorum.`;
+
+    window.open(`https://wa.me/${BRAND.phone.replace(/\s/g, "")}?text=${encodeURIComponent(message)}`, "_blank");
   };
 
   return (
@@ -148,11 +160,24 @@ export default function CartPage() {
                       <img src={item.product.image} alt={item.product.name} className="h-24 w-24 rounded-xl object-contain bg-muted/50 border border-border p-2" />
                     </Link>
                     <div className="flex-1 min-w-0">
-                      <BrandLogo brand={item.product.brand} size="sm" />
-                      <Link to={`/urun/${item.product.slug}`}>
-                        <p className="text-sm font-semibold text-foreground line-clamp-2 hover:text-primary transition-colors">{item.product.name}</p>
-                      </Link>
-                      <div className="flex items-center gap-2 mt-2">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <BrandLogo brand={item.product.brand} size="sm" />
+                          <Link to={`/urun/${item.product.slug}`}>
+                            <p className="text-sm font-semibold text-foreground line-clamp-2 hover:text-primary transition-colors">{item.product.name}</p>
+                          </Link>
+                        </div>
+                        {/* Fiyat — birim fiyat + satır toplamı (qty > 1 ise) */}
+                        <div className="text-right shrink-0">
+                          <p className="text-base font-bold text-primary whitespace-nowrap">{formatPrice(price * item.quantity)}</p>
+                          {item.quantity > 1 && (
+                            <p className="text-xs text-muted-foreground whitespace-nowrap">
+                              {formatPrice(price)} × {item.quantity}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 mt-3">
                         <Button variant="outline" size="icon" className="h-8 w-8 rounded-full" onClick={() => updateQuantity(item.product.id, item.quantity - 1)}>
                           <Minus className="h-3 w-3" />
                         </Button>
@@ -320,6 +345,25 @@ export default function CartPage() {
                 ) : (
                   <><PremiumIconInline icon={Banknote} size={16} className="text-primary-foreground" /> {t("cart.orderWithCash")}</>
                 )}
+              </Button>
+
+              {/* WhatsApp ayrı opsiyon — canlı sohbet tercih edenler için */}
+              <div className="flex items-center gap-2 my-3">
+                <div className="h-px flex-1 bg-border" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">
+                  {lang === "tr" ? "veya" : "or"}
+                </span>
+                <div className="h-px flex-1 bg-border" />
+              </div>
+
+              <Button
+                variant="outline"
+                className="w-full rounded-full font-semibold gap-2 border-green-500/30 bg-green-500/5 text-green-700 hover:bg-green-500/10 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
+                size="lg"
+                onClick={handleWhatsAppOrder}
+              >
+                <PremiumIconInline icon={MessageCircle} size={16} />
+                {lang === "tr" ? "WhatsApp ile Sipariş Ver" : "Order via WhatsApp"}
               </Button>
             </CardContent>
           </Card>
