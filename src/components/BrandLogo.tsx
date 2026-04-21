@@ -29,10 +29,10 @@ interface BrandLogoProps {
 }
 
 const SIZES = {
-  xs: "h-4 max-w-[52px]",
-  sm: "h-5 max-w-[60px]",
-  md: "h-6 max-w-[78px]",
-  lg: "h-8 max-w-[104px]",
+  xs: "h-5 min-w-[48px] max-w-[64px]",
+  sm: "h-6 min-w-[56px] max-w-[80px]",
+  md: "h-7 min-w-[72px] max-w-[96px]",
+  lg: "h-9 min-w-[96px] max-w-[128px]",
 };
 
 export default function BrandLogo({ brand, size = "sm", className = "" }: BrandLogoProps) {
@@ -53,7 +53,7 @@ export default function BrandLogo({ brand, size = "sm", className = "" }: BrandL
     <img
       src={logo}
       alt={brand}
-      className={`${sizeClass} w-auto object-contain select-none opacity-80 hover:opacity-100 transition-opacity ${className}`}
+      className={`${sizeClass} w-full object-contain select-none opacity-90 hover:opacity-100 transition-opacity ${className}`}
       loading="lazy"
     />
   );
