@@ -80,41 +80,8 @@ serve(async (req) => {
     const callbackUrl = failUrl;
     const inst = installment || "";
 
-    // Hash v3: fields sorted alphabetically by key, joined with "|", storeKey appended
-    const hashStr = [
-      amount,
-      billToCompany,
-      billToName,
-      callbackUrl,
-      clientId,
-      currency,
-      cvv,
-      expMonth,
-      expYear,
-      failUrl,
-      hashAlgorithm,
-      lang,
-      oid,
-      okUrl,
-      cardNumber,
-      rnd,
-      storetype,
-      storeKey,
-    ].join("|");
-
-    // SHA-512 hash, base64 encoded
-    const encoder = new TextEncoder();
-    const data = encoder.encode(hashStr);
-    const hashBuffer = await crypto.subtle.digest("SHA-512", data);
-    const hashArray = new Uint8Array(hashBuffer);
-    let binary = "";
-    for (const byte of hashArray) {
-      binary += String.fromCharCode(byte);
-    }
-    const hash = btoa(binary);
-
-    // Return form data that frontend will auto-submit to bank
-    const formData = {
+    // Build all params that will be sent to gateway
+    const allParams: Record<string, string> = {
       clientid: clientId,
       amount: amount,
       oid: oid,
@@ -132,9 +99,43 @@ serve(async (req) => {
       Ecom_Payment_Card_ExpDate_Month: expMonth,
       Ecom_Payment_Card_ExpDate_Year: expYear,
       cv2: cvv,
-      hash: hash,
       BillToName: billToName,
       BillToCompany: billToCompany,
+    };
+
+    // Hash v3: Sort params alphabetically (case-insensitive), exclude "encoding" and "hash"
+    const sortedKeys = Object.keys(allParams).sort((a, b) => 
+      a.toUpperCase().localeCompare(b.toUpperCase())
+    );
+
+    // Build hash string: param values joined with "|", escape \ and |
+    let hashStr = "";
+    for (const key of sortedKeys) {
+      const lowerKey = key.toLowerCase();
+      if (lowerKey !== "encoding" && lowerKey !== "hash") {
+        const value = allParams[key].replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
+        hashStr += value + "|";
+      }
+    }
+    // Append storeKey at the end (also escaped)
+    const escapedStoreKey = storeKey.replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
+    hashStr += escapedStoreKey;
+
+    // SHA-512 hash, base64 encoded
+    const encoder = new TextEncoder();
+    const data = encoder.encode(hashStr);
+    const hashBuffer = await crypto.subtle.digest("SHA-512", data);
+    const hashArray = new Uint8Array(hashBuffer);
+    let binary = "";
+    for (const byte of hashArray) {
+      binary += String.fromCharCode(byte);
+    }
+    const hash = btoa(binary);
+
+    // Return form data that frontend will auto-submit to bank
+    const formData = {
+      ...allParams,
+      hash: hash,
     };
 
     return new Response(

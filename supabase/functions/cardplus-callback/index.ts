@@ -45,6 +45,7 @@ serve(async (req) => {
 
     let hashValid = false;
     if (hashParams && returnHash) {
+      // Use HASHPARAMS method (for customized templates)
       const paramNames = hashParams.split(":");
       const values = paramNames
         .filter((p: string) => p.length > 0)
@@ -54,6 +55,35 @@ serve(async (req) => {
 
       const encoder = new TextEncoder();
       const data = encoder.encode(verifyStr);
+      const hashBuffer = await crypto.subtle.digest("SHA-512", data);
+      const hashArray = new Uint8Array(hashBuffer);
+      let binary = "";
+      for (const byte of hashArray) {
+        binary += String.fromCharCode(byte);
+      }
+      const calculatedHash = btoa(binary);
+      hashValid = calculatedHash === returnHash;
+    } else if (returnHash) {
+      // Fallback: Use alphabetical sorting method (standard response)
+      // Sort all params alphabetically (case-insensitive), exclude encoding, hash, countdown
+      const sortedKeys = Object.keys(params).sort((a, b) => 
+        a.toUpperCase().localeCompare(b.toUpperCase())
+      );
+      
+      let hashStr = "";
+      for (const key of sortedKeys) {
+        const lowerKey = key.toLowerCase();
+        if (lowerKey !== "encoding" && lowerKey !== "hash" && lowerKey !== "countdown") {
+          const value = (params[key] || "").replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
+          hashStr += value + "|";
+        }
+      }
+      // Append storeKey
+      const escapedStoreKey = storeKey.replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
+      hashStr += escapedStoreKey;
+
+      const encoder = new TextEncoder();
+      const data = encoder.encode(hashStr);
       const hashBuffer = await crypto.subtle.digest("SHA-512", data);
       const hashArray = new Uint8Array(hashBuffer);
       let binary = "";
