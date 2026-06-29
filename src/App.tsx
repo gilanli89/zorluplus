@@ -5,17 +5,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
-import Layout from "@/components/layout/Layout";
 import ScrollToTop from "@/components/ScrollToTop";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, type ComponentType } from "react";
 import PageLoader from "@/components/PageLoader";
 import { COMING_SOON } from "@/lib/featureFlags";
 import ComingSoonPage from "@/pages/ComingSoonPage";
 
-// Eager load: HomePage (above the fold)
-import HomePage from "@/pages/HomePage";
-
-// Lazy load: all other pages
+// Lazy load store/admin code so Coming Soon can render without loading backend-dependent modules.
+const Layout = lazy(() => import("@/components/layout/Layout"));
+const HomePage = lazy(() => import("@/pages/HomePage"));
 const CategoryPage = lazy(() => import("@/pages/CategoryPage"));
 const CategoriesPage = lazy(() => import("@/pages/CategoriesPage"));
 const ProductPage = lazy(() => import("@/pages/ProductPage"));
@@ -49,13 +47,23 @@ const BlogPostPage = lazy(() => import("@/pages/BlogPostPage"));
 const WPPageDetail = lazy(() => import("@/pages/WPPageDetail"));
 const AdminRoutes = lazy(() => import("@/pages/admin/AdminRoutes"));
 
-import {
-  HakkimizdaPage, KunyePage, EkibimizPage, DestekPage,
-  KullanimKosullariPage, IadeKosullariPage, GizlilikPolitikasiPage,
-  KvkkPage, CerezPolitikasiPage, MesafeliSatisSozlesmesiPage,
-  SiparisTakipPage, OdemeYontemleriPage, SurdurulebilirlikPage,
-  HavaleOdemePage,
-} from "@/pages/ContentPages";
+const lazyContentPage = (key: keyof typeof import("@/pages/ContentPages")) =>
+  lazy(() => import("@/pages/ContentPages").then((mod) => ({ default: mod[key] as ComponentType })));
+
+const HakkimizdaPage = lazyContentPage("HakkimizdaPage");
+const KunyePage = lazyContentPage("KunyePage");
+const EkibimizPage = lazyContentPage("EkibimizPage");
+const DestekPage = lazyContentPage("DestekPage");
+const KullanimKosullariPage = lazyContentPage("KullanimKosullariPage");
+const IadeKosullariPage = lazyContentPage("IadeKosullariPage");
+const GizlilikPolitikasiPage = lazyContentPage("GizlilikPolitikasiPage");
+const KvkkPage = lazyContentPage("KvkkPage");
+const CerezPolitikasiPage = lazyContentPage("CerezPolitikasiPage");
+const MesafeliSatisSozlesmesiPage = lazyContentPage("MesafeliSatisSozlesmesiPage");
+const SiparisTakipPage = lazyContentPage("SiparisTakipPage");
+const OdemeYontemleriPage = lazyContentPage("OdemeYontemleriPage");
+const SurdurulebilirlikPage = lazyContentPage("SurdurulebilirlikPage");
+const HavaleOdemePage = lazyContentPage("HavaleOdemePage");
 
 const queryClient = new QueryClient({
   defaultOptions: {
