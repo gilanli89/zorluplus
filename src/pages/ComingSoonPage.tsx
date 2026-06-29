@@ -7,8 +7,8 @@ export default function ComingSoonPage() {
       {/* Header */}
       <header className="w-full bg-slate-950 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col items-center justify-center leading-none">
-          <span className="text-white font-extrabold tracking-tight text-4xl md:text-5xl">
-            Zorlu
+          <span className="text-white font-extrabold tracking-tight text-4xl md:text-5xl uppercase">
+            ZORLU
           </span>
           <span className="text-white/80 uppercase tracking-[0.35em] text-[10px] md:text-xs mt-1.5">
             digital plaza
