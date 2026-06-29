@@ -141,7 +141,16 @@ function StoreRoutes() {
   );
 }
 
-const App = () => (
+const ComingSoonApp = () => (
+  <BrowserRouter>
+    <ScrollToTop />
+    <Suspense fallback={<PageLoader />}>
+      <ComingSoonRoutes />
+    </Suspense>
+  </BrowserRouter>
+);
+
+const StoreApp = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
       <CartProvider>
@@ -151,7 +160,7 @@ const App = () => (
           <BrowserRouter>
             <ScrollToTop />
             <Suspense fallback={<PageLoader />}>
-              {COMING_SOON ? <ComingSoonRoutes /> : <StoreRoutes />}
+              <StoreRoutes />
             </Suspense>
           </BrowserRouter>
         </TooltipProvider>
@@ -159,5 +168,7 @@ const App = () => (
     </LanguageProvider>
   </QueryClientProvider>
 );
+
+const App = () => (COMING_SOON ? <ComingSoonApp /> : <StoreApp />);
 
 export default App;
