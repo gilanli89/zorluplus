@@ -1,9 +1,23 @@
 import { MessageCircle, MapPin, Phone, Facebook, Instagram, Youtube } from "lucide-react";
 import { BRAND, BRANCHES, CATALOGUE_URL } from "@/lib/constants";
+import logoDark from "@/assets/zorlu-logo-dark-bg.png";
 
 export default function ComingSoonPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-white">
+      {/* Header */}
+      <header className="w-full bg-slate-950 border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-center">
+          <img
+            src={logoDark}
+            alt="Zorlu Digital Plaza"
+            className="h-10 md:h-12 w-auto object-contain select-none"
+            width={1536}
+            height={512}
+          />
+        </div>
+      </header>
+
       {/* Catalog */}
       <section className="w-full">
         <div className="w-full h-[85svh]">
