@@ -36,7 +36,9 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (!orderId) { setLoadingOrder(false); return; }
-    supabase.from("orders").select("total_amount").eq("order_number", orderId).maybeSingle().then(({ data, error }) => {
+    Promise.resolve(
+      supabase.from("orders").select("total_amount").eq("order_number", orderId).maybeSingle()
+    ).then(({ data, error }) => {
       if (error) console.error("Order fetch error:", error);
       if (data) setOrderAmount(data.total_amount);
       setLoadingOrder(false);
