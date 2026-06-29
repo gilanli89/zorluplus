@@ -6,13 +6,16 @@ export default function ComingSoonPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-white">
       {/* Catalog */}
       <section className="w-full">
-        <div className="w-full h-[100svh]">
+        <div className="w-full h-[85svh]">
           <iframe
             src={CATALOGUE_URL}
             title="Zorlu Digital Plaza E-Katalog"
             allowFullScreen
             className="w-full h-full border-0"
           />
+        </div>
+        <div className="text-center py-3 text-white/60 text-sm animate-bounce">
+          ↓ İletişim & Şubeler ↓
         </div>
       </section>
 
