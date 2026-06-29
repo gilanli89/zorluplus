@@ -40,8 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const fetchAdminStatus = async (userId: string) => {
     const id = ++fetchId.current;
 
-    function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
-      return Promise.race([p, new Promise<T>((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
+    function withTimeout<T>(p: PromiseLike<T>, ms: number): Promise<T> {
+      return Promise.race([Promise.resolve(p), new Promise<T>((_, reject) => setTimeout(() => reject(new Error("timeout")), ms))]);
     }
 
     // Step 1: user_roles (fast, no RPC) — set state immediately so UI unblocks
@@ -70,8 +70,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       withTimeout(supabase.rpc("is_super_admin", { _user_id: userId }), 10000),
     ]);
 
-    if (adminResult.status === "fulfilled") isAdminVal = !!adminResult.value.data;
-    if (saResult.status === "fulfilled") isSuperAdminVal = !!saResult.value.data;
+    if (adminResult.status === "fulfilled") isAdminVal = !!(adminResult.value as any).data;
+    if (saResult.status === "fulfilled") isSuperAdminVal = !!(saResult.value as any).data;
     if (adminResult.status === "rejected") console.warn("[Auth] check_own_admin_status failed", adminResult.reason);
     if (saResult.status === "rejected") console.warn("[Auth] is_super_admin failed", saResult.reason);
 
