@@ -4,21 +4,9 @@ import { BRAND, BRANCHES, CATALOGUE_URL } from "@/lib/constants";
 export default function ComingSoonPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-white">
-      {/* Header */}
-      <header className="w-full bg-slate-950 border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col items-center justify-center leading-none">
-          <span className="text-white font-extrabold tracking-tight text-4xl md:text-5xl uppercase">
-            ZORLU
-          </span>
-          <span className="text-white/80 uppercase tracking-[0.35em] text-[10px] md:text-xs mt-1.5">
-            digital plaza
-          </span>
-        </div>
-      </header>
-
-      {/* Catalog */}
+      {/* Catalog - full viewport */}
       <section className="w-full">
-        <div className="w-full h-[85svh]">
+        <div className="w-full h-[100svh]">
           <iframe
             src={CATALOGUE_URL}
             title="Zorlu Digital Plaza E-Katalog"
@@ -26,30 +14,26 @@ export default function ComingSoonPage() {
             className="w-full h-full border-0"
           />
         </div>
-        <div className="text-center py-3 text-white/60 text-sm animate-bounce">
-          ↓ İletişim & Şubeler ↓
-        </div>
       </section>
 
-      {/* WhatsApp CTA */}
-      <section className="max-w-5xl mx-auto px-4 py-12 text-center">
-        <h2 className="text-2xl md:text-3xl font-bold mb-3">Sipariş & Bilgi</h2>
-        <p className="text-white/70 mb-6">WhatsApp üzerinden hızlıca bize ulaşın.</p>
+      {/* WhatsApp CTA - prominent, readable */}
+      <section className="bg-slate-950 px-4 py-8 text-center">
         <a
           href={BRAND.whatsappLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-3 bg-[#25D366] hover:bg-[#1ebe57] transition-colors text-white font-semibold px-8 py-4 rounded-full shadow-lg"
+          className="inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1ebe57] active:bg-[#179c47] transition-colors text-white font-bold text-lg md:text-xl px-8 py-5 rounded-2xl shadow-2xl w-full max-w-md"
         >
-          <MessageCircle className="w-6 h-6" />
+          <MessageCircle className="w-7 h-7" />
           WhatsApp ile Sipariş Ver
         </a>
-        <div className="mt-4 flex items-center justify-center gap-2 text-white/80">
+        <a
+          href={`tel:${BRAND.phone.replace(/\s/g, "")}`}
+          className="mt-4 inline-flex items-center justify-center gap-2 text-white/90 font-medium text-base"
+        >
           <Phone className="w-4 h-4" />
-          <a href={`tel:${BRAND.phone.replace(/\s/g, "")}`} className="hover:text-white">
-            {BRAND.phone}
-          </a>
-        </div>
+          {BRAND.phone}
+        </a>
       </section>
 
       {/* Branches with Maps */}
