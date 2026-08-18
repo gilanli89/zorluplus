@@ -42,7 +42,7 @@ export default function TurksatGuncellemePage() {
             Zorlu Digital Plaza Güvencesiyle
           </div>
           <h1 className="mt-5 text-3xl font-extrabold leading-tight md:text-5xl">
-            Türksat Uydunuz mu Bozuldu?
+            En sevdiğiniz kanallar artık yok mu?
           </h1>
           <p className="mt-3 text-lg text-blue-700 md:text-xl">
             Üzülmeyin! İşi uzmanına bırakın.
