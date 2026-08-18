@@ -127,8 +127,22 @@ export default function TurksatGuncellemePage() {
             </div>
 
             <div className="md:col-span-3">
+              <label className="mb-4 flex cursor-pointer items-start gap-3 rounded-xl border border-slate-300 bg-slate-50 p-4">
+                <input
+                  type="checkbox"
+                  checked={priceOk}
+                  onChange={(e) => setPriceOk(e.target.checked)}
+                  className="mt-0.5 h-5 w-5 shrink-0 accent-blue-600"
+                />
+                <span className="text-sm text-slate-700">
+                  Kurulum ücreti <span className="text-slate-400 line-through">2.800 TL</span>{" "}
+                  <strong className="text-blue-700">2.500 TL</strong> — kabul ediyorum.
+                </span>
+              </label>
               {touched && !valid && (
-                <p className="mb-3 text-sm text-red-600">Lütfen ad, şehir ve TV markasını doldurun.</p>
+                <p className="mb-3 text-sm text-red-600">
+                  Lütfen ad, şehir, TV markasını doldurun ve kurulum ücretini onaylayın.
+                </p>
               )}
               <button
                 type="submit"
