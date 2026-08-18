@@ -9,15 +9,16 @@ export default function TurksatGuncellemePage() {
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [tvBrand, setTvBrand] = useState("");
+  const [priceOk, setPriceOk] = useState(false);
   const [touched, setTouched] = useState(false);
 
-  const valid = name.trim().length > 1 && city && tvBrand;
+  const valid = name.trim().length > 1 && !!city && !!tvBrand && priceOk;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setTouched(true);
     if (!valid) return;
-    const text = `Merhaba, ben ${name.trim()}. ${city}'dayım. ${tvBrand} marka TV'mde Türksat uydu ayarları bozuldu, express kurulum/güncelleme için yardım istiyorum.`;
+    const text = `Merhaba, ben ${name.trim()}. ${city}'dayım. ${tvBrand} marka TV'mde Türksat uydu ayarları bozuldu, express kurulum/güncelleme için yardım istiyorum. 2.500 TL kurulum ücretini kabul ediyorum.`;
     window.open(
       `https://api.whatsapp.com/send?phone=905488783131&text=${encodeURIComponent(text)}`,
       "_blank",
@@ -46,6 +47,10 @@ export default function TurksatGuncellemePage() {
           <p className="mt-3 text-lg text-blue-700 md:text-xl">
             Üzülmeyin! İşi uzmanına bırakın.
           </p>
+          <div className="mt-5 inline-flex items-center gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-5 py-3">
+            <span className="text-lg text-slate-400 line-through md:text-xl">2.800 TL</span>
+            <span className="text-2xl font-extrabold text-blue-700 md:text-3xl">Sadece 2.500 TL</span>
+          </div>
           <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 md:text-base">
             Samsung, LG, Toshiba ve TCL televizyonlarınızda bozulan Türksat uydu
             ayarlarını düzeltmek için express kurulum hizmeti. KKTC genelinde hızlı,
@@ -122,8 +127,22 @@ export default function TurksatGuncellemePage() {
             </div>
 
             <div className="md:col-span-3">
+              <label className="mb-4 flex cursor-pointer items-start gap-3 rounded-xl border border-slate-300 bg-slate-50 p-4">
+                <input
+                  type="checkbox"
+                  checked={priceOk}
+                  onChange={(e) => setPriceOk(e.target.checked)}
+                  className="mt-0.5 h-5 w-5 shrink-0 accent-blue-600"
+                />
+                <span className="text-sm text-slate-700">
+                  Kurulum ücreti <span className="text-slate-400 line-through">2.800 TL</span>{" "}
+                  <strong className="text-blue-700">2.500 TL</strong> — kabul ediyorum.
+                </span>
+              </label>
               {touched && !valid && (
-                <p className="mb-3 text-sm text-red-600">Lütfen ad, şehir ve TV markasını doldurun.</p>
+                <p className="mb-3 text-sm text-red-600">
+                  Lütfen ad, şehir, TV markasını doldurun ve kurulum ücretini onaylayın.
+                </p>
               )}
               <button
                 type="submit"
