@@ -31,6 +31,7 @@ const EvAletleriLandingPage = lazy(() => import("@/pages/landings/EvAletleriLand
 const AirfryerLandingPage = lazy(() => import("@/pages/landings/AirfryerLandingPage"));
 const FirinLandingPage = lazy(() => import("@/pages/landings/FirinLandingPage"));
 const TVKanalAyarlamaPage = lazy(() => import("@/pages/landings/TVKanalAyarlamaPage"));
+const TurksatGuncellemePage = lazy(() => import("@/pages/landings/TurksatGuncellemePage"));
 const SearchPage = lazy(() => import("@/pages/SearchPage"));
 const ECataloguePage = lazy(() => import("@/pages/ECataloguePage"));
 const BranchesPage = lazy(() => import("@/pages/BranchesPage"));
@@ -78,6 +79,7 @@ function ComingSoonRoutes() {
   return (
     <Routes>
       <Route path="/admin/*" element={<AdminRoutes />} />
+      <Route path="/turksat-guncelleme" element={<TurksatGuncellemePage />} />
       <Route path="*" element={<ComingSoonPage />} />
     </Routes>
   );
@@ -107,6 +109,7 @@ function StoreRoutes() {
         <Route path="/airfryer" element={<AirfryerLandingPage />} />
         <Route path="/firin" element={<FirinLandingPage />} />
         <Route path="/televizyon-kanal-ayarlama" element={<TVKanalAyarlamaPage />} />
+        <Route path="/turksat-guncelleme" element={<TurksatGuncellemePage />} />
         <Route path="/arama" element={<SearchPage />} />
         <Route path="/e-katalog" element={<ECataloguePage />} />
         <Route path="/subelerimiz" element={<BranchesPage />} />
