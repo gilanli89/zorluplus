@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { BRAND, FOOTER_LINKS } from "@/lib/constants";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import zorluLogo from "@/assets/zorlu-logo.png";
 import zorluDigitalLogo from "@/assets/zorlu-digital-logo.png";
 
@@ -25,6 +24,10 @@ export default function Footer() {
   const { data: lastUpdate } = useQuery({
     queryKey: ["inventory-last-update"],
     queryFn: async () => {
+      // Keep public pages renderable even if the backend configuration is
+      // temporarily unavailable in a deployment. The footer timestamp is
+      // supplementary and must never block the entire application startup.
+      const { supabase } = await import("@/integrations/supabase/client");
       const { data, error } = await supabase
         .from("inventory_public")
         .select("updated_at")
@@ -40,7 +43,7 @@ export default function Footer() {
       return new Date(data.updated_at);
     },
     staleTime: 60_000,
-    retry: 3,
+    retry: false,
   });
 
   const formattedUpdate = lastUpdate
