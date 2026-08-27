@@ -147,6 +147,7 @@
         var loader = document.getElementById('global-loader');
         var finish = function() {
           if (!loader) return;
+          sessionStorage.removeItem('zorlu-chunk-reload');
           loader.style.opacity = '0';
           setTimeout(function() { loader.remove(); }, 150);
         };
@@ -180,9 +181,6 @@
           sessionStorage.setItem(reloadKey, '1');
           window.location.reload();
         }
-      });
-      window.addEventListener('load', function() {
-        sessionStorage.removeItem('zorlu-chunk-reload');
       });
     </script>
   </body>
