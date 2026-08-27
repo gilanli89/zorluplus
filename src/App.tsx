@@ -10,6 +10,7 @@ import { lazy, Suspense, type ComponentType } from "react";
 import PageLoader from "@/components/PageLoader";
 import { COMING_SOON } from "@/lib/featureFlags";
 import ComingSoonPage from "@/pages/ComingSoonPage";
+import AppErrorBoundary from "@/components/AppErrorBoundary";
 
 // Lazy load store/admin code so Coming Soon can render without loading backend-dependent modules.
 const Layout = lazy(() => import("@/components/layout/Layout"));
@@ -172,6 +173,10 @@ const StoreApp = () => (
   </QueryClientProvider>
 );
 
-const App = () => (COMING_SOON ? <ComingSoonApp /> : <StoreApp />);
+const App = () => (
+  <AppErrorBoundary>
+    {COMING_SOON ? <ComingSoonApp /> : <StoreApp />}
+  </AppErrorBoundary>
+);
 
 export default App;

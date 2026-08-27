@@ -21,6 +21,9 @@
     <script async src="https://chatkit.co/widget.js" data-widget-id="domain_pk_69c487b23da4819593935d95525d217b0fb3cf60a9c401c4"></script>
     <!-- /ChatKit -->
     <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     <link rel="preconnect" href="https://mc.yandex.ru" />
@@ -127,33 +130,57 @@
     <!-- Yandex.Metrika noscript -->
     <noscript><div><img src="https://mc.yandex.ru/watch/106295459" style="position:absolute;left:-9999px;" alt="" /></div></noscript>
     <!-- Global loading screen -->
-    <div id="global-loader" role="status" aria-label="Yükleniyor..." style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,hsl(222,47%,6%),hsl(221,83%,15%));transition:opacity 0.5s ease">
+    <div id="global-loader" role="status" aria-label="Yükleniyor..." style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:hsl(210,20%,98%);transition:opacity 0.15s ease">
       <div style="text-align:center">
         <div aria-hidden="true" style="width:48px;height:48px;margin:0 auto 16px;border:3px solid rgba(59,130,246,0.2);border-top-color:rgb(59,130,246);border-radius:50%;animation:spin 1s linear infinite"></div>
-        <p style="color:rgba(255,255,255,0.7);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:600">Zorlu Digital Plaza</p>
+        <p style="color:hsl(222,47%,11%);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700">Zorlu Digital Plaza</p>
       </div>
     </div>
     <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      // Remove loader when app mounts
+      // Remove the loader as soon as React mounts. Never leave a blank screen:
+      // when startup cannot complete, keep a visible recovery action instead.
       window.addEventListener('DOMContentLoaded', function() {
-        var check = setInterval(function() {
-          if (document.getElementById('root') && document.getElementById('root').children.length > 0) {
-            clearInterval(check);
-            var loader = document.getElementById('global-loader');
-            if (loader) { loader.style.opacity = '0'; setTimeout(function() { loader.remove(); }, 500); }
-          }
-        }, 100);
-        // Fallback: never block the static catalogue fallback with a false error state.
+        var root = document.getElementById('root');
+        var loader = document.getElementById('global-loader');
+        var finish = function() {
+          if (!loader) return;
+          sessionStorage.removeItem('zorlu-chunk-reload');
+          loader.style.opacity = '0';
+          setTimeout(function() { loader.remove(); }, 150);
+        };
+        if (root && root.children.length > 0) {
+          finish();
+        } else if (root) {
+          var observer = new MutationObserver(function() {
+            if (root.children.length > 0) {
+              observer.disconnect();
+              finish();
+            }
+          });
+          observer.observe(root, { childList: true });
+        }
         setTimeout(function() {
-          var loader = document.getElementById('global-loader');
-          if (loader) {
-            loader.style.opacity = '0';
-            setTimeout(function() { loader.remove(); }, 500);
+          if (loader && document.body.contains(loader)) {
+            var message = loader.querySelector('p');
+            if (message) message.textContent = 'Yükleme tamamlanamadı';
+            var retry = document.createElement('a');
+            retry.href = window.location.href;
+            retry.textContent = 'Yeniden dene';
+            retry.style.cssText = 'display:inline-flex;margin-top:16px;padding:12px 20px;border-radius:6px;background:hsl(221,83%,53%);color:white;font:600 14px Plus Jakarta Sans,sans-serif;text-decoration:none';
+            var box = loader.firstElementChild;
+            if (box && !box.querySelector('a')) box.appendChild(retry);
           }
-        }, 2500);
+        }, 10000);
+      });
+      window.addEventListener('vite:preloadError', function() {
+        var reloadKey = 'zorlu-chunk-reload';
+        if (!sessionStorage.getItem(reloadKey)) {
+          sessionStorage.setItem(reloadKey, '1');
+          window.location.reload();
+        }
       });
     </script>
   </body>
